@@ -1,0 +1,46 @@
+.div-table {
+    display: table;
+    width: auto;
+    /*background-color: #eee;*/
+    /*border: 1px solid #666666;*/
+    border-spacing: 5px; /* cellspacing:poor IE support for  this */
+}
+.div-table-row {
+    display: table-row;
+    width: auto;
+    clear: both;
+}
+
+.div-table-col-first {
+    width: 30px !important;
+    text-align: right;
+}
+
+.div-table-col-last {
+    margin-left: auto !important;
+    text-align: right;
+}
+
+.div-table-col {
+    float: left; /* fix for  buggy browsers */
+    display: table-column;
+    width: 150px;
+    padding: 3px 5px;
+}
+.div-table-row-header {
+    background-color: #ccc;
+    font-weight: bold;
+}
+
+
+.selectionprocess-list {
+    font-size: 13px;
+}
+
+.selectionprocess-row-header {
+    display: flex;
+    font-weight: bold;
+    background-color: #cce5ff;
+    padding: 3px 7px;
+    border-radius: 10px;
+}

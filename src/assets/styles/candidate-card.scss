@@ -1,0 +1,61 @@
+.candidate-cards {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 25px;
+    font-size: 12px;
+}
+
+.candidate-card {
+    margin-left: 15px;
+    margin-bottom: 15px;
+    min-width: 370px;
+    padding: 10px;
+    border-radius: 15px;
+    border: 2px solid #cce5ff;
+}
+
+.candidate-card-tests {
+    display: flex;
+    flex-direction: row;
+}
+
+.candidate-card-test {
+    margin-top: 10px;
+    margin-right: 5px;
+    padding: 2px 7px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.candidate-card-test-pendiente {
+    border: 2px solid #721c24;
+}
+
+.candidate-card-test-completo {
+    border: 2px solid #155724;
+}
+
+.candidate-info {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.candidate-photo {
+    position: relative;
+    right: 0px;
+    padding: 10px;
+}
+
+.candidate-info-personal {
+    position: relative;
+    left: 0px;
+    padding: 10px;
+}
+
+.button-right-absolute {
+    position: relative;
+    /*border: 3px solid rgb(232, 241, 250);*/
+    padding: 4px;
+    margin-left: auto;
+}

@@ -1,0 +1,177 @@
+import Validator from 'validator';
+import isEmpty from 'lodash/isEmpty';
+
+export function validateInputCandidatoRegistrado(data) {
+	var mensajeRequerido = 'Campo es requerido.';
+	
+	let errors = {};
+	
+	if (Validator.isNull(data.correoElectronico)) {
+		errors.correoElectronico = mensajeRequerido;
+	} else {
+		if (!(Validator.isEmail(data.correoElectronico))) {
+			errors.correoElectronico = 'Dirección de correo inválida.';
+		}
+	}
+	
+	return {
+		errors,
+		isValid: isEmpty(errors)
+	};
+}
+
+export function validateInput(data) {
+	var mensajeRequerido = 'Campo es requerido.';
+	
+	let errors = {};
+
+	if (Validator.isNull(data.nombre)) {
+		errors.nombre = mensajeRequerido;
+	}
+	
+	if (Validator.isNull(data.apellidoPaterno)) {
+		errors.apellidoPaterno = mensajeRequerido;
+	}
+	
+	if (Validator.isNull(data.apellidoMaterno)) {
+		errors.apellidoMaterno = mensajeRequerido;
+	}
+	
+	if (data.correoElectronico == null) {
+		errors.correoElectronico = mensajeRequerido;
+	} else {
+		if (Validator.isNull(data.correoElectronico)) {
+			errors.correoElectronico = mensajeRequerido;
+		} else {
+			if (!(Validator.isEmail(data.correoElectronico))) {
+				errors.correoElectronico = 'Dirección de correo inválida.';
+			}
+		}
+	}
+	if (Validator.isNull(data.idSexo.toString())) {
+		errors.idSexo = mensajeRequerido;
+	} else {
+		if(data.idSexo === ''){
+			errors.idSexo = mensajeRequerido;
+		} else if(data.idSexo === '0'){
+			errors.idSexo = mensajeRequerido;
+		}
+	}
+	if (Validator.isNull(data.idDocumentoIdentidad.toString())) {
+		errors.idDocumentoIdentidad = mensajeRequerido;
+	} else {
+		if(data.idDocumentoIdentidad === ''){
+			errors.idDocumentoIdentidad = mensajeRequerido;
+		} else if(data.idDocumentoIdentidad === '0'){
+			errors.idDocumentoIdentidad = mensajeRequerido;
+		}
+	}
+	if (Validator.isNull(data.numeroDocumentoIdentidad)) {
+		errors.numeroDocumentoIdentidad = mensajeRequerido;
+	}
+	if (Validator.isNull(data.idEstadoCivil.toString())) {
+		errors.idEstadoCivil = mensajeRequerido;
+	} else {
+		if(data.idEstadoCivil.toString() === '0'){
+			errors.idEstadoCivil = mensajeRequerido;
+		}
+	}
+	if (Validator.isNull(data.cantidadHijos.toString())) {
+		errors.cantidadHijos = mensajeRequerido;
+	} else if (!(Validator.isInt(data.cantidadHijos.toString()))) {
+		errors.cantidadHijos = 'Campo debe ser numérico.';
+	}
+	if (Validator.isNull(data.numeroCelular) && Validator.isNull(data.numeroTelefono) ) {
+		errors.numeroTelefono = mensajeRequerido.concat(' Debe ingresar al menos un número de contacto.');
+		errors.numeroCelular = mensajeRequerido.concat(' Debe ingresar al menos un número de contacto.');
+	} else {
+		if (Validator.isNull(data.numeroCelular) && !(Validator.isNull(data.numeroTelefono)) ){
+			if (!(Validator.isInt(data.numeroTelefono.toString()))) {
+				errors.numeroTelefono = 'Campo debe ser numérico.';
+			} else if (!(Validator.isLength(data.numeroTelefono,{min:7, max: 7}))) {
+				errors.numeroTelefono = 'Campo debe tener 7 dígitos.';
+			}
+		} else if (Validator.isNull(data.numeroTelefono) && !(Validator.isNull(data.numeroCelular)) ){
+			if (!(Validator.isInt(data.numeroCelular.toString()))) {
+				errors.numeroCelular = 'Campo debe ser numérico.';
+			} else if (!(Validator.isLength(data.numeroCelular,{min:9, max: 9}))) {
+				errors.numeroCelular = 'Campo debe tener 9 dígitos.';
+			}
+		} else {
+			if (!(Validator.isInt(data.numeroTelefono.toString()))) {
+				errors.numeroTelefono = 'Campo debe ser numérico.';
+			} else if (!(Validator.isLength(data.numeroTelefono,{min:7, max: 7}))) {
+				errors.numeroTelefono = 'Campo debe tener 7 dígitos.';
+			}
+			if (!(Validator.isInt(data.numeroCelular.toString()))) {
+				errors.numeroCelular = 'Campo debe ser numérico.';
+			} else if (!(Validator.isLength(data.numeroCelular,{min:9, max: 9}))) {
+				errors.numeroCelular = 'Campo debe tener 9 dígitos.';
+			}
+		}
+	}
+	
+	if (Validator.isNull(data.fechaNacimiento)) {
+		errors.fechaNacimiento = mensajeRequerido;
+	} else {
+		var fechaActual = new Date();
+		var fechaNacimiento = new Date(data.fechaNacimiento);
+		const mayorEdad = 567993600000;
+		if((fechaActual - fechaNacimiento - (1000*60*60*24)) < mayorEdad){
+			errors.fechaNacimiento = 'Debe ser mayor de edad.';
+		}
+	}
+	
+	if (Validator.isNull(data.lugarDomicilio)) {
+		errors.lugarDomicilio = mensajeRequerido;
+	}
+	if (Validator.isNull(data.idPaisDomicilio.toString()) || data.idPaisDomicilio === '0') {
+		errors.idPaisDomicilio = mensajeRequerido;
+	}
+	if (Validator.isNull(data.idDepartamentoDomicilio.toString()) || data.idDepartamentoDomicilio === '0') {
+		errors.idDepartamentoDomicilio = mensajeRequerido;
+	}
+	if (Validator.isNull(data.idProvinciaDomicilio.toString()) || data.idProvinciaDomicilio === '0') {
+		errors.idProvinciaDomicilio = mensajeRequerido;
+	}
+	if (Validator.isNull(data.idDistritoDomicilio.toString()) || data.idDistritoDomicilio === '0') {
+		errors.idDistritoDomicilio = mensajeRequerido;
+	}
+	if (Validator.isNull(data.idPaisNacimiento.toString()) || data.idPaisNacimiento === '0') {
+		errors.idPaisNacimiento = mensajeRequerido;
+	}
+	if (Validator.isNull(data.idDepartamentoNacimiento.toString()) || data.idDepartamentoNacimiento === '0') {
+		errors.idDepartamentoNacimiento = mensajeRequerido;
+	}
+	if (Validator.isNull(data.idProvinciaNacimiento.toString()) || data.idProvinciaNacimiento === '0') {
+		errors.idProvinciaNacimiento = mensajeRequerido;
+	}
+	if (Validator.isNull(data.idDistritoNacimiento.toString()) || data.idDistritoNacimiento === '0') {
+		errors.idDistritoNacimiento = mensajeRequerido;
+	}
+	
+	return {
+		errors,
+		isValid: isEmpty(errors)
+	};
+}
+
+
+export function validateInputRecruiterRegistration(data) {
+	var mensajeRequerido = 'Campo es requerido.';
+	
+	let errors = {};
+	
+	if (Validator.isNull(data.correoElectronico)) {
+		errors.correoElectronico = mensajeRequerido;
+	} else {
+		if (!(Validator.isEmail(data.correoElectronico))) {
+			errors.correoElectronico = 'Dirección de correo inválida.';
+		}
+	}
+	
+	return {
+		errors,
+		isValid: isEmpty(errors)
+	};
+}
