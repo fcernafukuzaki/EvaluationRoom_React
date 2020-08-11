@@ -39,6 +39,7 @@ class SelectionProcessForm extends Component {
 
 		this.onCheck = this.onCheck.bind(this);
 		this.onUnCheck = this.onUnCheck.bind(this);
+		this.descargarInforme = this.descargarInforme.bind(this);
     }
 
     componentWillMount() {
@@ -415,8 +416,8 @@ class SelectionProcessForm extends Component {
                     </button>
                 </Link>
             );
-            if(row.psychologicaltests.length > 0){
-                if(row.tieneResultado > 0){
+            if(row.cant_examenes_asignados > 0){
+                if(row.tiene_resultado > 0){
                     verResultados = (
                         <Link to={{ pathname: this.state.rutaListaCandidatosResultados, search: `?id=${hashIdCandidato}`, state: { } }}>
                             <button type="button" className="btn btn-info btn-sm" title="Ver resultados">
@@ -478,7 +479,7 @@ class SelectionProcessForm extends Component {
         }
     }
     generarTablaBodyCandidato(row){
-        console.log(row)
+        //console.log(row)
         if(this.props.candidatos != null && row != null){
             var mensajeSinRespuestasTestPsicologico = '';
             var verResultados = '';
@@ -490,8 +491,10 @@ class SelectionProcessForm extends Component {
                     </button>
                 </Link>
             );
-            if(row.psychologicaltests.length > 0){
-                if(row.tieneResultado > 0){
+            if(row.cant_examenes_asignados > 0){
+                console.log(row.cant_examenes_asignados)
+                console.log(row.tiene_resultado)
+                if(row.tiene_resultado > 0){
                     verResultados = (
                         <Link to={{ pathname: this.state.rutaListaCandidatosResultados, search: `?id=${hashIdCandidato}`, state: { } }}>
                             <button type="button" className="btn btn-info btn-sm" title="Ver resultados">
@@ -548,6 +551,17 @@ class SelectionProcessForm extends Component {
             return (<tr><td>Cargando</td></tr>)
         }
     }
+
+    descargarInforme(row) {
+		console.log(row);
+		this.setState({
+			informe: {
+				idCandidato: row.idCandidato
+			}
+		}, () => {
+			this.props.generarInforme(this.state.informe);
+		});
+	}
 
     render() {
         return (
