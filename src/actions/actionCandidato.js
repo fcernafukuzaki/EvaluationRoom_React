@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { 
+	CANDIDATES_GET,
 	CANDIDATO_GUARDAR,
 	CANDIDATO_OBTENER,
 	CANDIDATOS_OBTENER,
@@ -57,6 +58,20 @@ export function obtenerCandidatos() {
 			.then((response) => { dispatch({ type: CANDIDATOS_OBTENER, payload: response.data }) })
 			.catch((error) => {
 				//console.log(error.toString());
+				if(error.toString().indexOf('Network Error') > -1){
+					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
+				} else {
+					dispatch({ type: ERROR, payload: error.response.data })
+				}
+			})
+	}
+}
+
+export function getCandidates() {
+	return (dispatch, getState) => {
+		axios.get('http://127.0.0.1:5000/v1/candidate_info')
+			.then((response) => { dispatch({ type: CANDIDATES_GET, payload: response.data }) })
+			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
 				} else {

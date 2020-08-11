@@ -20,11 +20,10 @@ class DashBoard extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-		if (prevProps.selectionProcess !== this.props.selectionProcess) {
+		if (prevProps.selectionProcesses !== this.props.selectionProcesses) {
             this.setState({
-				isLoading: Object.entries(this.props.selectionProcess).length > 0 ? false : true,
+				isLoading: Object.entries(this.props.selectionProcesses).length > 0 ? false : true,
             });
-            console.log(this.props.selectionProcess.status)
         }
         if (prevProps.errorResponse !== this.props.errorResponse) {
             if(409 == this.props.errorResponse.status){
@@ -40,7 +39,7 @@ class DashBoard extends Component {
 
     tableSelectionProcess(isLoading) {
         return (<ClientsSelectionProcessList 
-                    datos={this.props.selectionProcess}
+                    datos={this.props.selectionProcesses}
                 />)
     }
     render() {
@@ -57,7 +56,7 @@ class DashBoard extends Component {
 
 function mapStateToProps(state){
     return{
-        selectionProcess : state.reducerSelectionProcess.getSelectionProcessResponse,
+        selectionProcesses : state.reducerSelectionProcess.getSelectionProcessResponse,
         errorResponse : state.reducerSelectionProcess.errorResponse
     }
 }

@@ -8,8 +8,8 @@ import {
 export function getSelectionProcess(idclient, idjobposition) {
 	return (dispatch, getState) => {
 		axios.get(('http://127.0.0.1:5000/v1/selectionprocess')
-					.concat(idclient ? ('/' + idclient) : '')
-					.concat(idjobposition ? ('/' + idjobposition) : ''))
+					.concat(idclient != null ? ('/' + idclient) : '')
+					.concat(idjobposition != null ? ('/' + idjobposition) : ''))
 			.then((response) => { dispatch({ type: SELECTIONPROCESS_GET, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import classnames from 'classnames';
 
 export default function BarraBusqueda(props){
 	//<div className={classnames('botonesBusqueda', 'mb-3') }>
+	//<form className="form">
 	return (
-		<form className="form">
+		<Fragment>
 			<div className="form-group row">
 			{
 				props.camposBusqueda.map( campoBusqueda => {
@@ -27,6 +28,6 @@ export default function BarraBusqueda(props){
 				})
 			}
 			</div>
-		</form>
+		</Fragment>
 	)
 }

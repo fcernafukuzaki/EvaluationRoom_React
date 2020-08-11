@@ -3,6 +3,7 @@ import classnames from 'classnames';
 
 import TextFieldGroupCampos from './TextFieldGroupCampos';
 import ButtonGroup from './ButtonGroup';
+import TablePaginado from './TablePaginado';
 
 export default function Formulario(props) {
 	const {form} = props;
@@ -22,6 +23,10 @@ export default function Formulario(props) {
 	var botonesForm = form.botones.map( boton =>{
 		return <ButtonGroup {...boton} key={boton.key} />;
 	});
+
+	var tablaSelect = form.tablaSelect.map( tabla =>{
+		return <TablePaginado {...tabla} key={tabla.key} />
+	});
 	
 	return (
 		<Fragment>
@@ -31,6 +36,7 @@ export default function Formulario(props) {
 						<h4>{form.titulo}</h4>
 					</div>
 					{camposForm}
+					{tablaSelect}
 					<div className="form-group row">
 						<div className="col-sm-offset-2 col-sm-10">
 							{botonesForm}

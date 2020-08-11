@@ -12,7 +12,7 @@ import CargandoImagen from '../../components/common/CargandoImagen';
 
 import validateInput from '../../components/validate/Cliente';
 
-import { guardarCliente, obtenerCliente } from '../../../actions/actionCliente';
+import { guardarCliente, actualizarCliente, obtenerCliente } from '../../../actions/actionCliente';
 
 class ClienteDatosForm extends Component {
 	constructor(props){
@@ -55,7 +55,7 @@ class ClienteDatosForm extends Component {
 				isLoading: false
 			});
 		}
-		if (prevProps.guardarClienteResponse !== this.props.guardarClienteResponse) {
+		if ((prevProps.guardarClienteResponse !== this.props.guardarClienteResponse) || (prevProps.actualizarClienteResponse !== this.props.actualizarClienteResponse)) {
 			this.limpiar();
 			this.setState({ 
 				isLoading: false,
@@ -83,14 +83,15 @@ class ClienteDatosForm extends Component {
 				errors: {}, 
 				isLoading: true,
 				cliente:{
-					idCliente: this.state.idCliente,
+					//idCliente: this.state.idCliente,
+					idclient: this.state.idCliente,
 					nombre: this.state.nombre
 				}
 			}, () => {
 				if(this.state.idCliente === ''){
 					this.props.guardarCliente(this.state.cliente);
 				} else {
-					this.props.guardarCliente(this.state.cliente);
+					this.props.actualizarCliente(this.state.cliente);
 				}
 			});
 		}
@@ -187,9 +188,10 @@ class ClienteDatosForm extends Component {
 function mapStateToProps(state){
 	return{
 		guardarClienteResponse : state.reducerCliente.guardarClienteResponse,
+		actualizarCliente: state.reducerCliente.actualizarClienteResponse,
 		cliente : state.reducerCliente.obtenerClienteResponse,
 		errorResponse : state.reducerCliente.errorResponse
 	}
 }
 
-export default connect(mapStateToProps, { guardarCliente, obtenerCliente })(ClienteDatosForm);
+export default connect(mapStateToProps, { guardarCliente, actualizarCliente, obtenerCliente })(ClienteDatosForm);

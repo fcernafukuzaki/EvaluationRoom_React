@@ -33,12 +33,6 @@ export default function Home (props){
 			Object.entries(props.usuario.perfiles).length > 0 &&
 			<Fragment>
 				<h4>Bienvenido {props.usuario.nombre} al sistema de evaluación psicológica.</h4>
-				<p>Desde aquí Ud. podrá:</p>
-				<ul>
-					<li>Registrar candidatos.</li>
-					<li>Visualizar los candidatos, sus evaluaciones y resultados.</li>
-					<li>Acceder a la página de test psicológico.</li>
-				</ul>
 				
 				<DashBoard />
 			</Fragment>

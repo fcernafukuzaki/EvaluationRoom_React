@@ -12,7 +12,7 @@ import CargandoImagen from '../../components/common/CargandoImagen';
 
 import validateInput from '../../components/validate/PuestoLaboral';
 
-import { guardarPuestosLaborales, obtenerPuestoLaboral
+import { guardarPuestosLaborales, actualizarPuestosLaborales, obtenerPuestoLaboral
 } from '../../../actions/actionCliente';
 
 class PuestoLaboralDatosForm extends Component {
@@ -58,7 +58,7 @@ class PuestoLaboralDatosForm extends Component {
 				isLoading: false
 			});
 		}
-		if (prevProps.guardarPuestosLaboralesResponse !== this.props.guardarPuestosLaboralesResponse) {
+		if ((prevProps.guardarPuestosLaboralesResponse !== this.props.guardarPuestosLaboralesResponse) || (prevProps.actualizarPuestosLaboralesResponse !== this.props.actualizarPuestosLaboralesResponse)) {
 			this.limpiar();
 			this.setState({ 
 				isLoading: false,
@@ -88,8 +88,10 @@ class PuestoLaboralDatosForm extends Component {
 				cliente:{
 					idCliente: this.state.idCliente,
 					puestosLaborales: [{
-						idCliente: this.state.idCliente,
-						idPuestoLaboral: this.state.idPuestoLaboral,
+						//idCliente: this.state.idCliente,
+						//idPuestoLaboral: this.state.idPuestoLaboral,
+						idclient: this.state.idCliente,
+						idjobposition: this.state.idPuestoLaboral,
 						nombre: this.state.nombre
 					}]
 				}
@@ -97,7 +99,7 @@ class PuestoLaboralDatosForm extends Component {
 				if(this.state.idPuestoLaboral === ''){
 					this.props.guardarPuestosLaborales(this.state.cliente);
 				} else {
-					this.props.guardarPuestosLaborales(this.state.cliente);
+					this.props.actualizarPuestosLaborales(this.state.cliente);
 				}
 			});
 		}
@@ -193,9 +195,10 @@ class PuestoLaboralDatosForm extends Component {
 function mapStateToProps(state){
 	return{
 		guardarPuestosLaboralesResponse : state.reducerCliente.guardarPuestosLaboralesResponse,
+		actualizarPuestosLaboralesResponse: state.reducerCliente.actualizarPuestosLaboralesResponse,
 		puestoLaboral : state.reducerCliente.obtenerPuestoLaboralResponse,
 		errorResponse : state.reducerCliente.errorResponse
 	}
 }
 
-export default connect(mapStateToProps, { guardarPuestosLaborales, obtenerPuestoLaboral })(PuestoLaboralDatosForm);
+export default connect(mapStateToProps, { guardarPuestosLaborales, actualizarPuestosLaborales, obtenerPuestoLaboral })(PuestoLaboralDatosForm);

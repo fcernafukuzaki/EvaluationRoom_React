@@ -1,4 +1,5 @@
 import {
+	CANDIDATES_GET,
 	CANDIDATO_GUARDAR,
 	CANDIDATO_OBTENER,
 	CANDIDATOS_OBTENER,
@@ -23,6 +24,7 @@ import {
 import fileSaver from 'file-saver';
 
 const initialState = { 
+	getCandidatesResponse: [],
 	guardarCandidatoResponse: [],
 	obtenerCandidatoResponse: [],
 	obtenerCandidatosResponse: [],
@@ -47,6 +49,8 @@ const initialState = {
 
 export function actionCandidato(state = initialState, action){
 	switch (action.type) {
+		case CANDIDATES_GET:
+			return Object.assign({}, state, {getCandidatesResponse: action.payload})
 		case CANDIDATO_GUARDAR:
 			return Object.assign({}, state, {guardarCandidatoResponse: action.payload})
 		case CANDIDATO_OBTENER:
