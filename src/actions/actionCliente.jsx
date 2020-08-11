@@ -197,7 +197,7 @@ export function deleteCandidateToJobPosition(datos) {
 	*/
 	return (dispatch, getState) => {
 		console.log(datos)
-		axios.delete('http://127.0.0.1:5000/v1/jobpositioncandidate', datos)
+		axios.put('http://127.0.0.1:5000/v1/jobpositioncandidate', datos)
 			.then((response) => { dispatch({ type: JOBPOSITION_CANDIDATE_DELETE, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){

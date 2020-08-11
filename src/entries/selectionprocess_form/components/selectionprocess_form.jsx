@@ -112,15 +112,39 @@ class SelectionProcessForm extends Component {
                     if(Object.entries(this.props.candidatos).length > 0){
                         let candidatoSeleccionado = [];
                         let candidatos = this.props.candidatos;
-                        for(let i = 0; i < candidatos.length; i += 1){
+                        /*for(let i = 0; i < candidatos.length; i += 1){
                             this.state.selectionProcess.selectionprocess_candidates.map( c => {
+                                console.log(i, candidatos[i])
                                 if(candidatos[i].idcandidato == c.idcandidate){
                                     candidatoSeleccionado.push(candidatos[i]);
                                     //this.props.candidatos.splice(i,1);
                                     candidatos.splice(i,1);
                                 }
                             });
-                        }
+                        }*/
+                        
+                        var lista = candidatos.filter( (c, index) => {
+                            //c.idcandidate 
+                            var candidato = this.state.selectionProcess.selectionprocess_candidates.indexOf(candidatos[index]);
+                            console.log('Candidato asignado al proceso de selección', candidato)
+                            return candidato;
+                        });
+                        console.log(lista)
+
+                        lista = this.state.selectionProcess.selectionprocess_candidates.map( candidate_sp => {
+                            var lista_p = candidatos.filter( (c, index) => 
+                                c.idcandidato == candidate_sp.idcandidate
+                            );
+                            if (lista_p.length > 0){
+                                candidatoSeleccionado.push(lista_p[0]);
+                                var i = candidatos.indexOf(lista_p[0]);
+                                candidatos.splice(i,1);
+                            }
+                            console.log(lista_p)
+                            return candidate_sp.idcandidate;
+                        });
+                        console.log(lista)
+
                         this.setState({ candidatosSeleccionados: candidatoSeleccionado, candidatosNoSeleccionados: candidatos });
                     }
                 }
@@ -492,8 +516,6 @@ class SelectionProcessForm extends Component {
                 </Link>
             );
             if(row.cant_examenes_asignados > 0){
-                console.log(row.cant_examenes_asignados)
-                console.log(row.tiene_resultado)
                 if(row.tiene_resultado > 0){
                     verResultados = (
                         <Link to={{ pathname: this.state.rutaListaCandidatosResultados, search: `?id=${hashIdCandidato}`, state: { } }}>
