@@ -5,6 +5,7 @@ import Formulario from '../../components/common/Formulario'
 import { Prompt } from 'react-router';
 import { Link } from 'react-router-dom';
 
+import {getNewDateTimeFormat, getDateFormat} from '../../common/components/date_util'
 import validateInput from './selectionprocess_form_validate'
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
@@ -26,7 +27,10 @@ class SelectionProcessForm extends Component {
             idjobposition: '',
             nameClient: '',
             nameJobPosition: '',
-			nameForm: '',
+            nameForm: '',
+            dateProcessBegin: getDateFormat(),
+            dateProcessEnd: getDateFormat(),
+            processActive: 'False',
             prompt: false,
             selectionProcess: {},
 			filtroCandidatoNombre: '',
@@ -77,13 +81,13 @@ class SelectionProcessForm extends Component {
             
         }
         if (prevProps.candidatos !== this.props.candidatos) {
-            console.log('Cargó información de candidatos')
+            //console.log('Cargó información de candidatos')
             this.setState({
 				candidatosNoSeleccionados: this.props.candidatos
             });
         }
         if (prevState.selectionProcess !== this.state.selectionProcess){
-            console.log('El estado de selectionProcess ha cambiado.')
+            //console.log('El estado de selectionProcess ha cambiado.')
             //console.log(this.props.candidatos)
             //console.log(this.state.selectionProcess)
             //console.log(this.state.selectionProcess.selectionprocess_candidates)
@@ -114,7 +118,11 @@ class SelectionProcessForm extends Component {
                 idclient: this.props.guardarClienteResponse.idcliente,
                 puestolaboral: {
                         idclient: this.props.guardarClienteResponse.idcliente,
-                        nombre: this.state.nameJobPosition
+                        nombre: this.state.nameJobPosition,
+                        date_process_begin: this.state.dateProcessBegin,
+                        date_process_end: this.state.dateProcessEnd,
+                        user_register: '',
+                        process_active: this.state.processActive
                     }
 			}, () => {
 				if(this.state.idjobposition === ''){
@@ -194,6 +202,9 @@ class SelectionProcessForm extends Component {
                 onChange: this.filtrarListaCandidatosApeMat.bind(this),
                 valor: this.state.filtroCandidatoApellidoMaterno
         }];
+
+        var rowProcessActive = [{ label: "PENDIENTE" , value: "False" },
+                                { label: "COMPLETO" , value: "True" }]
     
         var form = {
             titulo: (this.state.idclient == '' || this.state.idclient == 0 ? 'Registrar cliente' : ('Datos de cliente ').concat(this.state.nameForm)),
@@ -245,36 +256,37 @@ class SelectionProcessForm extends Component {
                     name: 'dateProcessBegin',
                     id: 'dateProcessBegin',
                     label: 'Fecha de inicio de proceso : ',
-                    type: 'text-linea',
+                    type: 'date',
                     value: this.state.dateProcessBegin,
                     error: this.state.errors.dateProcessBegin,
                     onChange: this.onChange.bind(this),
-                    labelClass: 'col-md-2',
-                    fieldClass: 'col-md-2',
+                    labelClass: 'col-md-3',
+                    fieldClass: 'col-md-3',
                     required: 'true'
                 } , {
                     key: 'dateProcessEnd',
                     name: 'dateProcessEnd',
                     id: 'dateProcessEnd',
                     label: 'Fecha de fin de proceso : ',
-                    type: 'text-linea',
+                    type: 'date',
                     value: this.state.dateProcessEnd,
                     error: this.state.errors.dateProcessEnd,
                     onChange: this.onChange.bind(this),
-                    labelClass: 'col-md-2',
-                    fieldClass: 'col-md-2',
+                    labelClass: 'col-md-3',
+                    fieldClass: 'col-md-3',
                     required: 'true'
                 } , {
                     key: 'processActive',
                     name: 'processActive',
                     id: 'processActive',
                     label: 'Estado del proceso : ',
-                    type: 'text-linea',
-                    value: this.state.processActive,
+                    type: 'select',
+                    value: rowProcessActive,
+                    valueSelected: this.state.processActive,
                     error: this.state.errors.processActive,
                     onChange: this.onChange.bind(this),
-                    labelClass: 'col-md-2',
-                    fieldClass: 'col-md-2',
+                    labelClass: 'col-md-3',
+                    fieldClass: 'col-md-3',
                     required: 'true'
                 }]
             ],
@@ -393,7 +405,8 @@ class SelectionProcessForm extends Component {
 					idclient: this.state.idclient,
 					idjobposition: this.state.idjobposition,
 					idcandidate: parseInt(e.target.value),
-					date_registered: '2020-10-02 22:56:00',
+                    //date_registered: '2020-10-02 22:56:00',
+                    date_registered: getNewDateTimeFormat(),
 					user_register: '',
 					user_registered_byself: 'True'
 				}
@@ -408,8 +421,7 @@ class SelectionProcessForm extends Component {
             //console.log('Candidato encontrado', candidato)
 			if(candidato.length > 0){
                 i = candidatosNoSeleccionados.indexOf(candidato[0]);
-                console.log('candidatosNoSeleccionados', i, candidatosNoSeleccionados)
-
+                //console.log('candidatosNoSeleccionados', i, candidatosNoSeleccionados)
 				candidatosNoSeleccionados.splice(i,1);
 			}
 			this.setState({ candidatosNoSeleccionados: candidatosNoSeleccionados});
@@ -442,8 +454,8 @@ class SelectionProcessForm extends Component {
 	}
     
     onClickCancelar(prompt, e) {
-        console.log('onClickCancelar', e)
-        console.log('onClickCancelar', prompt)
+        //console.log('onClickCancelar', e)
+        //console.log('onClickCancelar', prompt)
         if(!prompt){
             limpiar();
         } else {
@@ -636,7 +648,7 @@ class SelectionProcessForm extends Component {
     }
 
     descargarInforme(row) {
-		console.log(row);
+		//console.log(row);
 		this.setState({
 			informe: {
 				idCandidato: row.idCandidato

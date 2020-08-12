@@ -1,3 +1,15 @@
+export function getNewDateTimeFormat() {
+    //2020-10-02 22:56:00
+    var fecha = new Date()
+    return fecha.getFullYear() + "-" + (fecha.getMonth() < 9 ? "0" + (fecha.getMonth() + 1) : fecha.getMonth() + 1) + "-" + (fecha.getDate() < 10 ? "0" + fecha.getDate() : fecha.getDate()) + " " + fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
+}
+
+export function getDateFormat() {
+    //2020-10-02 22:56:00
+    var fecha = new Date()
+    return fecha.getFullYear() + "-" + (fecha.getMonth() < 9 ? "0" + (fecha.getMonth() + 1) : fecha.getMonth() + 1) + "-" + (fecha.getDate() < 10 ? "0" + fecha.getDate() : fecha.getDate());
+}
+
 export function getDate(datetime) {
     var datetime_array = datetime.split('T')
     var date_array = datetime_array[0].split('-')
