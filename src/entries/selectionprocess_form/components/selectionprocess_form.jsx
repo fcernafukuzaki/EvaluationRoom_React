@@ -5,12 +5,13 @@ import Formulario from '../../components/common/Formulario'
 import { Prompt } from 'react-router';
 import { Link } from 'react-router-dom';
 
+import validateInput from './selectionprocess_form_validate'
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
 import {encriptarAES, obtenerValorParametro} from '../../components/common-exam/Mensajes';
-
+import MensajeGuardarExitoso from '../../components/common/MensajeGuardarExitoso';
 import {getSelectionProcess} from '../../../actions/actionSelectionProcess';
-import { obtenerCliente, getJobPosition, getCandidatesFromJobPosition, addCandidateToJobPosition, deleteCandidateToJobPosition } from '../../../actions/actionCliente';
+import { obtenerCliente, getJobPosition, getCandidatesFromJobPosition, guardarCliente, actualizarCliente, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition } from '../../../actions/actionCliente';
 import { getCandidates, obtenerCandidatos, generarInforme } from '../../../actions/actionCandidato';
 
 class SelectionProcessForm extends Component {
@@ -19,10 +20,12 @@ class SelectionProcessForm extends Component {
         this.state = {
             isLoading: true,
 			errorMensaje: '',
+			guardado: false,
 			errors: {},
             idclient: '',
             idjobposition: '',
-			name: '',
+            nameClient: '',
+            nameJobPosition: '',
 			nameForm: '',
             prompt: false,
             selectionProcess: {},
@@ -53,11 +56,11 @@ class SelectionProcessForm extends Component {
 			this.props.obtenerCliente(id[0]);
 			this.props.getJobPosition(id[0], id[1]);
 			this.props.getCandidatesFromJobPosition(id[0], id[1]);
-		}/* else {
+		} else {
 			this.setState({
 				isLoading: false
 			});
-		}*/
+		}
     }
     
     componentDidUpdate(prevProps, prevState) {
@@ -65,7 +68,8 @@ class SelectionProcessForm extends Component {
 			this.setState({
                 idclient: this.props.selectionProcess.client.idcliente,
                 idjobposition: this.props.selectionProcess.jobposition.idpuestolaboral,
-				name: this.props.selectionProcess.client.nombre,
+                nameClient: this.props.selectionProcess.client.nombre,
+                nameJobPosition: this.props.selectionProcess.jobposition.nombre,
                 nameForm: this.props.selectionProcess.client.nombre + ' - ' + this.props.selectionProcess.jobposition.nombre,
                 selectionProcess: this.props.selectionProcess,
 				isLoading: false
@@ -74,81 +78,76 @@ class SelectionProcessForm extends Component {
         }
         if (prevProps.candidatos !== this.props.candidatos) {
             console.log('Cargó información de candidatos')
-            /*this.setState({
-                isLoading: false
-            })*/
             this.setState({
-				//isLoading: Object.entries(this.props.candidatos).length > 0 ? false : true,
 				candidatosNoSeleccionados: this.props.candidatos
             });
-            /*console.log(this.props.selectionProcess)
-            console.log(this.props.selectionProcess.selectionprocess_candidates)
-            if(typeof this.props.selectionProcess.selectionprocess_candidates !== 'undefined'){
-                if(Object.entries(this.props.selectionProcess.selectionprocess_candidates).length > 0){
-                    if(Object.entries(this.props.candidatos).length > 0){
-                        let candidatoSeleccionado = [];
-                        let candidatos = this.props.candidatos;
-                        for(let i = 0; i < candidatos.length; i += 1){
-                            this.props.selectionProcess.selectionprocess_candidates.map( c => {
-                                if(candidatos[i].idCandidato == c.idCandidato){
-                                    candidatoSeleccionado.push(candidatos[i]);
-                                    //this.props.candidatos.splice(i,1);
-                                    candidatos.splice(i,1);
-                                }
-                            });
-                        }
-                        this.setState({ candidatosSeleccionados: candidatoSeleccionado, candidatosNoSeleccionados: candidatos });
-                    }
-                }
-            }*/
         }
         if (prevState.selectionProcess !== this.state.selectionProcess){
             console.log('El estado de selectionProcess ha cambiado.')
-            console.log(this.props.candidatos)
-            console.log(this.state.selectionProcess)
-            console.log(this.state.selectionProcess.selectionprocess_candidates)
+            //console.log(this.props.candidatos)
+            //console.log(this.state.selectionProcess)
+            //console.log(this.state.selectionProcess.selectionprocess_candidates)
             if(typeof this.state.selectionProcess.selectionprocess_candidates !== 'undefined'){
                 if(Object.entries(this.state.selectionProcess.selectionprocess_candidates).length > 0){
                     if(Object.entries(this.props.candidatos).length > 0){
                         let candidatoSeleccionado = [];
                         let candidatos = this.props.candidatos;
-                        /*for(let i = 0; i < candidatos.length; i += 1){
-                            this.state.selectionProcess.selectionprocess_candidates.map( c => {
-                                console.log(i, candidatos[i])
-                                if(candidatos[i].idcandidato == c.idcandidate){
-                                    candidatoSeleccionado.push(candidatos[i]);
-                                    //this.props.candidatos.splice(i,1);
-                                    candidatos.splice(i,1);
-                                }
-                            });
-                        }*/
-                        
-                        var lista = candidatos.filter( (c, index) => {
-                            //c.idcandidate 
-                            var candidato = this.state.selectionProcess.selectionprocess_candidates.indexOf(candidatos[index]);
-                            console.log('Candidato asignado al proceso de selección', candidato)
-                            return candidato;
-                        });
-                        console.log(lista)
-
-                        lista = this.state.selectionProcess.selectionprocess_candidates.map( candidate_sp => {
-                            var lista_p = candidatos.filter( (c, index) => 
+                        this.state.selectionProcess.selectionprocess_candidates.map( candidate_sp => {
+                            var lista_candidatos_encontrados = candidatos.filter( (c, index) => 
                                 c.idcandidato == candidate_sp.idcandidate
                             );
-                            if (lista_p.length > 0){
-                                candidatoSeleccionado.push(lista_p[0]);
-                                var i = candidatos.indexOf(lista_p[0]);
+                            if (lista_candidatos_encontrados.length > 0){
+                                candidatoSeleccionado.push(lista_candidatos_encontrados[0]);
+                                var i = candidatos.indexOf(lista_candidatos_encontrados[0]);
                                 candidatos.splice(i,1);
                             }
-                            console.log(lista_p)
-                            return candidate_sp.idcandidate;
                         });
-                        console.log(lista)
-
                         this.setState({ candidatosSeleccionados: candidatoSeleccionado, candidatosNoSeleccionados: candidatos });
                     }
                 }
             }
+        }
+        if (prevProps.guardarClienteResponse !== this.props.guardarClienteResponse) {
+            this.setState({
+				errors: {}, 
+                isLoading: true,
+                idclient: this.props.guardarClienteResponse.idcliente,
+                puestolaboral: {
+                        idclient: this.props.guardarClienteResponse.idcliente,
+                        nombre: this.state.nameJobPosition
+                    }
+			}, () => {
+				if(this.state.idjobposition === ''){
+					this.props.guardarPuestosLaborales(this.state.puestolaboral);
+				}
+			});
+        }
+        if (prevProps.actualizarClienteResponse !== this.props.actualizarClienteResponse) {
+            this.setState({
+				errors: {}, 
+                isLoading: true,
+                idclient: this.props.actualizarClienteResponse.idcliente,
+                puestolaboral: {
+                        idclient: this.props.actualizarClienteResponse.idcliente,
+                        idjobposition: this.state.idjobposition,
+                        nombre: this.state.nameJobPosition
+                    }
+			}, () => {
+				this.props.actualizarPuestosLaborales(this.state.puestolaboral);
+			});
+        }
+        if (prevProps.guardarPuestosLaboralesResponse !== this.props.guardarPuestosLaboralesResponse) {
+            this.setState({ 
+                isLoading: false,
+                idjobposition: this.props.guardarPuestosLaboralesResponse.idpuestolaboral,
+                guardado: true
+            })
+        }
+        if (prevProps.actualizarPuestosLaboralesResponse !== this.props.actualizarPuestosLaboralesResponse) {
+            this.setState({ 
+                isLoading: false,
+                guardado: true
+            })
         }
         if (prevProps.errorResponse !== this.props.errorResponse) {
 			this.setState({
@@ -204,71 +203,109 @@ class SelectionProcessForm extends Component {
                     name: 'idCliente',
                     id: 'idCliente',
                     type: 'hidden',
-                    value: this.state.selectionProcess.client.idclient,
+                    value: this.state.idclient,
                     error: this.state.errors.idCliente,
                     onChange: this.onChange.bind(this),
                     required: 'false'
                 }] , [{
-                    key: 'nombre',
-                    name: 'nombre',
-                    id: 'nombre',
+                    key: 'nameClient',
+                    name: 'nameClient',
+                    id: 'nameClient',
                     label: 'Nombre empresa : ',
                     type: 'text-linea',
-                    value: this.state.selectionProcess.client.nombre,
-                    error: this.state.errors.nombre,
+                    value: this.state.nameClient,
+                    error: this.state.errors.nameClient,
                     onChange: this.onChange.bind(this),
                     labelClass: 'col-md-4',
                     fieldClass: 'col-md-5',
                     required: 'true'
                 }] , [{
-                    key: 'idPuestoLaboral',
-                    name: 'idPuestoLaboral',
-                    id: 'idPuestoLaboral',
+                    key: 'idjobposition',
+                    name: 'idjobposition',
+                    id: 'idjobposition',
                     type: 'hidden',
-                    value: this.state.selectionProcess.jobposition.idpuestolaboral,
-                    error: this.state.errors.idPuestoLaboral,
+                    value: this.state.idjobposition,
+                    error: this.state.errors.idjobposition,
                     onChange: this.onChange.bind(this),
                     required: 'false'
                 }] , [{
-                    key: 'nombre',
-                    name: 'nombre',
-                    id: 'nombre',
+                    key: 'nameJobPosition',
+                    name: 'nameJobPosition',
+                    id: 'nameJobPosition',
                     label: 'Nombre puesto laboral : ',
                     type: 'text-linea',
-                    value: this.state.selectionProcess.jobposition.nombre,
-                    error: this.state.errors.nombre,
+                    value: this.state.nameJobPosition,
+                    error: this.state.errors.nameJobPosition,
                     onChange: this.onChange.bind(this),
                     labelClass: 'col-md-4',
                     fieldClass: 'col-md-5',
                     required: 'true'
+                }] , [{
+                    key: 'dateProcessBegin',
+                    name: 'dateProcessBegin',
+                    id: 'dateProcessBegin',
+                    label: 'Fecha de inicio de proceso : ',
+                    type: 'text-linea',
+                    value: this.state.dateProcessBegin,
+                    error: this.state.errors.dateProcessBegin,
+                    onChange: this.onChange.bind(this),
+                    labelClass: 'col-md-2',
+                    fieldClass: 'col-md-2',
+                    required: 'true'
+                } , {
+                    key: 'dateProcessEnd',
+                    name: 'dateProcessEnd',
+                    id: 'dateProcessEnd',
+                    label: 'Fecha de fin de proceso : ',
+                    type: 'text-linea',
+                    value: this.state.dateProcessEnd,
+                    error: this.state.errors.dateProcessEnd,
+                    onChange: this.onChange.bind(this),
+                    labelClass: 'col-md-2',
+                    fieldClass: 'col-md-2',
+                    required: 'true'
+                } , {
+                    key: 'processActive',
+                    name: 'processActive',
+                    id: 'processActive',
+                    label: 'Estado del proceso : ',
+                    type: 'text-linea',
+                    value: this.state.processActive,
+                    error: this.state.errors.processActive,
+                    onChange: this.onChange.bind(this),
+                    labelClass: 'col-md-2',
+                    fieldClass: 'col-md-2',
+                    required: 'true'
                 }]
             ],
-            tablaSelect: [
-                {
-                    key: 1,
-                    tituloTabla: 'Lista de candidatos seleccionados',
-                    mensajeSinRegistros: 'Aún no se han seleccionado candidatos para este puesto laboral.',
-                    tableHead: tableHead,
-                    tablaEstilo: "width200",
-                    tableBody: this.generarTablaBodyCandidatoSeleccionados.bind(this),
-                    registrosPorPagina: 10, 
-                    registros: this.state.candidatosSeleccionados,
-                    camposBusqueda: []
-                } , {
-                    key: 2,
-                    tituloTabla: 'Lista de candidatos',
-                    mensajeSinRegistros: 'Aún no se han registrado candidatos.',
-                    tableHead: tableHead,
-                    tablaEstilo: "width200",
-                    tableBody: this.generarTablaBodyCandidato.bind(this),
-                    registrosPorPagina: 15,
-                    registros: this.state.filtroCandidatoNombre.length > 0 || 
-                                this.state.filtroCandidatoApellidoPaterno.length > 0 || 
-                                this.state.filtroCandidatoApellidoMaterno.length > 0 ? 
-                                (this.state.candidatosFiltro.length > 0 ? this.state.candidatosFiltro : []) : this.state.candidatosNoSeleccionados,
-                    camposBusqueda: camposBusqueda
-                }
-            ],
+            tablaSelect: this.state.idclient === '' ? [] : (
+                [ 
+                    {
+                        key: 1,
+                        tituloTabla: 'Lista de candidatos seleccionados',
+                        mensajeSinRegistros: 'Aún no se han seleccionado candidatos para este puesto laboral.',
+                        tableHead: tableHead,
+                        tablaEstilo: "width200",
+                        tableBody: this.generarTablaBodyCandidatoSeleccionados.bind(this),
+                        registrosPorPagina: 10, 
+                        registros: this.state.candidatosSeleccionados,
+                        camposBusqueda: []
+                    } , {
+                        key: 2,
+                        tituloTabla: 'Lista de candidatos',
+                        mensajeSinRegistros: 'Aún no se han registrado candidatos.',
+                        tableHead: tableHead,
+                        tablaEstilo: "width200",
+                        tableBody: this.generarTablaBodyCandidato.bind(this),
+                        registrosPorPagina: 15,
+                        registros: this.state.filtroCandidatoNombre.length > 0 || 
+                                    this.state.filtroCandidatoApellidoPaterno.length > 0 || 
+                                    this.state.filtroCandidatoApellidoMaterno.length > 0 ? 
+                                    (this.state.candidatosFiltro.length > 0 ? this.state.candidatosFiltro : []) : this.state.candidatosNoSeleccionados,
+                        camposBusqueda: camposBusqueda
+                    }
+                ])
+            ,
             botones: [
                 {
                     key: 'guardar',
@@ -303,17 +340,40 @@ class SelectionProcessForm extends Component {
             this.setState({
                 errors: {}, 
                 isLoading: true,
-                cliente:{
-                    idCliente: this.state.idCliente,
-                    nombre: this.state.nombre
-                }
+                cliente: this.state.idclient === '' ? 
+                    {
+                        nombre: this.state.nameClient
+                    } : {
+                        idclient: this.state.idclient,
+                        nombre: this.state.nameClient
+                    }
             }, () => {
-                if(this.state.idCliente === ''){
+                if(this.state.idclient === ''){
                     this.props.guardarCliente(this.state.cliente);
                 } else {
-                    this.props.guardarCliente(this.state.cliente);
+                    this.props.actualizarCliente(this.state.cliente);
                 }
             });
+            /*console.log('Se va a registrar el puesto laboral', this.state)
+            this.setState({
+				errors: {}, 
+				isLoading: true,
+                puestolaboral: this.state.idjobposition === '' ?
+                    {
+                        idclient: this.state.idclient,
+                        nombre: this.state.nameJobPosition
+                    } : {
+                        idclient: this.state.idclient,
+                        idjobposition: this.state.idjobposition,
+                        nombre: this.state.nameJobPosition
+                    }
+			}, () => {
+				if(this.state.idjobposition === ''){
+					this.props.guardarPuestosLaborales(this.state.puestolaboral);
+				} else {
+					this.props.actualizarPuestosLaborales(this.state.puestolaboral);
+				}
+			});*/
         }
     }
     
@@ -345,7 +405,7 @@ class SelectionProcessForm extends Component {
 			var i = -1;
 			let candidatosNoSeleccionados = this.state.candidatosNoSeleccionados;
             let candidato = this.props.candidatos.filter( c => c.idcandidato.toString() == parseInt(e.target.value));
-            console.log('Candidato encontrado', candidato)
+            //console.log('Candidato encontrado', candidato)
 			if(candidato.length > 0){
                 i = candidatosNoSeleccionados.indexOf(candidato[0]);
                 console.log('candidatosNoSeleccionados', i, candidatosNoSeleccionados)
@@ -399,6 +459,7 @@ class SelectionProcessForm extends Component {
             //name: '',
             //nameForm: '',
             //cliente: {},
+            //puestolaboral: {},
             prompt: false
         })
     }
@@ -595,6 +656,7 @@ class SelectionProcessForm extends Component {
                             message="¿Estás seguro de NO querer registrar el cliente?"
                         />
                         <Formulario form={this.formSelectionProcess()} />
+                        <MensajeGuardarExitoso cargando={this.state.guardado} mensaje={"Se guardó exitosamente!"} />
                     </Fragment>)
                 :
 				(<CargandoImagen />)}
@@ -613,9 +675,13 @@ function mapStateToProps(state){
 		puestolaboral: state.reducerCliente.getJobPositionResponse,
 		candidatoPuestoLaboral: state.reducerCliente.getCandidatesFromJobPositionResponse,
         informePsicologicoResponse : state.reducerCandidato.generarInformeResponse,
+        guardarClienteResponse: state.reducerCliente.guardarClienteResponse,
+        actualizarClienteResponse: state.reducerCliente.actualizarClienteResponse,
+        guardarPuestosLaboralesResponse: state.reducerCliente.guardarPuestosLaboralesResponse,
+        actualizarPuestosLaboralesResponse: state.reducerCliente.actualizarPuestosLaboralesResponse,
         addCandidateToJobPosition: state.reducerCliente.addCandidateToJobPositionResponse,
         deleteCandidateToJobPosition: state.reducerCliente.deleteCandidateToJobPositionResponse,
 	}
 }
 
-export default connect(mapStateToProps, {getSelectionProcess, getCandidates, getJobPosition, addCandidateToJobPosition, deleteCandidateToJobPosition, obtenerCandidatos, obtenerCliente, getCandidatesFromJobPosition, generarInforme })(SelectionProcessForm);
+export default connect(mapStateToProps, {getSelectionProcess, getCandidates, getJobPosition, guardarCliente, actualizarCliente, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition, obtenerCandidatos, obtenerCliente, getCandidatesFromJobPosition, generarInforme })(SelectionProcessForm);

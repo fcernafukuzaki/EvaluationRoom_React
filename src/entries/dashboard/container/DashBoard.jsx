@@ -5,6 +5,7 @@ import CargandoImagen from '../../components/common/CargandoImagen'
 import MensajeError from '../../components/common/MensajeError';
 import {getSelectionProcess} from '../../../actions/actionSelectionProcess';
 import ClientsSelectionProcessList from '../components/clients_selectionprocess_list'
+import ClientsSelectionProcessButtonNew from '../components/clients_selectionprocess_button_new'
 
 class DashBoard extends Component {
     constructor(props){
@@ -38,9 +39,18 @@ class DashBoard extends Component {
     }
 
     tableSelectionProcess(isLoading) {
-        return (<ClientsSelectionProcessList 
-                    datos={this.props.selectionProcesses}
-                />)
+        return (<Fragment>
+                    <ClientsSelectionProcessButtonNew 
+                        pathname={'/selectionprocess'}
+                        hashId={``}
+                        buttonClass={'far fa-edit'}
+                        buttonTitle={'Registrar datos de nuevo proceso de selección'}
+                        buttonLabel={'Nuevo proceso de selección'}
+                    />
+                    <ClientsSelectionProcessList 
+                        datos={this.props.selectionProcesses}
+                    />
+                </Fragment>)
     }
     render() {
         const {isLoading, errorMensaje} = this.state
