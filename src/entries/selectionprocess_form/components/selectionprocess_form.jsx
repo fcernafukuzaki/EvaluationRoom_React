@@ -30,7 +30,7 @@ class SelectionProcessForm extends Component {
             nameForm: '',
             dateProcessBegin: getDateFormat(),
             dateProcessEnd: getDateFormat(),
-            processActive: 'False',
+            processActive: 'True',
             prompt: false,
             selectionProcess: {},
 			filtroCandidatoNombre: '',
@@ -75,6 +75,7 @@ class SelectionProcessForm extends Component {
                 nameClient: this.props.selectionProcess.client.nombre,
                 nameJobPosition: this.props.selectionProcess.jobposition.nombre,
                 nameForm: this.props.selectionProcess.client.nombre + ' - ' + this.props.selectionProcess.jobposition.nombre,
+                processActive: this.props.selectionProcess.process_active ? 'True' : 'False',
                 selectionProcess: this.props.selectionProcess,
 				isLoading: false
             });
@@ -138,7 +139,11 @@ class SelectionProcessForm extends Component {
                 puestolaboral: {
                         idclient: this.props.actualizarClienteResponse.idcliente,
                         idjobposition: this.state.idjobposition,
-                        nombre: this.state.nameJobPosition
+                        nombre: this.state.nameJobPosition,
+                        date_process_begin: this.state.dateProcessBegin,
+                        date_process_end: this.state.dateProcessEnd,
+                        user_register: '',
+                        process_active: this.state.processActive
                     }
 			}, () => {
 				this.props.actualizarPuestosLaborales(this.state.puestolaboral);
@@ -203,8 +208,8 @@ class SelectionProcessForm extends Component {
                 valor: this.state.filtroCandidatoApellidoMaterno
         }];
 
-        var rowProcessActive = [{ label: "PENDIENTE" , value: "False" },
-                                { label: "COMPLETO" , value: "True" }]
+        var rowProcessActive = [{ label: "ACTIVO" , value: "True" },
+                                { label: "FINALIZADO" , value: "False" }]
     
         var form = {
             titulo: (this.state.idclient == '' || this.state.idclient == 0 ? 'Registrar cliente' : ('Datos de cliente ').concat(this.state.nameForm)),
