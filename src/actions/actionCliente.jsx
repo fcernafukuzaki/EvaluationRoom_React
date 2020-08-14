@@ -63,7 +63,8 @@ export function obtenerCliente(idclient) {
 
 export function obtenerClientes() {
 	return (dispatch, getState) => {
-		axios.get(('http://127.0.0.1:5000/v1/client'))
+		//axios.get(('http://127.0.0.1:5000/v1/client'))
+		axios.get(('http://127.0.0.1:5000/v1/client_info'))
 			.then((response) => { dispatch({ type: CLIENTES_OBTENER, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){

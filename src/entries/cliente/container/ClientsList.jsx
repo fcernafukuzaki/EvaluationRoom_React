@@ -98,7 +98,7 @@ class ClientsList extends Component {
 	generarTablaBodyClientes(row){
 		if(row != null){
 			var asignarPuestosLaborales = '';
-			var hashIdCliente = encriptarAES(row.idCliente.toString());
+			var hashIdCliente = encriptarAES(row.idcliente.toString());
 			var actualizarCliente = (
 				<Link to={{ pathname: this.state.rutaRegistrarCliente, search: `?id=${hashIdCliente}`, state: { } }}>
 					<button type="button" className="btn btn-outline-secondary btn-sm" title="Actualizar datos">
@@ -108,7 +108,7 @@ class ClientsList extends Component {
 			);
 			if(row.puestosLaborales.length > 0){
 				asignarPuestosLaborales = (
-					<Link to={{ pathname: this.state.rutaRegistrarPuestoLaboral, search: `?id=${hashIdCliente}`, state: { idclient: row.idCliente } }}>
+					<Link to={{ pathname: this.state.rutaRegistrarPuestoLaboral, search: `?id=${hashIdCliente}`, state: { idclient: row.idcliente } }}>
 						<button type="button" className="btn btn-dark btn-sm" title="Asignar más puestos laborales">
 							<i className="far fa-folder-open"></i> Asignar más puestos laborales
 						</button>
@@ -116,15 +116,15 @@ class ClientsList extends Component {
 				);
 			} else {
 				asignarPuestosLaborales = (
-					<Link to={{ pathname: this.state.rutaRegistrarPuestoLaboral, search: `?id=${hashIdCliente}`, state: { idclient: row.idCliente } }}>
+					<Link to={{ pathname: this.state.rutaRegistrarPuestoLaboral, search: `?id=${hashIdCliente}`, state: { idclient: row.idcliente } }}>
 						<button type="button" className="btn btn-dark btn-sm" title="Asignar puestos laborales">
 							<i className="far fa-folder-open"></i> Asignar puestos laborales
 						</button>
 					</Link>
 				);
 			}
-			return (<tr key={row.idCliente} onClick={() => this.verPuestosLaborales(row)} >
-						<td>{row.idCliente}</td>
+			return (<tr key={row.idcliente} onClick={() => this.verPuestosLaborales(row)} >
+						<td>{row.idcliente}</td>
 						<td>{row.nombre}</td>
 						<td>{actualizarCliente}
 							{asignarPuestosLaborales}
@@ -137,7 +137,7 @@ class ClientsList extends Component {
 	
 	generarTablaBodyPuestosLaborales(row, index){
 		if(row != null){
-			var hashIdCliente = encriptarAES(row.idCliente.toString());
+			var hashIdCliente = encriptarAES(row.idcliente.toString());
 			var hashIdPuestoLaboral = encriptarAES(row.idPuestoLaboral.toString());
 			var actualizarPuestoLaboral = (
 				<Link to={{ pathname: this.state.rutaRegistrarPuestoLaboral, search: `?id=${hashIdCliente}&idp=${hashIdPuestoLaboral}`, state: { } }}>
