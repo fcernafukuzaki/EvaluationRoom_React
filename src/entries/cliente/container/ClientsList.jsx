@@ -12,10 +12,9 @@ import {obtenerValorParametro} from '../../components/common-exam/Mensajes';
 
 import {encriptarAES} from '../../components/common-exam/Mensajes';
 
-import { obtenerClientes, obtenerPuestosLaboralesPorCliente
-} from '../../../actions/actionCliente';
+import {obtenerClientes, getJobPosition, obtenerPuestosLaboralesPorCliente} from '../../../actions/actionCliente';
 
-class ClientesDatosForm extends Component {
+class ClientsList extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
@@ -23,8 +22,8 @@ class ClientesDatosForm extends Component {
 			filtroPuestosLaboralesNombre: '',
 			clientesFiltro:[],
 			puestosLaboralesFiltro:[],
-			idCliente: 0,
-			nombre: '',
+			idclient: 0,
+			nameClient: '',
 			errors: {},
 			isLoading: true,
 			errorMensaje: '',
@@ -47,7 +46,10 @@ class ClientesDatosForm extends Component {
 			this.setState({
 				isLoading: Object.entries(this.props.clientes).length > 0 ? false : true
 			});
-		}
+        }
+        if(prevProps.getJobPositionResponse !== this.props.getJobPosition){
+            console.log(this.props.getJobPositionResponse)
+        }
 		if (prevProps.errorResponse !== this.props.errorResponse) {
 			this.setState({
 				isLoading: false,
@@ -67,7 +69,7 @@ class ClientesDatosForm extends Component {
 			clientesFiltro: this.props.clientes.filter( c => c.nombre.toLowerCase().indexOf(filtroClientesNombre) > -1 ),
 			filtroPuestosLaboralesNombre: '',
 			puestosLaboralesFiltro: [],
-			idCliente: 0
+			idclient: 0
 		})
 	}
 	
@@ -85,11 +87,12 @@ class ClientesDatosForm extends Component {
 	
 	verPuestosLaborales(cliente){
 		this.setState({
-			idCliente : cliente.idCliente, 
-			nombre : cliente.nombre,
+			idclient : cliente.idcliente, 
+			nameClient : cliente.nombre,
 			puestosLaboralesFiltro: this.props.puestosLaboralesResponse
 		});
-		this.props.obtenerPuestosLaboralesPorCliente(cliente.idCliente);
+        this.props.obtenerPuestosLaboralesPorCliente(cliente.idcliente);
+        this.props.getJobPosition(cliente.idcliente)
 	}
 	
 	generarTablaBodyClientes(row){
@@ -105,7 +108,7 @@ class ClientesDatosForm extends Component {
 			);
 			if(row.puestosLaborales.length > 0){
 				asignarPuestosLaborales = (
-					<Link to={{ pathname: this.state.rutaRegistrarPuestoLaboral, search: `?id=${hashIdCliente}`, state: { idCliente: row.idCliente } }}>
+					<Link to={{ pathname: this.state.rutaRegistrarPuestoLaboral, search: `?id=${hashIdCliente}`, state: { idclient: row.idCliente } }}>
 						<button type="button" className="btn btn-dark btn-sm" title="Asignar más puestos laborales">
 							<i className="far fa-folder-open"></i> Asignar más puestos laborales
 						</button>
@@ -113,7 +116,7 @@ class ClientesDatosForm extends Component {
 				);
 			} else {
 				asignarPuestosLaborales = (
-					<Link to={{ pathname: this.state.rutaRegistrarPuestoLaboral, search: `?id=${hashIdCliente}`, state: { idCliente: row.idCliente } }}>
+					<Link to={{ pathname: this.state.rutaRegistrarPuestoLaboral, search: `?id=${hashIdCliente}`, state: { idclient: row.idCliente } }}>
 						<button type="button" className="btn btn-dark btn-sm" title="Asignar puestos laborales">
 							<i className="far fa-folder-open"></i> Asignar puestos laborales
 						</button>
@@ -164,15 +167,15 @@ class ClientesDatosForm extends Component {
 	}
 	
 	render() {
-		const { idCliente, nombre, clientesFiltro, filtroClientesNombre, puestosLaboralesFiltro, filtroPuestosLaboralesNombre, rutaRegistrarCliente, errors, isLoading, errorMensaje } = this.state;
+		const { idclient, nameClient, clientesFiltro, filtroClientesNombre, puestosLaboralesFiltro, filtroPuestosLaboralesNombre, rutaRegistrarCliente, errors, isLoading, errorMensaje } = this.state;
 		//console.log('ClientesDatosForm:state', this.state);
 		//console.log('ClientesDatosForm:props', this.props);
 		var tableHeadCliente = [{
-				key: 'idCliente',
+				key: 'idclient',
 				nombre: 'N°'
 			},{
-				key: 'nombre',
-				nombre: 'Nombre'
+				key: 'nameClient',
+				nombre: 'nameClient'
 			},{
 				key: 'accion',
 				nombre: 'Acciones'
@@ -223,16 +226,16 @@ class ClientesDatosForm extends Component {
 						registrosPorPagina={10} 
 						registros={filtroClientesNombre.length > 0 ? (clientesFiltro.length > 0 ? clientesFiltro : []) : this.props.clientes} 
 						camposBusqueda={camposBusqueda} />
-					{idCliente > 0 &&
+					{idclient > 0 &&
 					<Fragment>
-						<TablePaginado tituloTabla={this.obtenerTablaTitulo(nombre)}
-							mensajeSinRegistros={"No se encontró puestos laborales del cliente " + nombre} 
+						<TablePaginado tituloTabla={this.obtenerTablaTitulo(nameClient)}
+							mensajeSinRegistros={"No se encontró puestos laborales del cliente " + nameClient} 
 							tableHead={tableHeadPuestoLaboral}
 							tablaEstilo={"width200"}
 							tableBody={this.generarTablaBodyPuestosLaborales.bind(this)}
-							nombreTitulo={nombre}
+							nombreTitulo={nameClient}
 							registrosPorPagina={10}
-							registros={filtroPuestosLaboralesNombre.length > 0 ? puestosLaboralesFiltro : idCliente > 0 ? this.props.puestosLaboralesResponse : filtroClientesNombre.length > 0 ? [] : []} 
+							registros={filtroPuestosLaboralesNombre.length > 0 ? puestosLaboralesFiltro : idclient > 0 ? this.props.puestosLaboralesResponse : filtroClientesNombre.length > 0 ? [] : []} 
 							camposBusqueda={camposBusquedaPuestoLaboral} />
 					</Fragment>
 					}
@@ -246,9 +249,10 @@ class ClientesDatosForm extends Component {
 
 function mapStateToProps(state){
 	return{
-		clientes : state.reducerCliente.obtenerClientesResponse,
+        clientes : state.reducerCliente.obtenerClientesResponse,
+        getJobPositionResponse: state.reducerCliente.getJobPositionResponse,
 		puestosLaboralesResponse : state.reducerCliente.obtenerClientePuestosLaboralesResponse
 	}
 }
 
-export default connect(mapStateToProps, { obtenerClientes, obtenerPuestosLaboralesPorCliente })(ClientesDatosForm);
+export default connect(mapStateToProps, { obtenerClientes, obtenerPuestosLaboralesPorCliente })(ClientsList);

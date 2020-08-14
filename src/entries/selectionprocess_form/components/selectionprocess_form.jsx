@@ -12,7 +12,7 @@ import CargandoImagen from '../../components/common/CargandoImagen';
 import {encriptarAES, obtenerValorParametro} from '../../components/common-exam/Mensajes';
 import MensajeGuardarExitoso from '../../components/common/MensajeGuardarExitoso';
 import {getSelectionProcess} from '../../../actions/actionSelectionProcess';
-import { obtenerCliente, getJobPosition, getCandidatesFromJobPosition, guardarCliente, actualizarCliente, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition } from '../../../actions/actionCliente';
+import { obtenerCliente, getJobPosition, getCandidatesFromJobPosition, addClient, updateClient, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition } from '../../../actions/actionCliente';
 import { getCandidates, obtenerCandidatos, generarInforme } from '../../../actions/actionCandidato';
 
 class SelectionProcessForm extends Component {
@@ -366,31 +366,11 @@ class SelectionProcessForm extends Component {
                     }
             }, () => {
                 if(this.state.idclient === ''){
-                    this.props.guardarCliente(this.state.cliente);
+                    this.props.addClient(this.state.cliente);
                 } else {
-                    this.props.actualizarCliente(this.state.cliente);
+                    this.props.updateClient(this.state.cliente);
                 }
             });
-            /*console.log('Se va a registrar el puesto laboral', this.state)
-            this.setState({
-				errors: {}, 
-				isLoading: true,
-                puestolaboral: this.state.idjobposition === '' ?
-                    {
-                        idclient: this.state.idclient,
-                        nombre: this.state.nameJobPosition
-                    } : {
-                        idclient: this.state.idclient,
-                        idjobposition: this.state.idjobposition,
-                        nombre: this.state.nameJobPosition
-                    }
-			}, () => {
-				if(this.state.idjobposition === ''){
-					this.props.guardarPuestosLaborales(this.state.puestolaboral);
-				} else {
-					this.props.actualizarPuestosLaborales(this.state.puestolaboral);
-				}
-			});*/
         }
     }
     
@@ -701,4 +681,4 @@ function mapStateToProps(state){
 	}
 }
 
-export default connect(mapStateToProps, {getSelectionProcess, getCandidates, getJobPosition, guardarCliente, actualizarCliente, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition, obtenerCandidatos, obtenerCliente, getCandidatesFromJobPosition, generarInforme })(SelectionProcessForm);
+export default connect(mapStateToProps, {getSelectionProcess, getCandidates, getJobPosition, addClient, updateClient, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition, obtenerCandidatos, obtenerCliente, getCandidatesFromJobPosition, generarInforme })(SelectionProcessForm);

@@ -10,17 +10,17 @@ import MensajeGuardarExitoso from '../../components/common/MensajeGuardarExitoso
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
 
-import validateInput from '../../components/validate/Cliente';
+import validateInput from '../../cliente/components/cliente_form_validate';
 
-import { guardarCliente, actualizarCliente, obtenerCliente } from '../../../actions/actionCliente';
+import { addClient, updateClient, obtenerCliente } from '../../../actions/actionCliente';
 
 class ClienteDatosForm extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
 			filter: null,
-			idCliente: '',
-			nombre: '',
+			idclient: '',
+			nameClient: '',
 			nombreForm: '',
 			errors: {},
 			isLoading: true,
@@ -49,8 +49,8 @@ class ClienteDatosForm extends Component {
 	componentDidUpdate(prevProps, prevState) {
 		if (prevProps.cliente !== this.props.cliente) {
 			this.setState({
-				idCliente: this.props.cliente.idCliente,
-				nombre: this.props.cliente.nombre,
+				idclient: this.props.cliente.idcliente,
+				nameClient: this.props.cliente.nombre,
 				nombreForm: this.props.cliente.nombre,
 				isLoading: false
 			});
@@ -82,16 +82,18 @@ class ClienteDatosForm extends Component {
 			this.setState({
 				errors: {}, 
 				isLoading: true,
-				cliente:{
-					//idCliente: this.state.idCliente,
-					idclient: this.state.idCliente,
-					nombre: this.state.nombre
-				}
+				cliente: this.state.idclient === '' ? 
+                    {
+                        nombre: this.state.nameClient
+                    } : {
+                        idclient: this.state.idclient,
+                        nombre: this.state.nameClient
+                    }
 			}, () => {
-				if(this.state.idCliente === ''){
-					this.props.guardarCliente(this.state.cliente);
+				if(this.state.idclient === ''){
+					this.props.addClient(this.state.cliente);
 				} else {
-					this.props.actualizarCliente(this.state.cliente);
+					this.props.updateClient(this.state.cliente);
 				}
 			});
 		}
@@ -113,8 +115,8 @@ class ClienteDatosForm extends Component {
 	
 	limpiar(){
 		this.setState({
-			idCliente: '',
-			nombre: '',
+			idclient: '',
+			nameClient: '',
 			nombreForm: '',
 			cliente: {},
 			prompt: false
@@ -122,29 +124,29 @@ class ClienteDatosForm extends Component {
 	}
 	
 	render() {
-		const { idCliente, nombre, nombreForm, errors, isLoading , errorMensaje, guardado} = this.state;
+		const { idclient, nameClient, nombreForm, errors, isLoading , errorMensaje, guardado} = this.state;
 		//console.log('ClienteDatosForm:state', this.state);
 		//console.log('ClienteDatosForm:props', this.props);
 		var form = {
-			titulo: (idCliente == '' || idCliente == 0 ? 'Registrar cliente' : ('Datos de cliente ').concat(nombreForm)),
+			titulo: (idclient == '' || idclient == 0 ? 'Registrar cliente' : ('Datos de cliente ').concat(nombreForm)),
 			campos: [
 				[{
-					key: 'idCliente',
-					name: 'idCliente',
-					id: 'idCliente',
+					key: 'idclient',
+					name: 'idclient',
+					id: 'idclient',
 					type: 'hidden',
-					value: idCliente,
-					error: errors.idCliente,
+					value: idclient,
+					error: errors.idclient,
 					onChange: this.onChange,
 					required: 'false'
 				}] , [{
-					key: 'nombre',
-					name: 'nombre',
-					id: 'nombre',
+					key: 'nameClient',
+					name: 'nameClient',
+					id: 'nameClient',
 					label: 'Nombre empresa : ',
 					type: 'text-linea',
-					value: nombre,
-					error: errors.nombre,
+					value: nameClient,
+					error: errors.nameClient,
 					onChange: this.onChange,
 					labelClass: 'col-md-4',
 					fieldClass: 'col-md-5',
@@ -188,10 +190,10 @@ class ClienteDatosForm extends Component {
 function mapStateToProps(state){
 	return{
 		guardarClienteResponse : state.reducerCliente.guardarClienteResponse,
-		actualizarCliente: state.reducerCliente.actualizarClienteResponse,
+		actualizarClienteResponse: state.reducerCliente.actualizarClienteResponse,
 		cliente : state.reducerCliente.obtenerClienteResponse,
 		errorResponse : state.reducerCliente.errorResponse
 	}
 }
 
-export default connect(mapStateToProps, { guardarCliente, actualizarCliente, obtenerCliente })(ClienteDatosForm);
+export default connect(mapStateToProps, { addClient, updateClient, obtenerCliente })(ClienteDatosForm);

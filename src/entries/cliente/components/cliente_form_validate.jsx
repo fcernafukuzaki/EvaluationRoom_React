@@ -7,7 +7,7 @@ export default function validateInput(data) {
 	
 	let errors = {};
 
-	if (Validator.isNull(data.nombre)) {
+	if (Validator.isEmpty(data.nombre)) {
 		errors.nombre = mensajeRequerido;
 	}
 	

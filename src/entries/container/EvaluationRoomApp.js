@@ -6,18 +6,18 @@ import NavBar from '../components/common/NavBar';
 import Footer from '../components/Footer';
 import Home from '../components/Home';
 import NotFound from '../components/NotFound';
-import ClientesDatosForm from '../container/cliente/ClientesDatosForm';
-import ClienteDatosForm from '../container/cliente/ClienteDatosForm';
-import PuestoLaboralDatosForm from '../container/cliente/PuestoLaboralDatosForm';
+import ClientsList from '../cliente/container/ClientsList';
+import ClienteDatosForm from '../cliente/container/ClienteDatosForm';
+import PuestoLaboralDatosForm from '../cliente/container/PuestoLaboralDatosForm';
 import CandidatoDatosForm from '../container/candidato/CandidatoDatosForm';
 import CandidatosResultadoForm from '../container/candidato/CandidatosResultadoForm';
 import CandidatoResultadoForm from '../container/candidato/CandidatoResultadoForm';
 import CandidatosForm from '../container/candidato/CandidatosForm';
 import TestPsicologicos from '../container/testpsicologico/TestPsicologicos';
-import UsuarioDatosForm from '../container/administracion/UsuarioDatosForm';
-import PerfilDatosForm from '../container/administracion/PerfilDatosForm';
-import UsuariosForm from '../container/administracion/UsuariosForm';
-import PerfilesForm from '../container/administracion/PerfilesForm';
+import UsuarioDatosForm from '../administracion/container/UsuarioDatosForm';
+import PerfilDatosForm from '../administracion/container/PerfilDatosForm';
+import UsuariosForm from '../administracion/container/UsuariosForm';
+import PerfilesForm from '../administracion/container/PerfilesForm';
 import SelectionProcessFormContainer from '../selectionprocess_form/container/selectionprocess_form_container'
 import MensajeError from '../components/common/MensajeError';
 
@@ -179,7 +179,7 @@ export default class EvaluationRoomApp extends Component {
 					<Route exact path="/home" render={()=>(<Home usuario={this.state.usuario} isLoading={this.state.isLoading} />)} />
 					{flagUsuario !== 'No autorizado' &&
 					<Fragment>
-						<Route exact path="/listarClientes" render={()=>(<ClientesDatosForm errorResponse={this.state.errorMensaje} />)} />
+						<Route exact path="/listarClientes" render={()=>(<ClientsList errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/registrarCliente" render={()=>(<ClienteDatosForm errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/registrarPuestoLaboral" render={()=>(<PuestoLaboralDatosForm errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/registrarCandidato" render={()=>(<CandidatoDatosForm errorResponse={this.state.errorMensaje} />)} />

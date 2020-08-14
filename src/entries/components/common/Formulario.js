@@ -24,9 +24,12 @@ export default function Formulario(props) {
 		return <ButtonGroup {...boton} key={boton.key} />;
 	});
 
-	var tablaSelect = form.tablaSelect.map( tabla =>{
-		return <TablePaginado {...tabla} key={tabla.key} />
-	});
+	var tablaSelect = '';
+	if (typeof form.tablaSelect !== 'undefined'){
+		tablaSelect = form.tablaSelect.map( tabla =>{
+			return <TablePaginado {...tabla} key={tabla.key} />
+		});
+	}
 	
 	return (
 		<Fragment>

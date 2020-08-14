@@ -16,10 +16,10 @@ import {
 	OBJ_ERROR_TIME_OUT
 } from './actionTypes';
 
-export function guardarCliente(cliente) {
+export function addClient(client) {
+	console.log(client)
 	return (dispatch, getState) => {
-		//axios.post('/cliente/', cliente)
-		axios.post('http://127.0.0.1:5000/v1/client', cliente)
+		axios.post('http://127.0.0.1:5000/v1/client', client)
 			.then((response) => { dispatch({ type: CLIENTE_GUARDAR, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
@@ -31,9 +31,10 @@ export function guardarCliente(cliente) {
 	}
 }
 
-export function actualizarCliente(cliente) {
+export function updateClient(client) {
+	console.log(client)
 	return (dispatch, getState) => {
-		axios.put('http://127.0.0.1:5000/v1/client', cliente)
+		axios.put('http://127.0.0.1:5000/v1/client', client)
 			.then((response) => { dispatch({ type: CLIENTE_ACTUALIZAR, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
@@ -47,7 +48,6 @@ export function actualizarCliente(cliente) {
 
 export function obtenerCliente(idclient) {
 	return (dispatch, getState) => {
-		//axios.get(('/cliente/id/').concat(idCliente))
 		axios.get(('http://127.0.0.1:5000/v1/client')
 					.concat(idclient ? ('/' + idclient) : ''))
 			.then((response) => { dispatch({ type: CLIENTE_OBTENER, payload: response.data }) })
@@ -63,7 +63,6 @@ export function obtenerCliente(idclient) {
 
 export function obtenerClientes() {
 	return (dispatch, getState) => {
-		//axios.get('/cliente/')
 		axios.get(('http://127.0.0.1:5000/v1/client'))
 			.then((response) => { dispatch({ type: CLIENTES_OBTENER, payload: response.data }) })
 			.catch((error) => {
@@ -77,8 +76,8 @@ export function obtenerClientes() {
 }
 
 export function guardarPuestosLaborales(datos) {
+	console.log(datos)
 	return (dispatch, getState) => {
-		//axios.post('/cliente/puestos/',cliente)
 		axios.post('http://127.0.0.1:5000/v1/jobposition', datos)
 			.then((response) => { dispatch({ type: PUESTOS_LABORALES_GUARDAR, payload: response.data }) })
 			.catch((error) => {
@@ -92,6 +91,7 @@ export function guardarPuestosLaborales(datos) {
 }
 
 export function actualizarPuestosLaborales(datos) {
+	console.log(datos)
 	return (dispatch, getState) => {
 		axios.put('http://127.0.0.1:5000/v1/jobposition', datos)
 			.then((response) => { dispatch({ type: PUESTOS_LABORALES_ACTUALIZAR, payload: response.data }) })
