@@ -10,9 +10,6 @@ export default function CandidateCardInfo (props) {
         <CandidateButtonUpdate 
             pathname={'/registrarCandidato'}
             hashId={`?idc=${hashIdCandidato}`}
-            buttonClass={'far fa-edit'}
-            buttonTitle={'Actualizar datos'}
-            buttonLabel={'Actualizar'}
         />
     );
 

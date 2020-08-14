@@ -43,9 +43,6 @@ class DashBoard extends Component {
                     <ClientsSelectionProcessButtonNew 
                         pathname={'/selectionprocess'}
                         hashId={``}
-                        buttonClass={'far fa-edit'}
-                        buttonTitle={'Registrar datos de nuevo proceso de selección'}
-                        buttonLabel={'Nuevo proceso de selección'}
                     />
                     <ClientsSelectionProcessList 
                         datos={this.props.selectionProcesses}

@@ -1,18 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
-import { Link } from 'react-router-dom';
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
-import Formulario from '../../components/common/Formulario';
 import TablePaginado from '../../components/common/TablePaginado';
-import BarraBusqueda from '../../components/common/BarraBusqueda';
-import {obtenerValorParametro} from '../../components/common-exam/Mensajes';
 
+import {ClientButtonAdd, ClientButtonUpdate, ClientButtonAssignJobPosition, ClientButtonAssignMoreJobPosition}  from '../components/client_button'
+import {JobPositionButtonUpdate, JobPositionButtonAssignCandidates} from '../components/jobposition_button'
 import {encriptarAES} from '../../components/common-exam/Mensajes';
 
-import {obtenerClientes, getJobPosition, obtenerPuestosLaboralesPorCliente} from '../../../actions/actionCliente';
+import {obtenerClientes, getJobPosition} from '../../../actions/actionCliente';
 
 class ClientsList extends Component {
 	constructor(props){
@@ -28,7 +25,6 @@ class ClientsList extends Component {
 			isLoading: true,
 			errorMensaje: '',
 			clientes:{},
-			puestosLaboralesResponse:{},
 			rutaRegistrarCliente: '/registrarCliente',
 			rutaRegistrarPuestoLaboral: '/registrarPuestoLaboral',
 			rutaAsignarCandidatos: '/asignarCandidatos'
@@ -77,7 +73,7 @@ class ClientsList extends Component {
 		let filtroPuestosLaboralesNombre = e.target.value.toLowerCase();
 		this.setState({
 			filtroPuestosLaboralesNombre: filtroPuestosLaboralesNombre.toLowerCase(),
-			puestosLaboralesFiltro: this.props.puestosLaboralesResponse.filter( p => p.nombre.toLowerCase().indexOf(filtroPuestosLaboralesNombre) > -1 )
+			puestosLaboralesFiltro: this.props.getJobPositionResponse.filter( p => p.nombre.toLowerCase().indexOf(filtroPuestosLaboralesNombre) > -1 )
 		})
 	}
 	
@@ -89,9 +85,8 @@ class ClientsList extends Component {
 		this.setState({
 			idclient : cliente.idcliente, 
 			nameClient : cliente.nombre,
-			puestosLaboralesFiltro: this.props.puestosLaboralesResponse
+			puestosLaboralesFiltro: this.props.getJobPositionResponse
 		});
-        this.props.obtenerPuestosLaboralesPorCliente(cliente.idcliente);
         this.props.getJobPosition(cliente.idcliente)
 	}
 	
@@ -100,27 +95,27 @@ class ClientsList extends Component {
 			var asignarPuestosLaborales = '';
 			var hashIdCliente = encriptarAES(row.idcliente.toString());
 			var actualizarCliente = (
-				<Link to={{ pathname: this.state.rutaRegistrarCliente, search: `?id=${hashIdCliente}`, state: { } }}>
-					<button type="button" className="btn btn-outline-secondary btn-sm" title="Actualizar datos">
-						<i className="far fa-edit"></i> Actualizar
-					</button>
-				</Link>
+				<ClientButtonUpdate 
+					pathname={this.state.rutaRegistrarCliente}
+					hashId={`?idc=${hashIdCliente}`}
+				/>
 			);
-			if(row.puestosLaborales.length > 0){
+			if(row.cant_puestos_laborales > 0){
+				//
 				asignarPuestosLaborales = (
-					<Link to={{ pathname: this.state.rutaRegistrarPuestoLaboral, search: `?id=${hashIdCliente}`, state: { idclient: row.idcliente } }}>
-						<button type="button" className="btn btn-dark btn-sm" title="Asignar más puestos laborales">
-							<i className="far fa-folder-open"></i> Asignar más puestos laborales
-						</button>
-					</Link>
+					<ClientButtonAssignMoreJobPosition 
+						pathname={this.state.rutaRegistrarPuestoLaboral}
+						hashId={`?id=${hashIdCliente}`}
+						state={{idclient: row.idcliente}}
+					/>
 				);
 			} else {
 				asignarPuestosLaborales = (
-					<Link to={{ pathname: this.state.rutaRegistrarPuestoLaboral, search: `?id=${hashIdCliente}`, state: { idclient: row.idcliente } }}>
-						<button type="button" className="btn btn-dark btn-sm" title="Asignar puestos laborales">
-							<i className="far fa-folder-open"></i> Asignar puestos laborales
-						</button>
-					</Link>
+					<ClientButtonAssignJobPosition 
+						pathname={this.state.rutaRegistrarPuestoLaboral}
+						hashId={`?id=${hashIdCliente}`}
+						state={{idclient: row.idcliente}}
+					/>
 				);
 			}
 			return (<tr key={row.idcliente} onClick={() => this.verPuestosLaborales(row)} >
@@ -136,25 +131,24 @@ class ClientsList extends Component {
 	}
 	
 	generarTablaBodyPuestosLaborales(row, index){
+		console.log(row)
 		if(row != null){
 			var hashIdCliente = encriptarAES(row.idcliente.toString());
-			var hashIdPuestoLaboral = encriptarAES(row.idPuestoLaboral.toString());
+			var hashIdPuestoLaboral = encriptarAES(row.idpuestolaboral.toString());
 			var actualizarPuestoLaboral = (
-				<Link to={{ pathname: this.state.rutaRegistrarPuestoLaboral, search: `?id=${hashIdCliente}&idp=${hashIdPuestoLaboral}`, state: { } }}>
-					<button type="button" className="btn btn-outline-secondary btn-sm" title="Actualizar datos">
-						<i className="far fa-edit"></i> Actualizar
-					</button>
-				</Link>
+				<JobPositionButtonUpdate
+					pathname={this.state.rutaRegistrarPuestoLaboral}
+					hashId={`?id=${hashIdCliente}&idp=${hashIdPuestoLaboral}`}
+				/>
 			);
 			var asignarCandidatos = (
-				<Link to={{ pathname: this.state.rutaAsignarCandidatos, search: `?id=${hashIdCliente}&idp=${hashIdPuestoLaboral}`, state: { } }}>
-					<button type="button" className="btn btn-dark btn-sm" title="Asignar candidatos">
-						<i className="far fa-folder-open"></i> Asignar candidatos
-					</button>
-				</Link>
+				<JobPositionButtonAssignCandidates
+					pathname={this.state.rutaAsignarCandidatos}
+					hashId={`?id=${hashIdCliente}&idp=${hashIdPuestoLaboral}`}
+				/>
 			);
 			var indice = index + 1;
-			return (<tr key={row.idPuestoLaboral}>
+			return (<tr key={row.idpuestolaboral}>
 						<td>{indice}</td>
 						<td>{row.nombre}</td>
 						<td>{actualizarPuestoLaboral}
@@ -168,8 +162,6 @@ class ClientsList extends Component {
 	
 	render() {
 		const { idclient, nameClient, clientesFiltro, filtroClientesNombre, puestosLaboralesFiltro, filtroPuestosLaboralesNombre, rutaRegistrarCliente, errors, isLoading, errorMensaje } = this.state;
-		//console.log('ClientesDatosForm:state', this.state);
-		//console.log('ClientesDatosForm:props', this.props);
 		var tableHeadCliente = [{
 				key: 'idclient',
 				nombre: 'N°'
@@ -212,11 +204,9 @@ class ClientsList extends Component {
 				{!isLoading && 
 				<Fragment>
 					<div className="mb-3">
-						<Link to={{ pathname: rutaRegistrarCliente, state: { } }}>
-							<button type="button" className="btn btn-primary" >
-								Nuevo cliente
-							</button>
-						</Link>
+						<ClientButtonAdd 
+							pathname={rutaRegistrarCliente}
+						/>
 					</div>
 					<TablePaginado tituloTabla={"Lista de clientes"}
 						mensajeSinRegistros={"No se encontró clientes."}
@@ -235,7 +225,7 @@ class ClientsList extends Component {
 							tableBody={this.generarTablaBodyPuestosLaborales.bind(this)}
 							nombreTitulo={nameClient}
 							registrosPorPagina={10}
-							registros={filtroPuestosLaboralesNombre.length > 0 ? puestosLaboralesFiltro : idclient > 0 ? this.props.puestosLaboralesResponse : filtroClientesNombre.length > 0 ? [] : []} 
+							registros={filtroPuestosLaboralesNombre.length > 0 ? puestosLaboralesFiltro : idclient > 0 ? this.props.getJobPositionResponse : filtroClientesNombre.length > 0 ? [] : []} 
 							camposBusqueda={camposBusquedaPuestoLaboral} />
 					</Fragment>
 					}
@@ -251,8 +241,7 @@ function mapStateToProps(state){
 	return{
         clientes : state.reducerCliente.obtenerClientesResponse,
         getJobPositionResponse: state.reducerCliente.getJobPositionResponse,
-		puestosLaboralesResponse : state.reducerCliente.obtenerClientePuestosLaboralesResponse
 	}
 }
 
-export default connect(mapStateToProps, { obtenerClientes, obtenerPuestosLaboralesPorCliente })(ClientsList);
+export default connect(mapStateToProps, {obtenerClientes, getJobPosition})(ClientsList);

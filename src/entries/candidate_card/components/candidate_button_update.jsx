@@ -6,9 +6,10 @@ export default function CandidateButtonUpdate (props) {
         <Button 
             pathname={props.pathname}
             hashId={props.hashId}
-            buttonClass={props.buttonClass}
-            buttonTitle={props.buttonTitle}
-            buttonLabel={props.buttonLabel}
+            buttonClass={'btn btn-outline-secondary btn-sm'}
+            iconClass={'far fa-edit'}
+            buttonTitle={'Actualizar datos'}
+            buttonLabel={'Actualizar'}
         />
     );
 }

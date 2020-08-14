@@ -5,7 +5,6 @@ import {
 	CLIENTES_OBTENER,
 	PUESTOS_LABORALES_GUARDAR,
 	PUESTOS_LABORALES_ACTUALIZAR,
-	CLIENTE_PUESTOS_LABORALES_OBTENER,
 	PUESTO_LABORAL_OBTENER,
 	JOBPOSITIONS_GET,
 	JOBPOSITION_CANDIDATES_GET,
@@ -44,8 +43,6 @@ export function actionCliente(state = initialState, action){
 			return Object.assign({}, state, {guardarPuestosLaboralesResponse: action.payload})
 		case PUESTOS_LABORALES_ACTUALIZAR:
 			return Object.assign({}, state, {actualizarPuestosLaboralesResponse: action.payload})
-		case CLIENTE_PUESTOS_LABORALES_OBTENER:
-			return Object.assign({}, state, {obtenerClientePuestosLaboralesResponse: action.payload})
 		case PUESTO_LABORAL_OBTENER:
 			return Object.assign({}, state, {obtenerPuestoLaboralResponse: action.payload})
 		case JOBPOSITIONS_GET:

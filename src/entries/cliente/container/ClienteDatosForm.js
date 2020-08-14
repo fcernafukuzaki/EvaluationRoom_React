@@ -10,7 +10,7 @@ import MensajeGuardarExitoso from '../../components/common/MensajeGuardarExitoso
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
 
-import validateInput from '../../cliente/components/cliente_form_validate';
+import validateInput from '../../cliente/components/client_form_validate';
 
 import { addClient, updateClient, obtenerCliente } from '../../../actions/actionCliente';
 

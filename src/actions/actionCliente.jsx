@@ -6,7 +6,6 @@ import {
 	CLIENTES_OBTENER,
 	PUESTOS_LABORALES_GUARDAR,
 	PUESTOS_LABORALES_ACTUALIZAR,
-	CLIENTE_PUESTOS_LABORALES_OBTENER,
 	PUESTO_LABORAL_OBTENER,
 	JOBPOSITIONS_GET,
 	JOBPOSITION_CANDIDATES_GET,
@@ -96,20 +95,6 @@ export function actualizarPuestosLaborales(datos) {
 	return (dispatch, getState) => {
 		axios.put('http://127.0.0.1:5000/v1/jobposition', datos)
 			.then((response) => { dispatch({ type: PUESTOS_LABORALES_ACTUALIZAR, payload: response.data }) })
-			.catch((error) => {
-				if(error.toString().indexOf('Network Error') > -1){
-					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
-				} else {
-					dispatch({ type: ERROR, payload: error.response.data })
-				}
-			})
-	}
-}
-
-export function obtenerPuestosLaboralesPorCliente(idCliente) {
-	return (dispatch, getState) => {
-		axios.get(('/cliente/puestos/id/').concat(idCliente))
-			.then((response) => { dispatch({ type: CLIENTE_PUESTOS_LABORALES_OBTENER, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
