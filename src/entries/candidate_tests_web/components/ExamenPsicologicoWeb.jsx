@@ -1,15 +1,13 @@
 import React, {Component, Fragment} from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
 import MensajeAlerta from './MensajeAlerta';
-import Alternativa from './Alternativa';
 import Tablero from './Tablero';
 import Boton from './Boton';
 
 import Header from '../common-exam/Header';
 import Footer from '../Footer';
-import {obtenerTextoFinalizado, obtenerValorParametro} from '../common-exam/Mensajes';
+import {obtenerValorParametro} from '../../common/components/encriptar_aes';
 import MensajeBienvenidaWeb from '../common-exam/MensajeBienvenidaWeb';
 import TableroEnunciadoWeb from '../common-exam/TableroEnunciadoWeb';
 import MensajeInstruccionesWeb from '../common-exam/MensajeInstruccionesWeb';

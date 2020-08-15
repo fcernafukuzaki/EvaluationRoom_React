@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { Prompt } from 'react-router';
 
-import {obtenerValorParametro} from '../../components/common-exam/Mensajes';
+import {obtenerValorParametro} from '../../common/components/encriptar_aes';
 import Formulario from '../../components/common/Formulario';
 import MensajeGuardarExitoso from '../../components/common/MensajeGuardarExitoso';
 import MensajeError from '../../components/common/MensajeError';

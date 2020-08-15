@@ -3,12 +3,11 @@ import { connect } from 'react-redux';
 
 import { Prompt } from 'react-router';
 
-import {obtenerValorParametro} from '../../components/common-exam/Mensajes';
 import Formulario from '../../components/common/Formulario';
 import MensajeGuardarExitoso from '../../components/common/MensajeGuardarExitoso';
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
-import {encriptarAES} from '../../components/common-exam/Mensajes';
+import {encriptarAES} from '../../common/components/encriptar_aes';
 
 import {validateInput, validateInputCandidatoRegistrado} from '../../components/validate/Candidato';
 
@@ -415,7 +414,6 @@ class CandidatoDatosForm extends Component {
 	}
 	
 	render() {
-		//console.log('CandidatoForm');
 		const { idCandidato, nombre, apellidoPaterno, apellidoMaterno, correoElectronico,
 		idDocumentoIdentidad, numeroDocumentoIdentidad, idEstadoCivil, cantidadHijos,
 		numeroCelular, numeroTelefono, telefonos, lugarDomicilio, fechaNacimiento, idSexo,

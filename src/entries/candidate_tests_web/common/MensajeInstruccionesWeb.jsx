@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 
 import TableroMensaje from './TableroMensaje';
 
-import CargandoImagen from '../common/CargandoImagen';
+import CargandoImagen from '../../components/common/CargandoImagen';
 
 const MensajeInstruccionesWeb = (props) => {
 	const { texto, estiloTablero } = props;

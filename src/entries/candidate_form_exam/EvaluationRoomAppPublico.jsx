@@ -3,7 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 
 import Footer from '../common/components/Footer';
 import NotFound from '../common/components/NotFound';
-import CandidatoForm from '../container/candidato/CandidatoForm';
+import CandidatoForm from './container/CandidatoForm';
 
 export default class EvaluationRoomAppPublico extends Component {
 	constructor(props){

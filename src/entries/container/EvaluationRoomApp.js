@@ -3,12 +3,12 @@ import React, { Component, Fragment } from 'react';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 
 import NavBar from '../components/common/NavBar';
-import Footer from '../components/Footer';
+import Footer from '../common/components/Footer';
 import Home from '../components/Home';
-import NotFound from '../components/NotFound';
+import NotFound from '../common/components/NotFound';
 import ClientsList from '../cliente/container/ClientsList';
-import ClienteDatosForm from '../cliente/container/ClienteDatosForm';
-import PuestoLaboralDatosForm from '../cliente/container/PuestoLaboralDatosForm';
+import ClientForm from '../cliente/container/ClientForm';
+import PuestoLaboralForm from '../cliente/container/PuestoLaboralForm';
 import CandidatoDatosForm from '../container/candidato/CandidatoDatosForm';
 import CandidatosResultadoForm from '../container/candidato/CandidatosResultadoForm';
 import CandidatoResultadoForm from '../container/candidato/CandidatoResultadoForm';
@@ -180,8 +180,8 @@ export default class EvaluationRoomApp extends Component {
 					{flagUsuario !== 'No autorizado' &&
 					<Fragment>
 						<Route exact path="/listarClientes" render={()=>(<ClientsList errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/registrarCliente" render={()=>(<ClienteDatosForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/registrarPuestoLaboral" render={()=>(<PuestoLaboralDatosForm errorResponse={this.state.errorMensaje} />)} />
+						<Route exact path="/registrarCliente" render={()=>(<ClientForm errorResponse={this.state.errorMensaje} />)} />
+						<Route exact path="/registrarPuestoLaboral" render={()=>(<PuestoLaboralForm errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/registrarCandidato" render={()=>(<CandidatoDatosForm errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/listaCandidatos" render={()=>(<CandidatosResultadoForm errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/listaCandidatos/resultados" render={()=>(<CandidatoResultadoForm errorResponse={this.state.errorMensaje} />)} />

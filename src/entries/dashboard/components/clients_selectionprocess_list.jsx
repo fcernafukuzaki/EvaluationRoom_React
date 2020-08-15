@@ -5,7 +5,7 @@ import ClientsSelectionProcessTable from '../components/clients_selectionprocess
 import ClientsSelectionProcessButtonNew from '../components/clients_selectionprocess_button_new'
 import CandidateCard from '../../candidate_card/container/candidate_card'
 import {getDate} from '../../common/components/date_util'
-import {encriptarAES, obtenerValorParametro} from '../../components/common-exam/Mensajes';
+import {encriptarAES} from '../../common/components/encriptar_aes';
 
 function tableSelectionProcess(selectionProcess){
     var tableHead = [{

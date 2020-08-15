@@ -1,10 +1,10 @@
 import React, {Component, Fragment} from 'react';
 import classnames from 'classnames';
 
-import CargandoImagen from '../common/CargandoImagen';
+import CargandoImagen from '../../components/common/CargandoImagen';
 import TableroPreguntas from './TableroPreguntas';
 import Alternativa from '../web/Alternativa';
-import AlternativaImagen from '../web/AlternativaImagen';
+import AlternativaImagen from '../components/AlternativaImagen';
 import AlternativaImagenBoton from '../web/AlternativaImagenBoton';
 
 export default class TableroEnunciadoWeb extends Component {

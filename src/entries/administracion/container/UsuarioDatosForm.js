@@ -1,11 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
 import { Prompt } from 'react-router';
 
 import Formulario from '../../components/common/Formulario';
-import {obtenerValorParametro} from '../../components/common-exam/Mensajes';
+import {obtenerValorParametro} from '../../common/components/encriptar_aes';
 import MensajeGuardarExitoso from '../../components/common/MensajeGuardarExitoso';
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';

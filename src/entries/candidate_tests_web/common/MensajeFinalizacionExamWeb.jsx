@@ -1,10 +1,10 @@
 import React, {Component, Fragment} from 'react';
 
-import CargandoImagen from '../common/CargandoImagen';
+import CargandoImagen from '../../components/common/CargandoImagen';
 import TableroMensaje from './TableroMensaje';
-import {obtenerTextoBienvenidaPorParrafos} from './Mensajes';
+import {obtenerTextoFinalizadoPorParrafos} from './Mensajes';
 
-const MensajeBienvenidaWeb = (props) => {
+const MensajeFinalizacionExamWeb = (props) => {
 	const { nombreCandidato, estiloTablero } = props;
 	return (
 		<TableroMensaje estilo={estiloTablero} >
@@ -12,12 +12,11 @@ const MensajeBienvenidaWeb = (props) => {
 			{
 				typeof nombreCandidato != "undefined" ? (
 				<Fragment>
-					{obtenerTextoBienvenidaPorParrafos(nombreCandidato)}
+					{obtenerTextoFinalizadoPorParrafos(nombreCandidato)}
+					<i className="far fa-smile icono12em"></i>
 				</Fragment>
 				) : (
-					<Fragment>
-						<CargandoImagen />
-					</Fragment>
+					<CargandoImagen />
 				)
 			}
 			</Fragment>
@@ -25,4 +24,4 @@ const MensajeBienvenidaWeb = (props) => {
 	);
 }
 
-export default MensajeBienvenidaWeb;
+export default MensajeFinalizacionExamWeb;

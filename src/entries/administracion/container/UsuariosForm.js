@@ -1,16 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
-import Formulario from '../../components/common/Formulario';
 import TablePaginado from '../../components/common/TablePaginado';
-import BarraBusqueda from '../../components/common/BarraBusqueda';
-import {obtenerValorParametro} from '../../components/common-exam/Mensajes';
 
-import {encriptarAES} from '../../components/common-exam/Mensajes';
+import {encriptarAES} from '../../common/components/encriptar_aes';
 
 import { obtenerUsuarios, obtenerPerfiles } from '../../../actions/actionUsuario';
 

@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react';
 import classnames from 'classnames';
 import CandidateButtonUpdate from './candidate_button_update'
-import {encriptarAES, obtenerValorParametro} from '../../components/common-exam/Mensajes';
+import {encriptarAES} from '../../common/components/encriptar_aes';
 import {getAge} from '../../common/components/date_util'
 
 export default function CandidateCardInfo (props) {

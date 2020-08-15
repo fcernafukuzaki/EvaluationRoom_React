@@ -9,7 +9,7 @@ import {getNewDateTimeFormat, getDateFormat} from '../../common/components/date_
 import validateInput from './selectionprocess_form_validate'
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
-import {encriptarAES, obtenerValorParametro} from '../../components/common-exam/Mensajes';
+import {encriptarAES, obtenerValorParametro} from '../../common/components/encriptar_aes';
 import MensajeGuardarExitoso from '../../components/common/MensajeGuardarExitoso';
 import {getSelectionProcess} from '../../../actions/actionSelectionProcess';
 import { obtenerCliente, getJobPosition, getCandidatesFromJobPosition, addClient, updateClient, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition } from '../../../actions/actionCliente';

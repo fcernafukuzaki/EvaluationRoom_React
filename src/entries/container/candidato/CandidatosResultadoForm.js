@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
-import {encriptarAES} from '../../components/common-exam/Mensajes';
+import {encriptarAES} from '../../common/components/encriptar_aes';
 
 import { obtenerCandidatos, generarInforme } from '../../../actions/actionCandidato';
 import MensajeError from '../../components/common/MensajeError';

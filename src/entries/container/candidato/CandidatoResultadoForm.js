@@ -6,7 +6,7 @@ import {obtenerCandidatoTestPsicologicosRespuestas, obtenerCandidatoTestPsicolog
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
 import TabBar from '../../components/common/TabBar';
-import {obtenerValorParametro} from '../../components/common-exam/Mensajes';
+import {obtenerValorParametro} from '../../common/components/encriptar_aes';
 
 class CandidatoResultadoForm extends Component {
 	constructor(props){

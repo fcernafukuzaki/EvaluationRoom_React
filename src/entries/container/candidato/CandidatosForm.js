@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
-import {encriptarAES, obtenerValorParametro} from '../../components/common-exam/Mensajes';
+import {encriptarAES, obtenerValorParametro} from '../../common/components/encriptar_aes';
 
 import { obtenerCliente } from '../../../actions/actionCliente';
 import { obtenerCandidatos, guardarPuestoLaboralCandidato, eliminarPuestoLaboralCandidato, obtenerPuestoLaboralCandidato, generarInforme } from '../../../actions/actionCandidato';

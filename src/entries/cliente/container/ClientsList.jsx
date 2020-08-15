@@ -7,7 +7,7 @@ import TablePaginado from '../../components/common/TablePaginado';
 
 import {ClientButtonAdd, ClientButtonUpdate, ClientButtonAssignJobPosition, ClientButtonAssignMoreJobPosition}  from '../components/client_button'
 import {JobPositionButtonUpdate, JobPositionButtonAssignCandidates} from '../components/jobposition_button'
-import {encriptarAES} from '../../components/common-exam/Mensajes';
+import {encriptarAES} from '../../common/components/encriptar_aes';
 
 import {obtenerClientes, getJobPosition} from '../../../actions/actionCliente';
 
