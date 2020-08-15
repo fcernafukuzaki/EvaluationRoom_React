@@ -6,11 +6,11 @@ export default function validateInput(data) {
 	
 	let errors = {};
 
-	if (Validator.isNull(data.nombreUsuario)) {
+	if (Validator.isEmpty(data.nombreUsuario)) {
 		errors.nombreUsuario = mensajeRequerido;
 	}
 	
-	if (Validator.isNull(data.correoElectronicoUsuario)) {
+	if (Validator.isEmpty(data.correoElectronicoUsuario)) {
 		errors.correoElectronicoUsuario = mensajeRequerido;
 	} else {
 		if (!(Validator.isEmail(data.correoElectronicoUsuario))) {

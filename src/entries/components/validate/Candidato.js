@@ -6,7 +6,7 @@ export function validateInputCandidatoRegistrado(data) {
 	
 	let errors = {};
 	
-	if (Validator.isNull(data.correoElectronico)) {
+	if (Validator.isEmpty(data.correoElectronico)) {
 		errors.correoElectronico = mensajeRequerido;
 	} else {
 		if (!(Validator.isEmail(data.correoElectronico))) {
@@ -25,22 +25,22 @@ export function validateInput(data) {
 	
 	let errors = {};
 
-	if (Validator.isNull(data.nombre)) {
+	if (Validator.isEmpty(data.nombre)) {
 		errors.nombre = mensajeRequerido;
 	}
 	
-	if (Validator.isNull(data.apellidoPaterno)) {
+	if (Validator.isEmpty(data.apellidoPaterno)) {
 		errors.apellidoPaterno = mensajeRequerido;
 	}
 	
-	if (Validator.isNull(data.apellidoMaterno)) {
+	if (Validator.isEmpty(data.apellidoMaterno)) {
 		errors.apellidoMaterno = mensajeRequerido;
 	}
 	
 	if (data.correoElectronico == null) {
 		errors.correoElectronico = mensajeRequerido;
 	} else {
-		if (Validator.isNull(data.correoElectronico)) {
+		if (Validator.isEmpty(data.correoElectronico)) {
 			errors.correoElectronico = mensajeRequerido;
 		} else {
 			if (!(Validator.isEmail(data.correoElectronico))) {
@@ -48,7 +48,7 @@ export function validateInput(data) {
 			}
 		}
 	}
-	if (Validator.isNull(data.idSexo.toString())) {
+	if (Validator.isEmpty(data.idSexo.toString())) {
 		errors.idSexo = mensajeRequerido;
 	} else {
 		if(data.idSexo === ''){
@@ -57,7 +57,7 @@ export function validateInput(data) {
 			errors.idSexo = mensajeRequerido;
 		}
 	}
-	if (Validator.isNull(data.idDocumentoIdentidad.toString())) {
+	if (Validator.isEmpty(data.idDocumentoIdentidad.toString())) {
 		errors.idDocumentoIdentidad = mensajeRequerido;
 	} else {
 		if(data.idDocumentoIdentidad === ''){
@@ -66,32 +66,32 @@ export function validateInput(data) {
 			errors.idDocumentoIdentidad = mensajeRequerido;
 		}
 	}
-	if (Validator.isNull(data.numeroDocumentoIdentidad)) {
+	if (Validator.isEmpty(data.numeroDocumentoIdentidad)) {
 		errors.numeroDocumentoIdentidad = mensajeRequerido;
 	}
-	if (Validator.isNull(data.idEstadoCivil.toString())) {
+	if (Validator.isEmpty(data.idEstadoCivil.toString())) {
 		errors.idEstadoCivil = mensajeRequerido;
 	} else {
 		if(data.idEstadoCivil.toString() === '0'){
 			errors.idEstadoCivil = mensajeRequerido;
 		}
 	}
-	if (Validator.isNull(data.cantidadHijos.toString())) {
+	if (Validator.isEmpty(data.cantidadHijos.toString())) {
 		errors.cantidadHijos = mensajeRequerido;
 	} else if (!(Validator.isInt(data.cantidadHijos.toString()))) {
 		errors.cantidadHijos = 'Campo debe ser numérico.';
 	}
-	if (Validator.isNull(data.numeroCelular) && Validator.isNull(data.numeroTelefono) ) {
+	if (Validator.isEmpty(data.numeroCelular) && Validator.isEmpty(data.numeroTelefono) ) {
 		errors.numeroTelefono = mensajeRequerido.concat(' Debe ingresar al menos un número de contacto.');
 		errors.numeroCelular = mensajeRequerido.concat(' Debe ingresar al menos un número de contacto.');
 	} else {
-		if (Validator.isNull(data.numeroCelular) && !(Validator.isNull(data.numeroTelefono)) ){
+		if (Validator.isEmpty(data.numeroCelular) && !(Validator.isEmpty(data.numeroTelefono)) ){
 			if (!(Validator.isInt(data.numeroTelefono.toString()))) {
 				errors.numeroTelefono = 'Campo debe ser numérico.';
 			} else if (!(Validator.isLength(data.numeroTelefono,{min:7, max: 7}))) {
 				errors.numeroTelefono = 'Campo debe tener 7 dígitos.';
 			}
-		} else if (Validator.isNull(data.numeroTelefono) && !(Validator.isNull(data.numeroCelular)) ){
+		} else if (Validator.isEmpty(data.numeroTelefono) && !(Validator.isEmpty(data.numeroCelular)) ){
 			if (!(Validator.isInt(data.numeroCelular.toString()))) {
 				errors.numeroCelular = 'Campo debe ser numérico.';
 			} else if (!(Validator.isLength(data.numeroCelular,{min:9, max: 9}))) {
@@ -111,7 +111,7 @@ export function validateInput(data) {
 		}
 	}
 	
-	if (Validator.isNull(data.fechaNacimiento)) {
+	if (Validator.isEmpty(data.fechaNacimiento)) {
 		errors.fechaNacimiento = mensajeRequerido;
 	} else {
 		var fechaActual = new Date();
@@ -122,31 +122,31 @@ export function validateInput(data) {
 		}
 	}
 	
-	if (Validator.isNull(data.lugarDomicilio)) {
+	if (Validator.isEmpty(data.lugarDomicilio)) {
 		errors.lugarDomicilio = mensajeRequerido;
 	}
-	if (Validator.isNull(data.idPaisDomicilio.toString()) || data.idPaisDomicilio === '0') {
+	if (Validator.isEmpty(data.idPaisDomicilio.toString()) || data.idPaisDomicilio === '0') {
 		errors.idPaisDomicilio = mensajeRequerido;
 	}
-	if (Validator.isNull(data.idDepartamentoDomicilio.toString()) || data.idDepartamentoDomicilio === '0') {
+	if (Validator.isEmpty(data.idDepartamentoDomicilio.toString()) || data.idDepartamentoDomicilio === '0') {
 		errors.idDepartamentoDomicilio = mensajeRequerido;
 	}
-	if (Validator.isNull(data.idProvinciaDomicilio.toString()) || data.idProvinciaDomicilio === '0') {
+	if (Validator.isEmpty(data.idProvinciaDomicilio.toString()) || data.idProvinciaDomicilio === '0') {
 		errors.idProvinciaDomicilio = mensajeRequerido;
 	}
-	if (Validator.isNull(data.idDistritoDomicilio.toString()) || data.idDistritoDomicilio === '0') {
+	if (Validator.isEmpty(data.idDistritoDomicilio.toString()) || data.idDistritoDomicilio === '0') {
 		errors.idDistritoDomicilio = mensajeRequerido;
 	}
-	if (Validator.isNull(data.idPaisNacimiento.toString()) || data.idPaisNacimiento === '0') {
+	if (Validator.isEmpty(data.idPaisNacimiento.toString()) || data.idPaisNacimiento === '0') {
 		errors.idPaisNacimiento = mensajeRequerido;
 	}
-	if (Validator.isNull(data.idDepartamentoNacimiento.toString()) || data.idDepartamentoNacimiento === '0') {
+	if (Validator.isEmpty(data.idDepartamentoNacimiento.toString()) || data.idDepartamentoNacimiento === '0') {
 		errors.idDepartamentoNacimiento = mensajeRequerido;
 	}
-	if (Validator.isNull(data.idProvinciaNacimiento.toString()) || data.idProvinciaNacimiento === '0') {
+	if (Validator.isEmpty(data.idProvinciaNacimiento.toString()) || data.idProvinciaNacimiento === '0') {
 		errors.idProvinciaNacimiento = mensajeRequerido;
 	}
-	if (Validator.isNull(data.idDistritoNacimiento.toString()) || data.idDistritoNacimiento === '0') {
+	if (Validator.isEmpty(data.idDistritoNacimiento.toString()) || data.idDistritoNacimiento === '0') {
 		errors.idDistritoNacimiento = mensajeRequerido;
 	}
 	
@@ -162,7 +162,7 @@ export function validateInputRecruiterRegistration(data) {
 	
 	let errors = {};
 	
-	if (Validator.isNull(data.correoElectronico)) {
+	if (Validator.isEmpty(data.correoElectronico)) {
 		errors.correoElectronico = mensajeRequerido;
 	} else {
 		if (!(Validator.isEmail(data.correoElectronico))) {
