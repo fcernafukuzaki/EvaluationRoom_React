@@ -1,3 +1,7 @@
+export function getYear() {
+    var fecha = new Date()
+    return fecha.getFullYear()
+}
 export function getNewDateTimeFormat() {
     //2020-10-02 22:56:00
     var fecha = new Date()

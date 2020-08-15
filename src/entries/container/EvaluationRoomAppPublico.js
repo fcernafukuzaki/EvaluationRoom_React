@@ -1,10 +1,8 @@
 import React, { Component, Fragment } from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
-import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
-
-
-import Footer from '../components/Footer';
-import NotFound from '../components/NotFound';
+import Footer from '../common/components/Footer';
+import NotFound from '../common/components/NotFound';
 import CandidatoForm from '../container/candidato/CandidatoForm';
 
 export default class EvaluationRoomAppPublico extends Component {
