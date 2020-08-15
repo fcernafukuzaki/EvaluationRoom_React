@@ -90,7 +90,7 @@ class ClientsList extends Component {
         this.props.getJobPosition(cliente.idcliente)
 	}
 	
-	generarTablaBodyClientes(row){
+	generarTablaBodyClientes(row, index){
 		if(row != null){
 			var asignarPuestosLaborales = '';
 			var hashIdCliente = encriptarAES(row.idcliente.toString());
@@ -119,7 +119,7 @@ class ClientsList extends Component {
 				);
 			}
 			return (<tr key={row.idcliente} onClick={() => this.verPuestosLaborales(row)} >
-						<td>{row.idcliente}</td>
+						<td>{(index + 1)}</td>
 						<td>{row.nombre}</td>
 						<td>{actualizarCliente}
 							{asignarPuestosLaborales}
@@ -131,7 +131,6 @@ class ClientsList extends Component {
 	}
 	
 	generarTablaBodyPuestosLaborales(row, index){
-		console.log(row)
 		if(row != null){
 			var hashIdCliente = encriptarAES(row.idcliente.toString());
 			var hashIdPuestoLaboral = encriptarAES(row.idpuestolaboral.toString());

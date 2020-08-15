@@ -8,7 +8,7 @@ export default function validateInput(data) {
 	let errors = {};
 
 	if (Validator.isEmpty(data.nameJobPosition)) {
-		errors.nombre = mensajeRequerido;
+		errors.nameJobPosition = mensajeRequerido;
 	}
 	
 	return {

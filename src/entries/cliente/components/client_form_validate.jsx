@@ -7,8 +7,8 @@ export default function validateInput(data) {
 	
 	let errors = {};
 
-	if (Validator.isEmpty(data.nombre)) {
-		errors.nombre = mensajeRequerido;
+	if (Validator.isEmpty(data.nameClient)) {
+		errors.nameClient = mensajeRequerido;
 	}
 	
 	return {

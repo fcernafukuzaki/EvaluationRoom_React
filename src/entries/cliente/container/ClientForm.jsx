@@ -1,7 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-
 import { Prompt } from 'react-router';
 
 import Formulario from '../../components/common/Formulario';
@@ -10,11 +8,11 @@ import MensajeGuardarExitoso from '../../components/common/MensajeGuardarExitoso
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
 
-import validateInput from '../../cliente/components/client_form_validate';
+import validateInput from '../components/client_form_validate';
 
 import { addClient, updateClient, obtenerCliente } from '../../../actions/actionCliente';
 
-class ClienteDatosForm extends Component {
+class ClientForm extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
@@ -25,7 +23,6 @@ class ClienteDatosForm extends Component {
 			errors: {},
 			isLoading: true,
 			cliente:{},
-			clienteResponse:{},
 			prompt: false,
 			errorMensaje: '',
 			guardado: false
@@ -125,8 +122,7 @@ class ClienteDatosForm extends Component {
 	
 	render() {
 		const { idclient, nameClient, nombreForm, errors, isLoading , errorMensaje, guardado} = this.state;
-		//console.log('ClienteDatosForm:state', this.state);
-		//console.log('ClienteDatosForm:props', this.props);
+		
 		var form = {
 			titulo: (idclient == '' || idclient == 0 ? 'Registrar cliente' : ('Datos de cliente ').concat(nombreForm)),
 			campos: [
@@ -196,4 +192,4 @@ function mapStateToProps(state){
 	}
 }
 
-export default connect(mapStateToProps, { addClient, updateClient, obtenerCliente })(ClienteDatosForm);
+export default connect(mapStateToProps, { addClient, updateClient, obtenerCliente })(ClientForm);
