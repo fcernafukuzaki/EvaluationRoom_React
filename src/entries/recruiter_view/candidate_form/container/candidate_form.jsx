@@ -1,24 +1,27 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
+
 import { Prompt } from 'react-router';
 
+import {obtenerValorParametro} from '../../../common/components/encriptar_aes';
 import Formulario from '../../../components/common/Formulario';
 import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExitoso';
 import MensajeError from '../../../components/common/MensajeError';
 import CargandoImagen from '../../../components/common/CargandoImagen';
-import {encriptarAES} from '../../../common/components/encriptar_aes';
+import AlertBoxMessageForm from '../../../components/common/AlertBoxMessageForm';
 
-import {validateInput, validateInputCandidatoRegistrado} from '../components/candidato_selfregistration_form_validate';
+import {validateInputRecruiterRegistration} from '../components/candidate_form_validate';
 
-import {obtenerTipoDirecciones } from '../../../../actions/actionTipoDireccion';
-import {obtenerPaises, obtenerPaisesNacimiento } from '../../../../actions/actionPais';
-import {obtenerDepartamentos, obtenerDepartamentosNacimiento } from '../../../../actions/actionDepartamento';
-import {obtenerProvincias, obtenerProvinciasNacimiento } from '../../../../actions/actionProvincia';
-import {obtenerDistritos, obtenerDistritosNacimiento } from '../../../../actions/actionDistrito';
-import {obtenerSexos } from '../../../../actions/actionSexo';
-import {obtenerEstadosCiviles } from '../../../../actions/actionEstadoCivil';
-import {obtenerDocumentosIdentidad } from '../../../../actions/actionDocumentoIdentidad';
-import {guardarCandidatoTestPsicologico, validarCandidatoRegistrado} from '../../../../actions/actionCandidato';
+import { obtenerTipoDirecciones } from '../../../../actions/actionTipoDireccion';
+import { obtenerPaises, obtenerPaisesNacimiento } from '../../../../actions/actionPais';
+import { obtenerDepartamentos, obtenerDepartamentosNacimiento } from '../../../../actions/actionDepartamento';
+import { obtenerProvincias, obtenerProvinciasNacimiento } from '../../../../actions/actionProvincia';
+import { obtenerDistritos, obtenerDistritosNacimiento } from '../../../../actions/actionDistrito';
+import { obtenerSexos } from '../../../../actions/actionSexo';
+import { obtenerEstadosCiviles } from '../../../../actions/actionEstadoCivil';
+import { obtenerDocumentosIdentidad } from '../../../../actions/actionDocumentoIdentidad';
+import { obtenerTestPsicologicos} from '../../../../actions/actionTestPsicologico';
+import { guardarCandidatoTestPsicologicoRecruiter, obtenerCandidato} from '../../../../actions/actionCandidato';
 
 class CandidatoDatosForm extends Component {
 	constructor(props){
@@ -29,6 +32,9 @@ class CandidatoDatosForm extends Component {
 			nombre: '',
 			apellidoPaterno: '',
 			apellidoMaterno: '',
+			nombreForm: '',
+			apellidoPaternoForm: '',
+			apellidoMaternoForm: '',
 			correoElectronico: '',
 			idDocumentoIdentidad: '1',
 			numeroDocumentoIdentidad: '',
@@ -36,7 +42,6 @@ class CandidatoDatosForm extends Component {
 			cantidadHijos: '0',
 			numeroCelular: '',
 			numeroTelefono: '',
-			lugarDomicilio: '',
 			lugarNacimiento: '',
 			fechaNacimiento: '',
 			idSexo: '0',
@@ -45,6 +50,7 @@ class CandidatoDatosForm extends Component {
 			idDepartamentoDomicilio: '15',
 			idProvinciaDomicilio: '1501',
 			idDistritoDomicilio: '',
+			lugarDomicilio: '',
 			idPaisNacimiento: '1',
 			idDepartamentoNacimiento: '15',
 			idProvinciaNacimiento: '1501',
@@ -52,16 +58,21 @@ class CandidatoDatosForm extends Component {
 			errors: {},
 			isLoading: true,
 			candidato:{},
-			testPsicologicos: [{idTestPsicologico : 1},{idTestPsicologico : 2},{idTestPsicologico : 3}],
+			testPsicologicosListCheck: [],
+			testPsicologicosChecked: [],
 			prompt: false,
 			errorMensaje: '',
 			guardado: false,
-			esCandidatoRegistrado: null
+			mensajeInformativo: {
+				heading: 'Registro de candidato',
+				body: [<p key="" className="mb-0">Por defecto la creación de un candidato tiene asignado los 3 test psicológicos: Baron, GATB y DISC. Sin embargo, <strong>el reclutador tiene la opción de asignar los test psicológicos que considere necesarios a un nuevo candidato <u>sólo ingresando su dirección de correo electrónico.</u></strong> Posteriomente el candidato deberá completar el formulario con sus datos personales.</p>],
+				footer: [<p key="" className="mb-0">Sugerencias al reclutador al momento de registrar un candidato:</p>, <ul key="consideraciones" className="mb-0"><li key="1" >Deberá tener a la mano la dirección de correo electrónico del candidato.</li></ul>]
+			}
 		}
 		
-		this.validarCandidatoRegistrado = this.validarCandidatoRegistrado.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
 		this.onChange = this.onChange.bind(this);
+		this.onChangeCheck = this.onChangeCheck.bind(this);
 		this.onClickCancelar = this.onClickCancelar.bind(this);
 	}
 	
@@ -69,7 +80,7 @@ class CandidatoDatosForm extends Component {
 		this.props.obtenerSexos();
 		this.props.obtenerEstadosCiviles();
 		this.props.obtenerDocumentosIdentidad();
-		this.props.obtenerTipoDirecciones();
+		this.props.obtenerTestPsicologicos();
 		this.props.obtenerPaises();
 		this.props.obtenerPaisesNacimiento();
 		this.props.obtenerDepartamentos(1);
@@ -78,143 +89,135 @@ class CandidatoDatosForm extends Component {
 		this.props.obtenerDepartamentosNacimiento(1);
 		this.props.obtenerProvinciasNacimiento(1,15);
 		this.props.obtenerDistritosNacimiento(1,15,1501);
-		this.setState({
-			isLoading: false
-		});
+		if(obtenerValorParametro('idc') != null){
+			this.props.obtenerCandidato(obtenerValorParametro('idc'));
+		} else {
+			this.setState({
+				isLoading: false
+			});
+		}
 	}
 	
 	componentDidUpdate(prevProps, prevState) {
-		if (prevProps.validarCandidatoRegistradoResponse !== this.props.validarCandidatoRegistradoResponse) {
-			if(this.props.validarCandidatoRegistradoResponse.correoElectronico !== '' && 
-					this.props.validarCandidatoRegistradoResponse.selfRegistration){
-				var hashIdCandidato = encriptarAES(this.props.validarCandidatoRegistradoResponse.idCandidato.toString());
-				window.location.href = ('/pages/examen.html?id=').concat(hashIdCandidato);
-			} else {
-				var candidatoResponse = this.props.validarCandidatoRegistradoResponse;
-				
-				var fechaFormat = '';
-				if(typeof candidatoResponse.fechaNacimiento != "undefined"){
-					var fecha = new Date(candidatoResponse.fechaNacimiento);
-					fechaFormat = fecha.getFullYear() + "-" + (fecha.getMonth() < 9 ? "0" + (fecha.getMonth() + 1) : fecha.getMonth() + 1) + "-" + (fecha.getDate() < 10 ? "0" + fecha.getDate() : fecha.getDate());
+		if (prevProps.candidato !== this.props.candidato) {
+			//this.props.obtenerCandidato(this.state.candidato.idCandidato);
+			var fecha = new Date(this.props.candidato.fechaNacimiento);
+			var fechaFormat = fecha.getFullYear() + "-" + (fecha.getMonth() < 9 ? "0" + (fecha.getMonth() + 1) : fecha.getMonth() + 1) + "-" + (fecha.getDate() < 10 ? "0" + fecha.getDate() : fecha.getDate());
+			
+			var idPaisDomicilio = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].pais.idPais : '0';
+			var idDepartamentoDomicilio = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].departamento.idDepartamento : '0';
+			var idProvinciaDomicilio = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].provincia.idProvincia : '0';
+			var idDistritoDomicilio = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].distrito.idDistrito : '0';
+			
+			var idPaisNacimiento = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2)[0].pais.idPais : '0';
+			var idDepartamentoNacimiento = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2)[0].departamento.idDepartamento : '0';
+			var idProvinciaNacimiento = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2)[0].provincia.idProvincia : '0';
+			var idDistritoNacimiento = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2)[0].distrito.idDistrito : '0';
+			
+			this.props.obtenerDepartamentos(idPaisDomicilio);
+			this.props.obtenerProvincias(idPaisDomicilio, idDepartamentoDomicilio);
+			this.props.obtenerDistritos(idPaisDomicilio, idDepartamentoDomicilio, idProvinciaDomicilio);
+			this.props.obtenerDepartamentosNacimiento(idPaisNacimiento);
+			this.props.obtenerProvinciasNacimiento(idPaisNacimiento, idDepartamentoNacimiento);
+			this.props.obtenerDistritosNacimiento(idPaisNacimiento, idDepartamentoNacimiento, idProvinciaNacimiento);
+			
+			this.setState({
+				idCandidato: this.props.candidato.idCandidato,
+				nombre: this.props.candidato.nombre,
+				apellidoPaterno: this.props.candidato.apellidoPaterno,
+				apellidoMaterno: this.props.candidato.apellidoMaterno,
+				nombreForm: this.props.candidato.nombre,
+				apellidoPaternoForm: this.props.candidato.apellidoPaterno,
+				apellidoMaternoForm: this.props.candidato.apellidoMaterno,
+				correoElectronico: this.props.candidato.correoElectronico,
+				idDocumentoIdentidad: this.props.candidato.documentoIdentidad.idDocumentoIdentidad,
+				numeroDocumentoIdentidad: this.props.candidato.numeroDocumentoIdentidad,
+				idEstadoCivil: this.props.candidato.estadoCivil.idEstadoCivil,
+				cantidadHijos: this.props.candidato.cantidadHijos,
+				numeroCelular: this.props.candidato.telefonos.filter( t => t.idTelefono == 1).length > 0 ? this.props.candidato.telefonos.filter( t => t.idTelefono == 1)[0].numero : '',
+				numeroTelefono: this.props.candidato.telefonos.filter( t => t.idTelefono == 2).length > 0 ? this.props.candidato.telefonos.filter( t => t.idTelefono == 2)[0].numero : '',
+				fechaNacimiento: fechaFormat,
+				idSexo: this.props.candidato.sexo.idSexo,
+				idPaisDomicilio: idPaisDomicilio,
+				idDepartamentoDomicilio: idDepartamentoDomicilio,
+				idProvinciaDomicilio: idProvinciaDomicilio,
+				idDistritoDomicilio: idDistritoDomicilio,
+				lugarDomicilio: this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].direccion : '',
+				idPaisNacimiento: idPaisNacimiento,
+				idDepartamentoNacimiento: idDepartamentoNacimiento,
+				idProvinciaNacimiento: idProvinciaNacimiento,
+				idDistritoNacimiento: idDistritoNacimiento,
+				isLoading: false
+			});
+			let rowsTestPsicologicos = [];
+			let rowsTestPsicologicosChecked = [];
+			this.props.testPsicologico.map( test =>{
+				var checked = false;//Valor Default, ningún test seleccionado.
+				// Si candidato tiene asignado test psicológicos
+				if(typeof this.props.candidato.testPsicologicos != "undefined"){
+					checked = this.props.candidato.testPsicologicos.filter(
+							t => t.idTestPsicologico == test.idTestPsicologico).length > 0 ? true : false;
 				}
-				
-				var idPaisDomicilio = this.state.idPaisDomicilio;
-				var idDepartamentoDomicilio = this.state.idDepartamentoDomicilio;
-				var idProvinciaDomicilio = this.state.idProvinciaDomicilio;
-				var idDistritoDomicilio = this.state.idDistritoDomicilio;
-				var lugarDomicilio = this.state.lugarDomicilio;
-				
-				var idPaisNacimiento = this.state.idPaisNacimiento;
-				var idDepartamentoNacimiento = this.state.idDepartamentoNacimiento;
-				var idProvinciaNacimiento = this.state.idProvinciaNacimiento;
-				var idDistritoNacimiento = this.state.idDistritoNacimiento;
-				if(typeof candidatoResponse.direcciones != "undefined"){
-					idPaisDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].pais.idPais : '1';
-					idDepartamentoDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].departamento.idDepartamento : '0';
-					idProvinciaDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].provincia.idProvincia : '0';
-					idDistritoDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].distrito.idDistrito : '0';
-					
-					lugarDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].direccion : '';
-					
-					idPaisNacimiento = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2)[0].pais.idPais : '1';
-					idDepartamentoNacimiento = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2)[0].departamento.idDepartamento : '0';
-					idProvinciaNacimiento = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2)[0].provincia.idProvincia : '0';
-					idDistritoNacimiento = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2)[0].distrito.idDistrito : '0';
-					
-					this.props.obtenerDepartamentos(idPaisDomicilio);
-					this.props.obtenerProvincias(idPaisDomicilio, idDepartamentoDomicilio);
-					this.props.obtenerDistritos(idPaisDomicilio, idDepartamentoDomicilio, idProvinciaDomicilio);
-					this.props.obtenerDepartamentosNacimiento(idPaisNacimiento);
-					this.props.obtenerProvinciasNacimiento(idPaisNacimiento, idDepartamentoNacimiento);
-					this.props.obtenerDistritosNacimiento(idPaisNacimiento, idDepartamentoNacimiento, idProvinciaNacimiento);
+				if(checked){
+					rowsTestPsicologicosChecked.push(
+						{
+							idTestPsicologico: test.idTestPsicologico
+						}
+					)
 				}
-				// Objeto candidatoValidarInput
-				var candidatoValidarInput = {
-					idCandidato: candidatoResponse.idCandidato,
-					nombre: candidatoResponse.nombre == null ? this.state.nombre : candidatoResponse.nombre,
-					apellidoPaterno: candidatoResponse.apellidoPaterno == null ? this.state.apellidoPaterno : candidatoResponse.apellidoPaterno,
-					apellidoMaterno: candidatoResponse.apellidoMaterno == null ? this.state.apellidoMaterno : candidatoResponse.apellidoMaterno,
-					correoElectronico: candidatoResponse.correoElectronico,
-					idDocumentoIdentidad: candidatoResponse.documentoIdentidad.idDocumentoIdentidad,
-					numeroDocumentoIdentidad: candidatoResponse.numeroDocumentoIdentidad == null ? this.state.numeroDocumentoIdentidad : candidatoResponse.numeroDocumentoIdentidad,
-					idEstadoCivil: candidatoResponse.estadoCivil.idEstadoCivil,
-					cantidadHijos: candidatoResponse.cantidadHijos,
-					numeroCelular: candidatoResponse.telefonos.filter( t => t.idTelefono == 1).length > 0 ? candidatoResponse.telefonos.filter( t => t.idTelefono == 1)[0].numero : '',
-					numeroTelefono: candidatoResponse.telefonos.filter( t => t.idTelefono == 2).length > 0 ? candidatoResponse.telefonos.filter( t => t.idTelefono == 2)[0].numero : '',
-					lugarDomicilio: lugarDomicilio,
-					fechaNacimiento: fechaFormat,
-					idSexo: candidatoResponse.sexo.idSexo,
-					idPaisDomicilio: idPaisDomicilio,
-					idDepartamentoDomicilio: idDepartamentoDomicilio,
-					idProvinciaDomicilio: idProvinciaDomicilio,
-					idDistritoDomicilio: idDistritoDomicilio,
-					idPaisNacimiento: idPaisNacimiento,
-					idDepartamentoNacimiento: idDepartamentoNacimiento,
-					idProvinciaNacimiento: idProvinciaNacimiento,
-					idDistritoNacimiento: idDistritoNacimiento,
-					testPsicologicos: candidatoResponse.testPsicologicos
-				}
-				
-				this.setState({ 
-					isLoading: false,
-					esCandidatoRegistrado: false,
-					idCandidato: candidatoResponse.idCandidato,
-					nombre: candidatoResponse.nombre == null ? this.state.nombre : candidatoResponse.nombre,
-					apellidoPaterno: candidatoResponse.apellidoPaterno == null ? this.state.apellidoPaterno : candidatoResponse.apellidoPaterno,
-					apellidoMaterno: candidatoResponse.apellidoMaterno == null ? this.state.apellidoMaterno : candidatoResponse.apellidoMaterno,
-					correoElectronico: candidatoResponse.correoElectronico,
-					idDocumentoIdentidad: candidatoResponse.documentoIdentidad.idDocumentoIdentidad,
-					numeroDocumentoIdentidad: candidatoResponse.numeroDocumentoIdentidad == null ? this.state.numeroDocumentoIdentidad : candidatoResponse.numeroDocumentoIdentidad,
-					idEstadoCivil: candidatoResponse.estadoCivil.idEstadoCivil,
-					cantidadHijos: candidatoResponse.cantidadHijos,
-					numeroCelular: candidatoResponse.telefonos.filter( t => t.idTelefono == 1).length > 0 ? candidatoResponse.telefonos.filter( t => t.idTelefono == 1)[0].numero : '',
-					numeroTelefono: candidatoResponse.telefonos.filter( t => t.idTelefono == 2).length > 0 ? candidatoResponse.telefonos.filter( t => t.idTelefono == 2)[0].numero : '',
-					lugarDomicilio: lugarDomicilio,
-					fechaNacimiento: fechaFormat,
-					idSexo: candidatoResponse.sexo.idSexo,
-					idPaisDomicilio: idPaisDomicilio,
-					idDepartamentoDomicilio: idDepartamentoDomicilio,
-					idProvinciaDomicilio: idProvinciaDomicilio,
-					idDistritoDomicilio: idDistritoDomicilio,
-					idPaisNacimiento: idPaisNacimiento,
-					idDepartamentoNacimiento: idDepartamentoNacimiento,
-					idProvinciaNacimiento: idProvinciaNacimiento,
-					idDistritoNacimiento: idDistritoNacimiento,
-					testPsicologicos: candidatoResponse.testPsicologicos
-				})
-				
-				//const { errors, isValid } = validateInput(this.state);
-				const { errors, isValid } = validateInput(candidatoValidarInput);
-				
-				if( isValid ){
-					var hashIdCandidato = encriptarAES(this.props.validarCandidatoRegistradoResponse.idCandidato.toString());
-					window.location.href = ('/pages/examen.html?id=').concat(hashIdCandidato);
-				} else {
-					this.setState({ 
-						isLoading: false,
-						esCandidatoRegistrado: false
-					})
-				}
-			}
+				rowsTestPsicologicos.push(
+					{
+						nombre: test.nombre,
+						identificador: test.idTestPsicologico,
+						checked: checked
+					}
+				)
+			});
+			this.setState({
+				testPsicologicosChecked : rowsTestPsicologicosChecked,
+				testPsicologicosListCheck : rowsTestPsicologicos
+			});
 		}
-		if (prevProps.guardarCandidatoTestPsicologicoResponse !== this.props.guardarCandidatoTestPsicologicoResponse) {
-			if(this.props.guardarCandidatoTestPsicologicoResponse.idCandidato !== ''){
-				var hashIdCandidato = encriptarAES(this.props.guardarCandidatoTestPsicologicoResponse.idCandidato.toString());
-				window.location.href = ('/pages/examen.html?id=').concat(hashIdCandidato);
-			} else {
-				this.setState({
-					errorMensaje: {status: 'ERROR_OTROS', mensaje: 'Ocurrió un error al registrar sus datos.'}
-				})
-			}
+		if (prevProps.testPsicologico !== this.props.testPsicologico) {
+			let rowsTestPsicologicos = [];
+			let rowsTestPsicologicosChecked = [];
+			this.props.testPsicologico.map( test =>{
+				var checked = true;//Valor Default al cargar formulario.
+				// Si candidato tiene asignado test psicológicos
+				if(this.state.idCandidato != '' && typeof this.props.candidato.testPsicologicos != "undefined"){
+					checked = this.props.candidato.testPsicologicos.filter(t => t.idTestPsicologico == test.idTestPsicologico).length > 0 ? true : false;
+				} else {
+					checked = true;
+				}
+				if(checked){
+					rowsTestPsicologicosChecked.push(
+						{
+							idTestPsicologico: test.idTestPsicologico
+						}
+					)
+				}
+				rowsTestPsicologicos.push(
+					{
+						nombre: test.nombre,
+						identificador: test.idTestPsicologico,
+						checked: checked
+					}
+				)
+			});
+			this.setState({
+				testPsicologicosChecked : rowsTestPsicologicosChecked,
+				testPsicologicosListCheck : rowsTestPsicologicos
+			});
+		}
+		if (prevProps.guardarCandidatoTestPsicologicoRecruiterResponse !== this.props.guardarCandidatoTestPsicologicoRecruiterResponse) {
+			this.limpiar();
+			this.setState({ 
+				isLoading: false,
+				guardado: true
+			})
 		}
 		if (prevProps.errorResponse !== this.props.errorResponse) {
-			//console.log('error', this.props.errorResponse);
-			if(404 == this.props.errorResponse.status){
-				this.setState({
-					isLoading: false,
-					esCandidatoRegistrado: false
-				})
-			} else if(409 == this.props.errorResponse.status){
+			if(409 == this.props.errorResponse.status){
 				let error = {};
 				if(this.props.errorResponse.mensaje.indexOf('Correo') > -1){
 					error = {correoElectronico: this.props.errorResponse.mensaje}
@@ -234,13 +237,7 @@ class CandidatoDatosForm extends Component {
 	}
 	
 	isValid() {
-		const { errors, isValid } = validateInput(this.state);
-		if (!isValid) { this.setState({	errors : errors	}) }
-		return isValid;
-	}
-	
-	esValidoCandidatoRegistrado() {
-		const { errors, isValid } = validateInputCandidatoRegistrado(this.state);
+		const { errors, isValid } = validateInputRecruiterRegistration(this.state);
 		if (!isValid) { this.setState({	errors : errors	}) }
 		return isValid;
 	}
@@ -249,14 +246,6 @@ class CandidatoDatosForm extends Component {
 		e.preventDefault();
 		if (this.isValid()) {
 			this.guardar();
-		}
-	}
-	
-	validarCandidatoRegistrado(e){
-		e.preventDefault();
-		if (this.esValidoCandidatoRegistrado()) {
-			let candidato = {correoElectronico: this.state.correoElectronico}
-			this.props.validarCandidatoRegistrado(candidato);
 		}
 	}
 	
@@ -278,10 +267,10 @@ class CandidatoDatosForm extends Component {
 			};
 			telefonosCandidato.push(numeroTelefono);
 		}
-		var tests = this.state.testPsicologicos;
+		var tests = this.state.testPsicologicosChecked;
 		var testCandidato = [];
 		if(this.state.idCandidato !== ''){
-			this.state.testPsicologicos.map( t => {
+			this.state.testPsicologicosChecked.map( t => {
 				testCandidato.push({
 					idCandidato: this.state.idCandidato,
 					idTestPsicologico: t.idTestPsicologico
@@ -328,9 +317,10 @@ class CandidatoDatosForm extends Component {
 			}
 		}, () => {
 			if(this.state.idCandidato === ''){
-				this.props.guardarCandidatoTestPsicologico(this.state.candidato);
+				this.props.guardarCandidatoTestPsicologicoRecruiter(this.state.candidato);
 			} else {
-				this.props.guardarCandidatoTestPsicologico(this.state.candidato);
+				this.props.guardarCandidatoTestPsicologicoRecruiter(this.state.candidato);
+				//this.props.guardarCandidato(this.state.candidato);
 			}
 		});
 	}
@@ -340,14 +330,12 @@ class CandidatoDatosForm extends Component {
 		
 		if(e.target.name === 'idPaisDomicilio'){
 			this.props.obtenerPaises(e.target.value);
-			this.props.obtenerDepartamentos(e.target.value);
 			this.props.obtenerProvincias(e.target.value, 0);
 			this.props.obtenerDistritos(e.target.value, 0, 0);
 			this.setState({idDepartamentoDomicilio: '0', idProvinciaDomicilio: '0'});
 		}
 		if(e.target.name === 'idPaisNacimiento'){
 			this.props.obtenerPaisesNacimiento(e.target.value);
-			this.props.obtenerDepartamentosNacimiento(e.target.value);
 			this.props.obtenerProvinciasNacimiento(e.target.value, 0);
 			this.props.obtenerDistritosNacimiento(e.target.value, 0, 0);
 			this.setState({idDepartamentoNacimiento: '0', idProvinciaNacimiento: '0'});
@@ -370,6 +358,38 @@ class CandidatoDatosForm extends Component {
 		}
 	}
 	
+	onChangeCheck(event) {
+		const opcionSeleccionada = event.target;
+		const testPsicologicosChecked = this.state.testPsicologicosChecked;
+		const testPsicologicosListCheck = this.state.testPsicologicosListCheck;
+		var found = false;
+		let rowsTestPsicologicos = [];
+		let rowsTestPsicologicosChecked = [];
+		
+		testPsicologicosListCheck.map( listCheck => {
+			var checked = listCheck.checked;
+			if(listCheck.identificador == parseInt(opcionSeleccionada.value)){
+				checked = !listCheck.checked
+			}
+			rowsTestPsicologicos.push(
+				{
+					nombre: listCheck.nombre,
+					identificador: listCheck.identificador,
+					checked: checked
+				}
+			)
+			if(checked){
+				rowsTestPsicologicosChecked.push(
+					{idTestPsicologico : listCheck.identificador}
+				);
+			}
+		});
+		this.setState({
+			testPsicologicosChecked : rowsTestPsicologicosChecked,
+			testPsicologicosListCheck : rowsTestPsicologicos
+		});
+	}
+	
 	onClickCancelar(e) {
 		if(!this.state.prompt){
 			this.limpiar();
@@ -386,6 +406,9 @@ class CandidatoDatosForm extends Component {
 			nombre: '',
 			apellidoPaterno: '',
 			apellidoMaterno: '',
+			nombreForm: '',
+			apellidoPaternoForm: '',
+			apellidoMaternoForm: '',
 			correoElectronico: '',
 			idDocumentoIdentidad: '1',
 			numeroDocumentoIdentidad: '',
@@ -407,17 +430,19 @@ class CandidatoDatosForm extends Component {
 			idProvinciaNacimiento: '1501',
 			idDistritoNacimiento: '',
 			candidato: {},
+			testPsicologicosChecked: [],
 			prompt: false
 		})
 	}
 	
 	render() {
-		const { idCandidato, nombre, apellidoPaterno, apellidoMaterno, correoElectronico,
+		const { idCandidato, nombre, apellidoPaterno, apellidoMaterno, nombreForm, apellidoPaternoForm, apellidoMaternoForm, correoElectronico,
 		idDocumentoIdentidad, numeroDocumentoIdentidad, idEstadoCivil, cantidadHijos,
 		numeroCelular, numeroTelefono, telefonos, lugarDomicilio, fechaNacimiento, idSexo,
+		testPsicologicosChecked, testPsicologicosListCheck, 
 		idPaisDomicilio, idDepartamentoDomicilio, idProvinciaDomicilio, idDistritoDomicilio,
 		idPaisNacimiento, idDepartamentoNacimiento, idProvinciaNacimiento, idDistritoNacimiento,
-		errors, isLoading , errorMensaje, guardado, esCandidatoRegistrado} = this.state;
+		errors, isLoading , errorMensaje, guardado} = this.state;
 		
 		let rowsDocumentoIdentidad = [{ label: "Seleccione..." , value: 0 }]
 		this.props.documentosIdentidadResponse.map( elemento =>{
@@ -539,46 +564,8 @@ class CandidatoDatosForm extends Component {
 			)
 		});
 		
-		var formValidarCandidatoRegistrado = {
-			titulo: 'Debe ingresar su correo electrónico para realizar el test psicológico',
-			campos: [
-				[{
-					key: 'idCandidato',
-					name: 'idCandidato',
-					id: 'idCandidato',
-					type: 'hidden',
-					value: idCandidato,
-					error: errors.idCandidato,
-					onChange: this.onChange,
-					required: 'false'
-				}] , [{
-					key: 'correoElectronico',
-					name: 'correoElectronico',
-					id: 'correoElectronico',
-					label: 'Correo electrónico : ',
-					type: 'text-linea',
-					value: correoElectronico.toLowerCase(),
-					error: errors.correoElectronico,
-					onChange: this.onChange,
-					labelClass: 'col-md-3',
-					fieldClass: 'col-md-5',
-					//textClass: 'text-lowercase',
-					required: 'true'
-				}]
-			] ,
-			botones: [{
-					key: 'guardar',
-					label: 'Realizar test psicológico',
-					divClass: 'col-md-1',
-					botonClass: 'btn-primary btn-md',
-					tipo: 'button-submit',
-					isLoading: isLoading
-				}],
-				onSubmit: this.validarCandidatoRegistrado.bind(this)
-			}
-		
 		var form = {
-			titulo: 'Complete el formulario para realizar el test psicológico',
+			titulo: (idCandidato == '' ? 'Registrar candidato' : ('Datos de candidato ').concat(nombreForm, ' ', apellidoPaternoForm, ' ',apellidoMaternoForm)),
 			campos: [
 				[{
 					key: 'idCandidato',
@@ -861,12 +848,23 @@ class CandidatoDatosForm extends Component {
 					labelClass: 'col-md-2',
 					fieldClass: 'col-md-2',
 					required: 'true'
+				}] , [{
+					key: 'testPsicologicos',
+					name: 'testPsicologicos',
+					id: 'testPsicologicos',
+					label: 'Test psicologicos : ',
+					type: 'check',
+					value: testPsicologicosListCheck,
+					error: errors.testPsicologico,
+					onChange: this.onChangeCheck,
+					labelClass: 'col-md-2',
+					fieldClass: 'col-md-5'
 				}]
 			],
 			botones: [
 				{
 					key: 'guardar',
-					label: 'Realizar test psicológico',
+					label: 'Guardar',
 					divClass: 'col-md-1',
 					botonClass: 'btn-primary btn-md',
 					tipo: 'button-submit',
@@ -890,8 +888,12 @@ class CandidatoDatosForm extends Component {
 				/>
 				{isLoading && <CargandoImagen />}
 				{errorMensaje != '' && <MensajeError error={errorMensaje} />}
-				{esCandidatoRegistrado == null && <Formulario form={formValidarCandidatoRegistrado} />}
-				{esCandidatoRegistrado != null && !(esCandidatoRegistrado) && <Formulario form={form} />}
+				<AlertBoxMessageForm 
+						alertMessageHeading={this.state.mensajeInformativo.heading} 
+						alertMessageBody={this.state.mensajeInformativo.body} 
+						alertMessageFooter={this.state.mensajeInformativo.footer} 
+				/>
+				<Formulario form={form} />
 				<MensajeGuardarExitoso cargando={guardado} mensaje={"Se guardó exitosamente!"} />
 			</div>
 		);
@@ -912,10 +914,11 @@ function mapStateToProps(state){
 		sexosResponse : state.reducerSexo.obtenerSexosResponse,
 		estadosCivilesResponse : state.reducerEstadoCivil.obtenerEstadosCivilesResponse,
 		documentosIdentidadResponse : state.reducerDocumentoIdentidad.obtenerDocumentosIdentidadResponse,
-		guardarCandidatoTestPsicologicoResponse : state.reducerCandidato.guardarCandidatoTestPsicologicoResponse,
-		validarCandidatoRegistradoResponse : state.reducerCandidato.validarCandidatoRegistradoResponse,
+		testPsicologico : state.reducerTestPsicologico.obtenerTestPsicologicosResponse,
+		candidato : state.reducerCandidato.obtenerCandidatoResponse,
+		guardarCandidatoTestPsicologicoRecruiterResponse : state.reducerCandidato.guardarCandidatoTestPsicologicoRecruiterResponse,
 		errorResponse : state.reducerCandidato.errorResponse
 	}
 }
 
-export default connect(mapStateToProps, { guardarCandidatoTestPsicologico, validarCandidatoRegistrado, obtenerEstadosCiviles, obtenerDocumentosIdentidad, obtenerSexos, obtenerTipoDirecciones, obtenerPaises, obtenerPaisesNacimiento, obtenerDepartamentos, obtenerDepartamentosNacimiento, obtenerProvincias, obtenerProvinciasNacimiento, obtenerDistritos, obtenerDistritosNacimiento })(CandidatoDatosForm);
+export default connect(mapStateToProps, { guardarCandidatoTestPsicologicoRecruiter, obtenerCandidato, obtenerTestPsicologicos, obtenerEstadosCiviles, obtenerDocumentosIdentidad, obtenerSexos, obtenerTipoDirecciones, obtenerPaises, obtenerPaisesNacimiento, obtenerDepartamentos, obtenerDepartamentosNacimiento, obtenerProvincias, obtenerProvinciasNacimiento, obtenerDistritos, obtenerDistritosNacimiento })(CandidatoDatosForm);

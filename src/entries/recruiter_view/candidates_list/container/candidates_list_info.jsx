@@ -4,15 +4,14 @@ import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
-import {encriptarAES} from '../../common/components/encriptar_aes';
+import {encriptarAES} from '../../../common/components/encriptar_aes';
 
-import { obtenerCandidatos, generarInforme } from '../../../actions/actionCandidato';
-import MensajeError from '../../components/common/MensajeError';
-import CargandoImagen from '../../components/common/CargandoImagen';
-import TablePaginado from '../../components/common/TablePaginado';
-import BarraBusqueda from '../../components/common/BarraBusqueda';
+import { obtenerCandidatos, generarInforme } from '../../../../actions/actionCandidato';
+import MensajeError from '../../../components/common/MensajeError';
+import CargandoImagen from '../../../components/common/CargandoImagen';
+import TablePaginado from '../../../components/common/TablePaginado';
 
-class CandidatosResultadoForm extends Component {
+class CandidatesListInfo extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
@@ -190,8 +189,7 @@ class CandidatosResultadoForm extends Component {
 	
 	render() {
 		const { candidatosFiltro, filtroCandidatoNombre, filtroCandidatoApellidoPaterno, filtroCandidatoApellidoMaterno, errors, isLoading, errorMensaje } = this.state;
-		//console.log("CandidatosResultadoForm:props:" , this.props);
-		//console.log("CandidatosResultadoForm:state:" , this.state);
+		
 		var tableHead = [{
 				key: 'idCandidato',
 				nombre: 'N°'
@@ -257,4 +255,4 @@ function mapStateToProps(state){
 	}
 }
 
-export default connect(mapStateToProps, { obtenerCandidatos, generarInforme })(CandidatosResultadoForm);
+export default connect(mapStateToProps, { obtenerCandidatos, generarInforme })(CandidatesListInfo);

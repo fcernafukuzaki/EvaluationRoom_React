@@ -2,11 +2,11 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {obtenerCandidatoTestPsicologicosRespuestas, obtenerCandidatoTestPsicologicosResultadoData} from '../../../actions/actionCandidato';
-import MensajeError from '../../components/common/MensajeError';
-import CargandoImagen from '../../components/common/CargandoImagen';
-import TabBar from '../../components/common/TabBar';
-import {obtenerValorParametro} from '../../common/components/encriptar_aes';
+import {obtenerCandidatoTestPsicologicosRespuestas, obtenerCandidatoTestPsicologicosResultadoData} from '../../../../actions/actionCandidato';
+import MensajeError from '../../../components/common/MensajeError';
+import CargandoImagen from '../../../components/common/CargandoImagen';
+import TabBar from '../../../components/common/TabBar';
+import {obtenerValorParametro} from '../../../common/components/encriptar_aes';
 
 class CandidatoResultadoForm extends Component {
 	constructor(props){

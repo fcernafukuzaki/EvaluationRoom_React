@@ -4,16 +4,16 @@ import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
-import {encriptarAES, obtenerValorParametro} from '../../common/components/encriptar_aes';
+import {encriptarAES, obtenerValorParametro} from '../../../common/components/encriptar_aes';
 
-import { obtenerCliente } from '../../../actions/actionCliente';
-import { obtenerCandidatos, guardarPuestoLaboralCandidato, eliminarPuestoLaboralCandidato, obtenerPuestoLaboralCandidato, generarInforme } from '../../../actions/actionCandidato';
-import MensajeError from '../../components/common/MensajeError';
-import CargandoImagen from '../../components/common/CargandoImagen';
-import TablePaginado from '../../components/common/TablePaginado';
-import BarraBusqueda from '../../components/common/BarraBusqueda';
+import { obtenerCliente } from '../../../../actions/actionCliente';
+import { obtenerCandidatos, guardarPuestoLaboralCandidato, eliminarPuestoLaboralCandidato, obtenerPuestoLaboralCandidato, generarInforme } from '../../../../actions/actionCandidato';
+import MensajeError from '../../../components/common/MensajeError';
+import CargandoImagen from '../../../components/common/CargandoImagen';
+import TablePaginado from '../../../components/common/TablePaginado';
+import BarraBusqueda from '../../../components/common/BarraBusqueda';
 
-class CandidatosForm extends Component {
+class CandidatesListJobPosition extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
@@ -346,9 +346,8 @@ class CandidatosForm extends Component {
 	render() {
 		const { candidatosFiltro, filtroCandidatoNombre, filtroCandidatoApellidoPaterno, filtroCandidatoApellidoMaterno,
 			idPuestoLaboral, candidatosSeleccionados, candidatosNoSeleccionados, errors, isLoading, errorMensaje } = this.state;
-		console.log("CandidatosResultadoForm:props:" , this.props);
-		console.log("CandidatosResultadoForm:state:" , this.state);
-		var tableHead = [{
+		
+			var tableHead = [{
 				key: 'idCandidato',
 				nombre: 'N°'
 			},{
@@ -431,4 +430,4 @@ function mapStateToProps(state){
 	}
 }
 
-export default connect(mapStateToProps, { obtenerCandidatos, obtenerCliente, guardarPuestoLaboralCandidato, eliminarPuestoLaboralCandidato, obtenerPuestoLaboralCandidato, generarInforme })(CandidatosForm);
+export default connect(mapStateToProps, { obtenerCandidatos, obtenerCliente, guardarPuestoLaboralCandidato, eliminarPuestoLaboralCandidato, obtenerPuestoLaboralCandidato, generarInforme })(CandidatesListJobPosition);

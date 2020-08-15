@@ -9,10 +9,10 @@ import NotFound from '../common/components/NotFound';
 import ClientsList from './cliente/container/ClientsList';
 import ClientForm from './cliente/container/ClientForm';
 import PuestoLaboralForm from './cliente/container/PuestoLaboralForm';
-import CandidatoDatosForm from '../container/candidato/CandidatoDatosForm';
-import CandidatosResultadoForm from '../container/candidato/CandidatosResultadoForm';
-import CandidatoResultadoForm from '../container/candidato/CandidatoResultadoForm';
-import CandidatosForm from '../container/candidato/CandidatosForm';
+import CandidatoDatosForm from './candidate_form/container/candidate_form';
+import CandidatesListInfo from '../recruiter_view/candidates_list/container/candidates_list_info';
+import CandidatoResultadoForm from './candidate_info_result/container/candidate_info_result_tests';
+import CandidatesListJobPosition from './candidates_list_assign_jobposition/container/CandidatesListAssingJobPosition';
 import TestPsicologicos from './testpsicologico/TestPsicologicos';
 import UsuarioDatosForm from '../administrator_view/container/UsuarioDatosForm';
 import PerfilDatosForm from '../administrator_view/container/PerfilDatosForm';
@@ -182,9 +182,9 @@ export default class EvaluationRoomApp extends Component {
 						<Route exact path="/registrarCliente" render={()=>(<ClientForm errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/registrarPuestoLaboral" render={()=>(<PuestoLaboralForm errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/registrarCandidato" render={()=>(<CandidatoDatosForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/listaCandidatos" render={()=>(<CandidatosResultadoForm errorResponse={this.state.errorMensaje} />)} />
+						<Route exact path="/listaCandidatos" render={()=>(<CandidatesListInfo errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/listaCandidatos/resultados" render={()=>(<CandidatoResultadoForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/asignarCandidatos" render={()=>(<CandidatosForm errorResponse={this.state.errorMensaje} />)} />
+						<Route exact path="/asignarCandidatos" render={()=>(<CandidatesListJobPosition errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/listaTestPsicologicos" render={()=>(<TestPsicologicos errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/registrarUsuario" render={()=>(<UsuarioDatosForm errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/registrarPerfil" render={()=>(<PerfilDatosForm errorResponse={this.state.errorMensaje} />)} />
