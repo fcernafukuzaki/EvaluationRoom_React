@@ -1,9 +1,8 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
-import {Prompt} from 'react-router';
-import CargandoImagen from '../../components/common/CargandoImagen'
-import MensajeError from '../../components/common/MensajeError';
-import {getSelectionProcess} from '../../../actions/actionSelectionProcess';
+import CargandoImagen from '../../../components/common/CargandoImagen'
+import MensajeError from '../../../components/common/MensajeError';
+import {getSelectionProcess} from '../../../../actions/actionSelectionProcess';
 import ClientsSelectionProcessList from '../components/clients_selectionprocess_list'
 import ClientsSelectionProcessButtonNew from '../components/clients_selectionprocess_button_new'
 

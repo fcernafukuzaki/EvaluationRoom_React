@@ -1,9 +1,8 @@
 import React, {Fragment} from 'react';
-import { connect } from 'react-redux';
 
-import CargandoImagen from './common/CargandoImagen';
+import CargandoImagen from '../components/common/CargandoImagen';
 
-import DashBoard from '../dashboard/container/DashBoard';
+import DashBoard from './dashboard/container/DashBoard';
 
 export default function Home (props){
 	return (

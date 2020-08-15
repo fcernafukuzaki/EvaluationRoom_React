@@ -2,15 +2,15 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Prompt } from 'react-router';
 
-import Formulario from '../../components/common/Formulario';
-import {obtenerValorParametro} from '../../common/components/encriptar_aes';
-import MensajeGuardarExitoso from '../../components/common/MensajeGuardarExitoso';
-import MensajeError from '../../components/common/MensajeError';
-import CargandoImagen from '../../components/common/CargandoImagen';
+import Formulario from '../../../components/common/Formulario';
+import {obtenerValorParametro} from '../../../common/components/encriptar_aes';
+import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExitoso';
+import MensajeError from '../../../components/common/MensajeError';
+import CargandoImagen from '../../../components/common/CargandoImagen';
 
 import validateInput from '../components/client_form_validate';
 
-import { addClient, updateClient, obtenerCliente } from '../../../actions/actionCliente';
+import { addClient, updateClient, obtenerCliente } from '../../../../actions/actionCliente';
 
 class ClientForm extends Component {
 	constructor(props){

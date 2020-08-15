@@ -1,15 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
-import MensajeError from '../../components/common/MensajeError';
-import CargandoImagen from '../../components/common/CargandoImagen';
-import TablePaginado from '../../components/common/TablePaginado';
+import MensajeError from '../../../components/common/MensajeError';
+import CargandoImagen from '../../../components/common/CargandoImagen';
+import TablePaginado from '../../../components/common/TablePaginado';
 
 import {ClientButtonAdd, ClientButtonUpdate, ClientButtonAssignJobPosition, ClientButtonAssignMoreJobPosition}  from '../components/client_button'
 import {JobPositionButtonUpdate, JobPositionButtonAssignCandidates} from '../components/jobposition_button'
-import {encriptarAES} from '../../common/components/encriptar_aes';
+import {encriptarAES} from '../../../common/components/encriptar_aes';
 
-import {obtenerClientes, getJobPosition} from '../../../actions/actionCliente';
+import {obtenerClientes, getJobPosition} from '../../../../actions/actionCliente';
 
 class ClientsList extends Component {
 	constructor(props){

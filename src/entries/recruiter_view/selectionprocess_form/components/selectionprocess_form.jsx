@@ -1,19 +1,19 @@
 import React, {Component, Fragment} from 'react'
 import { connect } from 'react-redux';
 import classnames from 'classnames'
-import Formulario from '../../components/common/Formulario'
+import Formulario from '../../../components/common/Formulario'
 import { Prompt } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import {getNewDateTimeFormat, getDateFormat} from '../../common/components/date_util'
+import {getNewDateTimeFormat, getDateFormat} from '../../../common/components/date_util'
 import validateInput from './selectionprocess_form_validate'
-import MensajeError from '../../components/common/MensajeError';
-import CargandoImagen from '../../components/common/CargandoImagen';
-import {encriptarAES, obtenerValorParametro} from '../../common/components/encriptar_aes';
-import MensajeGuardarExitoso from '../../components/common/MensajeGuardarExitoso';
-import {getSelectionProcess} from '../../../actions/actionSelectionProcess';
-import { obtenerCliente, getJobPosition, getCandidatesFromJobPosition, addClient, updateClient, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition } from '../../../actions/actionCliente';
-import { getCandidates, obtenerCandidatos, generarInforme } from '../../../actions/actionCandidato';
+import MensajeError from '../../../components/common/MensajeError';
+import CargandoImagen from '../../../components/common/CargandoImagen';
+import {encriptarAES, obtenerValorParametro} from '../../../common/components/encriptar_aes';
+import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExitoso';
+import {getSelectionProcess} from '../../../../actions/actionSelectionProcess';
+import { obtenerCliente, getJobPosition, getCandidatesFromJobPosition, addClient, updateClient, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition } from '../../../../actions/actionCliente';
+import { getCandidates, obtenerCandidatos, generarInforme } from '../../../../actions/actionCandidato';
 
 class SelectionProcessForm extends Component {
     constructor(props) {

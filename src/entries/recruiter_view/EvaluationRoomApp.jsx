@@ -4,22 +4,21 @@ import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 
 import NavBar from '../components/common/NavBar';
 import Footer from '../common/components/Footer';
-import Home from '../components/Home';
+import Home from './Home';
 import NotFound from '../common/components/NotFound';
-import ClientsList from '../cliente/container/ClientsList';
-import ClientForm from '../cliente/container/ClientForm';
-import PuestoLaboralForm from '../cliente/container/PuestoLaboralForm';
+import ClientsList from './cliente/container/ClientsList';
+import ClientForm from './cliente/container/ClientForm';
+import PuestoLaboralForm from './cliente/container/PuestoLaboralForm';
 import CandidatoDatosForm from '../container/candidato/CandidatoDatosForm';
 import CandidatosResultadoForm from '../container/candidato/CandidatosResultadoForm';
 import CandidatoResultadoForm from '../container/candidato/CandidatoResultadoForm';
 import CandidatosForm from '../container/candidato/CandidatosForm';
-import TestPsicologicos from '../container/testpsicologico/TestPsicologicos';
-import UsuarioDatosForm from '../administracion/container/UsuarioDatosForm';
-import PerfilDatosForm from '../administracion/container/PerfilDatosForm';
-import UsuariosForm from '../administracion/container/UsuariosForm';
-import PerfilesForm from '../administracion/container/PerfilesForm';
-import SelectionProcessFormContainer from '../selectionprocess_form/container/selectionprocess_form_container'
-import MensajeError from '../components/common/MensajeError';
+import TestPsicologicos from './testpsicologico/TestPsicologicos';
+import UsuarioDatosForm from '../administrator_view/container/UsuarioDatosForm';
+import PerfilDatosForm from '../administrator_view/container/PerfilDatosForm';
+import UsuariosForm from '../administrator_view/container/UsuariosForm';
+import PerfilesForm from '../administrator_view/container/PerfilesForm';
+import SelectionProcessFormContainer from './selectionprocess_form/container/selectionprocess_form_container'
 
 export default class EvaluationRoomApp extends Component {
 	constructor(props){

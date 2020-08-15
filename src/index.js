@@ -8,7 +8,7 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
 import reducers from './reducers';
-import EvaluationRoomApp from './entries/container/EvaluationRoomApp';
+import EvaluationRoomApp from './entries/recruiter_view/EvaluationRoomApp';
 
 import './assets/styles/estilos.scss'
 import './assets/styles/estilos-exam-web.scss'
