@@ -1,11 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
-import { Link } from 'react-router-dom';
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
-import Formulario from '../../components/common/Formulario';
 import TablePaginado from '../../components/common/TablePaginado';
 import BarraBusqueda from '../../components/common/BarraBusqueda';
 
@@ -40,7 +37,6 @@ class TestPsicologicos extends Component {
 				isLoading: Object.entries(this.props.obtenerTestPsicologicosResponse).length > 0 ? false : true
 			});
 		}
-		//if (prevProps.testPsicologicosPreguntasFiltro !== this.props.testPsicologicosPreguntasFiltro) {
 		if (prevProps.obtenerTestPsicologicoPreguntasResponse !== this.props.obtenerTestPsicologicoPreguntasResponse) {
 			this.setState({
 				isLoading: this.state.isLoading ? false : true
@@ -147,8 +143,7 @@ class TestPsicologicos extends Component {
 	
 	render() {
 		const { idTestPsicologico, idParte, nombre, testPsicologicosPreguntasFiltro, filtroTestPsicologicoEnunciado, testPsicologicosPartesFiltro, errors, isLoading, errorMensaje } = this.state;
-		//console.log('TestPsicologicos:state', this.state);
-		//console.log('TestPsicologicos:props', this.props);
+		
 		var tableHeadTestPsicologico = [{
 				key: 'idTestPsicologico',
 				nombre: 'N°'

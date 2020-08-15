@@ -84,7 +84,7 @@ export default class EvaluationRoomApp extends Component {
 					botonClass: 'btn-primary btn-sm',
 					tipo: 'dropdown-item',
 					exact: false,
-					link: '/registrarCliente',
+					link: '/listarClientes',//'/registrarCliente',
 					perfil: [1,2,3]
 				}]
 			} , {
