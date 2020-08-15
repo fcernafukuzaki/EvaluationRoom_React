@@ -5,7 +5,6 @@ import {
 	CLIENTES_OBTENER,
 	PUESTOS_LABORALES_GUARDAR,
 	PUESTOS_LABORALES_ACTUALIZAR,
-	PUESTO_LABORAL_OBTENER,
 	JOBPOSITIONS_GET,
 	JOBPOSITION_CANDIDATES_GET,
 	JOBPOSITION_CANDIDATE_ADD,
@@ -20,10 +19,8 @@ const initialState = {
 	obtenerClientesResponse: [],
 	guardarPuestosLaboralesResponse: [],
 	actualizarPuestosLaboralesResponse: [],
-	obtenerClientePuestosLaboralesResponse: [],
-	obtenerPuestoLaboralResponse: [],
 	getJobPositionResponse: [],
-	getCandidatesFromJobPosition: [],
+	getCandidatesFromJobPositionResponse: [],
 	addCandidateToJobPositionResponse: [],
 	deleteCandidateToJobPositionResponse: [],
 	errorResponse: []
@@ -43,12 +40,10 @@ export function actionCliente(state = initialState, action){
 			return Object.assign({}, state, {guardarPuestosLaboralesResponse: action.payload})
 		case PUESTOS_LABORALES_ACTUALIZAR:
 			return Object.assign({}, state, {actualizarPuestosLaboralesResponse: action.payload})
-		case PUESTO_LABORAL_OBTENER:
-			return Object.assign({}, state, {obtenerPuestoLaboralResponse: action.payload})
 		case JOBPOSITIONS_GET:
 			return Object.assign({}, state, {getJobPositionResponse: action.payload})
 		case JOBPOSITION_CANDIDATES_GET:
-			return Object.assign({}, state, {addCandidateToJobPositionResponse: action.payload})
+			return Object.assign({}, state, {getCandidatesFromJobPositionResponse: action.payload})
 		case JOBPOSITION_CANDIDATE_ADD:
 			return Object.assign({}, state, {addCandidateToJobPositionResponse: action.payload})
 		case JOBPOSITION_CANDIDATE_DELETE:

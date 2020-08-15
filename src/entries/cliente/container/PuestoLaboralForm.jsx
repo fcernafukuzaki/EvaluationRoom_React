@@ -9,25 +9,26 @@ import {obtenerValorParametro} from '../../components/common-exam/Mensajes';
 import MensajeGuardarExitoso from '../../components/common/MensajeGuardarExitoso';
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
+import {getDateFormat} from '../../common/components/date_util'
+import validateInput from '../components/jobposition_form_validate';
 
-import validateInput from '../../components/validate/PuestoLaboral';
+import {guardarPuestosLaborales, actualizarPuestosLaborales, getJobPosition} from '../../../actions/actionCliente';
 
-import { guardarPuestosLaborales, actualizarPuestosLaborales, obtenerPuestoLaboral
-} from '../../../actions/actionCliente';
-
-class PuestoLaboralDatosForm extends Component {
+class PuestoLaboralForm extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
 			filter: null,
-			idCliente: obtenerValorParametro('id'),
-			idPuestoLaboral: '',
-			nombre: '',
-			nombreForm: '',
+			idclient: obtenerValorParametro('id'),
+			idjobposition: '',
+			nameJobPosition: '',
+			dateProcessBegin: getDateFormat(),
+            dateProcessEnd: getDateFormat(),
+			processActive: 'True',
+            nameForm: '',
 			errors: {},
 			isLoading: true,
-			cliente:{},
-			//puestoLaboral:{},
+			jobposition:{},
 			puestoLaboralResponse:{},
 			prompt: false,
 			errorMensaje: '',
@@ -41,7 +42,7 @@ class PuestoLaboralDatosForm extends Component {
 	
 	componentWillMount() {
 		if(obtenerValorParametro('idp') != null){
-			this.props.obtenerPuestoLaboral(obtenerValorParametro('id'), obtenerValorParametro('idp'));
+			this.props.getJobPosition(obtenerValorParametro('id'), obtenerValorParametro('idp'));
 		} else {
 			this.setState({
 				isLoading: false
@@ -52,9 +53,9 @@ class PuestoLaboralDatosForm extends Component {
 	componentDidUpdate(prevProps, prevState) {
 		if (prevProps.puestoLaboral !== this.props.puestoLaboral) {
 			this.setState({
-				idPuestoLaboral: this.props.puestoLaboral.idPuestoLaboral,
-				nombre: this.props.puestoLaboral.nombre,
-				nombreForm: this.props.puestoLaboral.nombre,
+				idjobposition: this.props.puestoLaboral.idpuestolaboral,
+				nameJobPosition: this.props.puestoLaboral.nombre,
+				nameForm: this.props.puestoLaboral.nombre,
 				isLoading: false
 			});
 		}
@@ -85,21 +86,28 @@ class PuestoLaboralDatosForm extends Component {
 			this.setState({
 				errors: {}, 
 				isLoading: true,
-				cliente:{
-					idCliente: this.state.idCliente,
-					puestosLaborales: [{
-						//idCliente: this.state.idCliente,
-						//idPuestoLaboral: this.state.idPuestoLaboral,
-						idclient: this.state.idCliente,
-						idjobposition: this.state.idPuestoLaboral,
-						nombre: this.state.nombre
-					}]
-				}
+				jobposition: this.state.idjobposition === '' ? 
+					{
+						idclient: this.state.idclient,
+                        nombre: this.state.nameJobPosition,
+                        date_process_begin: this.state.dateProcessBegin,
+                        date_process_end: this.state.dateProcessEnd,
+                        user_register: '',
+						process_active: this.state.processActive
+					} : {
+						idclient: this.state.idclient,
+                        idjobposition: this.state.idjobposition,
+                        nombre: this.state.nameJobPosition,
+                        date_process_begin: this.state.dateProcessBegin,
+                        date_process_end: this.state.dateProcessEnd,
+                        user_register: '',
+                        process_active: this.state.processActive
+					}
 			}, () => {
-				if(this.state.idPuestoLaboral === ''){
-					this.props.guardarPuestosLaborales(this.state.cliente);
+				if(this.state.idjobposition === ''){
+					this.props.guardarPuestosLaborales(this.state.jobposition);
 				} else {
-					this.props.actualizarPuestosLaborales(this.state.cliente);
+					this.props.actualizarPuestosLaborales(this.state.jobposition);
 				}
 			});
 		}
@@ -121,37 +129,40 @@ class PuestoLaboralDatosForm extends Component {
 	
 	limpiar(){
 		this.setState({
-			cliente: {},
-			idPuestoLaboral: '',
-			nombre: '',
-			nombreForm: '',
+			jobposition: {},
+			idjobposition: '',
+			nameJobPosition: '',
+			dateProcessBegin: getDateFormat(),
+            dateProcessEnd: getDateFormat(),
+			processActive: 'True',
+            nameForm: '',
 			prompt: false
 		})
 	}
 	
 	render() {
-		const { idPuestoLaboral, nombre, nombreForm, errors, isLoading , errorMensaje, guardado} = this.state;
-		//console.log('PuestoLaboralDatosForm', this.state);
+		const { idjobposition, nameJobPosition, nameForm, errors, isLoading , errorMensaje, guardado} = this.state;
+		
 		var form = {
-			titulo: (idPuestoLaboral == '' || idPuestoLaboral == 0 ? 'Registrar puesto laboral' : ('Datos de puesto laboral ').concat(nombreForm)),
+			titulo: (idjobposition == '' || idjobposition == 0 ? 'Registrar puesto laboral' : ('Datos de puesto laboral ').concat(nameForm)),
 			campos: [
 				[{
-					key: 'idPuestoLaboral',
-					name: 'idPuestoLaboral',
-					id: 'idPuestoLaboral',
+					key: 'idjobposition',
+					name: 'idjobposition',
+					id: 'idjobposition',
 					type: 'hidden',
-					value: idPuestoLaboral,
-					error: errors.idPuestoLaboral,
+					value: idjobposition,
+					error: errors.idjobposition,
 					onChange: this.onChange,
 					required: 'false'
 				}] , [{
-					key: 'nombre',
-					name: 'nombre',
-					id: 'nombre',
+					key: 'nameJobPosition',
+					name: 'nameJobPosition',
+					id: 'nameJobPosition',
 					label: 'Nombre puesto laboral : ',
 					type: 'text-linea',
-					value: nombre,
-					error: errors.nombre,
+					value: nameJobPosition,
+					error: errors.nameJobPosition,
 					onChange: this.onChange,
 					labelClass: 'col-md-4',
 					fieldClass: 'col-md-5',
@@ -196,9 +207,9 @@ function mapStateToProps(state){
 	return{
 		guardarPuestosLaboralesResponse : state.reducerCliente.guardarPuestosLaboralesResponse,
 		actualizarPuestosLaboralesResponse: state.reducerCliente.actualizarPuestosLaboralesResponse,
-		puestoLaboral : state.reducerCliente.obtenerPuestoLaboralResponse,
+		puestoLaboral : state.reducerCliente.getJobPositionResponse,
 		errorResponse : state.reducerCliente.errorResponse
 	}
 }
 
-export default connect(mapStateToProps, { guardarPuestosLaborales, actualizarPuestosLaborales, obtenerPuestoLaboral })(PuestoLaboralDatosForm);
+export default connect(mapStateToProps, { guardarPuestosLaborales, actualizarPuestosLaborales, getJobPosition })(PuestoLaboralForm);

@@ -6,7 +6,6 @@ import {
 	CLIENTES_OBTENER,
 	PUESTOS_LABORALES_GUARDAR,
 	PUESTOS_LABORALES_ACTUALIZAR,
-	PUESTO_LABORAL_OBTENER,
 	JOBPOSITIONS_GET,
 	JOBPOSITION_CANDIDATES_GET,
 	JOBPOSITION_CANDIDATE_ADD,
@@ -62,7 +61,6 @@ export function obtenerCliente(idclient) {
 
 export function obtenerClientes() {
 	return (dispatch, getState) => {
-		//axios.get(('http://127.0.0.1:5000/v1/client'))
 		axios.get(('http://127.0.0.1:5000/v1/client_info'))
 			.then((response) => { dispatch({ type: CLIENTES_OBTENER, payload: response.data }) })
 			.catch((error) => {
@@ -95,20 +93,6 @@ export function actualizarPuestosLaborales(datos) {
 	return (dispatch, getState) => {
 		axios.put('http://127.0.0.1:5000/v1/jobposition', datos)
 			.then((response) => { dispatch({ type: PUESTOS_LABORALES_ACTUALIZAR, payload: response.data }) })
-			.catch((error) => {
-				if(error.toString().indexOf('Network Error') > -1){
-					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
-				} else {
-					dispatch({ type: ERROR, payload: error.response.data })
-				}
-			})
-	}
-}
-
-export function obtenerPuestoLaboral(idCliente, idPuestoLaboral) {
-	return (dispatch, getState) => {
-		axios.get(('/cliente/').concat(idCliente,'/puesto/id/',idPuestoLaboral))
-			.then((response) => { dispatch({ type: PUESTO_LABORAL_OBTENER, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
