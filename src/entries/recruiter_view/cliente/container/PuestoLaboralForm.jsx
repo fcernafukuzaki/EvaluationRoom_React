@@ -142,7 +142,7 @@ class PuestoLaboralForm extends Component {
 		const { idjobposition, nameJobPosition, nameForm, errors, isLoading , errorMensaje, guardado} = this.state;
 		
 		var form = {
-			titulo: (idjobposition == '' || idjobposition == 0 ? 'Registrar puesto laboral' : ('Datos de puesto laboral ').concat(nameForm)),
+			titulo: (idjobposition === '' || idjobposition == 0 ? 'Registrar puesto laboral' : ('Datos de puesto laboral ').concat(nameForm)),
 			campos: [
 				[{
 					key: 'idjobposition',

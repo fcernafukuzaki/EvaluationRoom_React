@@ -1,22 +1,22 @@
 import React, {Component, Fragment} from 'react';
 import { connect } from 'react-redux';
 
-import MensajeAlerta from './MensajeAlerta';
-import Tablero from './Tablero';
-import Boton from './Boton';
+import MensajeAlerta from '../components/MensajeAlerta';
+import Tablero from '../components/Tablero';
+import Boton from '../components/Boton';
 
-import Header from '../common-exam/Header';
-import Footer from '../Footer';
-import {obtenerValorParametro} from '../../common/components/encriptar_aes';
-import MensajeBienvenidaWeb from '../common-exam/MensajeBienvenidaWeb';
-import TableroEnunciadoWeb from '../common-exam/TableroEnunciadoWeb';
-import MensajeInstruccionesWeb from '../common-exam/MensajeInstruccionesWeb';
-import MensajeFinalizacionExamWeb from '../common-exam/MensajeFinalizacionExamWeb';
-import MensajeContador from '../common-exam/MensajeContador';
+import Header from '../common/Header';
+import Footer from '../../../common/components/Footer'
+import {obtenerValorParametro} from '../../../common/components/encriptar_aes'
+import MensajeBienvenidaWeb from '../common/MensajeBienvenidaWeb';
+import TableroEnunciadoWeb from '../common/TableroEnunciadoWeb';
+import MensajeInstruccionesWeb from '../common/MensajeInstruccionesWeb';
+import MensajeFinalizacionExamWeb from '../common/MensajeFinalizacionExamWeb';
+import MensajeContador from '../common/MensajeContador';
 
-import {obtenerTestPsicologicosPartes} from '../../../actions/actionTestPsicologico';
-import {obtenerCandidatoTestPsicologicosPreguntas, obtenerCandidatoRespuestas, guardarCandidatoRespuesta, obtenerInterpretacion, validarTestPsicologicosFinalizado} from '../../../actions/actionCandidato';
-import {notificarReclutador} from '../../../actions/actionReclutador';
+import {obtenerTestPsicologicosPartes} from '../../../../actions/actionTestPsicologico';
+import {obtenerCandidatoTestPsicologicosPreguntas, obtenerCandidatoRespuestas, guardarCandidatoRespuesta, obtenerInterpretacion, validarTestPsicologicosFinalizado} from '../../../../actions/actionCandidato';
+import {notificarReclutador} from '../../../../actions/actionReclutador';
 
 class ExamenPsicologicoWeb extends Component {
 	constructor(props){

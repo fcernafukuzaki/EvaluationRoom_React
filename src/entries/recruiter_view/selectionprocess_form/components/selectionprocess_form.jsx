@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react'
 import { connect } from 'react-redux';
-import classnames from 'classnames'
 import Formulario from '../../../components/common/Formulario'
 import { Prompt } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -13,7 +12,7 @@ import {encriptarAES, obtenerValorParametro} from '../../../common/components/en
 import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExitoso';
 import {getSelectionProcess} from '../../../../actions/actionSelectionProcess';
 import { obtenerCliente, getJobPosition, getCandidatesFromJobPosition, addClient, updateClient, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition } from '../../../../actions/actionCliente';
-import { getCandidates, obtenerCandidatos, generarInforme } from '../../../../actions/actionCandidato';
+import { getCandidates, generarInforme } from '../../../../actions/actionCandidato';
 
 class SelectionProcessForm extends Component {
     constructor(props) {
@@ -636,7 +635,7 @@ class SelectionProcessForm extends Component {
 		//console.log(row);
 		this.setState({
 			informe: {
-				idCandidato: row.idCandidato
+				idCandidato: row.idcandidato
 			}
 		}, () => {
 			this.props.generarInforme(this.state.informe);
@@ -681,4 +680,4 @@ function mapStateToProps(state){
 	}
 }
 
-export default connect(mapStateToProps, {getSelectionProcess, getCandidates, getJobPosition, addClient, updateClient, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition, obtenerCandidatos, obtenerCliente, getCandidatesFromJobPosition, generarInforme })(SelectionProcessForm);
+export default connect(mapStateToProps, {getSelectionProcess, getCandidates, getJobPosition, addClient, updateClient, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition, obtenerCliente, getCandidatesFromJobPosition, generarInforme })(SelectionProcessForm);

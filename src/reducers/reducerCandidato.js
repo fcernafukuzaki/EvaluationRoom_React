@@ -16,8 +16,6 @@ import {
 	CANDIDATO_GUARDAR_RESPUESTA,
 	INTERPRETACION_OBTENER,
 	INFORME_GENERAR,
-	CANDIDATO_PUESTO_LABORAL_GUARDAR,
-	CANDIDATO_PUESTO_LABORAL_ELIMINAR,
 	CANDIDATO_PUESTO_LABORAL_OBTENER,
 	ERROR
 	} from '../actions/actionTypes';
@@ -41,8 +39,6 @@ const initialState = {
 	guardarCandidatoRespuestaResponse: [],
 	obtenerInterpretacionResponse: [],
 	generarInformeResponse: [],
-	guardarCandidatoPuestoLaboralResponse: [],
-	eliminarCandidatoPuestoLaboralResponse: [],
 	obtenerCandidatoPuestoLaboralResponse: [],
 	errorResponse: []
 }
@@ -84,10 +80,6 @@ export function actionCandidato(state = initialState, action){
 		case INFORME_GENERAR:
 			fileSaver.saveAs(action.payload, "Informe.docx");
 			return state;
-		case CANDIDATO_PUESTO_LABORAL_GUARDAR:
-			return Object.assign({}, state, {guardarCandidatoPuestoLaboralResponse: action.payload})
-		case CANDIDATO_PUESTO_LABORAL_ELIMINAR:
-			return Object.assign({}, state, {eliminarCandidatoPuestoLaboralResponse: action.payload})
 		case CANDIDATO_PUESTO_LABORAL_OBTENER:
 			return Object.assign({}, state, {obtenerCandidatoPuestoLaboralResponse: action.payload})
 		case ERROR:

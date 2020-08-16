@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import classnames from 'classnames';
 
 import ClientsSelectionProcessTable from '../components/clients_selectionprocess_table'
-import ClientsSelectionProcessButtonNew from '../components/clients_selectionprocess_button_new'
+import {ClientsSelectionProcessButtonUpdate} from './clients_selectionprocess_button'
 import CandidateCard from '../../candidate_card/container/candidate_card'
 import {getDate} from '../../../common/components/date_util'
 import {encriptarAES} from '../../../common/components/encriptar_aes';;
@@ -52,12 +52,9 @@ function tableSelectionProcess(selectionProcess){
             })
             var hashIdClientIdJobPosition = encriptarAES(elemento.idclient.toString() + '_' + elemento.idjobposition.toString());
             var asignarCandidatos = (
-                                    <ClientsSelectionProcessButtonNew 
+                                    <ClientsSelectionProcessButtonUpdate 
                                         pathname={'/selectionprocess'}
                                         hashId={`?id=${hashIdClientIdJobPosition}`}
-                                        buttonClass={'far fa-edit'}
-                                        buttonTitle={'Actualizar datos de proceso de selección'}
-                                        buttonLabel={'Actualizar'}
                                     />
             );
             return (<Fragment key={elemento.idclient + ' - ' + elemento.idjobposition}>

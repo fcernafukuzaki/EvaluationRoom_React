@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
 
-import CargandoImagen from '../../components/common/CargandoImagen';
+import CargandoImagen from '../../../components/common/CargandoImagen';
 import TableroMensaje from './TableroMensaje';
 import {obtenerTextoBienvenidaPorParrafos} from './Mensajes';
 

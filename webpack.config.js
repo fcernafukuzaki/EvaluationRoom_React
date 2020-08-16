@@ -3,10 +3,14 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: {
+        'index': './src/index.js',
+        'index_public': './src/index_public.js',
+        'index_exam': './src/index_exam.js',
+    }, 
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js'
+        filename: 'js/[name].js'
     },
     resolve: {
         extensions: ['.js', '.jsx']
@@ -37,16 +41,32 @@ module.exports = {
                     'css-loader',
                     'sass-loader'
                 ],
-           }
+           },
+           {
+                test: /\.(png|svg|jpg|gif)$/,
+                use: [
+                    'file-loader',
+                ],
+            },
         ]
     },
     plugins: [
         new HtmlWebPackPlugin({
             template: './public/index.html',
+            chunks: ['index'],
             filename: './index.html'
         }),
+        new HtmlWebPackPlugin({
+            template: './public/index.html',
+            chunks: ['index_public'],
+            filename: './evaluacion/index.html'
+        }),
+        new HtmlWebPackPlugin({
+            chunks: ['index_exam'],
+            filename: './pages/examen.html'
+        }),
         new MiniCssExtractPlugin({
-            filename: 'assets/[name].css',
+            filename: 'css/[name].css',
         }),
     ]
 }

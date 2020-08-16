@@ -97,7 +97,7 @@ class ClientsList extends Component {
 			var actualizarCliente = (
 				<ClientButtonUpdate 
 					pathname={this.state.rutaRegistrarCliente}
-					hashId={`?idc=${hashIdCliente}`}
+					hashId={`?id=${hashIdCliente}`}
 				/>
 			);
 			if(row.cant_puestos_laborales > 0){

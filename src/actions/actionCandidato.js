@@ -17,8 +17,6 @@ import {
 	CANDIDATO_GUARDAR_RESPUESTA,
 	INTERPRETACION_OBTENER,
 	INFORME_GENERAR,
-	CANDIDATO_PUESTO_LABORAL_GUARDAR,
-	CANDIDATO_PUESTO_LABORAL_ELIMINAR,
 	CANDIDATO_PUESTO_LABORAL_OBTENER,
 	ERROR,
 	OBJ_ERROR_TIME_OUT
@@ -245,34 +243,6 @@ export function generarInforme(datosInforme) {
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
-				}
-			})
-	}
-}
-
-export function guardarPuestoLaboralCandidato(puestoLaboralCandidato) {
-	return (dispatch, getState) => {
-		axios.post('/candidato/puestolaboral/',puestoLaboralCandidato)
-			.then((response) => { dispatch({ type: CANDIDATO_PUESTO_LABORAL_GUARDAR, payload: response.data }) })
-			.catch((error) => {
-				if(error.toString().indexOf('Network Error') > -1){
-					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
-				} else if(error.response.status == '409'){
-					dispatch({ type: ERROR, payload: error.response.data })
-				}
-			})
-	}
-}
-
-export function eliminarPuestoLaboralCandidato(puestoLaboralCandidato) {
-	return (dispatch, getState) => {
-		axios.put('/candidato/puestolaboral/',puestoLaboralCandidato)
-			.then((response) => { dispatch({ type: CANDIDATO_PUESTO_LABORAL_ELIMINAR, payload: response.data }) })
-			.catch((error) => {
-				if(error.toString().indexOf('Network Error') > -1){
-					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
-				} else if(error.response.status == '409'){
-					dispatch({ type: ERROR, payload: error.response.data })
 				}
 			})
 	}

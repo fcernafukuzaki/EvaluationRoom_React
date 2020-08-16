@@ -1,4 +1,11 @@
 import React, {Component, Fragment} from 'react';
+import Logo from '../../../../assets/img/logo.jpg'
+
+function getLogo(){
+	const logo = new Image();
+	logo.src = Logo;
+	return logo.src;
+}
 
 const Header = (props) => {
 	const { nombreCandidato, testPsicologicoActual, testPsicologicosAsignados, numeroPreguntaActualIndex, candidatoDatos, estiloTablero } = props;
@@ -9,7 +16,7 @@ const Header = (props) => {
 		<header id="header" className="header">
 			<div id="header-container" className="lineaSubrayado">
 				<div className="headerDatos">
-					<img src="./assets/img/logo.jpg" />
+					<img src={getLogo()} />
 					<div>
 						{typeof nombreCandidato != "undefined" ? (
 								<p className="datosPersonales">

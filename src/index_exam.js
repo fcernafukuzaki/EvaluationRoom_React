@@ -8,9 +8,10 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
 import reducers from './reducers';
-import EvaluationRoomApp from './entries/recruiter_view/EvaluationRoomApp_Recruiter';
+import EvaluationRoomExam from './entries/candidate_view/candidate_tests_web/container/EvaluationRoomExam';
 
 import './assets/styles/estilos.scss'
+import './assets/styles/estilos-exam-web.scss'
 import './assets/styles/candidate-card.scss'
 import './assets/styles/selectionprocess-list.scss'
 
@@ -27,7 +28,7 @@ const homeContainer = document.getElementById('home-container');
 ReactDOM.render(
 	<BrowserRouter>
 		<Provider store={store}>
-			<EvaluationRoomApp />
+			<EvaluationRoomExam />
 		</Provider>
 	</BrowserRouter>
 	, homeContainer);

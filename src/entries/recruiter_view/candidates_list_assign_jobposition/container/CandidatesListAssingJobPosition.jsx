@@ -1,36 +1,42 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
 import {encriptarAES, obtenerValorParametro} from '../../../common/components/encriptar_aes';
 
-import { obtenerCliente } from '../../../../actions/actionCliente';
-import { obtenerCandidatos, guardarPuestoLaboralCandidato, eliminarPuestoLaboralCandidato, obtenerPuestoLaboralCandidato, generarInforme } from '../../../../actions/actionCandidato';
+import {getSelectionProcess} from '../../../../actions/actionSelectionProcess';
+import {obtenerCliente, addCandidateToJobPosition, deleteCandidateToJobPosition} from '../../../../actions/actionCliente';
+import {getCandidates, obtenerPuestoLaboralCandidato, generarInforme } from '../../../../actions/actionCandidato';
 import MensajeError from '../../../components/common/MensajeError';
 import CargandoImagen from '../../../components/common/CargandoImagen';
 import TablePaginado from '../../../components/common/TablePaginado';
-import BarraBusqueda from '../../../components/common/BarraBusqueda';
 
 class CandidatesListJobPosition extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
+			isLoading: true,
+			errorMensaje: '',
+			errors: {},
+			idclient: obtenerValorParametro('id'),
+			idjobposition: obtenerValorParametro('idp'),
+			nameForm: '',
+			dateProcessBegin: getDateFormat(),
+            dateProcessEnd: getDateFormat(),
+            processActive: 'True',
+			candidatosSeleccionados: [],
+			candidatosNoSeleccionados: [],
+			puestoLaboralCandidato: {},
+			
+			candidato:{},
+			candidatos: {},
+			
 			filtroCandidatoNombre: '',
 			filtroCandidatoApellidoPaterno: '',
 			filtroCandidatoApellidoMaterno: '',
 			candidatosFiltro:[],
-			idCliente: obtenerValorParametro('id'),
-			idPuestoLaboral: obtenerValorParametro('idp'),
-			candidatosSeleccionados: [],
-			candidatosNoSeleccionados: [],
-			puestoLaboralCandidato: {},
-			errors: {},
-			isLoading: true,
-			candidato:{},
-			candidatos: {},
-			errorMensaje: '',
+			
 			rutaRegistrarCandidato: '/registrarCandidato',
 			rutaListaCandidatosResultados: '/listaCandidatos/resultados'
 		}
@@ -42,14 +48,22 @@ class CandidatesListJobPosition extends Component {
 	}
 	
 	componentWillMount() {
-		this.props.obtenerCandidatos();
+		this.props.getCandidates()
 		if(obtenerValorParametro('idp') != null){
 			this.props.obtenerCliente(obtenerValorParametro('id'));
+			this.props.getSelectionProcess(obtenerValorParametro('id'));
 			this.props.obtenerPuestoLaboralCandidato(obtenerValorParametro('id'), obtenerValorParametro('idp'));
 		}
 	}
 	
 	componentDidUpdate(prevProps, prevState) {
+		if (prevProps.selectionProcess !== this.props.selectionProcess) {
+			this.setState({
+                nameForm: this.props.selectionProcess.client.nombre + ' - ' + this.props.selectionProcess.jobposition.nombre,
+                processActive: this.props.selectionProcess.process_active ? 'True' : 'False'
+            });
+            
+        }
 		if (prevProps.candidatos !== this.props.candidatos) {
 			this.setState({
 				isLoading: Object.entries(this.props.candidatos).length > 0 ? false : true,
@@ -100,24 +114,28 @@ class CandidatesListJobPosition extends Component {
 	onCheck(e) {
 		if(this.state.candidatosSeleccionados.length < 100){//Terna de candidatos
 			var candidatosElegidos = this.state.candidatosSeleccionados;
-			let candidatoElegido = this.props.candidatos.filter( c => c.idCandidato.toString() == e.target.value)[0];
+			let candidatoElegido = this.props.candidatos.filter( c => c.idcandidato.toString() == e.target.value)[0];
 			candidatosElegidos.push(candidatoElegido);
 			this.setState({ candidatosSeleccionados: candidatosElegidos });
 			
 			this.setState({
 				puestoLaboralCandidato: {
-					idCliente: this.state.idCliente,
-					idPuestoLaboral: this.state.idPuestoLaboral,
-					idCandidato: parseInt(e.target.value)
+					idclient: this.state.idclient,
+					idjobposition: this.state.idjobposition,
+					idcandidate: parseInt(e.target.value),
+                    //date_registered: '2020-10-02 22:56:00',
+                    date_registered: getNewDateTimeFormat(),
+					user_register: '',
+					user_registered_byself: 'True'
 				}
 			}, () => {
-				this.props.guardarPuestoLaboralCandidato(this.state.puestoLaboralCandidato);
+                this.props.addCandidateToJobPosition(this.state.puestoLaboralCandidato);
 				this.limpiar();
 			});
 			
 			var i = -1;
 			let candidatosNoSeleccionados = this.state.candidatosNoSeleccionados;
-			let candidato = this.props.candidatos.filter( c => c.idCandidato == parseInt(e.target.value));
+			let candidato = this.props.candidatos.filter( c => c.idcandidato == parseInt(e.target.value));
 			if(candidato.length > 0){
 				i = candidatosNoSeleccionados.indexOf(candidato[0]);
 				candidatosNoSeleccionados.splice(i,1);
@@ -131,35 +149,24 @@ class CandidatesListJobPosition extends Component {
 	onUnCheck(e) {
 		this.setState({
 			puestoLaboralCandidato: {
-				idCliente: this.state.idCliente,
-				idPuestoLaboral: this.state.idPuestoLaboral,
-				idCandidato: parseInt(e.target.value)
+				idclient: this.state.idclient,
+				idjobposition: this.state.idjobposition,
+				idcandidate: parseInt(e.target.value)
 			}
 		}, () => {
-			this.props.eliminarPuestoLaboralCandidato(this.state.puestoLaboralCandidato);
+			this.props.deleteCandidateToJobPosition(this.state.puestoLaboralCandidato);
 		});
 		
 		var i = -1;
 		let candidatosNoSeleccionados = this.state.candidatosNoSeleccionados;
 		let candidatosSeleccionados = this.state.candidatosSeleccionados;
-		let candidato = this.state.candidatosSeleccionados.filter( c => c.idCandidato == parseInt(e.target.value));
+		let candidato = this.state.candidatosSeleccionados.filter( c => c.idcandidato == parseInt(e.target.value));
 		if(candidato.length > 0){
 			i = candidatosSeleccionados.indexOf(candidato[0]);
 			candidatosSeleccionados.splice(i,1);
 			candidatosNoSeleccionados.push(candidato[0]);
 		}
 		this.setState({ candidatosSeleccionados: candidatosSeleccionados, candidatosNoSeleccionados: candidatosNoSeleccionados});
-	}
-	
-	descargarInforme(row) {
-		console.log(row);
-		this.setState({
-			informe: {
-				idCandidato: row.idCandidato
-			}
-		}, () => {
-			this.props.generarInforme(this.state.informe);
-		});
 	}
 	
 	limpiar(){
@@ -173,28 +180,28 @@ class CandidatesListJobPosition extends Component {
 	}
 	
 	filtrarListaCandidatosNombre(e){
-		let filtroCandidatoNombre = e.target.value.toLowerCase();
-		this.setState({
-			filtroCandidatoNombre: filtroCandidatoNombre.toLowerCase(),
-			candidatosFiltro: this.props.candidatos.filter( c => c.nombre.toLowerCase().indexOf(filtroCandidatoNombre) > -1 && c.apellidoPaterno.toLowerCase().indexOf(this.state.filtroCandidatoApellidoPaterno) > -1 && c.apellidoMaterno.toLowerCase().indexOf(this.state.filtroCandidatoApellidoMaterno) > -1)
-		})
-	}
-	
-	filtrarListaCandidatosApePat(e){
-		let filtroCandidatoApePat = e.target.value.toLowerCase();
-		this.setState({
-			filtroCandidatoApellidoPaterno: filtroCandidatoApePat.toLowerCase(),
-			candidatosFiltro: this.props.candidatos.filter( c => c.nombre.toLowerCase().indexOf(this.state.filtroCandidatoNombre) > -1 && c.apellidoPaterno.toLowerCase().indexOf(filtroCandidatoApePat) > -1 && c.apellidoMaterno.toLowerCase().indexOf(this.state.filtroCandidatoApellidoMaterno) > -1)
-		})
-	}
-	
-	filtrarListaCandidatosApeMat(e){
-		let filtroCandidatoApeMat = e.target.value.toLowerCase();
-		this.setState({
-			filtroCandidatoApellidoMaterno: filtroCandidatoApeMat.toLowerCase(),
-			candidatosFiltro: this.props.candidatos.filter( c => c.nombre.toLowerCase().indexOf(this.state.filtroCandidatoNombre) > -1 && c.apellidoPaterno.toLowerCase().indexOf(this.state.filtroCandidatoApellidoPaterno) > -1 && c.apellidoMaterno.toLowerCase().indexOf(filtroCandidatoApeMat) > -1 )
-		})
-	}
+        let filtroCandidatoNombre = e.target.value.toLowerCase();
+        this.setState({
+            filtroCandidatoNombre: filtroCandidatoNombre.toLowerCase(),
+            candidatosFiltro: this.props.candidatos.filter( c => c.nombre.toLowerCase().indexOf(filtroCandidatoNombre) > -1 && c.apellidopaterno.toLowerCase().indexOf(this.state.filtroCandidatoApellidoPaterno) > -1 && c.apellidomaterno.toLowerCase().indexOf(this.state.filtroCandidatoApellidoMaterno) > -1)
+        })
+    }
+    
+    filtrarListaCandidatosApePat(e){
+        let filtroCandidatoApePat = e.target.value.toLowerCase();
+        this.setState({
+            filtroCandidatoApellidoPaterno: filtroCandidatoApePat.toLowerCase(),
+            candidatosFiltro: this.props.candidatos.filter( c => c.nombre.toLowerCase().indexOf(this.state.filtroCandidatoNombre) > -1 && c.apellidopaterno.toLowerCase().indexOf(filtroCandidatoApePat) > -1 && c.apellidomaterno.toLowerCase().indexOf(this.state.filtroCandidatoApellidoMaterno) > -1)
+        })
+    }
+    
+    filtrarListaCandidatosApeMat(e){
+        let filtroCandidatoApeMat = e.target.value.toLowerCase();
+        this.setState({
+            filtroCandidatoApellidoMaterno: filtroCandidatoApeMat.toLowerCase(),
+            candidatosFiltro: this.props.candidatos.filter( c => c.nombre.toLowerCase().indexOf(this.state.filtroCandidatoNombre) > -1 && c.apellidopaterno.toLowerCase().indexOf(this.state.filtroCandidatoApellidoPaterno) > -1 && c.apellidomaterno.toLowerCase().indexOf(filtroCandidatoApeMat) > -1 )
+        })
+    }
 	
 	generarTablaBodyCandidatoSeleccionados(row){
 		if(this.state.candidatosSeleccionados != null && row != null){
@@ -202,7 +209,7 @@ class CandidatesListJobPosition extends Component {
 			var verResultados = '';
 			var evaluationRoom = '';
 			var descargarInforme = '';
-			var hashIdCandidato = encriptarAES(row.idCandidato.toString());
+			var hashIdCandidato = encriptarAES(row.idcandidato.toString());
 			var actualizarCandidato = (
 				<Link to={{ pathname: this.state.rutaRegistrarCandidato, search: `?idc=${hashIdCandidato}`, state: { } }}>
 					<button type="button" className="btn btn-outline-secondary btn-sm" title="Actualizar datos">
@@ -245,28 +252,28 @@ class CandidatesListJobPosition extends Component {
 			} else {
 				verResultados = 'Asignar test psicológico';
 			}
-			return (<tr key={row.idCandidato}>
+			return (<tr key={row.idcandidato}>
 						<td>
-						<div className="form-check" key={row.idCandidato}>
+						<div className="form-check" key={row.idcandidato}>
 							<input className="form-check-input"
-								type="checkbox" id={row.idCandidato}
+								type="checkbox" id={row.idcandidato}
 								
 								onChange={this.onUnCheck}
 								name="candidatosSeleccionados"
-								value={row.idCandidato}
+								value={row.idcandidato}
 							/>
 						</div>
 						</td>
 						<td>{row.nombre}</td>
-						<td>{row.apellidoPaterno}</td>
-						<td>{row.apellidoMaterno}</td>
-						<td>{mensajeSinRespuestasTestPsicologico}
-							{descargarInforme}
-						</td>
-						<td>{actualizarCandidato}
-							{verResultados}
-							{evaluationRoom}
-						</td>
+                        <td>{row.apellidopaterno}</td>
+                        <td>{row.apellidomaterno}</td>
+                        <td>{mensajeSinRespuestasTestPsicologico}
+                            {descargarInforme}
+                        </td>
+                        <td>{actualizarCandidato}
+                            {verResultados}
+                            {evaluationRoom}
+                        </td>
 					</tr>);
 		} else {
 			return (<tr><td>Cargando</td></tr>)
@@ -276,7 +283,7 @@ class CandidatesListJobPosition extends Component {
 		if(this.props.candidatos != null && row != null){
 			var mensajeSinRespuestasTestPsicologico = '';
 			var verResultados = '';
-			var hashIdCandidato = encriptarAES(row.idCandidato.toString());
+			var hashIdCandidato = encriptarAES(row.idcandidato.toString());
 			var actualizarCandidato = (
 				<Link to={{ pathname: '/er/registrarCandidato', search: `?idc=${hashIdCandidato}`, state: { } }}>
 					<button type="button" className="btn btn-outline-secondary btn-sm" title="Actualizar datos">
@@ -311,19 +318,19 @@ class CandidatesListJobPosition extends Component {
 			} else {
 				verResultados = 'Asignar test psicológico';
 			}
-			return (<tr key={row.idCandidato}>
+			return (<tr key={row.idcandidato}>
 						<td>
 						{this.state.candidatosSeleccionados.length < 100 ? // terna
-							<div className="form-check" key={row.idCandidato}>
+							<div className="form-check" key={row.idcandidato}>
 								<input className="form-check-input"
-									type="checkbox" id={row.idCandidato}
+									type="checkbox" id={row.idcandidato}
 									onChange={this.onCheck}
 									name="candidatosSeleccionados"
-									value={row.idCandidato}
+									value={row.idcandidato}
 								/>
 							</div>
 						:
-							<div className="form-check" key={row.idCandidato}>
+							<div className="form-check" key={row.idcandidato}>
 								<input className="form-check-input"
 									type="checkbox" disabled
 								/>
@@ -331,21 +338,32 @@ class CandidatesListJobPosition extends Component {
 						}
 						</td>
 						<td>{row.nombre}</td>
-						<td>{row.apellidoPaterno}</td>
-						<td>{row.apellidoMaterno}</td>
-						<td>{mensajeSinRespuestasTestPsicologico}</td>
-						<td>{actualizarCandidato}
-							{verResultados}
-						</td>
+                        <td>{row.apellidopaterno}</td>
+                        <td>{row.apellidomaterno}</td>
+                        <td>{mensajeSinRespuestasTestPsicologico}</td>
+                        <td>{actualizarCandidato}
+                            {verResultados}
+                        </td>
 					</tr>);
 		} else {
 			return (<tr><td>Cargando</td></tr>)
 		}
 	}
 	
+	descargarInforme(row) {
+		console.log(row);
+		this.setState({
+			informe: {
+				idCandidato: row.idcandidato
+			}
+		}, () => {
+			this.props.generarInforme(this.state.informe);
+		});
+	}
+
 	render() {
 		const { candidatosFiltro, filtroCandidatoNombre, filtroCandidatoApellidoPaterno, filtroCandidatoApellidoMaterno,
-			idPuestoLaboral, candidatosSeleccionados, candidatosNoSeleccionados, errors, isLoading, errorMensaje } = this.state;
+			nameForm, candidatosSeleccionados, candidatosNoSeleccionados, errors, isLoading, errorMensaje } = this.state;
 		
 			var tableHead = [{
 				key: 'idCandidato',
@@ -391,7 +409,7 @@ class CandidatesListJobPosition extends Component {
 				<Fragment>
 					<div className="mb-3">
 						<h4>
-						Asignar puesto laboral: <strong>{this.props.cliente.nombre} - {this.props.cliente.puestosLaborales.filter( p => p.idPuestoLaboral == idPuestoLaboral)[0].nombre}</strong>
+						Asignar puesto laboral: <strong>{nameForm}</strong>
 						</h4>
 					</div>
 					<TablePaginado tituloTabla={"Lista de candidatos seleccionados"}
@@ -421,13 +439,16 @@ class CandidatesListJobPosition extends Component {
 
 function mapStateToProps(state){
 	return{
-		candidatos : state.reducerCandidato.obtenerCandidatosResponse,
+		selectionProcess : state.reducerSelectionProcess.getSelectionProcessResponse,
+        candidatos : state.reducerCandidato.getCandidatesResponse,
 		cliente : state.reducerCliente.obtenerClienteResponse,
 		candidatoPuestoLaboral : state.reducerCandidato.obtenerCandidatoPuestoLaboralResponse,
-		candidatoPuestoLaboralResponse : state.reducerCandidato.guardarCandidatoPuestoLaboralResponse,
-		candidatoPuestoLaboralEliminarResponse : state.reducerCandidato.eliminarCandidatoPuestoLaboralResponse,
-		informePsicologicoResponse : state.reducerCandidato.generarInformeResponse
+		//candidatoPuestoLaboralResponse : state.reducerCandidato.guardarCandidatoPuestoLaboralResponse,
+		//candidatoPuestoLaboralEliminarResponse : state.reducerCandidato.eliminarCandidatoPuestoLaboralResponse,
+		informePsicologicoResponse : state.reducerCandidato.generarInformeResponse,
+		addCandidateToJobPosition: state.reducerCliente.addCandidateToJobPositionResponse,
+        deleteCandidateToJobPosition: state.reducerCliente.deleteCandidateToJobPositionResponse,
 	}
 }
 
-export default connect(mapStateToProps, { obtenerCandidatos, obtenerCliente, guardarPuestoLaboralCandidato, eliminarPuestoLaboralCandidato, obtenerPuestoLaboralCandidato, generarInforme })(CandidatesListJobPosition);
+export default connect(mapStateToProps, {getSelectionProcess, getCandidates, obtenerCliente, obtenerPuestoLaboralCandidato, addCandidateToJobPosition, deleteCandidateToJobPosition, generarInforme })(CandidatesListJobPosition);

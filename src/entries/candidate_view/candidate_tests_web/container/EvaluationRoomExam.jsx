@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import ExamenPsicologicoWeb from '../../components/web/ExamenPsicologicoWeb';
+import ExamenPsicologicoWeb from './ExamenPsicologicoWeb';
 
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';

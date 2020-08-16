@@ -4,7 +4,7 @@ import CargandoImagen from '../../../components/common/CargandoImagen'
 import MensajeError from '../../../components/common/MensajeError';
 import {getSelectionProcess} from '../../../../actions/actionSelectionProcess';
 import ClientsSelectionProcessList from '../components/clients_selectionprocess_list'
-import ClientsSelectionProcessButtonNew from '../components/clients_selectionprocess_button_new'
+import {ClientsSelectionProcessButtonNew} from '../components/clients_selectionprocess_button'
 
 class DashBoard extends Component {
     constructor(props){
