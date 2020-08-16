@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import {encriptarAES, obtenerValorParametro} from '../../../common/components/encriptar_aes';
-
+import {getNewDateTimeFormat, getDateFormat} from '../../../common/components/date_util'
 import {getSelectionProcess} from '../../../../actions/actionSelectionProcess';
 import {obtenerCliente, addCandidateToJobPosition, deleteCandidateToJobPosition} from '../../../../actions/actionCliente';
 import {getCandidates, obtenerPuestoLaboralCandidato, generarInforme } from '../../../../actions/actionCandidato';
@@ -29,6 +29,7 @@ class CandidatesListJobPosition extends Component {
 			candidatosNoSeleccionados: [],
 			puestoLaboralCandidato: {},
 			
+            selectionProcess: {},
 			candidato:{},
 			candidatos: {},
 			
@@ -51,8 +52,8 @@ class CandidatesListJobPosition extends Component {
 		this.props.getCandidates()
 		if(obtenerValorParametro('idp') != null){
 			this.props.obtenerCliente(obtenerValorParametro('id'));
-			this.props.getSelectionProcess(obtenerValorParametro('id'));
-			this.props.obtenerPuestoLaboralCandidato(obtenerValorParametro('id'), obtenerValorParametro('idp'));
+			this.props.getSelectionProcess(obtenerValorParametro('id'), obtenerValorParametro('idp'));
+			//this.props.obtenerPuestoLaboralCandidato(obtenerValorParametro('id'), obtenerValorParametro('idp'));
 		}
 	}
 	
@@ -60,16 +61,18 @@ class CandidatesListJobPosition extends Component {
 		if (prevProps.selectionProcess !== this.props.selectionProcess) {
 			this.setState({
                 nameForm: this.props.selectionProcess.client.nombre + ' - ' + this.props.selectionProcess.jobposition.nombre,
-                processActive: this.props.selectionProcess.process_active ? 'True' : 'False'
+				processActive: this.props.selectionProcess.process_active ? 'True' : 'False',
+				selectionProcess: this.props.selectionProcess,
+				isLoading: false
             });
             
         }
 		if (prevProps.candidatos !== this.props.candidatos) {
 			this.setState({
-				isLoading: Object.entries(this.props.candidatos).length > 0 ? false : true,
+				//isLoading: Object.entries(this.props.candidatos).length > 0 ? false : true,
 				candidatosNoSeleccionados: this.props.candidatos
 			});
-			if(Object.entries(this.props.candidatoPuestoLaboral).length > 0){
+			/*if(Object.entries(this.props.candidatoPuestoLaboral).length > 0){
 				if(Object.entries(this.props.candidatos).length > 0){
 					let candidatoSeleccionado = [];
 					let candidatos = this.props.candidatos;
@@ -84,8 +87,29 @@ class CandidatesListJobPosition extends Component {
 					}
 					this.setState({ candidatosSeleccionados: candidatoSeleccionado, candidatosNoSeleccionados: candidatos });
 				}
-			}
+			}*/
 		}
+		if (prevState.selectionProcess !== this.state.selectionProcess){
+            if(typeof this.state.selectionProcess.selectionprocess_candidates !== 'undefined'){
+                if(Object.entries(this.state.selectionProcess.selectionprocess_candidates).length > 0){
+                    if(Object.entries(this.props.candidatos).length > 0){
+                        let candidatoSeleccionado = [];
+                        let candidatos = this.props.candidatos;
+                        this.state.selectionProcess.selectionprocess_candidates.map( candidate_sp => {
+                            var lista_candidatos_encontrados = candidatos.filter( (c, index) => 
+                                c.idcandidato == candidate_sp.idcandidate
+                            );
+                            if (lista_candidatos_encontrados.length > 0){
+                                candidatoSeleccionado.push(lista_candidatos_encontrados[0]);
+                                var i = candidatos.indexOf(lista_candidatos_encontrados[0]);
+                                candidatos.splice(i,1);
+                            }
+                        });
+                        this.setState({ candidatosSeleccionados: candidatoSeleccionado, candidatosNoSeleccionados: candidatos });
+                    }
+                }
+            }
+        }
 		if (prevProps.errorResponse !== this.props.errorResponse) {
 			if(409 == this.props.errorResponse.status){
 				let error = {};
@@ -217,8 +241,8 @@ class CandidatesListJobPosition extends Component {
 					</button>
 				</Link>
 			);
-			if(row.cantidadTestPsicologicos > 0){
-				if(row.tieneResultado > 0){
+			if(row.cant_examenes_asignados > 0){
+				if(row.tiene_resultado > 0){
 					verResultados = (
 						<Link to={{ pathname: this.state.rutaListaCandidatosResultados, search: `?id=${hashIdCandidato}`, state: { } }}>
 							<button type="button" className="btn btn-info btn-sm" title="Ver resultados">
@@ -291,8 +315,8 @@ class CandidatesListJobPosition extends Component {
 					</button>
 				</Link>
 			);
-			if(row.cantidadTestPsicologicos > 0){
-				if(row.tieneResultado > 0){
+			if(row.cant_examenes_asignados > 0){
+				if(row.tiene_resultado > 0){
 					verResultados = (
 						<Link to={{ pathname: this.state.rutaListaCandidatosResultados, search: `?id=${hashIdCandidato}`, state: { } }}>
 							<button type="button" className="btn btn-info btn-sm" title="Ver resultados">
