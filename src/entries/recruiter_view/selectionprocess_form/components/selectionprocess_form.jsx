@@ -13,6 +13,7 @@ import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExit
 import {getSelectionProcess} from '../../../../actions/actionSelectionProcess';
 import { obtenerCliente, getJobPosition, getCandidatesFromJobPosition, addClient, updateClient, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition } from '../../../../actions/actionCliente';
 import { getCandidates, generarInforme } from '../../../../actions/actionCandidato';
+import {CandidateButtonUpdate, CandidateButtonResults, CandidateButtonDatos, CandidateButtonExam} from '../../candidate_card/components/candidate_button';
 
 class SelectionProcessForm extends Component {
     constructor(props) {
@@ -491,30 +492,27 @@ class SelectionProcessForm extends Component {
             var descargarInforme = '';
             var hashIdCandidato = encriptarAES(row.idcandidato.toString());
             var actualizarCandidato = (
-                <Link to={{ pathname: this.state.rutaRegistrarCandidato, search: `?idc=${hashIdCandidato}`, state: { } }}>
-                    <button type="button" className="btn btn-outline-secondary btn-sm" title="Actualizar datos">
-                        <i className="far fa-edit"></i> Actualizar
-                    </button>
-                </Link>
+                <CandidateButtonUpdate 
+                    pathname={this.state.rutaRegistrarCandidato}
+                    hashId={`?idc=${hashIdCandidato}`}
+                />
             );
             if(row.cant_examenes_asignados > 0){
                 if(row.tiene_resultado > 0){
                     verResultados = (
-                        <Link to={{ pathname: this.state.rutaListaCandidatosResultados, search: `?id=${hashIdCandidato}`, state: { } }}>
-                            <button type="button" className="btn btn-info btn-sm" title="Ver resultados">
-                                <i className="fas fa-chart-pie"></i> Resultados
-                            </button>
-                        </Link>
+                        <CandidateButtonResults 
+                            pathname={this.state.rutaListaCandidatosResultados}
+                            hashId={`?id=${hashIdCandidato}`}
+                        />
                     );
                     
                     descargarInforme = (<button type="button" className="btn btn-outline-success btn-sm" onClick={this.descargarInforme.bind(this,row)} title="Descargar informe"><i className="fas fa-file-word"></i> Descargar informe</button>)
                 } else {
                     verResultados = (
-                        <Link to={{ pathname: this.state.rutaListaCandidatosResultados, search: `?id=${hashIdCandidato}`, state: { } }}>
-                            <button type="button" className="btn btn-info btn-sm" title="Ver datos">
-                                <i className="fas fa-chart-pie"></i> Ver datos
-                            </button>
-                        </Link>
+                        <CandidateButtonDatos 
+                            pathname={this.state.rutaListaCandidatosResultados}
+                            hashId={`?id=${hashIdCandidato}`}
+                        />
                     );
                     mensajeSinRespuestasTestPsicologico = (
                         <button type="button" className="btn btn-outline-warning btn-sm" title="Aún no ha realizado los test psicologicos">
@@ -523,11 +521,10 @@ class SelectionProcessForm extends Component {
                     );
                 }
                 evaluationRoom = (
-                    <Link to={{ pathname: '/pages/examen.html', search: `?id=${hashIdCandidato}`, state: { } }}>
-                        <button type="button" className="btn btn-dark btn-sm" title="Sala de evaluación">
-                            <i className="fas fa-door-closed"></i> Evaluación
-                        </button>
-                    </Link>
+                    <CandidateButtonExam 
+                        pathname={'/pages/examen.html'}
+                        hashId={`?id=${hashIdCandidato}`}
+                    />
                 );
             } else {
                 verResultados = 'Asignar test psicológico';
@@ -566,29 +563,26 @@ class SelectionProcessForm extends Component {
             var verResultados = '';
             var hashIdCandidato = encriptarAES(row.idcandidato.toString());
             var actualizarCandidato = (
-                <Link to={{ pathname: '/er/registrarCandidato', search: `?idc=${hashIdCandidato}`, state: { } }}>
-                    <button type="button" className="btn btn-outline-secondary btn-sm" title="Actualizar datos">
-                        <i className="far fa-edit"></i> Actualizar
-                    </button>
-                </Link>
+                <CandidateButtonUpdate 
+                    pathname={'/er/registrarCandidato'}
+                    hashId={`?idc=${hashIdCandidato}`}
+                />
             );
             if(row.cant_examenes_asignados > 0){
                 if(row.tiene_resultado > 0){
                     verResultados = (
-                        <Link to={{ pathname: this.state.rutaListaCandidatosResultados, search: `?id=${hashIdCandidato}`, state: { } }}>
-                            <button type="button" className="btn btn-info btn-sm" title="Ver resultados">
-                                <i className="fas fa-chart-pie"></i> Resultados
-                            </button>
-                        </Link>
+                        <CandidateButtonResults 
+                            pathname={this.state.rutaListaCandidatosResultados}
+                            hashId={`?id=${hashIdCandidato}`}
+                        />
                     );
                     
                 } else {
                     verResultados = (
-                        <Link to={{ pathname: this.state.rutaListaCandidatosResultados, search: `?id=${hashIdCandidato}`, state: { } }}>
-                            <button type="button" className="btn btn-info btn-sm" title="Ver datos">
-                                <i className="fas fa-chart-pie"></i> Ver datos
-                            </button>
-                        </Link>
+                        <CandidateButtonDatos 
+                            pathname={this.state.rutaListaCandidatosResultados}
+                            hashId={`?id=${hashIdCandidato}`}
+                        />
                     );
                     mensajeSinRespuestasTestPsicologico = (
                         <button type="button" className="btn btn-outline-warning btn-sm" title="Aún no ha realizado los test psicologicos">

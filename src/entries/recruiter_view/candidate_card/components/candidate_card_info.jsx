@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import classnames from 'classnames';
-import CandidateButtonUpdate from './candidate_button_update'
+import CandidateButtonUpdate from './candidate_button'
 import {encriptarAES} from '../../../common/components/encriptar_aes';
 import {getAge} from '../../../common/components/date_util'
 
