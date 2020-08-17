@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import classnames from 'classnames';
-import CandidateButtonUpdate from './candidate_button'
+import {CandidateButtonUpdate} from './candidate_button'
 import {encriptarAES} from '../../../common/components/encriptar_aes';
 import {getAge} from '../../../common/components/date_util'
 
@@ -13,6 +13,9 @@ export default function CandidateCardInfo (props) {
         />
     );
 
+    var telefono_movil = (props.telefono_movil ? (' (Cel.) ').concat(props.telefono_movil) : '');
+    var telefono_fijo = (props.telefono_fijo ? (' (Fijo) ').concat(props.telefono_fijo) : '');
+    
     return (
 		<Fragment>
             <div key={props.id}>
@@ -31,14 +34,8 @@ export default function CandidateCardInfo (props) {
                     </div>
                 </div>
                 <div>Email: <strong>{props.email_address}</strong></div>
-                <div>Tel.:
-                    {
-                        (props.telephones.length > 0) ? (
-                            props.telephones.map( e => { 
-                            return (<strong key={e.idtelefono}>{(e.idtelefono == 1) ? (' (Cel.) ').concat(e.numero) : (' (Fijo) ').concat(e.numero)}</strong>)
-                            })
-                        ) : (<i> No posee número de contacto.</i>)
-                    }
+                <div>Tel.: 
+                    <strong>{(!telefono_movil && !telefono_fijo) ? (<i> No posee número de contacto.</i>) : telefono_movil.concat(telefono_fijo)}</strong>
                 </div>
             </div>
 		</Fragment>

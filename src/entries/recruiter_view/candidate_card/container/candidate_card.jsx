@@ -22,7 +22,8 @@ class CandidateCard extends Component {
                         maternal_surname={this.props.maternal_surname}
                         birth_date={this.props.birth_date}
                         email_address={this.props.email_address}
-                        telephones={this.props.telephones}
+                        telefono_fijo={this.props.telefono_fijo}
+                        telefono_movil={this.props.telefono_movil}
                     />
                     <div className={classnames('candidate-card-tests')} >
                     {

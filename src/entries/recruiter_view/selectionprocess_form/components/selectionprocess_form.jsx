@@ -79,7 +79,6 @@ class SelectionProcessForm extends Component {
                 selectionProcess: this.props.selectionProcess,
 				isLoading: false
             });
-            
         }
         if (prevProps.candidatos !== this.props.candidatos) {
             //console.log('Cargó información de candidatos')

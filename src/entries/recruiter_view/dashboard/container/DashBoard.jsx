@@ -1,5 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
+
+import {groupBy} from '../../../common/components/groupby'
 import CargandoImagen from '../../../components/common/CargandoImagen'
 import MensajeError from '../../../components/common/MensajeError';
 import {getSelectionProcess} from '../../../../actions/actionSelectionProcess';
@@ -11,7 +13,8 @@ class DashBoard extends Component {
         super(props);
         this.state = {
             isLoading: true,
-            errorMensaje: ''
+            errorMensaje: '',
+            selectionProcesses: {}
         }
     }
 
@@ -22,7 +25,13 @@ class DashBoard extends Component {
     componentDidUpdate(prevProps, prevState) {
 		if (prevProps.selectionProcesses !== this.props.selectionProcesses) {
             this.setState({
-				isLoading: Object.entries(this.props.selectionProcesses).length > 0 ? false : true,
+                //isLoading: Object.entries(this.props.selectionProcesses).length > 0 ? false : true,
+                selectionProcesses: groupBy(this.props.selectionProcesses, 'idjobposition')
+            });
+        }
+        if (prevState.selectionProcesses !== this.state.selectionProcesses){
+            this.setState({
+                isLoading: Object.entries(this.state.selectionProcesses).length > 0 ? false : true
             });
         }
         if (prevProps.errorResponse !== this.props.errorResponse) {
@@ -37,23 +46,22 @@ class DashBoard extends Component {
         }
     }
 
-    tableSelectionProcess(isLoading) {
+    tableSelectionProcess() {
         return (<Fragment>
                     <ClientsSelectionProcessButtonNew 
                         pathname={'/selectionprocess'}
                         hashId={``}
                     />
                     <ClientsSelectionProcessList 
-                        datos={this.props.selectionProcesses}
+                        datos={this.state.selectionProcesses}
                     />
                 </Fragment>)
     }
     render() {
         const {isLoading, errorMensaje} = this.state
-        var tableSelectionProcess = this.tableSelectionProcess(isLoading)
         return (
             <Fragment>
-                {!isLoading ? tableSelectionProcess : (<CargandoImagen />)}
+                {!isLoading ? this.tableSelectionProcess() : (<CargandoImagen />)}
                 {errorMensaje != '' && <MensajeError error={errorMensaje} />}
             </Fragment>
         );
