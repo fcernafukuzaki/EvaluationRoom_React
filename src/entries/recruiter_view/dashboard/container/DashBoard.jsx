@@ -14,7 +14,8 @@ class DashBoard extends Component {
         this.state = {
             isLoading: true,
             errorMensaje: '',
-            selectionProcesses: {}
+            selectionProcesses: {},
+            candidatesPsychologicalTest: {}
         }
     }
 
@@ -24,9 +25,12 @@ class DashBoard extends Component {
 
     componentDidUpdate(prevProps, prevState) {
 		if (prevProps.selectionProcesses !== this.props.selectionProcesses) {
+            console.log(this.props.selectionProcesses[0])
+            console.log(this.props.selectionProcesses[1])
             this.setState({
                 //isLoading: Object.entries(this.props.selectionProcesses).length > 0 ? false : true,
-                selectionProcesses: groupBy(this.props.selectionProcesses, 'idjobposition')
+                selectionProcesses: groupBy(this.props.selectionProcesses[0], 'idjobposition'),
+                candidatesPsychologicalTest: groupBy(this.props.selectionProcesses[1], 'id')
             });
         }
         if (prevState.selectionProcesses !== this.state.selectionProcesses){
@@ -54,6 +58,7 @@ class DashBoard extends Component {
                     />
                     <ClientsSelectionProcessList 
                         datos={this.state.selectionProcesses}
+                        datosCandidatos={this.state.candidatesPsychologicalTest}
                     />
                 </Fragment>)
     }

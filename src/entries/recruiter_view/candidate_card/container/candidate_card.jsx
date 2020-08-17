@@ -10,7 +10,7 @@ class CandidateCard extends Component {
 
         }
     }
-
+    
     render(){
         return (
             <Fragment>
@@ -30,7 +30,7 @@ class CandidateCard extends Component {
                         this.props.psychologicaltests.map(e => {
                             return (
                                 <CandidateCardTests
-                                    key={e.psychologicaltest.idtestpsicologico}
+                                    key={e.idtestpsicologico}
                                     psychologicaltest={e}
                                 />
                             )

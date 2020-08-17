@@ -18,7 +18,7 @@ class ClientsSelectionProcessList extends Component {
         }
     }
 
-    tableSelectionProcess(selectionProcess){
+    tableSelectionProcess(selectionProcess, candidatesPsychologicalTest){
         var tableHead = [{
                 key: 'identificador',
                 nombre: 'N°'
@@ -44,9 +44,21 @@ class ClientsSelectionProcessList extends Component {
                 key: 'accion',
                 nombre: 'Acción'
         }]
+
         if(Object.keys(selectionProcess).length > 0) {
             var tableBody = Object.keys(selectionProcess).map((id_jobposition, index) => {
                 var tableCandidates = selectionProcess[id_jobposition].map((candidate, i) => {
+                    
+                    var candidatesPsychologicalTestList = []
+                    if(Object.keys(candidatesPsychologicalTest).length > 0) {
+                        Object.keys(candidatesPsychologicalTest).map((id_candidate, index) => {
+                            //console.log('id_candidate', candidatesPsychologicalTest[id_candidate])
+                            if(candidatesPsychologicalTest[id_candidate][0].idcandidato == candidate.idcandidato){
+                                candidatesPsychologicalTestList = candidatesPsychologicalTest[id_candidate]
+                            }
+                        });
+                    }
+                    //console.log('id_candidate', candidatesPsychologicalTestList)
                     return (<Fragment key={candidate.idcandidato}>
                                 <CandidateCard 
                                         id={candidate.idcandidato}
@@ -57,7 +69,7 @@ class ClientsSelectionProcessList extends Component {
                                         email_address={candidate.correoelectronico}
                                         telefono_fijo={candidate.telefono_fijo}
                                         telefono_movil={candidate.telefono_movil}
-                                        psychologicaltests={[]}
+                                        psychologicaltests={candidatesPsychologicalTestList}
                                     />
                     </Fragment>)
                 })
@@ -149,7 +161,7 @@ class ClientsSelectionProcessList extends Component {
             <Fragment>
                 {this.barraBusqueda()}
                 {
-                    this.tableSelectionProcess(this.props.datos)
+                    this.tableSelectionProcess(this.props.datos, this.props.datosCandidatos)
                 }
             </Fragment>
         )
