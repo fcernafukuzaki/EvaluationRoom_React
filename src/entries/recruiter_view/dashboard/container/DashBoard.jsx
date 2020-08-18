@@ -65,10 +65,12 @@ class DashBoard extends Component {
 
     tableSelectionProcess() {
         return (<Fragment>
-                    <ClientsSelectionProcessButtonNew 
-                        pathname={'/selectionprocess'}
-                        hashId={``}
-                    />
+                    <div className="dashboard-button">
+                        <ClientsSelectionProcessButtonNew 
+                            pathname={'/selectionprocess'}
+                            hashId={``}
+                        />
+                    </div>
                     <ClientsSelectionProcessList 
                         datos={this.state.selectionProcesses}
                         datosCandidatos={this.state.candidatesPsychologicalTest}

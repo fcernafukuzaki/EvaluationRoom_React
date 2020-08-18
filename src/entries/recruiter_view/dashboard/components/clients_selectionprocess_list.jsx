@@ -174,12 +174,12 @@ class ClientsSelectionProcessList extends Component {
                             <div className='selectionprocess-row-header'>
                                 <div className='div-table-col div-table-col-first'>{(index+1)}</div>
                                 <div className='div-table-col'>Cliente: {elemento.client_name}</div>
-                                <div className='div-table-col'>Puesto laboral: {elemento.jobposition_name}</div>
+                                <div className='div-table-col-190'>Puesto laboral: {elemento.jobposition_name}</div>
                                 <div className='div-table-col'>Fec. Ini. proceso: {getDate(elemento.date_process_begin)}</div>
                                 <div className='div-table-col'>Fec. Fin proceso: {getDate(elemento.date_process_end)}</div>
-                                <div className='div-table-col'>Estado: {elemento.process_active ? 
-                                    (<Fragment><i className="fas fa-exclamation"></i> ACTIVO</Fragment>) : 
-                                    (<Fragment><i className="fas fa-check-circle"></i> FINALIZADO</Fragment>)}</div>
+                                <div className='div-table-col-170'>Estado: {elemento.process_active ? 
+                                    (<Fragment><i className="fas fa-exclamation iconoRojo"></i> ACTIVO</Fragment>) : 
+                                    (<Fragment><i className="fas fa-check-circle iconoVerde"></i> FINALIZADO</Fragment>)}</div>
                                 <div className='div-table-col'>Cant. de candidatos: {elemento_id_jobposition.length}</div>
                                 <div className='div-table-col div-table-col-last'>{asignarCandidatos}
                                 </div>
