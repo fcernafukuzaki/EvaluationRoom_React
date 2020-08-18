@@ -5,11 +5,11 @@ import {
 	OBJ_ERROR_TIME_OUT
 } from './actionTypes';
 
-export function getSelectionProcess(idclient, idjobposition) {
+export function getSelectionProcess(idclient, idjobposition, process_status) {
 	return (dispatch, getState) => {
 		axios.get(('http://127.0.0.1:5000/v1/selectionprocess')
-					.concat(idclient != null ? ('/' + idclient) : '')
-					.concat(idjobposition != null ? ('/' + idjobposition) : ''))
+					.concat(process_status != null ? ('/' + process_status) : '')
+					.concat(idclient != null && idjobposition != null ? ('/' + idclient).concat('/' + idjobposition) : ''))
 			.then((response) => { dispatch({ type: SELECTIONPROCESS_GET, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){

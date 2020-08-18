@@ -66,6 +66,40 @@ class ClientsSelectionProcessList extends Component {
                 camposFiltrados: lista,
             })
         }
+        if (prevState.filtroStatusSelectionProcess !== this.state.filtroStatusSelectionProcess){
+            this.props.funcGetByStatus(this.state.filtroStatusSelectionProcess)
+        }
+        if (prevProps.datos !== this.props.datos){
+            // Codigo utilizado en constructor - Inicio
+            var camposBusquedaFiltro = this.props.camposBusqueda
+            var filtroNombreClienteList = []
+            var filtroNombrePuestoLaboralList = []
+            var filtroStatusProcesoSeleccionList = []
+            if(Object.keys(camposBusquedaFiltro).length > 0) {
+                var filtroNombreCliente = groupBy(camposBusquedaFiltro, 'client_name')
+                Object.keys(filtroNombreCliente).map( (elemento, i) => {
+                    filtroNombreClienteList.push(elemento)
+                })
+                var filtroNombrePuestoLaboral = groupBy(camposBusquedaFiltro, 'jobposition_name')
+                Object.keys(filtroNombrePuestoLaboral).map( (elemento, i) => {
+                    filtroNombrePuestoLaboralList.push(elemento)
+                })
+                var filtroStatusProcesoSeleccion = groupBy(camposBusquedaFiltro, 'process_active')
+                Object.keys(filtroStatusProcesoSeleccion).map( (elemento, i) => {
+                    filtroStatusProcesoSeleccionList.push(elemento)
+                })
+                //console.log(filtroNombreCliente, filtroNombrePuestoLaboral, filtroStatusProcesoSeleccion)
+            }
+            // Codigo utilizado en constructor - Fin
+            this.setState({
+                isLoading: false,
+                filtroNombreClienteList: filtroNombreClienteList,
+                filtroNombrePuestoLaboralList: filtroNombrePuestoLaboralList,
+                filtroStatusProcesoSeleccionList: filtroStatusProcesoSeleccionList,
+                camposFiltrados: this.props.camposBusqueda,
+                datos: this.props.datos
+            })
+        }
     }
 
     tableSelectionProcess(selectionProcess, candidatesPsychologicalTest){
@@ -134,7 +168,7 @@ class ClientsSelectionProcessList extends Component {
                                             hashId={`?id=${hashIdClientIdJobPosition}`}
                                         />
                 );
-    
+
                 return (<Fragment key={elemento.idclient + ' - ' + elemento.idjobposition}>
                         <div className='div-table-row'>
                             <div className='selectionprocess-row-header'>
@@ -168,7 +202,8 @@ class ClientsSelectionProcessList extends Component {
 
     barraBusqueda(){
         var rowProcessActive = [{ label: "ACTIVO" , value: "True" },
-                                { label: "FINALIZADO" , value: "False" }]
+                                { label: "FINALIZADO" , value: "False" },
+                                { label: "TODOS" , value: "All" }]
         
         var camposBusqueda = [{
                 key: 'idFiltroNombreCliente',

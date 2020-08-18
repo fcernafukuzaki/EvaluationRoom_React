@@ -18,6 +18,8 @@ class DashBoard extends Component {
             candidatesPsychologicalTest: {},
             camposBusqueda: {}
         }
+
+        this.getSelectionProcessByStatus.bind(this);
     }
 
     componentWillMount() {
@@ -26,8 +28,8 @@ class DashBoard extends Component {
 
     componentDidUpdate(prevProps, prevState) {
 		if (prevProps.selectionProcesses !== this.props.selectionProcesses) {
-            console.log(this.props.selectionProcesses[0])
-            console.log(this.props.selectionProcesses[1])
+            //console.log(this.props.selectionProcesses[0])
+            //console.log(this.props.selectionProcesses[1])
             this.setState({
                 //isLoading: Object.entries(this.props.selectionProcesses).length > 0 ? false : true,
                 selectionProcesses: groupBy(this.props.selectionProcesses[0], 'idjobposition'),
@@ -39,6 +41,7 @@ class DashBoard extends Component {
             this.setState({
                 isLoading: Object.entries(this.state.selectionProcesses).length > 0 ? false : true
             });
+            this.tableSelectionProcess()
         }
         if (prevProps.errorResponse !== this.props.errorResponse) {
             if(409 == this.props.errorResponse.status){
@@ -52,6 +55,14 @@ class DashBoard extends Component {
         }
     }
 
+    getSelectionProcessByStatus(process_status){
+        this.setState({
+            isLoading: true,
+            errorMensaje: this.props.errorResponse
+        })
+        this.props.getSelectionProcess(null, null, process_status);
+    }
+
     tableSelectionProcess() {
         return (<Fragment>
                     <ClientsSelectionProcessButtonNew 
@@ -62,6 +73,7 @@ class DashBoard extends Component {
                         datos={this.state.selectionProcesses}
                         datosCandidatos={this.state.candidatesPsychologicalTest}
                         camposBusqueda={this.state.camposBusqueda}
+                        funcGetByStatus={this.getSelectionProcessByStatus.bind(this)}
                     />
                 </Fragment>)
     }
@@ -69,7 +81,8 @@ class DashBoard extends Component {
         const {isLoading, errorMensaje} = this.state
         return (
             <Fragment>
-                {!isLoading ? this.tableSelectionProcess() : (<CargandoImagen />)}
+                {Object.entries(this.state.selectionProcesses).length > 0 ? this.tableSelectionProcess() : ''}
+                {isLoading && (<CargandoImagen />)}
                 {errorMensaje != '' && <MensajeError error={errorMensaje} />}
             </Fragment>
         );
