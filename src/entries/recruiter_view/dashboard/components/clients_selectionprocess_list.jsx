@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import classnames from 'classnames';
 
+import {groupBy} from '../../../common/components/groupby'
 import BarraBusqueda from '../../../components/common/BarraBusqueda'
 import ClientsSelectionProcessTable from '../components/clients_selectionprocess_table'
 import {ClientsSelectionProcessButtonUpdate} from './clients_selectionprocess_button'
@@ -10,11 +11,60 @@ import {encriptarAES} from '../../../common/components/encriptar_aes';;
 
 class ClientsSelectionProcessList extends Component {
 	constructor(props){
-		super(props);
+        super(props);
+        
+        var camposBusquedaFiltro = this.props.camposBusqueda
+        var filtroNombreClienteList = []
+        var filtroNombrePuestoLaboralList = []
+        var filtroStatusProcesoSeleccionList = []
+        if(Object.keys(camposBusquedaFiltro).length > 0) {
+            var filtroNombreCliente = groupBy(camposBusquedaFiltro, 'client_name')
+            Object.keys(filtroNombreCliente).map( (elemento, i) => {
+                filtroNombreClienteList.push(elemento)
+            })
+            var filtroNombrePuestoLaboral = groupBy(camposBusquedaFiltro, 'jobposition_name')
+            Object.keys(filtroNombrePuestoLaboral).map( (elemento, i) => {
+                filtroNombrePuestoLaboralList.push(elemento)
+            })
+            var filtroStatusProcesoSeleccion = groupBy(camposBusquedaFiltro, 'process_active')
+            Object.keys(filtroStatusProcesoSeleccion).map( (elemento, i) => {
+                filtroStatusProcesoSeleccionList.push(elemento)
+            })
+            //console.log(filtroNombreCliente, filtroNombrePuestoLaboral, filtroStatusProcesoSeleccion)
+        }
+
 		this.state = {
             filtroNombreCliente: '',
             filtroPuestoLaboral: '',
-            filtroStatusSelectionProcess: ''
+            filtroStatusSelectionProcess: '',
+            filtroNombreClienteList: filtroNombreClienteList,
+            filtroNombrePuestoLaboralList: filtroNombrePuestoLaboralList,
+            filtroStatusProcesoSeleccionList: filtroStatusProcesoSeleccionList,
+            camposFiltrados: this.props.camposBusqueda,
+            datos: this.props.datos
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        if (prevState.filtroNombreCliente !== this.state.filtroNombreCliente){
+            var lista = this.props.camposBusqueda.filter( c => 
+                c.client_name.toLowerCase().indexOf(this.state.filtroNombreCliente.toLowerCase()) > -1 && 
+                c.jobposition_name.toLowerCase().indexOf(this.state.filtroPuestoLaboral.toLowerCase()) > -1 
+            )
+            console.log(this.state.filtroNombreCliente, lista)
+            this.setState({
+                camposFiltrados: lista,
+            })
+        }
+        if (prevState.filtroPuestoLaboral !== this.state.filtroPuestoLaboral){
+            var lista = this.props.camposBusqueda.filter( c => 
+                c.client_name.toLowerCase().indexOf(this.state.filtroNombreCliente.toLowerCase()) > -1 && 
+                c.jobposition_name.toLowerCase().indexOf(this.state.filtroPuestoLaboral.toLowerCase()) > -1 
+            )
+            console.log(this.state.filtroPuestoLaboral, lista)
+            this.setState({
+                camposFiltrados: lista,
+            })
         }
     }
 
@@ -117,6 +167,9 @@ class ClientsSelectionProcessList extends Component {
     }
 
     barraBusqueda(){
+        var rowProcessActive = [{ label: "ACTIVO" , value: "True" },
+                                { label: "FINALIZADO" , value: "False" }]
+        
         var camposBusqueda = [{
                 key: 'idFiltroNombreCliente',
                 label: "Filtrar por nombre de cliente",
@@ -131,7 +184,9 @@ class ClientsSelectionProcessList extends Component {
                 key: 'idFiltroStatusSelectionProcess',
                 label: "Estado",
                 onChange: this.filtrarStatusSelectionProcess.bind(this),
-                valor: this.state.filtroStatusSelectionProcess
+                valor: rowProcessActive,
+                type: "select",
+                valueSelected: this.state.filtroStatusSelectionProcess
         }];
         return (<BarraBusqueda camposBusqueda={camposBusqueda} />)
     }
@@ -140,7 +195,6 @@ class ClientsSelectionProcessList extends Component {
         let filtro = e.target.value.toLowerCase();
         this.setState({
             filtroNombreCliente: filtro.toLowerCase(),
-            //perfilesFiltro: this.props.obtenerPerfilesResponse.filter( c => c.nombre.toLowerCase().indexOf(filtroPerfilesNombre) > -1 )
         })
     }
     filtrarPuestoLaboral(e){
@@ -150,9 +204,9 @@ class ClientsSelectionProcessList extends Component {
         })
     }
     filtrarStatusSelectionProcess(e){
-        let filtro = e.target.value.toLowerCase();
+        let filtro = e.target.value;
         this.setState({
-            filtroStatusSelectionProcess: filtro.toLowerCase(),
+            filtroStatusSelectionProcess: filtro,
         })
     }
 
@@ -160,9 +214,7 @@ class ClientsSelectionProcessList extends Component {
         return (
             <Fragment>
                 {this.barraBusqueda()}
-                {
-                    this.tableSelectionProcess(this.props.datos, this.props.datosCandidatos)
-                }
+                {this.tableSelectionProcess(groupBy(this.state.camposFiltrados, 'idjobposition'), this.props.datosCandidatos)}
             </Fragment>
         )
     }

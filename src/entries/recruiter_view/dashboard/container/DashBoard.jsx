@@ -15,7 +15,8 @@ class DashBoard extends Component {
             isLoading: true,
             errorMensaje: '',
             selectionProcesses: {},
-            candidatesPsychologicalTest: {}
+            candidatesPsychologicalTest: {},
+            camposBusqueda: {}
         }
     }
 
@@ -30,7 +31,8 @@ class DashBoard extends Component {
             this.setState({
                 //isLoading: Object.entries(this.props.selectionProcesses).length > 0 ? false : true,
                 selectionProcesses: groupBy(this.props.selectionProcesses[0], 'idjobposition'),
-                candidatesPsychologicalTest: groupBy(this.props.selectionProcesses[1], 'id')
+                candidatesPsychologicalTest: groupBy(this.props.selectionProcesses[1], 'id'),
+                camposBusqueda: this.props.selectionProcesses[0]
             });
         }
         if (prevState.selectionProcesses !== this.state.selectionProcesses){
@@ -59,6 +61,7 @@ class DashBoard extends Component {
                     <ClientsSelectionProcessList 
                         datos={this.state.selectionProcesses}
                         datosCandidatos={this.state.candidatesPsychologicalTest}
+                        camposBusqueda={this.state.camposBusqueda}
                     />
                 </Fragment>)
     }
