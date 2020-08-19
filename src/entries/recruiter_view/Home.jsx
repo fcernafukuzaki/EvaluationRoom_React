@@ -33,7 +33,7 @@ export default function Home (props){
 			<Fragment>
 				<h4>Bienvenido {props.usuario.nombre} al sistema de evaluación psicológica.</h4>
 				
-				<DashBoard />
+				<DashBoard token={props.usuario.token} />
 			</Fragment>
 			}
 		</div>

@@ -158,6 +158,10 @@ export function validateInput(data) {
 
 
 export function validateInputRecruiterRegistration(data) {
+	/**
+	 * El reclutador puede registrar un candidato con sólo colocar la dirección de correo electrónico.
+	 * El resto de campos serán llenados por el candidato cuando ingrese a la URL de evaluación.
+	*/
 	var mensajeRequerido = 'Campo es requerido.';
 	
 	let errors = {};

@@ -67,7 +67,7 @@ export function obtenerCandidatos() {
 
 export function getCandidates() {
 	return (dispatch, getState) => {
-		axios.get('http://127.0.0.1:5000/v1/candidate_info')
+		axios.get('https://apirest.evaluationroom.com/v1/candidate_info')
 			.then((response) => { dispatch({ type: CANDIDATES_GET, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){

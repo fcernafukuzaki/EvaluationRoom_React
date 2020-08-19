@@ -5,13 +5,19 @@ import {
 	OBJ_ERROR_TIME_OUT
 } from './actionTypes';
 
-export function getSelectionProcess(idclient, idjobposition, process_status) {
+export function getSelectionProcess(idclient, idjobposition, process_status, token) {
 	return (dispatch, getState) => {
-		axios.get(('http://127.0.0.1:5000/v1/selectionprocess')
+		axios.get(('https://apirest.evaluationroom.com/v1/selectionprocess')
+		//axios.get(('http://127.0.0.1:5000/v1/selectionprocess')
 					.concat(process_status != null ? ('/' + process_status) : '')
-					.concat(idclient != null && idjobposition != null ? ('/' + idclient).concat('/' + idjobposition) : ''))
+					.concat(idclient != null && idjobposition != null ? ('/' + idclient).concat('/' + idjobposition) : '')
+					,{headers: { Authorization: token }}
+					)
 			.then((response) => { dispatch({ type: SELECTIONPROCESS_GET, payload: response.data }) })
 			.catch((error) => {
+				console.log(error)
+				console.log(error.response)
+				console.log(error.response.data)
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
 				} else {

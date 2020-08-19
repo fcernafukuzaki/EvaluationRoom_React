@@ -23,7 +23,7 @@ class DashBoard extends Component {
     }
 
     componentWillMount() {
-        this.props.getSelectionProcess();
+        this.props.getSelectionProcess(null, null, null, this.props.token);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -44,12 +44,13 @@ class DashBoard extends Component {
             this.tableSelectionProcess()
         }
         if (prevProps.errorResponse !== this.props.errorResponse) {
+            console.log('E', this.props.errorResponse)
             if(409 == this.props.errorResponse.status){
                 console.log('Error')
             } else {
 				this.setState({
 					isLoading: false,
-					errorMensaje: this.props.errorResponse
+					errorMensaje: {status: this.props.errorResponse.status, mensaje: this.props.errorResponse.message}
 				})
 			}
         }
@@ -58,9 +59,9 @@ class DashBoard extends Component {
     getSelectionProcessByStatus(process_status){
         this.setState({
             isLoading: true,
-            errorMensaje: this.props.errorResponse
+            errorMensaje: {status: this.props.errorResponse.status, mensaje: this.props.errorResponse.message}
         })
-        this.props.getSelectionProcess(null, null, process_status);
+        this.props.getSelectionProcess(null, null, process_status, this.props.token);
     }
 
     tableSelectionProcess() {
