@@ -29,7 +29,7 @@ class SelectionProcessForm extends Component {
             nameJobPosition: '',
             nameForm: '',
             dateProcessBegin: getDateFormat(),
-            dateProcessEnd: getDateFormat(),
+            dateProcessEnd: null,
             processActive: 'True',
             prompt: false,
             selectionProcess: {},
@@ -128,7 +128,7 @@ class SelectionProcessForm extends Component {
                         idclient: this.props.guardarClienteResponse.idcliente,
                         nombre: this.state.nameJobPosition,
                         date_process_begin: this.state.dateProcessBegin,
-                        date_process_end: this.state.dateProcessEnd,
+                        date_process_end: this.state.dateProcessEnd == null || this.state.dateProcessEnd == '' ? null : this.state.dateProcessEnd,
                         user_register: '',
                         process_active: this.state.processActive
                     }
@@ -148,7 +148,7 @@ class SelectionProcessForm extends Component {
                         idjobposition: this.state.idjobposition,
                         nombre: this.state.nameJobPosition,
                         date_process_begin: this.state.dateProcessBegin,
-                        date_process_end: this.state.dateProcessEnd,
+                        date_process_end: this.state.dateProcessEnd == null || this.state.dateProcessEnd == '' ? null : this.state.dateProcessEnd,
                         user_register: '',
                         process_active: this.state.processActive
                     }
@@ -312,7 +312,7 @@ class SelectionProcessForm extends Component {
                     required: 'true'
                 }]
             ],
-            tablaSelect: (this.state.idclient === '' && this.state.idjobposition) ? [] : (
+            tablaSelect: (this.state.idjobposition === '') ? [] : (
                 [ 
                     {
                         key: 1,

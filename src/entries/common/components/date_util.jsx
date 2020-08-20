@@ -15,12 +15,18 @@ export function getDateFormat() {
 }
 
 export function getDate(datetime) {
+    if(datetime == null){
+        return null
+    }
     var datetime_array = datetime.split('T')
     var date_array = datetime_array[0].split('-')
-    return date_array[1].concat('/').concat(date_array[2]).concat('/').concat(date_array[0])
+    return date_array[2].concat('/').concat(date_array[1]).concat('/').concat(date_array[0])
 }
 
 export function getDateFormat_SeparadoPorGuion(datetime) {
+    if(datetime == null){
+        return null
+    }
     // return 2020-10-02
     var datetime_array = datetime.split('T')
     var date_array = datetime_array[0].split('-')
