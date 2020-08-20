@@ -9,7 +9,7 @@ export function getNewDateTimeFormat() {
 }
 
 export function getDateFormat() {
-    //2020-10-02 22:56:00
+    //2020-10-02
     var fecha = new Date()
     return fecha.getFullYear() + "-" + (fecha.getMonth() < 9 ? "0" + (fecha.getMonth() + 1) : fecha.getMonth() + 1) + "-" + (fecha.getDate() < 10 ? "0" + fecha.getDate() : fecha.getDate());
 }
@@ -18,6 +18,13 @@ export function getDate(datetime) {
     var datetime_array = datetime.split('T')
     var date_array = datetime_array[0].split('-')
     return date_array[1].concat('/').concat(date_array[2]).concat('/').concat(date_array[0])
+}
+
+export function getDateFormat_SeparadoPorGuion(datetime) {
+    // return 2020-10-02
+    var datetime_array = datetime.split('T')
+    var date_array = datetime_array[0].split('-')
+    return date_array[0].concat('-').concat(date_array[1]).concat('-').concat(date_array[2])
 }
 
 export function getAge(birth_date) {

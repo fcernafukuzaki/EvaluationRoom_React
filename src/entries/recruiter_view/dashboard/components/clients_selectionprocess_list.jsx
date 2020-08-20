@@ -133,6 +133,9 @@ class ClientsSelectionProcessList extends Component {
             var tableBody = Object.keys(selectionProcess).map((id_jobposition, index) => {
                 var tableCandidates = selectionProcess[id_jobposition].map((candidate, i) => {
                     
+                    if(candidate.idcandidato === null){
+                        return 'Aún no se han asignado candidatos.'
+                    }
                     var candidatesPsychologicalTestList = []
                     if(Object.keys(candidatesPsychologicalTest).length > 0) {
                         Object.keys(candidatesPsychologicalTest).map((id_candidate, index) => {

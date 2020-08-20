@@ -32,17 +32,34 @@ export default function Formulario(props) {
 						renderInput={(params) => <TextField {...params} label={c.label} size="small" />}
 					/>
 					</Fragment>);
-            } else if(c.type == 'date'){
+            } else if(c.type == 'text-linea'){
                 return (<TextField key={c.key}
-                            id="date"
+                            id="filled-basic"
                             label={c.label}
                             type={c.type}
                             defaultValue={c.value}
                             className={c.fieldClass}
                             InputLabelProps={{
                                 shrink: true,
-                            }}
-                        />)
+							}}
+							onChange={(event, newValue) => {
+								c.onChange(event, newValue);
+							}}
+						/>)
+					} else if(c.type == 'date'){
+						return (<TextField key={c.key}
+									id="date"
+									label={c.label}
+									type={c.type}
+									defaultValue={c.value}
+									className={c.fieldClass}
+									InputLabelProps={{
+										shrink: true,
+									}}
+									onChange={(event, newValue) => {
+										c.onChange(event, newValue);
+									}}
+								/>)
             } else {
 				var htmlCampo = TextFieldGroupCampos(c);
 				return (<Fragment key={c.key}>{htmlCampo}</Fragment>);

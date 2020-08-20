@@ -4,7 +4,7 @@ import Formulario from '../../../common/components/formulario/formulario'
 import { Prompt } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import {getNewDateTimeFormat, getDateFormat} from '../../../common/components/date_util'
+import {getNewDateTimeFormat, getDateFormat, getDateFormat_SeparadoPorGuion} from '../../../common/components/date_util'
 import validateInput from './selectionprocess_form_validate'
 import MensajeError from '../../../components/common/MensajeError';
 import CargandoImagen from '../../../components/common/CargandoImagen';
@@ -62,8 +62,8 @@ class SelectionProcessForm extends Component {
 			this.props.getSelectionProcess(id[0], id[1]);
 
 			//this.props.obtenerCliente(id[0]);
-			this.props.getJobPosition(id[0], id[1]);
-			this.props.getCandidatesFromJobPosition(id[0], id[1]);
+			//this.props.getJobPosition(id[0], id[1]);
+			//this.props.getCandidatesFromJobPosition(id[0], id[1]);
 		}
     }
     
@@ -75,18 +75,21 @@ class SelectionProcessForm extends Component {
                 nameClient: this.props.selectionProcess.client.nombre,
                 nameJobPosition: this.props.selectionProcess.jobposition.nombre,
                 nameForm: this.props.selectionProcess.client.nombre + ' - ' + this.props.selectionProcess.jobposition.nombre,
+                dateProcessBegin: getDateFormat_SeparadoPorGuion(this.props.selectionProcess.date_process_begin),
+                dateProcessEnd: getDateFormat_SeparadoPorGuion(this.props.selectionProcess.date_process_end),
                 processActive: this.props.selectionProcess.process_active ? 'True' : 'False',
                 selectionProcess: this.props.selectionProcess,
-				//isLoading: false
+				isLoading: false
             });
         }
         if (prevProps.clientes !== this.props.clientes) {
             var listaNombreClientes = this.props.clientes.map((c) => {return c.nombre})
             console.log(listaNombreClientes)
             this.setState({
-                isLoading: false,
+                //isLoading: false,
                 listNameClients: listaNombreClientes,
-                nameClient: '',//listaNombreClientes[0],
+                //nameClient: '',
+                nameClient: (this.state.idclient !== '') ? this.props.selectionProcess.client.nombre : '',
             });
         }
         if (prevProps.candidatos !== this.props.candidatos) {
@@ -313,7 +316,7 @@ class SelectionProcessForm extends Component {
                     required: 'true'
                 }]
             ],
-            tablaSelect: this.state.idclient === '' ? [] : (
+            tablaSelect: (this.state.idclient === '' && this.state.idjobposition) ? [] : (
                 [ 
                     {
                         key: 1,
@@ -393,6 +396,10 @@ class SelectionProcessForm extends Component {
     }
     
     onChange(e) {
+        console.log(e)
+        console.log(e.target)
+        console.log(e.target.name)
+        console.log(e.target.value)
         this.setState({ [e.target.name]: e.target.value, prompt: !!(e.target.value.length) });
     }
 
@@ -658,7 +665,8 @@ class SelectionProcessForm extends Component {
         if(nombreCliente == ''){
             return ''
         } else {
-            return (this.props.clientes.filter((c) => {return c.nombre == nombreCliente ? c.idcliente : ''})[0].idcliente)
+            var cliente = this.props.clientes.filter((c) => {return c.nombre == nombreCliente ? c.idcliente : ''})[0]
+            return (typeof cliente !== 'undefined') ? cliente.idcliente : ''
         }
     }
 
@@ -679,7 +687,7 @@ class SelectionProcessForm extends Component {
     render() {
         return (
             <Fragment>
-                {!this.state.isLoading ? 
+                {!this.state.isLoading &&
                     (<Fragment>
                         <Prompt
                             when={this.state.prompt}
@@ -688,8 +696,8 @@ class SelectionProcessForm extends Component {
                         <Formulario form={this.formSelectionProcess()} />
                         <MensajeGuardarExitoso cargando={this.state.guardado} mensaje={"Se guardó exitosamente!"} />
                     </Fragment>)
-                :
-				(<CargandoImagen />)}
+                }
+                {this.state.isLoading && (<CargandoImagen />)}
                 {this.state.errorMensaje != '' && <MensajeError error={this.state.errorMensaje} />}
             </Fragment>
         );
