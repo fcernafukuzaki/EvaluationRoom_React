@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
 import classnames from 'classnames';
 import CandidateCardInfo from '../components/candidate_card_info'
 import CandidateCardTests from '../components/candidate_card_tests'
+import {generarInforme} from '../../../../actions/actionCandidato';
 
 class CandidateCard extends Component {
     constructor(props){
@@ -9,6 +11,19 @@ class CandidateCard extends Component {
         this.state = {
 
         }
+        
+		this.descargarInforme = this.descargarInforme.bind(this);
+    }
+
+    descargarInforme(idcandidato) {
+        console.log(idcandidato);
+        this.setState({
+            informe: {
+                idCandidato: idcandidato
+            }
+        }, () => {
+            this.props.generarInforme(this.state.informe);
+        });
     }
     
     render(){
@@ -24,6 +39,8 @@ class CandidateCard extends Component {
                         email_address={this.props.email_address}
                         telefono_fijo={this.props.telefono_fijo}
                         telefono_movil={this.props.telefono_movil}
+                        psychologicaltests={this.props.psychologicaltests}
+                        descargar_informe={this.descargarInforme.bind(this, this.props.id)}
                     />
                     <div className={classnames('candidate-card-tests')} >
                     {
@@ -43,4 +60,10 @@ class CandidateCard extends Component {
     }
 }
 
-export default CandidateCard;
+function mapStateToProps(state){
+	return{
+		informePsicologicoResponse : state.reducerCandidato.generarInformeResponse
+	}
+}
+
+export default connect(mapStateToProps, {generarInforme})(CandidateCard);

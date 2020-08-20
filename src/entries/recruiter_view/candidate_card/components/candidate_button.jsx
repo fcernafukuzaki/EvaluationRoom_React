@@ -52,3 +52,13 @@ export function CandidateButtonExam (props) {
         />
     );
 }
+
+export function CandidateButtonDownloadInform(props) {
+    return (
+        <button type="button" 
+            className="btn btn-outline-success btn-sm" 
+            onClick={props.onClick} 
+            title="Descargar informe">
+            <i className="fas fa-file-word"></i> Informe
+        </button>)
+}

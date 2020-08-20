@@ -7,6 +7,7 @@ import MensajeError from '../../../components/common/MensajeError';
 import {getSelectionProcess} from '../../../../actions/actionSelectionProcess';
 import ClientsSelectionProcessList from '../components/clients_selectionprocess_list'
 import {ClientsSelectionProcessButtonNew} from '../components/clients_selectionprocess_button'
+import AlertBoxMessageForm from '../../../components/common/AlertBoxMessageForm';
 
 class DashBoard extends Component {
     constructor(props){
@@ -16,10 +17,27 @@ class DashBoard extends Component {
             errorMensaje: '',
             selectionProcesses: {},
             candidatesPsychologicalTest: {},
-            camposBusqueda: {}
+            camposBusqueda: {},
+            cantidadProcesosSeleccion: 0,
+            mensajeInformativo: {
+				heading: '',
+				body: [<p key="" className="mb-0">Actualmente existen <strong>0</strong> procesos de selección <strong>Activos</strong>.</p>],
+				footer: []
+			}
         }
 
         this.getSelectionProcessByStatus.bind(this);
+    }
+
+    mensajeInformativo(cantidadProcesosSeleccion){
+        var mensaje = (cantidadProcesosSeleccion == 1) ? (<strong>existe {cantidadProcesosSeleccion} proceso</strong>) : (<strong>existen {cantidadProcesosSeleccion} procesos</strong>)
+        this.setState({
+            mensajeInformativo: {
+				heading: '',
+				body: [<p key="" className="mb-0">Actualmente {mensaje} de selección <strong>Activos</strong>.</p>],
+				footer: []
+			}
+        })
     }
 
     componentWillMount() {
@@ -31,11 +49,11 @@ class DashBoard extends Component {
             //console.log(this.props.selectionProcesses[0])
             //console.log(this.props.selectionProcesses[1])
             this.setState({
-                //isLoading: Object.entries(this.props.selectionProcesses).length > 0 ? false : true,
-                selectionProcesses: groupBy(this.props.selectionProcesses[0], 'idjobposition'),
-                candidatesPsychologicalTest: groupBy(this.props.selectionProcesses[1], 'id'),
-                camposBusqueda: this.props.selectionProcesses[0]
+                selectionProcesses: groupBy(this.props.selectionProcesses[1], 'idjobposition'),
+                candidatesPsychologicalTest: groupBy(this.props.selectionProcesses[2], 'id'),
+                camposBusqueda: this.props.selectionProcesses[1]
             });
+            this.mensajeInformativo(this.props.selectionProcesses[0][0].cant_procesos_activos)
         }
         if (prevState.selectionProcesses !== this.state.selectionProcesses){
             this.setState({
@@ -59,13 +77,18 @@ class DashBoard extends Component {
     getSelectionProcessByStatus(process_status){
         this.setState({
             isLoading: true,
-            errorMensaje: {status: this.props.errorResponse.status, mensaje: this.props.errorResponse.message}
+            //errorMensaje: {status: this.props.errorResponse.status, mensaje: this.props.errorResponse.message}
         })
         this.props.getSelectionProcess(null, null, process_status, this.props.token);
     }
 
     tableSelectionProcess() {
         return (<Fragment>
+                    <AlertBoxMessageForm 
+                        alertMessageHeading={this.state.mensajeInformativo.heading} 
+                        alertMessageBody={this.state.mensajeInformativo.body} 
+                        alertMessageFooter={this.state.mensajeInformativo.footer} 
+                    />
                     <div className="dashboard-button">
                         <ClientsSelectionProcessButtonNew 
                             pathname={'/selectionprocess'}

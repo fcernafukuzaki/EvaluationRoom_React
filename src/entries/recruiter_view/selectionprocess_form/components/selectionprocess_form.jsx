@@ -11,7 +11,7 @@ import CargandoImagen from '../../../components/common/CargandoImagen';
 import {encriptarAES, obtenerValorParametro} from '../../../common/components/encriptar_aes';
 import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExitoso';
 import {getSelectionProcess} from '../../../../actions/actionSelectionProcess';
-import { obtenerCliente, getJobPosition, getCandidatesFromJobPosition, addClient, updateClient, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition } from '../../../../actions/actionCliente';
+import { obtenerCliente, addClient, updateClient, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition } from '../../../../actions/actionCliente';
 import { getCandidates, generarInforme } from '../../../../actions/actionCandidato';
 import {CandidateButtonUpdate, CandidateButtonResults, CandidateButtonDatos, CandidateButtonExam} from '../../candidate_card/components/candidate_button';
 
@@ -54,17 +54,13 @@ class SelectionProcessForm extends Component {
 
     componentWillMount() {
         this.props.getCandidates()
-        this.props.obtenerCliente()
-		//console.log(obtenerValorParametro('id'))
 		if(obtenerValorParametro('id') != null){
 			var ids = obtenerValorParametro('id');
 			var id = ids.split('_');//idclient, idjobposition
 			this.props.getSelectionProcess(id[0], id[1]);
-
-			//this.props.obtenerCliente(id[0]);
-			//this.props.getJobPosition(id[0], id[1]);
-			//this.props.getCandidatesFromJobPosition(id[0], id[1]);
-		}
+		} else {
+            this.props.obtenerCliente()
+        }
     }
     
     componentDidUpdate(prevProps, prevState) {
@@ -79,17 +75,17 @@ class SelectionProcessForm extends Component {
                 dateProcessEnd: getDateFormat_SeparadoPorGuion(this.props.selectionProcess.date_process_end),
                 processActive: this.props.selectionProcess.process_active ? 'True' : 'False',
                 selectionProcess: this.props.selectionProcess,
-				isLoading: false
+				//isLoading: false
             });
+            this.props.obtenerCliente()
         }
         if (prevProps.clientes !== this.props.clientes) {
             var listaNombreClientes = this.props.clientes.map((c) => {return c.nombre})
-            console.log(listaNombreClientes)
+            //console.log('Lista de clientes', listaNombreClientes)
             this.setState({
-                //isLoading: false,
+                isLoading: false,
                 listNameClients: listaNombreClientes,
-                //nameClient: '',
-                nameClient: (this.state.idclient !== '') ? this.props.selectionProcess.client.nombre : '',
+                nameClient: (typeof this.props.selectionProcess.client !== 'undefined' && this.props.selectionProcess.client.idcliente !== '') ? this.props.selectionProcess.client.nombre : '',
             });
         }
         if (prevProps.candidatos !== this.props.candidatos) {
@@ -273,7 +269,7 @@ class SelectionProcessForm extends Component {
                     type: 'text-linea',
                     value: this.state.nameJobPosition,
                     error: this.state.errors.nameJobPosition,
-                    onChange: this.onChange.bind(this),
+                    onChange: this.onChangeTextField.bind(this),
                     labelClass: 'col-md-4 campo',
                     fieldClass: 'col-md-5 campo',
                     required: 'true'
@@ -285,7 +281,7 @@ class SelectionProcessForm extends Component {
                     type: 'date',
                     value: this.state.dateProcessBegin,
                     error: this.state.errors.dateProcessBegin,
-                    onChange: this.onChange.bind(this),
+                    onChange: this.onChangeTextField.bind(this),
                     labelClass: 'col-md-3 campo',
                     fieldClass: 'col-md-3 campo',
                     required: 'true'
@@ -297,7 +293,7 @@ class SelectionProcessForm extends Component {
                     type: 'date',
                     value: this.state.dateProcessEnd,
                     error: this.state.errors.dateProcessEnd,
-                    onChange: this.onChange.bind(this),
+                    onChange: this.onChangeTextField.bind(this),
                     labelClass: 'col-md-3 campo',
                     fieldClass: 'col-md-3 campo',
                     required: 'true'
@@ -401,6 +397,10 @@ class SelectionProcessForm extends Component {
         console.log(e.target.name)
         console.log(e.target.value)
         this.setState({ [e.target.name]: e.target.value, prompt: !!(e.target.value.length) });
+    }
+
+    onChangeTextField(e, nombreCampo) {
+        this.setState({ [nombreCampo]: e.target.value, prompt: !!(e.target.value.length) });
     }
 
     onCheck(e) {
@@ -710,8 +710,6 @@ function mapStateToProps(state){
         errorResponse : state.reducerSelectionProcess.errorResponse,
 		candidatos: state.reducerCandidato.getCandidatesResponse,
 		clientes : state.reducerCliente.obtenerClienteResponse,
-		puestolaboral: state.reducerCliente.getJobPositionResponse,
-		candidatoPuestoLaboral: state.reducerCliente.getCandidatesFromJobPositionResponse,
         informePsicologicoResponse : state.reducerCandidato.generarInformeResponse,
         guardarClienteResponse: state.reducerCliente.guardarClienteResponse,
         actualizarClienteResponse: state.reducerCliente.actualizarClienteResponse,
@@ -722,4 +720,4 @@ function mapStateToProps(state){
 	}
 }
 
-export default connect(mapStateToProps, {getSelectionProcess, getCandidates, getJobPosition, addClient, updateClient, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition, obtenerCliente, getCandidatesFromJobPosition, generarInforme })(SelectionProcessForm);
+export default connect(mapStateToProps, {getSelectionProcess, getCandidates, addClient, updateClient, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition, obtenerCliente, generarInforme })(SelectionProcessForm);

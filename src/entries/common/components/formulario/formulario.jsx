@@ -15,6 +15,7 @@ export default function Formulario(props) {
 		var classRow = true;
 		html = campo.map( c =>{
 			classRow = c.type.includes('-linea') ? false : true;
+			console.log(c.label, classRow)
 			if(c.type.includes('-autocomplete')){
 				return (<Fragment key={c.key}>
 					<Autocomplete
@@ -42,24 +43,24 @@ export default function Formulario(props) {
                             InputLabelProps={{
                                 shrink: true,
 							}}
-							onChange={(event, newValue) => {
-								c.onChange(event, newValue);
+							onChange={(event) => {
+								c.onChange(event, c.id);
 							}}
 						/>)
-					} else if(c.type == 'date'){
-						return (<TextField key={c.key}
-									id="date"
-									label={c.label}
-									type={c.type}
-									defaultValue={c.value}
-									className={c.fieldClass}
-									InputLabelProps={{
-										shrink: true,
-									}}
-									onChange={(event, newValue) => {
-										c.onChange(event, newValue);
-									}}
-								/>)
+			} else if(c.type == 'date'){
+				return (<TextField key={c.key}
+							id="date"
+							label={c.label}
+							type={c.type}
+							defaultValue={c.value}
+							className={c.fieldClass}
+							InputLabelProps={{
+								shrink: true,
+							}}
+							onChange={(event) => {
+								c.onChange(event, c.id);
+							}}
+						/>)
             } else {
 				var htmlCampo = TextFieldGroupCampos(c);
 				return (<Fragment key={c.key}>{htmlCampo}</Fragment>);
