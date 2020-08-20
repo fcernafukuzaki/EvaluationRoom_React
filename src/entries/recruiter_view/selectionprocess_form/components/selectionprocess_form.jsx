@@ -57,7 +57,7 @@ class SelectionProcessForm extends Component {
 		if(obtenerValorParametro('id') != null){
 			var ids = obtenerValorParametro('id');
 			var id = ids.split('_');//idclient, idjobposition
-			this.props.getSelectionProcess(id[0], id[1]);
+			this.props.getSelectionProcess(id[0], id[1], null, this.props.token);
 		} else {
             this.props.obtenerCliente()
         }
@@ -392,10 +392,6 @@ class SelectionProcessForm extends Component {
     }
     
     onChange(e) {
-        console.log(e)
-        console.log(e.target)
-        console.log(e.target.name)
-        console.log(e.target.value)
         this.setState({ [e.target.name]: e.target.value, prompt: !!(e.target.value.length) });
     }
 

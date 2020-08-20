@@ -17,7 +17,7 @@ class SelectionProcessFormContainer extends Component {
 		
         return (
             <div className="mt-3 mx-auto ancho1200">
-				<SelectionProcessForm />
+				<SelectionProcessForm token={this.props.usuario.token} />
 			</div>
         );
     }

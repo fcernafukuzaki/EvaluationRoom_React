@@ -190,7 +190,7 @@ export default class EvaluationRoomApp extends Component {
 						<Route exact path="/registrarPerfil" render={()=>(<PerfilDatosForm errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/listaUsuarios" render={()=>(<UsuariosForm errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/listaPerfiles" render={()=>(<PerfilesForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/selectionprocess" render={()=>(<SelectionProcessFormContainer errorResponse={this.state.errorMensaje} />)} />
+						<Route exact path="/selectionprocess" render={()=>(<SelectionProcessFormContainer usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />
 					</Fragment>
 					}
 					<Route component={NotFound} />
