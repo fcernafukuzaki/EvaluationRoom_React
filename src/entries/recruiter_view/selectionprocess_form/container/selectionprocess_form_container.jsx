@@ -9,9 +9,6 @@ class SelectionProcessFormContainer extends Component {
             isLoading: true,
 			errorMensaje: '',
 			errors: {},
-			idclient: '',
-			name: '',
-			nameForm: '',
 			prompt: false
         }
     }

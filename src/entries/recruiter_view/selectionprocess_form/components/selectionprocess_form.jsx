@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import { connect } from 'react-redux';
-import Formulario from '../../../components/common/Formulario'
+import Formulario from '../../../common/components/formulario/formulario'
 import { Prompt } from 'react-router';
 import { Link } from 'react-router-dom';
 
@@ -41,7 +41,10 @@ class SelectionProcessForm extends Component {
             candidatosNoSeleccionados: [],
             
 			rutaRegistrarCandidato: '/registrarCandidato',
-			rutaListaCandidatosResultados: '/listaCandidatos/resultados'
+            rutaListaCandidatosResultados: '/listaCandidatos/resultados',
+            
+            listNameClients: [],
+            inputValueNameClient: ''
         }
 
 		this.onCheck = this.onCheck.bind(this);
@@ -51,19 +54,16 @@ class SelectionProcessForm extends Component {
 
     componentWillMount() {
         this.props.getCandidates()
+        this.props.obtenerCliente()
 		//console.log(obtenerValorParametro('id'))
 		if(obtenerValorParametro('id') != null){
 			var ids = obtenerValorParametro('id');
 			var id = ids.split('_');//idclient, idjobposition
 			this.props.getSelectionProcess(id[0], id[1]);
 
-			this.props.obtenerCliente(id[0]);
+			//this.props.obtenerCliente(id[0]);
 			this.props.getJobPosition(id[0], id[1]);
 			this.props.getCandidatesFromJobPosition(id[0], id[1]);
-		} else {
-			this.setState({
-				isLoading: false
-			});
 		}
     }
     
@@ -77,7 +77,16 @@ class SelectionProcessForm extends Component {
                 nameForm: this.props.selectionProcess.client.nombre + ' - ' + this.props.selectionProcess.jobposition.nombre,
                 processActive: this.props.selectionProcess.process_active ? 'True' : 'False',
                 selectionProcess: this.props.selectionProcess,
-				isLoading: false
+				//isLoading: false
+            });
+        }
+        if (prevProps.clientes !== this.props.clientes) {
+            var listaNombreClientes = this.props.clientes.map((c) => {return c.nombre})
+            console.log(listaNombreClientes)
+            this.setState({
+                isLoading: false,
+                listNameClients: listaNombreClientes,
+                nameClient: '',//listaNombreClientes[0],
             });
         }
         if (prevProps.candidatos !== this.props.candidatos) {
@@ -145,7 +154,14 @@ class SelectionProcessForm extends Component {
                         process_active: this.state.processActive
                     }
 			}, () => {
-				this.props.actualizarPuestosLaborales(this.state.puestolaboral);
+                /** 
+                 * Si se escoge un cliente ya existente, entonces se registrará un nuevo puesto laboral
+                */
+                if(this.state.idjobposition === ''){
+					this.props.guardarPuestosLaborales(this.state.puestolaboral);
+				} else {
+                    this.props.actualizarPuestosLaborales(this.state.puestolaboral);
+                }
 			});
         }
         if (prevProps.guardarPuestosLaboralesResponse !== this.props.guardarPuestosLaboralesResponse) {
@@ -227,12 +243,15 @@ class SelectionProcessForm extends Component {
                     name: 'nameClient',
                     id: 'nameClient',
                     label: 'Nombre empresa : ',
-                    type: 'text-linea',
+                    type: 'text-autocomplete-linea',
+                    options: this.state.listNameClients,
+                    inputValue: this.state.inputValueNameClient,
                     value: this.state.nameClient,
                     error: this.state.errors.nameClient,
-                    onChange: this.onChange.bind(this),
-                    labelClass: 'col-md-4',
-                    fieldClass: 'col-md-5',
+                    onChange: this.setValueNameClient.bind(this),
+                    onInputChange: this.setInputValueNameClient.bind(this),
+                    labelClass: 'col-md-4 campo',
+                    fieldClass: 'col-md-5 campo',
                     required: 'true'
                 }] , [{
                     key: 'idjobposition',
@@ -252,8 +271,8 @@ class SelectionProcessForm extends Component {
                     value: this.state.nameJobPosition,
                     error: this.state.errors.nameJobPosition,
                     onChange: this.onChange.bind(this),
-                    labelClass: 'col-md-4',
-                    fieldClass: 'col-md-5',
+                    labelClass: 'col-md-4 campo',
+                    fieldClass: 'col-md-5 campo',
                     required: 'true'
                 }] , [{
                     key: 'dateProcessBegin',
@@ -264,8 +283,8 @@ class SelectionProcessForm extends Component {
                     value: this.state.dateProcessBegin,
                     error: this.state.errors.dateProcessBegin,
                     onChange: this.onChange.bind(this),
-                    labelClass: 'col-md-3',
-                    fieldClass: 'col-md-3',
+                    labelClass: 'col-md-3 campo',
+                    fieldClass: 'col-md-3 campo',
                     required: 'true'
                 } , {
                     key: 'dateProcessEnd',
@@ -276,8 +295,8 @@ class SelectionProcessForm extends Component {
                     value: this.state.dateProcessEnd,
                     error: this.state.errors.dateProcessEnd,
                     onChange: this.onChange.bind(this),
-                    labelClass: 'col-md-3',
-                    fieldClass: 'col-md-3',
+                    labelClass: 'col-md-3 campo',
+                    fieldClass: 'col-md-3 campo',
                     required: 'true'
                 } , {
                     key: 'processActive',
@@ -289,8 +308,8 @@ class SelectionProcessForm extends Component {
                     valueSelected: this.state.processActive,
                     error: this.state.errors.processActive,
                     onChange: this.onChange.bind(this),
-                    labelClass: 'col-md-3',
-                    fieldClass: 'col-md-3',
+                    labelClass: 'col-md-3 campo',
+                    fieldClass: 'col-md-3 campo',
                     required: 'true'
                 }]
             ],
@@ -635,6 +654,28 @@ class SelectionProcessForm extends Component {
 		});
 	}
 
+    obtenerIdCliente(nombreCliente) {
+        if(nombreCliente == ''){
+            return ''
+        } else {
+            return (this.props.clientes.filter((c) => {return c.nombre == nombreCliente ? c.idcliente : ''})[0].idcliente)
+        }
+    }
+
+    setValueNameClient(nameClient) {
+        this.setState({
+            nameClient: nameClient,// Reclutador puede ingresar un nombre que no esté en la lista
+            idclient: this.obtenerIdCliente(nameClient)
+        })
+    }
+    setInputValueNameClient(nameClient){
+        this.setState({
+            inputValueNameClient: nameClient,
+            nameClient: nameClient,// Reclutador puede ingresar un nombre que no esté en la lista
+            idclient: this.obtenerIdCliente(nameClient)
+        })
+    }
+
     render() {
         return (
             <Fragment>
@@ -660,7 +701,7 @@ function mapStateToProps(state){
         selectionProcess : state.reducerSelectionProcess.getSelectionProcessResponse,
         errorResponse : state.reducerSelectionProcess.errorResponse,
 		candidatos: state.reducerCandidato.getCandidatesResponse,
-		cliente : state.reducerCliente.obtenerClienteResponse,
+		clientes : state.reducerCliente.obtenerClienteResponse,
 		puestolaboral: state.reducerCliente.getJobPositionResponse,
 		candidatoPuestoLaboral: state.reducerCliente.getCandidatesFromJobPositionResponse,
         informePsicologicoResponse : state.reducerCandidato.generarInformeResponse,
