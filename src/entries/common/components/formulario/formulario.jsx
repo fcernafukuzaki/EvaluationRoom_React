@@ -7,17 +7,22 @@ import TablePaginado from '../../../components/common/TablePaginado';
 
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 export default function Formulario(props) {
 	const {form} = props;
+
 	var camposForm = form.campos.map( (campo, index) =>{
 		var html = '';
 		var classRow = true;
 		html = campo.map( c =>{
 			classRow = c.type.includes('-linea') ? false : true;
-			console.log(c.label, classRow)
 			if(c.type.includes('-autocomplete')){
-				return (<Fragment key={c.key}>
+				return (<FormControl key={c.key} className={c.fieldClass}>
 					<Autocomplete
 						value={c.value}
 						onChange={(event, newValue) => {
@@ -30,23 +35,33 @@ export default function Formulario(props) {
 						id="controllable-states-demo"
 						options={c.options}
 						style={{ width: 300 }}
-						renderInput={(params) => <TextField {...params} label={c.label} size="small" />}
+						renderInput={(params) => <TextField {...params} 
+							InputLabelProps={{
+								shrink: true,
+							}} 
+							label={c.label} 
+							size="small" />}
 					/>
-					</Fragment>);
+					<FormHelperText>{c.error}</FormHelperText>
+					</FormControl>);
             } else if(c.type == 'text-linea'){
-                return (<TextField key={c.key}
+                return (
+					<FormControl key={c.key} className={c.fieldClass} error={c.required}>
+						<TextField 
                             id="filled-basic"
                             label={c.label}
                             type={c.type}
-                            defaultValue={c.value}
-                            className={c.fieldClass}
+							defaultValue={c.value}
+							style={{ width: 450 }}
                             InputLabelProps={{
                                 shrink: true,
 							}}
 							onChange={(event) => {
 								c.onChange(event, c.id);
 							}}
-						/>)
+						/>
+						<FormHelperText>{c.error}</FormHelperText>
+					</FormControl>)
 			} else if(c.type == 'date'){
 				return (<TextField key={c.key}
 							id="date"
@@ -61,13 +76,34 @@ export default function Formulario(props) {
 								c.onChange(event, c.id);
 							}}
 						/>)
+			} else if(c.type == 'select'){
+				let rows = []
+				c.value.map(e => {
+					rows.push(<MenuItem key={e.value} value={e.value}>{e.label}</MenuItem>)
+				})
+				return (
+					<FormControl key={c.key} className={c.fieldClass}>
+						<InputLabel id="demo-simple-select-helper-label">{c.label}</InputLabel>
+						<Select
+							labelId="demo-simple-select-helper-label"
+							id="demo-simple-select-helper"
+							value={c.valueSelected}
+							onChange={(event) => {
+								c.onChange(event, c.id);
+							}}
+							>
+							{rows}
+						</Select>
+						<FormHelperText>{c.error}</FormHelperText>
+					</FormControl>)
             } else {
 				var htmlCampo = TextFieldGroupCampos(c);
 				return (<Fragment key={c.key}>{htmlCampo}</Fragment>);
 			}
 		});
 		return (<div key={index} className={campo[0].type == 'hidden' ? '' :
-				classnames('form-group',(classRow ? 'row' : '') )} >{html}</div>
+				//classnames('form-group',(classRow ? 'row' : '') )} >{html}</div>
+				classnames('form-group')} >{html}</div>
 			);
 	});
 	
@@ -89,13 +125,13 @@ export default function Formulario(props) {
 					<div className="mt-4 mb-4">
 						<h4>{form.titulo}</h4>
 					</div>
-					{camposForm}
-					{tablaSelect}
-					<div className="form-group row">
+					<div className="form-group">
 						<div className="col-sm-offset-2 col-sm-10">
 							{botonesForm}
 						</div>
 					</div>
+					{camposForm}
+					{tablaSelect}
 				</div>
 			</form>
 		</Fragment>

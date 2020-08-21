@@ -47,6 +47,8 @@ class SelectionProcessForm extends Component {
             inputValueNameClient: ''
         }
 
+        this.onSubmit = this.onSubmit.bind(this);
+        this.onClickCancelar = this.onClickCancelar.bind(this);
 		this.onCheck = this.onCheck.bind(this);
 		this.onUnCheck = this.onUnCheck.bind(this);
 		this.descargarInforme = this.descargarInforme.bind(this);
@@ -250,7 +252,7 @@ class SelectionProcessForm extends Component {
                     onChange: this.setValueNameClient.bind(this),
                     onInputChange: this.setInputValueNameClient.bind(this),
                     labelClass: 'col-md-4 campo',
-                    fieldClass: 'col-md-5 campo',
+                    fieldClass: 'campo',
                     required: 'true'
                 }] , [{
                     key: 'idjobposition',
@@ -271,8 +273,8 @@ class SelectionProcessForm extends Component {
                     error: this.state.errors.nameJobPosition,
                     onChange: this.onChangeTextField.bind(this),
                     labelClass: 'col-md-4 campo',
-                    fieldClass: 'col-md-5 campo',
-                    required: 'true'
+                    fieldClass: 'campo',
+                    required: true
                 }] , [{
                     key: 'dateProcessBegin',
                     name: 'dateProcessBegin',
@@ -306,7 +308,7 @@ class SelectionProcessForm extends Component {
                     value: rowProcessActive,
                     valueSelected: this.state.processActive,
                     error: this.state.errors.processActive,
-                    onChange: this.onChange.bind(this),
+                    onChange: this.onChangeTextField.bind(this),
                     labelClass: 'col-md-3 campo',
                     fieldClass: 'col-md-3 campo',
                     required: 'true'
@@ -354,7 +356,7 @@ class SelectionProcessForm extends Component {
                     divClass: 'col-md-1',
                     botonClass: 'btn-primary btn-md',
                     tipo: 'button',
-                    onClick: this.onClickCancelar.bind(this, this.state.prompt),
+                    onClick: this.onClickCancelar,
                     isLoading: this.state.isLoading
                 }],
                 onSubmit: this.onSubmit.bind(this)
@@ -364,12 +366,14 @@ class SelectionProcessForm extends Component {
     
     isValid() {
         const { errors, isValid } = validateInput(this.state);
+        console.log('validateInput_', errors, isValid)
         if (!isValid) { this.setState({	errors : errors	}) }
         return isValid;
     }
     
     onSubmit(e) {
         e.preventDefault();
+        console.log('onSubmit', e.target.name)
         if (this.isValid()) {
             this.setState({
                 errors: {}, 
@@ -393,10 +397,12 @@ class SelectionProcessForm extends Component {
     
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value, prompt: !!(e.target.value.length) });
+        //console.log('El campo ', e.target.name, !!(e.target.value.length))
     }
 
     onChangeTextField(e, nombreCampo) {
         this.setState({ [nombreCampo]: e.target.value, prompt: !!(e.target.value.length) });
+        //console.log('El campo text ', nombreCampo, !!(e.target.value.length))
     }
 
     onCheck(e) {
@@ -459,14 +465,15 @@ class SelectionProcessForm extends Component {
 		this.setState({ candidatosSeleccionados: candidatosSeleccionados, candidatosNoSeleccionados: candidatosNoSeleccionados});
 	}
     
-    onClickCancelar(prompt, e) {
-        //console.log('onClickCancelar', e)
-        //console.log('onClickCancelar', prompt)
-        if(!prompt){
-            limpiar();
+    onClickCancelar(e) {
+        e.preventDefault();
+        if(!this.state.prompt){
+            this.limpiar();
+            console.log('Prompt es false')
         } else {
             if(window.confirm("¿Estás seguro de NO querer registrar el cliente?")){
-                limpiar();
+                this.limpiar();
+                console.log('Confirmó botón cancelar')
             }
         }
     }
