@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react'
 import { connect } from 'react-redux';
 import Formulario from '../../../common/components/formulario/formulario'
-import { Prompt } from 'react-router';
+import { Prompt, Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import {getNewDateTimeFormat, getDateFormat, getDateFormat_SeparadoPorGuion} from '../../../common/components/date_util'
@@ -32,6 +32,7 @@ class SelectionProcessForm extends Component {
             dateProcessEnd: null,
             processActive: 'True',
             prompt: false,
+            cancelado: false, // Permite redireccionar a la pagina de inicio
             selectionProcess: {},
 			filtroCandidatoNombre: '',
 			filtroCandidatoApellidoPaterno: '',
@@ -226,9 +227,9 @@ class SelectionProcessForm extends Component {
 
         var rowProcessActive = [{ label: "ACTIVO" , value: "True" },
                                 { label: "FINALIZADO" , value: "False" }]
-    
+        
         var form = {
-            titulo: (this.state.idclient == '' || this.state.idclient == 0 ? 'Registrar cliente' : ('Datos de cliente ').concat(this.state.nameForm)),
+            titulo: (this.state.idjobposition === '' ? 'Registrar cliente' : ('Datos de cliente ').concat(this.state.nameForm)),
             campos: [
                 [{
                     key: 'idCliente',
@@ -253,7 +254,7 @@ class SelectionProcessForm extends Component {
                     onInputChange: this.setInputValueNameClient.bind(this),
                     labelClass: 'col-md-4 campo',
                     fieldClass: 'campo',
-                    required: 'true'
+                    required: true
                 }] , [{
                     key: 'idjobposition',
                     name: 'idjobposition',
@@ -286,7 +287,7 @@ class SelectionProcessForm extends Component {
                     onChange: this.onChangeTextField.bind(this),
                     labelClass: 'col-md-3 campo',
                     fieldClass: 'col-md-3 campo',
-                    required: 'true'
+                    required: true
                 } , {
                     key: 'dateProcessEnd',
                     name: 'dateProcessEnd',
@@ -298,7 +299,7 @@ class SelectionProcessForm extends Component {
                     onChange: this.onChangeTextField.bind(this),
                     labelClass: 'col-md-3 campo',
                     fieldClass: 'col-md-3 campo',
-                    required: 'true'
+                    required: false
                 } , {
                     key: 'processActive',
                     name: 'processActive',
@@ -311,7 +312,7 @@ class SelectionProcessForm extends Component {
                     onChange: this.onChangeTextField.bind(this),
                     labelClass: 'col-md-3 campo',
                     fieldClass: 'col-md-3 campo',
-                    required: 'true'
+                    required: true
                 }]
             ],
             tablaSelect: (this.state.idjobposition === '') ? [] : (
@@ -366,14 +367,13 @@ class SelectionProcessForm extends Component {
     
     isValid() {
         const { errors, isValid } = validateInput(this.state);
-        console.log('validateInput_', errors, isValid)
+        //onsole.log('validateInput_', errors, isValid)
         if (!isValid) { this.setState({	errors : errors	}) }
         return isValid;
     }
     
     onSubmit(e) {
         e.preventDefault();
-        console.log('onSubmit', e.target.name)
         if (this.isValid()) {
             this.setState({
                 errors: {}, 
@@ -470,10 +470,12 @@ class SelectionProcessForm extends Component {
         if(!this.state.prompt){
             this.limpiar();
             console.log('Prompt es false')
+            this.setCanceladoTrue()
         } else {
             if(window.confirm("¿Estás seguro de NO querer registrar el cliente?")){
                 this.limpiar();
                 console.log('Confirmó botón cancelar')
+                this.setCanceladoTrue()
             }
         }
     }
@@ -486,6 +488,12 @@ class SelectionProcessForm extends Component {
             //cliente: {},
             //puestolaboral: {},
             prompt: false
+        })
+    }
+
+    setCanceladoTrue(){
+        this.setState({
+            cancelado: true
         })
     }
     
@@ -676,20 +684,23 @@ class SelectionProcessForm extends Component {
     setValueNameClient(nameClient) {
         this.setState({
             nameClient: nameClient,// Reclutador puede ingresar un nombre que no esté en la lista
-            idclient: this.obtenerIdCliente(nameClient)
+            idclient: this.obtenerIdCliente(nameClient),
+            prompt: (nameClient == null) ? this.state.prompt : !!(nameClient.length)
         })
     }
     setInputValueNameClient(nameClient){
         this.setState({
             inputValueNameClient: nameClient,
             nameClient: nameClient,// Reclutador puede ingresar un nombre que no esté en la lista
-            idclient: this.obtenerIdCliente(nameClient)
+            idclient: this.obtenerIdCliente(nameClient),
+            prompt: (nameClient == null) ? this.state.prompt : !!(nameClient.length)
         })
     }
 
     render() {
         return (
             <Fragment>
+                {this.state.cancelado && <Redirect push to='/home' />}
                 {!this.state.isLoading &&
                     (<Fragment>
                         <Prompt

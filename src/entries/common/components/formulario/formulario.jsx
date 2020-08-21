@@ -22,33 +22,42 @@ export default function Formulario(props) {
 		html = campo.map( c =>{
 			classRow = c.type.includes('-linea') ? false : true;
 			if(c.type.includes('-autocomplete')){
-				return (<FormControl key={c.key} className={c.fieldClass}>
-					<Autocomplete
-						value={c.value}
-						onChange={(event, newValue) => {
-							c.onChange(newValue);
-						}}
-						inputValue={c.inputValue}
-						onInputChange={(event, newInputValue) => {
-							c.onInputChange(newInputValue);
-						}}
-						id="controllable-states-demo"
-						options={c.options}
-						style={{ width: 300 }}
-						renderInput={(params) => <TextField {...params} 
-							InputLabelProps={{
-								shrink: true,
-							}} 
-							label={c.label} 
-							size="small" />}
-					/>
-					<FormHelperText>{c.error}</FormHelperText>
+				return (
+					<FormControl key={c.key} 
+						className={c.fieldClass} 
+						error={typeof c.error !== 'undefined' ? c.required : false} >
+						<Autocomplete 
+							value={c.value}
+							onChange={(event, newValue) => {
+								c.onChange(newValue);
+							}}
+							inputValue={c.inputValue}
+							onInputChange={(event, newInputValue) => {
+								c.onInputChange(newInputValue);
+							}}
+							id="controllable-states-demo"
+							options={c.options}
+							style={{ width: 300 }}
+							renderInput={(params) => 
+								(<TextField {...params} 
+									InputLabelProps={{
+										shrink: true,
+									}} 
+									label={c.label} 
+									error={typeof c.error !== 'undefined' ? c.required : false}
+									size="small" 
+								/>)}
+						/>
+						<FormHelperText>{c.error}</FormHelperText>
 					</FormControl>);
             } else if(c.type == 'text-linea'){
-                return (
-					<FormControl key={c.key} className={c.fieldClass} error={c.required}>
+				return (
+					<FormControl key={c.key} 
+						className={c.fieldClass} 
+						error={c.required}>
 						<TextField 
-                            id="filled-basic"
+							error={typeof c.error !== 'undefined' ? c.required : false}
+                            id={typeof c.error !== 'undefined' ? 'standard-error' : "filled-basic"}
                             label={c.label}
                             type={c.type}
 							defaultValue={c.value}
@@ -63,26 +72,33 @@ export default function Formulario(props) {
 						<FormHelperText>{c.error}</FormHelperText>
 					</FormControl>)
 			} else if(c.type == 'date'){
-				return (<TextField key={c.key}
+				return (
+					<FormControl key={c.key} 
+						className={c.fieldClass} 
+						error={typeof c.error !== 'undefined' ? c.required : false} >
+						<TextField 
+							error={typeof c.error !== 'undefined' ? c.required : false}
 							id="date"
 							label={c.label}
 							type={c.type}
 							defaultValue={c.value}
-							className={c.fieldClass}
 							InputLabelProps={{
 								shrink: true,
 							}}
 							onChange={(event) => {
 								c.onChange(event, c.id);
 							}}
-						/>)
+						/>
+						<FormHelperText>{c.error}</FormHelperText>
+					</FormControl>)
 			} else if(c.type == 'select'){
 				let rows = []
 				c.value.map(e => {
 					rows.push(<MenuItem key={e.value} value={e.value}>{e.label}</MenuItem>)
 				})
 				return (
-					<FormControl key={c.key} className={c.fieldClass}>
+					<FormControl key={c.key} 
+						className={c.fieldClass} >
 						<InputLabel id="demo-simple-select-helper-label">{c.label}</InputLabel>
 						<Select
 							labelId="demo-simple-select-helper-label"
@@ -91,7 +107,7 @@ export default function Formulario(props) {
 							onChange={(event) => {
 								c.onChange(event, c.id);
 							}}
-							>
+						>
 							{rows}
 						</Select>
 						<FormHelperText>{c.error}</FormHelperText>
@@ -126,7 +142,7 @@ export default function Formulario(props) {
 						<h4>{form.titulo}</h4>
 					</div>
 					<div className="form-group">
-						<div className="col-sm-offset-2 col-sm-10">
+						<div className="alert alert-info">
 							{botonesForm}
 						</div>
 					</div>
