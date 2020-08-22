@@ -682,16 +682,16 @@ class SelectionProcessForm extends Component {
 
     setValueNameClient(nameClient) {
         this.setState({
-            nameClient: nameClient,// Reclutador puede ingresar un nombre que no esté en la lista
-            idclient: this.obtenerIdCliente(nameClient),
+            nameClient: nameClient == null ? '' : nameClient,// Reclutador puede ingresar un nombre que no esté en la lista
+            idclient: this.obtenerIdCliente(nameClient == null ? '' : nameClient),
             prompt: (nameClient == null) ? this.state.prompt : !!(nameClient.length)
         })
     }
     setInputValueNameClient(nameClient){
         this.setState({
-            inputValueNameClient: nameClient,
+            inputValueNameClient: nameClient == null ? '' : nameClient,
             nameClient: nameClient,// Reclutador puede ingresar un nombre que no esté en la lista
-            idclient: this.obtenerIdCliente(nameClient),
+            idclient: this.obtenerIdCliente(nameClient == null ? '' : nameClient),
             prompt: (nameClient == null) ? this.state.prompt : !!(nameClient.length)
         })
     }

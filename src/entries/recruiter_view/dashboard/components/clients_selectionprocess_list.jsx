@@ -185,14 +185,14 @@ class ClientsSelectionProcessList extends Component {
                                 <div className='div-table-col-170'>Estado: {elemento.process_active ? 
                                     (<Fragment><i className="fas fa-exclamation iconoRojo"></i> ACTIVO</Fragment>) : 
                                     (<Fragment><i className="fas fa-check-circle iconoVerde"></i> FINALIZADO</Fragment>)}</div>
-                                <div className='div-table-col'>Cant. de candidatos: {elemento_id_jobposition.length}</div>
+                                <div className='div-table-col'>Cant. de candidatos: {existsCandidates == 0 ? existsCandidates : elemento_id_jobposition.length}</div>
                                 <div className='div-table-col div-table-col-last'>{asignarCandidatos}
                                 </div>
                             </div>
                         </div>
                         <div className='div-table-row'>
                             <div className='candidate-cards-row'>
-                                <div className={classnames('candidate-cards', existsCandidates !== null ? 'not-candidate' : '')}>
+                                <div className={classnames('candidate-cards', existsCandidates == 0 ? 'not-candidate' : '')}>
                                 {tableCandidates}
                                 </div>
                             </div>
