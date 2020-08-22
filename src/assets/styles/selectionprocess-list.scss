@@ -2,8 +2,9 @@
     display: table;
     width: auto;
     /*background-color: #eee;*/
-    /*border: 1px solid #666666;*/
-    border-spacing: 5px; /* cellspacing:poor IE support for  this */
+    border: 2px solid #cce5ff;
+    border-spacing: 0px; /* cellspacing:poor IE support for  this */
+    border-radius: 10px;
 }
 .div-table-row {
     display: table-row;
@@ -52,12 +53,15 @@
     font-size: 13px;
 }
 
+.selectionprocess-row-header-primary {
+    border-radius: 3px 3px 0px 0px;
+}
+
 .selectionprocess-row-header {
     display: flex;
     font-weight: bold;
     background-color: #cce5ff;
     padding: 3px 7px;
-    border-radius: 10px;
 }
 
 .dashboard-button {

@@ -137,12 +137,12 @@ export default function Formulario(props) {
 	return (
 		<Fragment>
 			<form onSubmit={form.onSubmit} className="form" autoComplete="off">
-				<div className="container-fluid">
+				<div className="container-fluid form-border">
 					<div className="mt-4 mb-4">
 						<h4>{form.titulo}</h4>
 					</div>
 					<div className="form-group">
-						<div className="alert alert-info">
+						<div className="alert alert-secondary">
 							{botonesForm}
 						</div>
 					</div>

@@ -131,9 +131,11 @@ class ClientsSelectionProcessList extends Component {
 
         if(Object.keys(selectionProcess).length > 0) {
             var tableBody = Object.keys(selectionProcess).map((id_jobposition, index) => {
+                var existsCandidates = null;
                 var tableCandidates = selectionProcess[id_jobposition].map((candidate, i) => {
                     
                     if(candidate.idcandidato === null){
+                        existsCandidates = 0;
                         return 'Aún no se han asignado candidatos.'
                     }
                     var candidatesPsychologicalTestList = []
@@ -174,7 +176,7 @@ class ClientsSelectionProcessList extends Component {
 
                 return (<Fragment key={elemento.idclient + ' - ' + elemento.idjobposition}>
                         <div className='div-table-row'>
-                            <div className='selectionprocess-row-header'>
+                            <div className={classnames('selectionprocess-row-header', (index == 0 ? 'selectionprocess-row-header-primary' : ''))}>
                                 <div className='div-table-col div-table-col-first'>{(index+1)}</div>
                                 <div className='div-table-col'>Cliente: {elemento.client_name}</div>
                                 <div className='div-table-col-190'>Puesto laboral: {elemento.jobposition_name}</div>
@@ -189,8 +191,8 @@ class ClientsSelectionProcessList extends Component {
                             </div>
                         </div>
                         <div className='div-table-row'>
-                            <div>
-                                <div className='candidate-cards'>
+                            <div className='candidate-cards-row'>
+                                <div className={classnames('candidate-cards', existsCandidates !== null ? 'not-candidate' : '')}>
                                 {tableCandidates}
                                 </div>
                             </div>

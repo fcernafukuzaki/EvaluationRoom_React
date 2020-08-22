@@ -132,18 +132,17 @@ class ClientsList extends Component {
 	
 	generarTablaBodyPuestosLaborales(row, index){
 		if(row != null){
-			var hashIdCliente = encriptarAES(row.idcliente.toString());
-			var hashIdPuestoLaboral = encriptarAES(row.idpuestolaboral.toString());
+			var hashIdCliente = encriptarAES(row.idcliente.toString() + '_' + row.idpuestolaboral.toString());
 			var actualizarPuestoLaboral = (
 				<JobPositionButtonUpdate
 					pathname={this.state.rutaRegistrarPuestoLaboral}
-					hashId={`?id=${hashIdCliente}&idp=${hashIdPuestoLaboral}`}
+					hashId={`?id=${hashIdCliente}`}
 				/>
 			);
 			var asignarCandidatos = (
 				<JobPositionButtonAssignCandidates
 					pathname={this.state.rutaAsignarCandidatos}
-					hashId={`?id=${hashIdCliente}&idp=${hashIdPuestoLaboral}`}
+					hashId={`?id=${hashIdCliente}`}
 				/>
 			);
 			var indice = index + 1;

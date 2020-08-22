@@ -2,7 +2,6 @@ import React, {Component, Fragment} from 'react'
 import { connect } from 'react-redux';
 import Formulario from '../../../common/components/formulario/formulario'
 import { Prompt, Redirect } from 'react-router';
-import { Link } from 'react-router-dom';
 
 import {getNewDateTimeFormat, getDateFormat, getDateFormat_SeparadoPorGuion} from '../../../common/components/date_util'
 import validateInput from './selectionprocess_form_validate'

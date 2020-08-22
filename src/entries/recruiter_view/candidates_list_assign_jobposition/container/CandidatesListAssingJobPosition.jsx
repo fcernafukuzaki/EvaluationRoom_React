@@ -19,8 +19,8 @@ class CandidatesListJobPosition extends Component {
 			isLoading: true,
 			errorMensaje: '',
 			errors: {},
-			idclient: obtenerValorParametro('id'),
-			idjobposition: obtenerValorParametro('idp'),
+			idclient: obtenerValorParametro('id').split('_')[0],
+			idjobposition: obtenerValorParametro('id').split('_')[1],
 			nameForm: '',
 			dateProcessBegin: getDateFormat(),
             dateProcessEnd: getDateFormat(),
@@ -50,10 +50,11 @@ class CandidatesListJobPosition extends Component {
 	
 	componentWillMount() {
 		this.props.getCandidates()
-		if(obtenerValorParametro('idp') != null){
-			this.props.obtenerCliente(obtenerValorParametro('id'));
-			this.props.getSelectionProcess(obtenerValorParametro('id'), obtenerValorParametro('idp'));
-			//this.props.obtenerPuestoLaboralCandidato(obtenerValorParametro('id'), obtenerValorParametro('idp'));
+		if(obtenerValorParametro('id') != null){
+			var ids = obtenerValorParametro('id');
+			var id = ids.split('_');//idclient, idjobposition
+			this.props.obtenerCliente(id[0]);
+			this.props.getSelectionProcess(id[0], id[1], null, this.props.usuario.token);
 		}
 	}
 	
@@ -72,22 +73,6 @@ class CandidatesListJobPosition extends Component {
 				//isLoading: Object.entries(this.props.candidatos).length > 0 ? false : true,
 				candidatosNoSeleccionados: this.props.candidatos
 			});
-			/*if(Object.entries(this.props.candidatoPuestoLaboral).length > 0){
-				if(Object.entries(this.props.candidatos).length > 0){
-					let candidatoSeleccionado = [];
-					let candidatos = this.props.candidatos;
-					for(let i = 0; i < candidatos.length; i += 1){
-						this.props.candidatoPuestoLaboral.map( c => {
-							if(candidatos[i].idCandidato == c.idCandidato){
-								candidatoSeleccionado.push(candidatos[i]);
-								//this.props.candidatos.splice(i,1);
-								candidatos.splice(i,1);
-							}
-						});
-					}
-					this.setState({ candidatosSeleccionados: candidatoSeleccionado, candidatosNoSeleccionados: candidatos });
-				}
-			}*/
 		}
 		if (prevState.selectionProcess !== this.state.selectionProcess){
             if(typeof this.state.selectionProcess.selectionprocess_candidates !== 'undefined'){

@@ -17,7 +17,7 @@ class PuestoLaboralForm extends Component {
 		super(props);
 		this.state = {
 			filter: null,
-			idclient: obtenerValorParametro('id'),
+			idclient: obtenerValorParametro('id').split('_')[0],
 			idjobposition: '',
 			nameJobPosition: '',
 			dateProcessBegin: getDateFormat(),
@@ -39,8 +39,10 @@ class PuestoLaboralForm extends Component {
 	}
 	
 	componentWillMount() {
-		if(obtenerValorParametro('idp') != null){
-			this.props.getJobPosition(obtenerValorParametro('id'), obtenerValorParametro('idp'));
+		if(obtenerValorParametro('id') != null){
+			var ids = obtenerValorParametro('id');
+			var id = ids.split('_');//idclient, idjobposition
+			this.props.getJobPosition(id[0], id[1]);
 		} else {
 			this.setState({
 				isLoading: false

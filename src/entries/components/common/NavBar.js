@@ -7,17 +7,10 @@ import { obtenerUsuarioOAuth } from '../../../actions/actionUsuario';
 class NavBar extends Component {
 	constructor(props){
 		super(props);
-		// TESTING
-		var usuario_datos = {activo: true,
-			correoElectronico: "fcernaf@gmail.com",
-			idUsuario: 1,
-			nombre: "Francisco Cerna Fukuzaki",
-			perfiles: [{idUsuario: 1, idPerfil: 1}]};
-		this.props.datosUsuario(usuario_datos);
 	}
 	
 	componentWillMount() {
-		//this.props.obtenerUsuarioOAuth();
+		this.props.obtenerUsuarioOAuth();
 	}
 	
 	componentDidUpdate(prevProps, prevState) {
@@ -36,6 +29,7 @@ class NavBar extends Component {
 			let perfiles = this.props.obtenerUsuarioOAuthResponse.perfiles.map( p => {
 				return p.idPerfil;
 			});
+
 			this.props.items.map( item =>{
 				if(item.tipo === 'nav-item' ) {
 					var flagPerfil = item.perfil.filter( p => 
@@ -65,6 +59,7 @@ class NavBar extends Component {
 				}
 			});
 		}
+		
 		var navItem = itemUsuario.map( elemento =>{
 			return <NavBarItem {...elemento} key={elemento.key} />;
 		});
