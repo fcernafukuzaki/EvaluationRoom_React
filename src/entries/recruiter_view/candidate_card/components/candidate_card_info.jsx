@@ -46,7 +46,7 @@ class CandidateCardInfo extends Component {
                             <div>Nombre: <strong>{props.name}</strong></div>
                             <div>Ap. Pat: <strong>{props.paternal_surname}</strong></div>
                             <div>Ap. Mat: <strong>{props.maternal_surname}</strong></div>
-                            <div>Edad: <strong>{getAge(props.birth_date)} años</strong></div>
+                            <div>Edad: <strong>{getAge(props.birth_date)}</strong></div>
                         </div>
                         <div className='button-right-absolute flex-column'>
                             {actualizarCandidato}

@@ -34,9 +34,12 @@ export function getDateFormat_SeparadoPorGuion(datetime) {
 }
 
 export function getAge(birth_date) {
+    if(birth_date == null){
+        return "Sin información."
+    }
     var datetime_array = birth_date.split('T')
     var date_array = datetime_array[0].split('-')
-    return calculate_age(date_array[1], date_array[2], date_array[0])
+    return calculate_age(date_array[1], date_array[2], date_array[0]) + " años";
 }
 
 export function calculate_age(birth_month,birth_day,birth_year) {
