@@ -29,7 +29,7 @@ class NavBar extends Component {
 			let perfiles = this.props.obtenerUsuarioOAuthResponse.perfiles.map( p => {
 				return p.idPerfil;
 			});
-
+			
 			this.props.items.map( item =>{
 				if(item.tipo === 'nav-item' ) {
 					var flagPerfil = item.perfil.filter( p => 
