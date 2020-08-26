@@ -15,9 +15,6 @@ export function getSelectionProcess(idclient, idjobposition, process_status, tok
 					)
 			.then((response) => { dispatch({ type: SELECTIONPROCESS_GET, payload: response.data }) })
 			.catch((error) => {
-				console.log(error)
-				console.log(error.response)
-				console.log(error.response.data)
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
 				} else {
