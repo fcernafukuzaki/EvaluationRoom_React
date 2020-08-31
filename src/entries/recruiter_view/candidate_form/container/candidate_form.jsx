@@ -430,7 +430,7 @@ class CandidatoDatosForm extends Component {
 			idProvinciaNacimiento: '1501',
 			idDistritoNacimiento: '',
 			candidato: {},
-			testPsicologicosChecked: [],
+			//testPsicologicosChecked: [],
 			prompt: false
 		})
 	}
