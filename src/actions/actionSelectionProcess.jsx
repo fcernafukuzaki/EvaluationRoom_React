@@ -8,7 +8,6 @@ import {
 export function getSelectionProcess(idclient, idjobposition, process_status, token) {
 	return (dispatch, getState) => {
 		axios.get(('https://apirest.evaluationroom.com/v1/selectionprocess')
-		//axios.get(('http://127.0.0.1:5000/v1/selectionprocess')
 					.concat(process_status != null ? ('/' + process_status) : '')
 					.concat(idclient != null && idjobposition != null ? ('/' + idclient).concat('/' + idjobposition) : '')
 					,{headers: { Authorization: token }}

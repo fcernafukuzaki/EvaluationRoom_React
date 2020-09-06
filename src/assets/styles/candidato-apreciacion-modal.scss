@@ -1,0 +1,42 @@
+.candidato_apreciacion_overlay {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color:#000;
+	opacity: .75;
+	z-index: 99999;
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.candidato_apreciacion_modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 999999;
+  }
+  
+  .candidato_apreciacion_modal_container {
+    position: relative;
+    top: 10rem;
+    background-color: #ffffff;
+    padding: 1rem;
+    width: auto;
+  }
+  
+  .candidato_apreciacion_modal_close_button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 0;
+    background-color: #F5F5F5;
+    padding: 0.5rem1rem;
+  }

@@ -5,9 +5,11 @@ import {groupBy} from '../../../common/components/groupby'
 import CargandoImagen from '../../../components/common/CargandoImagen'
 import MensajeError from '../../../components/common/MensajeError';
 import {getSelectionProcess} from '../../../../actions/actionSelectionProcess';
+import {getCandidatoApreciacion, addCandidatoApreciacion} from '../../../../actions/actionCandidatoApreciacion';
 import ClientsSelectionProcessList from '../components/clients_selectionprocess_list'
 import {ClientsSelectionProcessButtonNew} from '../components/clients_selectionprocess_button'
 import AlertBoxMessageForm from '../../../components/common/AlertBoxMessageForm';
+import {formato_idcliente_idpuestolaboral} from '../../../common/components/formato_identificador'
 
 class DashBoard extends Component {
     constructor(props){
@@ -23,10 +25,14 @@ class DashBoard extends Component {
 				heading: '',
 				body: [<p key="" className="mb-0">Actualmente existen <strong>0</strong> procesos de selección <strong>Activos</strong>.</p>],
 				footer: []
-			}
+            },
+            datosCandidato: {},
+            idcandidato_apreciacion: ''
         }
 
         this.getSelectionProcessByStatus.bind(this);
+        this.getCandidatoApreciacionPorIdCandidato.bind(this);
+        this.addCandidatoApreciacion.bind(this);
     }
 
     mensajeInformativo(cantidadProcesosSeleccion){
@@ -61,6 +67,12 @@ class DashBoard extends Component {
             });
             this.tableSelectionProcess()
         }
+        if (prevProps.addCandidatoApreciacionResponse !== this.props.addCandidatoApreciacionResponse){
+            this.setState({
+                isLoading: false
+            });
+            this.props.getCandidatoApreciacion(this.props.token, this.props.correoelectronico, this.state.idcandidato_apreciacion, undefined, undefined)
+        }
         if (prevProps.errorResponse !== this.props.errorResponse) {
             console.log('E', this.props.errorResponse)
             if(409 == this.props.errorResponse.status){
@@ -82,6 +94,22 @@ class DashBoard extends Component {
         this.props.getSelectionProcess(null, null, process_status, this.props.token);
     }
 
+    getCandidatoApreciacionPorIdCandidato(idcandidato, candidato){
+        this.setState({
+            datosCandidato: candidato
+        })
+        this.props.getCandidatoApreciacion(this.props.token, this.props.correoelectronico, idcandidato, undefined, undefined)
+    }
+
+    addCandidatoApreciacion(idcandidato, idcliente, idpuestolaboral, idreclutador, apreciacion){
+        this.setState({
+            isLoading: true,
+            idcandidato_apreciacion: idcandidato
+        });
+        var idcliente_idpuestolaboral = formato_idcliente_idpuestolaboral(idcliente, idpuestolaboral)
+        this.props.addCandidatoApreciacion(this.props.token, this.props.correoelectronico, idcandidato, idcliente_idpuestolaboral, idcliente, idpuestolaboral, idreclutador, apreciacion)
+    }
+
     tableSelectionProcess() {
         return (<Fragment>
                     <AlertBoxMessageForm 
@@ -100,6 +128,11 @@ class DashBoard extends Component {
                         datosCandidatos={this.state.candidatesPsychologicalTest}
                         camposBusqueda={this.state.camposBusqueda}
                         funcGetByStatus={this.getSelectionProcessByStatus.bind(this)}
+                        getCandidatoApreciacionPorIdCandidato={this.getCandidatoApreciacionPorIdCandidato.bind(this)}
+                        addCandidatoApreciacion={this.addCandidatoApreciacion.bind(this)}
+                        candidatoApreciacion={this.props.candidatoApreciacionResponse}
+                        glosaModalDatosCandidato={this.state.datosCandidato}
+                        idreclutador={this.props.idusuario}
                     />
                 </Fragment>)
     }
@@ -118,8 +151,10 @@ class DashBoard extends Component {
 function mapStateToProps(state){
     return{
         selectionProcesses : state.reducerSelectionProcess.getSelectionProcessResponse,
+        candidatoApreciacionResponse: state.reducerCandidatoApreciacion.getCandidatoApreciacionResponse,
+        addCandidatoApreciacionResponse: state.reducerCandidatoApreciacion.addCandidatoApreciacionResponse,
         errorResponse : state.reducerSelectionProcess.errorResponse
     }
 }
 
-export default connect(mapStateToProps, {getSelectionProcess})(DashBoard);
+export default connect(mapStateToProps, {getSelectionProcess, getCandidatoApreciacion, addCandidatoApreciacion})(DashBoard);

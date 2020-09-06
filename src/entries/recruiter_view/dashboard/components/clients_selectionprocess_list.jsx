@@ -7,7 +7,8 @@ import ClientsSelectionProcessTable from '../components/clients_selectionprocess
 import {ClientsSelectionProcessButtonUpdate} from './clients_selectionprocess_button'
 import CandidateCard from '../../candidate_card/container/candidate_card'
 import {getDate} from '../../../common/components/date_util'
-import {encriptarAES} from '../../../common/components/encriptar_aes';;
+import {encriptarAES} from '../../../common/components/encriptar_aes'
+import CandidatoApreciacionModal from '../../candidato_apreciacion/components/candidato_apreciacion_modal'
 
 class ClientsSelectionProcessList extends Component {
 	constructor(props){
@@ -41,8 +42,15 @@ class ClientsSelectionProcessList extends Component {
             filtroNombrePuestoLaboralList: filtroNombrePuestoLaboralList,
             filtroStatusProcesoSeleccionList: filtroStatusProcesoSeleccionList,
             camposFiltrados: this.props.camposBusqueda,
-            datos: this.props.datos
+            datos: this.props.datos,
+            modalCerrado: true,
+            apreciacionCandidatoTexto: ''
         }
+
+        this.handleCloseCandidatoApreciacionModal = this.handleCloseCandidatoApreciacionModal.bind(this);
+        this.handleOpenCandidatoApreciacionModal = this.handleOpenCandidatoApreciacionModal.bind(this);
+        this.onChangeApreciacionCandidato = this.onChangeApreciacionCandidato.bind(this);
+        this.guardarCandidatoApreciacion = this.guardarCandidatoApreciacion.bind(this);
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -102,6 +110,31 @@ class ClientsSelectionProcessList extends Component {
         }
     }
 
+    handleCloseCandidatoApreciacionModal(event){
+        this.setState({
+            modalCerrado: !this.state.modalCerrado
+        })
+    }
+
+    handleOpenCandidatoApreciacionModal(idcandidato, candidato){
+        this.props.getCandidatoApreciacionPorIdCandidato(idcandidato, candidato)
+        this.setState({
+            modalCerrado: !this.state.modalCerrado
+        })
+    }
+
+    onChangeApreciacionCandidato(event, texto){
+        console.log(event);
+        console.log(texto);
+        this.setState({
+            apreciacionCandidatoTexto: ''
+        })
+    }
+
+    guardarCandidatoApreciacion(idcandidato, idcliente_idpuestolaboral, idcliente, idpuestolaboral, idreclutador, apreciacion){
+        this.props.addCandidatoApreciacion(idcandidato, idcliente_idpuestolaboral, idcliente, idpuestolaboral, idreclutador, apreciacion)
+    }
+
     tableSelectionProcess(selectionProcess, candidatesPsychologicalTest){
         var tableHead = [{
                 key: 'identificador',
@@ -159,6 +192,7 @@ class ClientsSelectionProcessList extends Component {
                                         telefono_fijo={candidate.telefono_fijo}
                                         telefono_movil={candidate.telefono_movil}
                                         psychologicaltests={candidatesPsychologicalTestList}
+                                        onOpenModal={this.handleOpenCandidatoApreciacionModal.bind(this, candidate.idcandidato, candidate)}
                                     />
                     </Fragment>)
                 })
@@ -199,7 +233,18 @@ class ClientsSelectionProcessList extends Component {
                         </div>
                     </Fragment>)
             });
-            return (<ClientsSelectionProcessTable tableHead={tableHead} tableBody={tableBody} />)
+            return (<Fragment>
+                    <ClientsSelectionProcessTable tableHead={tableHead} tableBody={tableBody} />
+                    <CandidatoApreciacionModal cerrado={this.state.modalCerrado} 
+                        onClose={this.handleCloseCandidatoApreciacionModal.bind(this)} 
+                        onGuardar={this.guardarCandidatoApreciacion.bind(this)}
+                        onChangeApreciacionCandidato={this.onChangeApreciacionCandidato.bind(this)}
+                        datos={this.props.candidatoApreciacion}
+                        datosCandidato={this.props.glosaModalDatosCandidato}
+                        idreclutador={this.props.idreclutador}
+                    />
+                </Fragment>
+            )
         } else {
             return (<strong>No se ha encontrado resultados.</strong>)
         }

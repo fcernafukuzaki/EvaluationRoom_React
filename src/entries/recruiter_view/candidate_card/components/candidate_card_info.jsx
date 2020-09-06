@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import classnames from 'classnames';
 import {CandidateButtonUpdate, CandidateButtonDownloadInform} from './candidate_button'
+import {CandidatoApreciacionButtonObtener} from '../../candidato_apreciacion/components/candidato_apreciacion_button'
 import {encriptarAES} from '../../../common/components/encriptar_aes';
 import {getAge} from '../../../common/components/date_util'
 
@@ -31,6 +32,11 @@ class CandidateCardInfo extends Component {
                 onClick={props.descargar_informe}
             />)
             : ''
+        var obtenerApreciacion = (
+            <CandidatoApreciacionButtonObtener
+                onClick={props.onOpen}
+            />
+        );
 
         var telefono_movil = (props.telefono_movil ? (' (Cel.) ').concat(props.telefono_movil) : '');
         var telefono_fijo = (props.telefono_fijo ? (' (Fijo) ').concat(props.telefono_fijo) : '');
@@ -51,6 +57,7 @@ class CandidateCardInfo extends Component {
                         <div className='button-right-absolute flex-column'>
                             {actualizarCandidato}
                             {descargarInforme}
+                            {obtenerApreciacion}
                         </div>
                     </div>
                     <div>Email: <strong>{props.email_address}</strong></div>
