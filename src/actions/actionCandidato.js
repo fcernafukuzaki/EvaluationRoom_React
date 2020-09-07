@@ -18,6 +18,7 @@ import {
 	INTERPRETACION_OBTENER,
 	INFORME_GENERAR,
 	CANDIDATO_PUESTO_LABORAL_OBTENER,
+	CANDIDATOS_SIN_PUESTO_LABORAL_OBTENER,
 	ERROR,
 	OBJ_ERROR_TIME_OUT
 } from './actionTypes';
@@ -252,6 +253,25 @@ export function obtenerPuestoLaboralCandidato(idCliente, idPuestoLaboral) {
 	return (dispatch, getState) => {
 		axios.get(('/candidato/puestolaboral/id/').concat(idCliente, '/', idPuestoLaboral))
 			.then((response) => { dispatch({ type: CANDIDATO_PUESTO_LABORAL_OBTENER, payload: response.data }) })
+			.catch((error) => {
+				if(error.toString().indexOf('Network Error') > -1){
+					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
+				}
+			})
+	}
+}
+
+export function obtenerCandidatosSinAsignacion(token, email) {
+	var body = {
+		headers: {
+			'Authorization': token,
+			correoelectronico: email
+		}
+	}
+
+	return (dispatch, getState) => {
+		axios.post('https://apirest.evaluationroom.com/v1/candidatewithoutselectionprocess', body)
+			.then((response) => { dispatch({ type: CANDIDATOS_SIN_PUESTO_LABORAL_OBTENER, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })

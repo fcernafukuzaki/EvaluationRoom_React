@@ -17,6 +17,7 @@ import {
 	INTERPRETACION_OBTENER,
 	INFORME_GENERAR,
 	CANDIDATO_PUESTO_LABORAL_OBTENER,
+	CANDIDATOS_SIN_PUESTO_LABORAL_OBTENER,
 	ERROR
 	} from '../actions/actionTypes';
 import fileSaver from 'file-saver';
@@ -40,6 +41,7 @@ const initialState = {
 	obtenerInterpretacionResponse: [],
 	generarInformeResponse: [],
 	obtenerCandidatoPuestoLaboralResponse: [],
+	obtenerCandidatosSinPuestoLaboralResponse: [],
 	errorResponse: []
 }
 
@@ -82,6 +84,8 @@ export function actionCandidato(state = initialState, action){
 			return state;
 		case CANDIDATO_PUESTO_LABORAL_OBTENER:
 			return Object.assign({}, state, {obtenerCandidatoPuestoLaboralResponse: action.payload})
+		case CANDIDATOS_SIN_PUESTO_LABORAL_OBTENER:
+			return Object.assign({}, state, {obtenerCandidatosSinPuestoLaboralResponse: action.payload})
 		case ERROR:
 			return Object.assign({}, state, {errorResponse: action.payload})
 		default:

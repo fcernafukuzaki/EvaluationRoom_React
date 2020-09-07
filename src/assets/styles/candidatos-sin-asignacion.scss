@@ -1,0 +1,21 @@
+.candidatos_sin_asignacion_container {
+    font-size: 12px;
+    border: 2px solid #bfdbf9;
+    border-spacing: 0px;
+    border-radius: 10px;
+}
+
+.candidatos_sin_asignacion_container_header {
+    background-color: #cce5ff;
+    font-weight: bold;
+    padding: 8px 15px;
+    font-size: 13px !important;
+    border-radius: 7px 7px 0px 0px;
+}
+
+.candidatos_sin_asignacion_lista {
+    overflow: auto;
+    max-width: 1200px;
+    display: flex;
+    max-height: 250px;
+}

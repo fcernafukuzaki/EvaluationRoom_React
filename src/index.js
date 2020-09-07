@@ -15,6 +15,7 @@ import './assets/styles/candidate-card.scss'
 import './assets/styles/selectionprocess-list.scss'
 import './assets/styles/formulario.scss'
 import './assets/styles/candidato-apreciacion-modal.scss'
+import './assets/styles/candidatos-sin-asignacion.scss'
 
 /* Redux */
 const store = createStore(

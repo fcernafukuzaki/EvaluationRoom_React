@@ -6,7 +6,9 @@ import CargandoImagen from '../../../components/common/CargandoImagen'
 import MensajeError from '../../../components/common/MensajeError';
 import {getSelectionProcess} from '../../../../actions/actionSelectionProcess';
 import {getCandidatoApreciacion, addCandidatoApreciacion} from '../../../../actions/actionCandidatoApreciacion';
+import {obtenerCandidatosSinAsignacion} from '../../../../actions/actionCandidato'
 import ClientsSelectionProcessList from '../components/clients_selectionprocess_list'
+import CandidatosSinAsignacionList from '../components/candidatos_sin_asignacion_list'
 import {ClientsSelectionProcessButtonNew} from '../components/clients_selectionprocess_button'
 import AlertBoxMessageForm from '../../../components/common/AlertBoxMessageForm';
 
@@ -28,6 +30,8 @@ class DashBoard extends Component {
             datosCandidato: {},
             idcandidato_apreciacion: '',
             candidatosApreciacion: [],
+            candidatosSinPuestoLaboral: {},
+            candidatesPsychologicalTestSinPuestoLaboral: {},
             guardado: false
         }
 
@@ -49,6 +53,7 @@ class DashBoard extends Component {
 
     componentWillMount() {
         this.props.getSelectionProcess(null, null, null, this.props.token);
+        this.props.obtenerCandidatosSinAsignacion(this.props.token, this.props.correoelectronico)
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -67,6 +72,13 @@ class DashBoard extends Component {
                 isLoading: Object.entries(this.state.selectionProcesses).length > 0 ? false : true
             });
             this.tableSelectionProcess()
+        }
+        if (prevProps.obtenerCandidatosSinPuestoLaboralResponse !== this.props.obtenerCandidatosSinPuestoLaboralResponse) {
+            this.setState({
+                isLoading: false,
+                candidatosSinPuestoLaboral: this.props.obtenerCandidatosSinPuestoLaboralResponse[0],
+                candidatesPsychologicalTestSinPuestoLaboral: groupBy(this.props.obtenerCandidatosSinPuestoLaboralResponse[1], 'id'),
+            });
         }
         if (prevProps.getCandidatoApreciacionResponse !== this.props.getCandidatoApreciacionResponse){
             this.setState({
@@ -143,6 +155,14 @@ class DashBoard extends Component {
                         alertMessageBody={this.state.mensajeInformativo.body} 
                         alertMessageFooter={this.state.mensajeInformativo.footer} 
                     />
+                    <CandidatosSinAsignacionList 
+                        candidatosSinPuestoLaboral={this.state.candidatosSinPuestoLaboral} 
+                        candidatosTestPsicologicosSinPuestoLaboral={this.state.candidatesPsychologicalTestSinPuestoLaboral}
+                        getCandidatoApreciacionPorIdCandidato={this.getCandidatoApreciacionPorIdCandidato.bind(this)}
+                        
+                        idreclutador={this.props.idusuario}
+                        guardado={this.state.guardado}
+                    />
                     <div className="dashboard-button">
                         <ClientsSelectionProcessButtonNew 
                             pathname={'/selectionprocess'}
@@ -181,8 +201,9 @@ function mapStateToProps(state){
         selectionProcesses : state.reducerSelectionProcess.getSelectionProcessResponse,
         getCandidatoApreciacionResponse: state.reducerCandidatoApreciacion.getCandidatoApreciacionResponse,
         addCandidatoApreciacionResponse: state.reducerCandidatoApreciacion.addCandidatoApreciacionResponse,
+        obtenerCandidatosSinPuestoLaboralResponse: state.reducerCandidato.obtenerCandidatosSinPuestoLaboralResponse,
         errorResponse : state.reducerSelectionProcess.errorResponse
     }
 }
 
-export default connect(mapStateToProps, {getSelectionProcess, getCandidatoApreciacion, addCandidatoApreciacion})(DashBoard);
+export default connect(mapStateToProps, {getSelectionProcess, obtenerCandidatosSinAsignacion, getCandidatoApreciacion, addCandidatoApreciacion})(DashBoard);
