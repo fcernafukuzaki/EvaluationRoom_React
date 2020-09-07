@@ -10,7 +10,7 @@ module.exports = {
     }, 
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'js/[name].js'
+        filename: 'js/[name].[contenthash].js'
     },
     resolve: {
         extensions: ['.js', '.jsx']
@@ -66,7 +66,7 @@ module.exports = {
             filename: './pages/examen.html'
         }),
         new MiniCssExtractPlugin({
-            filename: 'css/[name].css',
+            filename: 'css/[name].[contenthash].css',
         }),
     ]
 }

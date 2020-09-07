@@ -131,7 +131,7 @@ class SelectionProcessForm extends Component {
                         nombre: this.state.nameJobPosition,
                         date_process_begin: this.state.dateProcessBegin,
                         date_process_end: this.state.dateProcessEnd == null || this.state.dateProcessEnd == '' ? null : this.state.dateProcessEnd,
-                        user_register: '',
+                        user_register: this.props.idusuario,
                         process_active: this.state.processActive
                     }
 			}, () => {
@@ -418,7 +418,7 @@ class SelectionProcessForm extends Component {
 					idcandidate: parseInt(e.target.value),
                     //date_registered: '2020-10-02 22:56:00',
                     date_registered: getNewDateTimeFormat(),
-					user_register: '',
+					user_register: this.props.idusuario,
 					user_registered_byself: 'True'
 				}
 			}, () => {
