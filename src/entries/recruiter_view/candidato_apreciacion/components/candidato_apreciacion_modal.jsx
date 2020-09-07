@@ -88,18 +88,20 @@ class CandidatoApreciacionModal extends Component {
             return null
         }
         
-        if (tipoConsulta == 'elemento') {
+        if (tipoConsulta == 'elemento' || tipoConsulta == 'sin_asignacion') {
             const {datosCandidatosApreciacion} = this.state
-            const {datosCandidato} = this.props
+            const {datosCandidato, onGuardar, guardado} = this.props
 
             var nombreReclutador = datosCandidatosApreciacion.body.length > 0 ? datosCandidatosApreciacion.body[0].nombre : undefined
             var fechaRegistro = datosCandidatosApreciacion.body.length > 0 ? datosCandidatosApreciacion.body[0].fecha : undefined
             var apreciacion = datosCandidatosApreciacion.body.length > 0 ? datosCandidatosApreciacion.body[0].apreciacion : ''
+            var idCliente = typeof datosCandidato.idclient != 'undefined' ? datosCandidato.idclient : 0
+            var idPuestoLaboral = typeof datosCandidato.idjobposition != 'undefined' ? datosCandidato.idjobposition : 0
             
             if(datosCandidatosApreciacion.body.length > 1){
                 const datos_candidato_filtrado = datosCandidatosApreciacion.body.filter(c => 
-                    c.idcliente == datosCandidato.idclient && 
-                    c.idpuestolaboral == datosCandidato.idjobposition
+                    c.idcliente == idCliente && 
+                    c.idpuestolaboral == idPuestoLaboral
                 )[0]
                 
                 if(typeof datos_candidato_filtrado != 'undefined'){
@@ -129,19 +131,19 @@ class CandidatoApreciacionModal extends Component {
                         <div className="form-group">
                             <div className="alert alert-secondary">
                                 <CandidatoApreciacionButtonRegistrar 
-                                    onClick={props.onGuardar.bind(this, 'elemento', props.datosCandidato.idcandidato, 
-                                        props.datosCandidato.idclient, 
-                                        props.datosCandidato.idjobposition, 
+                                    onClick={onGuardar.bind(this, 'elemento', datosCandidato.idcandidato, 
+                                        idCliente, 
+                                        idPuestoLaboral, 
                                         idreclutador, 
                                         apreciacion)}
                                 />
                             </div>
                         </div>
                     </Modal>
-                    <MensajeGuardarExitoso cargando={props.guardado} mensaje={"Se guardó exitosamente!"} />
+                    <MensajeGuardarExitoso cargando={guardado} mensaje={"Se guardó exitosamente!"} />
                 </Fragment>
             );
-        } else {
+        } else if (tipoConsulta == 'lista') {
             var contenido = (
                 props.datosCandidato.map((datos_candidato, index) => {
                     //console.log('lista datos_candidato', datos_candidato.idcandidato)

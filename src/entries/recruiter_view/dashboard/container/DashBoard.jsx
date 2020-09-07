@@ -160,6 +160,9 @@ class DashBoard extends Component {
                         candidatosTestPsicologicosSinPuestoLaboral={this.state.candidatesPsychologicalTestSinPuestoLaboral}
                         getCandidatoApreciacionPorIdCandidato={this.getCandidatoApreciacionPorIdCandidato.bind(this)}
                         
+                        addCandidatoApreciacion={this.addCandidatoApreciacion.bind(this)}
+                        candidatosApreciacion={this.state.candidatosApreciacion}
+                        
                         idreclutador={this.props.idusuario}
                         guardado={this.state.guardado}
                     />

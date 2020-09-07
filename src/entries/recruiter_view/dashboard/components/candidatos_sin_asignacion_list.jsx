@@ -1,19 +1,22 @@
 import React, {Component, Fragment} from 'react';
-import {groupBy} from '../../../common/components/groupby'
 import CandidateCard from '../../candidate_card/container/candidate_card'
-import {encriptarAES} from '../../../common/components/encriptar_aes'
-import {getDate} from '../../../common/components/date_util'
+import CandidatoApreciacionModal from '../../candidato_apreciacion/components/candidato_apreciacion_modal'
+import {formato_idcliente_idpuestolaboral} from '../../../common/components/formato_identificador'
 
 class CandidatosSinAsignacionList extends Component {
 	constructor(props){
         super(props);
 
         this.state = {
-            datos: this.props.candidatosSinPuestoLaboral
+            datos: this.props.candidatosSinPuestoLaboral,
+            modalCerrado: true,
+            tipoConsulta: '',
+            
         }
 
+        this.handleCloseCandidatoApreciacionModal = this.handleCloseCandidatoApreciacionModal.bind(this);
         this.handleOpenCandidatoApreciacionModal = this.handleOpenCandidatoApreciacionModal.bind(this);
-        
+        this.guardarCandidatoApreciacion = this.guardarCandidatoApreciacion.bind(this);
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -24,18 +27,29 @@ class CandidatosSinAsignacionList extends Component {
         }
     }
 
+    handleCloseCandidatoApreciacionModal(event){
+        this.setState({
+            modalCerrado: !this.state.modalCerrado
+        })
+    }
+
     handleOpenCandidatoApreciacionModal(idcandidato, candidato){
         //console.log('handleOpenCandidatoApreciacionModal', idcandidato, candidato)
         this.props.getCandidatoApreciacionPorIdCandidato(idcandidato, candidato)
         this.setState({
             modalCerrado: !this.state.modalCerrado,
-            tipoConsulta: 'elemento',
+            tipoConsulta: 'sin_asignacion',
             datosCandidato: candidato
         })
     }
 
+    guardarCandidatoApreciacion(tipoConsulta, idcandidato, idcliente, idpuestolaboral, idreclutador, apreciacion){
+        var idcliente_idpuestolaboral = formato_idcliente_idpuestolaboral(idcliente, idpuestolaboral)
+        this.props.addCandidatoApreciacion(tipoConsulta, idcandidato, idcliente_idpuestolaboral, idcliente, idpuestolaboral, idreclutador, apreciacion)
+    }
+
     contenido(candidatosSinPuestoLaboral, candidatosTestPsicologicosSinPuestoLaboral){
-        console.log('contenido', candidatosSinPuestoLaboral, candidatosTestPsicologicosSinPuestoLaboral)
+        //console.log('contenido', candidatosSinPuestoLaboral, candidatosTestPsicologicosSinPuestoLaboral)
         if(Object.keys(candidatosSinPuestoLaboral).length > 0) {
             var existsCandidates = null;
             var tableCandidates = candidatosSinPuestoLaboral.map((candidate, i) => {
@@ -95,6 +109,15 @@ class CandidatosSinAsignacionList extends Component {
                         </div>
                     </div>
                 </div>
+                <CandidatoApreciacionModal cerrado={this.state.modalCerrado} 
+                    onClose={this.handleCloseCandidatoApreciacionModal.bind(this)} 
+                    onGuardar={this.guardarCandidatoApreciacion.bind(this)}
+                    datosCandidatosApreciacion={this.props.candidatosApreciacion}
+                    datosCandidato={this.state.datosCandidato}
+                    idreclutador={this.props.idreclutador}
+                    guardado={this.props.guardado}
+                    tipoConsulta={this.state.tipoConsulta}
+                />
             </Fragment>
         )
     }
