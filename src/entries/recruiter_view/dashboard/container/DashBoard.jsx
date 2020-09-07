@@ -9,7 +9,6 @@ import {getCandidatoApreciacion, addCandidatoApreciacion} from '../../../../acti
 import ClientsSelectionProcessList from '../components/clients_selectionprocess_list'
 import {ClientsSelectionProcessButtonNew} from '../components/clients_selectionprocess_button'
 import AlertBoxMessageForm from '../../../components/common/AlertBoxMessageForm';
-import {formato_idcliente_idpuestolaboral} from '../../../common/components/formato_identificador'
 
 class DashBoard extends Component {
     constructor(props){
@@ -27,7 +26,9 @@ class DashBoard extends Component {
 				footer: []
             },
             datosCandidato: {},
-            idcandidato_apreciacion: ''
+            idcandidato_apreciacion: '',
+            candidatosApreciacion: [],
+            guardado: false
         }
 
         this.getSelectionProcessByStatus.bind(this);
@@ -67,11 +68,21 @@ class DashBoard extends Component {
             });
             this.tableSelectionProcess()
         }
+        if (prevProps.getCandidatoApreciacionResponse !== this.props.getCandidatoApreciacionResponse){
+            this.setState({
+                isLoading: false,
+                candidatosApreciacion: this.props.getCandidatoApreciacionResponse
+            });
+        }
         if (prevProps.addCandidatoApreciacionResponse !== this.props.addCandidatoApreciacionResponse){
             this.setState({
                 isLoading: false
             });
-            this.props.getCandidatoApreciacion(this.props.token, this.props.correoelectronico, this.state.idcandidato_apreciacion, undefined, undefined)
+            if(this.state.tipoConsulta == 'lista'){
+                this.props.getCandidatoApreciacion(this.props.token, this.props.correoelectronico, undefined, this.state.idcliente_idpuestolaboral_apreciacion, undefined)
+            } else {
+                this.props.getCandidatoApreciacion(this.props.token, this.props.correoelectronico, this.state.idcandidato_apreciacion, undefined, undefined)
+            }
         }
         if (prevProps.errorResponse !== this.props.errorResponse) {
             console.log('E', this.props.errorResponse)
@@ -95,18 +106,33 @@ class DashBoard extends Component {
     }
 
     getCandidatoApreciacionPorIdCandidato(idcandidato, candidato){
+        //console.log('getCandidatoApreciacionPorIdCandidato', idcandidato, candidato)
         this.setState({
+            isLoading: true,
+            guardado: false,
             datosCandidato: candidato
         })
         this.props.getCandidatoApreciacion(this.props.token, this.props.correoelectronico, idcandidato, undefined, undefined)
     }
 
-    addCandidatoApreciacion(idcandidato, idcliente, idpuestolaboral, idreclutador, apreciacion){
+    getCandidatoApreciacionPorIdClienteIdPuestoLaboral(idcliente_idpuestolaboral){
         this.setState({
             isLoading: true,
-            idcandidato_apreciacion: idcandidato
+            guardado: false,
+            datosCandidato: {}
+        })
+        this.props.getCandidatoApreciacion(this.props.token, this.props.correoelectronico, undefined, idcliente_idpuestolaboral, undefined)
+    }
+
+    addCandidatoApreciacion(tipoConsulta, idcandidato, idcliente_idpuestolaboral, idcliente, idpuestolaboral, idreclutador, apreciacion){
+        //console.log('addCandidatoApreciacion', idcandidato, idcliente_idpuestolaboral, idcliente, idpuestolaboral, idreclutador, apreciacion)
+        this.setState({
+            isLoading: true,
+            guardado: true,
+            idcandidato_apreciacion: idcandidato,
+            idcliente_idpuestolaboral_apreciacion: idcliente_idpuestolaboral,
+            tipoConsulta: tipoConsulta
         });
-        var idcliente_idpuestolaboral = formato_idcliente_idpuestolaboral(idcliente, idpuestolaboral)
         this.props.addCandidatoApreciacion(this.props.token, this.props.correoelectronico, idcandidato, idcliente_idpuestolaboral, idcliente, idpuestolaboral, idreclutador, apreciacion)
     }
 
@@ -129,10 +155,12 @@ class DashBoard extends Component {
                         camposBusqueda={this.state.camposBusqueda}
                         funcGetByStatus={this.getSelectionProcessByStatus.bind(this)}
                         getCandidatoApreciacionPorIdCandidato={this.getCandidatoApreciacionPorIdCandidato.bind(this)}
+                        getCandidatoApreciacionPorIdClienteIdPuestoLaboral={this.getCandidatoApreciacionPorIdClienteIdPuestoLaboral.bind(this)}
                         addCandidatoApreciacion={this.addCandidatoApreciacion.bind(this)}
-                        candidatoApreciacion={this.props.candidatoApreciacionResponse}
+                        candidatosApreciacion={this.state.candidatosApreciacion}
                         glosaModalDatosCandidato={this.state.datosCandidato}
                         idreclutador={this.props.idusuario}
+                        guardado={this.state.guardado}
                     />
                 </Fragment>)
     }
@@ -151,7 +179,7 @@ class DashBoard extends Component {
 function mapStateToProps(state){
     return{
         selectionProcesses : state.reducerSelectionProcess.getSelectionProcessResponse,
-        candidatoApreciacionResponse: state.reducerCandidatoApreciacion.getCandidatoApreciacionResponse,
+        getCandidatoApreciacionResponse: state.reducerCandidatoApreciacion.getCandidatoApreciacionResponse,
         addCandidatoApreciacionResponse: state.reducerCandidatoApreciacion.addCandidatoApreciacionResponse,
         errorResponse : state.reducerSelectionProcess.errorResponse
     }

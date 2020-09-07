@@ -13,7 +13,8 @@ export function getCandidatoApreciacion(token, email, idcandidato, idcliente_idp
 				correoelectronico: email
 			},
 			idcandidato: idcandidato,
-			correoelectronico: email
+			idcliente_idpuestolaboral: idcliente_idpuestolaboral,
+			idreclutador: idreclutador
 		}
 
 	return (dispatch, getState) => {

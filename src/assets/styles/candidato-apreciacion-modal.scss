@@ -13,30 +13,51 @@
 }
 
 .candidato_apreciacion_modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 999999;
-  }
-  
-  .candidato_apreciacion_modal_container {
-    position: relative;
-    top: 10rem;
-    background-color: #ffffff;
-    padding: 1rem;
-    width: auto;
-  }
-  
-  .candidato_apreciacion_modal_close_button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    border: 0;
-    background-color: #F5F5F5;
-    padding: 0.5rem1rem;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 999999;
+  font-size: 13px;
+}
+
+.candidato_apreciacion_modal_container {
+  position: relative;
+  top: 10rem;
+  background-color: #ffffff;
+  padding: 1rem;
+  width: auto;
+  border-radius: 10px;
+  overflow: auto;
+  max-height: 680px;
+}
+
+.candidato_apreciacion_modal_close_button_align {
+  justify-content: flex-end;
+  display: flex;
+}
+
+.candidato_apreciacion_modal_close_button {
+  position: absolute;
+  background-color: #F5F5F5;
+  padding: 0.3rem 0.8rem;
+  border-radius: 10px;
+  border: 2px solid #b9b9b9;
+}
+
+.candidatos_apreciacion_modal_contenido_lista {
+  display: flex;
+  flex-direction: row;
+  border-top: 1px solid #a2a2a2;
+  padding-top: 10px;
+}
+
+.candidatos_apreciacion_modal_contenido_lista_datos {
+  min-width: 180px;
+  max-width: 180px;
+  display: inline-block;
+}

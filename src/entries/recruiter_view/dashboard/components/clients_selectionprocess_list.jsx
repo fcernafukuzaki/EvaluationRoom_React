@@ -4,10 +4,11 @@ import classnames from 'classnames';
 import {groupBy} from '../../../common/components/groupby'
 import BarraBusqueda from '../../../components/common/BarraBusqueda'
 import ClientsSelectionProcessTable from '../components/clients_selectionprocess_table'
-import {ClientsSelectionProcessButtonUpdate} from './clients_selectionprocess_button'
+import {ClientsSelectionProcessButtonUpdate, ClientsSelectionProcessApreciacionCandidatosButtonUpdate} from './clients_selectionprocess_button'
 import CandidateCard from '../../candidate_card/container/candidate_card'
 import {getDate} from '../../../common/components/date_util'
 import {encriptarAES} from '../../../common/components/encriptar_aes'
+import {formato_idcliente_idpuestolaboral} from '../../../common/components/formato_identificador'
 import CandidatoApreciacionModal from '../../candidato_apreciacion/components/candidato_apreciacion_modal'
 
 class ClientsSelectionProcessList extends Component {
@@ -44,12 +45,13 @@ class ClientsSelectionProcessList extends Component {
             camposFiltrados: this.props.camposBusqueda,
             datos: this.props.datos,
             modalCerrado: true,
-            apreciacionCandidatoTexto: ''
+            tipoConsulta: '',
+            datosCandidato: this.props.glosaModalDatosCandidato
         }
 
         this.handleCloseCandidatoApreciacionModal = this.handleCloseCandidatoApreciacionModal.bind(this);
         this.handleOpenCandidatoApreciacionModal = this.handleOpenCandidatoApreciacionModal.bind(this);
-        this.onChangeApreciacionCandidato = this.onChangeApreciacionCandidato.bind(this);
+        this.handleOpenCandidatosApreciacionModal = this.handleOpenCandidatosApreciacionModal.bind(this);
         this.guardarCandidatoApreciacion = this.guardarCandidatoApreciacion.bind(this);
     }
 
@@ -117,22 +119,28 @@ class ClientsSelectionProcessList extends Component {
     }
 
     handleOpenCandidatoApreciacionModal(idcandidato, candidato){
+        //console.log('handleOpenCandidatoApreciacionModal', idcandidato, candidato)
         this.props.getCandidatoApreciacionPorIdCandidato(idcandidato, candidato)
         this.setState({
-            modalCerrado: !this.state.modalCerrado
+            modalCerrado: !this.state.modalCerrado,
+            tipoConsulta: 'elemento',
+            datosCandidato: candidato
         })
     }
 
-    onChangeApreciacionCandidato(event, texto){
-        console.log(event);
-        console.log(texto);
+    guardarCandidatoApreciacion(tipoConsulta, idcandidato, idcliente, idpuestolaboral, idreclutador, apreciacion){
+        var idcliente_idpuestolaboral = formato_idcliente_idpuestolaboral(idcliente, idpuestolaboral)
+        this.props.addCandidatoApreciacion(tipoConsulta, idcandidato, idcliente_idpuestolaboral, idcliente, idpuestolaboral, idreclutador, apreciacion)
+    }
+
+    handleOpenCandidatosApreciacionModal(idcliente_idpuestolaboral, elemento_id_jobposition){
+        //console.log(elemento_id_jobposition)
+        this.props.getCandidatoApreciacionPorIdClienteIdPuestoLaboral(idcliente_idpuestolaboral)
         this.setState({
-            apreciacionCandidatoTexto: ''
+            modalCerrado: !this.state.modalCerrado,
+            tipoConsulta: 'lista',
+            datosCandidato: elemento_id_jobposition
         })
-    }
-
-    guardarCandidatoApreciacion(idcandidato, idcliente_idpuestolaboral, idcliente, idpuestolaboral, idreclutador, apreciacion){
-        this.props.addCandidatoApreciacion(idcandidato, idcliente_idpuestolaboral, idcliente, idpuestolaboral, idreclutador, apreciacion)
     }
 
     tableSelectionProcess(selectionProcess, candidatesPsychologicalTest){
@@ -196,16 +204,22 @@ class ClientsSelectionProcessList extends Component {
                                     />
                     </Fragment>)
                 })
-    
+
                 var elemento_id_jobposition = selectionProcess[id_jobposition]
                 var elemento = elemento_id_jobposition[0]
     
                 var hashIdClientIdJobPosition = encriptarAES(elemento.idclient.toString() + '_' + elemento.idjobposition.toString());
-                var asignarCandidatos = (
-                                        <ClientsSelectionProcessButtonUpdate 
-                                            pathname={'/selectionprocess'}
-                                            hashId={`?id=${hashIdClientIdJobPosition}`}
-                                        />
+                var actualizarAsignarCandidatos = (
+                    <ClientsSelectionProcessButtonUpdate 
+                        pathname={'/selectionprocess'}
+                        hashId={`?id=${hashIdClientIdJobPosition}`}
+                    />
+                );
+                var actualizarApreciacionCandidatos = (
+                    <ClientsSelectionProcessApreciacionCandidatosButtonUpdate 
+                        onClick={this.handleOpenCandidatosApreciacionModal.bind(this, 
+                            formato_idcliente_idpuestolaboral(elemento.idclient.toString(), elemento.idjobposition.toString()), elemento_id_jobposition)}
+                    />
                 );
 
                 return (<Fragment key={elemento.idclient + ' - ' + elemento.idjobposition}>
@@ -220,7 +234,7 @@ class ClientsSelectionProcessList extends Component {
                                     (<Fragment><i className="fas fa-exclamation iconoRojo"></i> ACTIVO</Fragment>) : 
                                     (<Fragment><i className="fas fa-check-circle iconoVerde"></i> FINALIZADO</Fragment>)}</div>
                                 <div className='div-table-col'>Cant. de candidatos: {existsCandidates == 0 ? existsCandidates : elemento_id_jobposition.length}</div>
-                                <div className='div-table-col div-table-col-last'>{asignarCandidatos}
+                                <div className='div-table-col div-table-col-last'>{actualizarAsignarCandidatos}{actualizarApreciacionCandidatos}
                                 </div>
                             </div>
                         </div>
@@ -238,10 +252,11 @@ class ClientsSelectionProcessList extends Component {
                     <CandidatoApreciacionModal cerrado={this.state.modalCerrado} 
                         onClose={this.handleCloseCandidatoApreciacionModal.bind(this)} 
                         onGuardar={this.guardarCandidatoApreciacion.bind(this)}
-                        onChangeApreciacionCandidato={this.onChangeApreciacionCandidato.bind(this)}
-                        datos={this.props.candidatoApreciacion}
-                        datosCandidato={this.props.glosaModalDatosCandidato}
+                        datosCandidatosApreciacion={this.props.candidatosApreciacion}
+                        datosCandidato={this.state.datosCandidato}
                         idreclutador={this.props.idreclutador}
+                        guardado={this.props.guardado}
+                        tipoConsulta={this.state.tipoConsulta}
                     />
                 </Fragment>
             )

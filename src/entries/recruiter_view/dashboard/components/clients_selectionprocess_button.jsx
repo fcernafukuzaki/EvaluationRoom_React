@@ -26,3 +26,14 @@ export function ClientsSelectionProcessButtonUpdate (props) {
         />
     );
 }
+
+export function ClientsSelectionProcessApreciacionCandidatosButtonUpdate (props) {
+    return(
+        <button type="button" 
+            className="btn btn-outline-danger btn-sm" 
+            onClick={props.onClick} 
+            title="Apreciación de los candidatos">
+            <i className="fas fa-file-word"></i> Apreciación
+        </button>
+    );
+}
