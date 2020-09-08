@@ -413,6 +413,10 @@ class SelectionProcessForm extends Component {
 			
 			this.setState({
 				puestoLaboralCandidato: {
+                    headers: {
+                        Authorization: this.props.token,
+                        correoelectronico: this.props.correoelectronico
+                    },
 					idclient: this.state.idclient,
 					idjobposition: this.state.idjobposition,
 					idcandidate: parseInt(e.target.value),
