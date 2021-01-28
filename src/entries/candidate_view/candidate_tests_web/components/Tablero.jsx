@@ -85,6 +85,7 @@ class Tablero extends Component {
 							let pregunta = preguntas[this.props.numeroPreguntaActualIndex];
 							enunciado = this.props.mostrarEnunciado(pregunta
 									, this.props.listaAlternativasSeleccionadas
+									, this.props.respuestaPreguntaAbierta
 									, this.props.mensaje.mensajeAlerta
 									, this.props.mensaje.mensajeContador);
 						}

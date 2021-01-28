@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import CargandoImagen from '../../../components/common/CargandoImagen';
 import TableroPreguntas from './TableroPreguntas';
 import Alternativa from '../components/Alternativa';
+import AlternativaPreguntaAbierta from '../components/AlternativaPreguntaAbierta'
 import AlternativaImagen from '../components/AlternativaImagen';
 import AlternativaImagenBoton from '../components/AlternativaImagenBoton';
 
@@ -11,15 +12,34 @@ export default class TableroEnunciadoWeb extends Component {
 	constructor(props){
 		super(props);
 		
+		this.state = {
+            respuestaPreguntaAbiertaTexto: ''
+        }
+
 		this.handleClick = this.handleClick.bind(this);
+		this.handleOnChange = this.handleOnChange.bind(this);
 	}
 	
 	handleClick(pregunta, indice){
 		this.seleccionarAlternativa(pregunta, indice);
 	}
 	
-	seleccionarAlternativa(pregunta, indice){
-		this.props.alternativaSeleccionar(pregunta, indice);
+	seleccionarAlternativa(pregunta, indice, e){
+		this.props.alternativaSeleccionar(pregunta, indice, null);
+	}
+
+	handleOnChange(pregunta, indice, e){
+		//console.log(e)
+		let respuestaPreguntaAbierta = e.target.value
+		console.log(respuestaPreguntaAbierta)
+		//console.log(pregunta)
+		//console.log(indice)
+		//this.props.alternativaSeleccionar(e);
+		this.setState({
+            [e.target.name]: e.target.value
+		});
+		console.log('handleOnChange', this.state, this.props.respuestaPreguntaAbierta)
+		this.props.alternativaSeleccionar(pregunta, indice, respuestaPreguntaAbierta);
 	}
 	
 	mostrarEnunciado(pregunta, enunciadoImg){
@@ -57,12 +77,36 @@ export default class TableroEnunciadoWeb extends Component {
 				</Fragment>
 			return alternativas;
 		} else {
-			alternativas = pregunta.alternativa.map( (alternativa, i) => 
-				<Alternativa key={alternativasID[i]} id={alternativasID[i]} label={alternativa.glosa}
-					visible={true} 
-					estaSeleccionada={this.props.listaAlternativasSeleccionadas[i]}
-					onClick={this.handleClick.bind(this, pregunta, i)}
-				/>
+			alternativas = pregunta.alternativa.map( (alternativa, i) => {
+				// Si tiene glosa, entonces la pregunta es cerrada.
+				// Si no tiene glosa, entonces la pregunta es abierta.
+				if(alternativa.glosa.length > 0){
+					return(<Alternativa key={alternativasID[i]} id={alternativasID[i]} label={alternativa.glosa}
+						visible={true} 
+						estaSeleccionada={this.props.listaAlternativasSeleccionadas[i]}
+						onClick={this.handleClick.bind(this, pregunta, i)}
+					/>)
+				} else {
+					const placeholder = 'Colocar aquí su respuesta.'
+					return (<textarea key={alternativasID[i]}
+						id={alternativasID[i]} 
+						name={alternativasID[i]} 
+						rows="10" cols="70" 
+						maxLength="500"
+						value={this.props.respuestaPreguntaAbierta}
+						className={classnames('botonAlternativaPreguntaAbierta', (true ? 'visible' : 'noVisible') )}
+						placeholder={placeholder}
+						onChange={this.handleOnChange.bind(this, pregunta, i)} />)
+						//value={this.props.respuestaPreguntaAbierta} 
+					/*return (<AlternativaPreguntaAbierta 
+						key={alternativasID[i]}
+						id={alternativasID[i]}
+						visible={true}
+						valor={this.props.respuestaPreguntaAbierta}
+						onChange={this.handleOnChange.bind(this)}
+					/>)*/
+				}
+			}
 			);
 		}
 		return alternativas;

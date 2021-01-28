@@ -47,7 +47,8 @@ class ExamenPsicologicoWeb extends Component {
 			flagMostrarBotonInicioInstrucciones2: false,
 			flagMostrarBotonSiguiente: false,
 			
-			listaAlternativasSeleccionadas: [false, false, false, false, false]
+			listaAlternativasSeleccionadas: [false, false, false, false, false],
+			respuestaPreguntaAbierta: ''
 		}
 		
 		this.guardarCandidatoRespuesta = this.guardarCandidatoRespuesta.bind(this);
@@ -99,7 +100,7 @@ class ExamenPsicologicoWeb extends Component {
 		this.asignarMensajeContador(flagInstrucciones);
 	}
 	
-	alternativaSeleccionar(pregunta, indiceAlternativa){
+	alternativaSeleccionar(pregunta, indiceAlternativa, respuestaPreguntaAbierta){
 		var mensajeAlerta = {mensaje: '', estilo: ''};
 		var marcarAlternativa = true;
 		var alternativasID = ["alternativa1", "alternativa2", "alternativa3", "alternativa4"];
@@ -110,61 +111,82 @@ class ExamenPsicologicoWeb extends Component {
 			var cantMaxAlt = this.props.testPsicologicosPartesResponse.filter(test => test.idTestPsicologico == this.obtenerIdTestPsicologico() && test.idParte == this.obtenerIdParte() );
 			var alternat = this.obtenerTestPsicologico().preguntas[this.state.numeroPreguntaActualIndex].alternativa[indiceAlternativa];
 			//console.log('alternat.', alternat);
+			var alternativaGlosa = alternat.glosa;
 			let respuesta = this.state.respuestas;
+			//let respuestaPreguntaAbiert = this.state.respuestaPreguntaAbierta;
+			let respuestaPreguntaAbiert = respuestaPreguntaAbierta
 			//console.log('Pregunta sin contador. cantMaxAlt:', cantMaxAlt[0].alternativaMaxSeleccion);
-			if(this.state.respuestas.length >= cantMaxAlt[0].alternativaMaxSeleccion){
-				//console.log(' Cantidad de alternativas seleccionadas es IGUAL o MAYOR a máximo de alternativas posibles de seleccionar.');
-				var i = -1;
-				var isSameAnswerSelected = this.state.respuestas.map( resp =>{
-					if(resp.respuesta == alternat.alternativa){
-						marcarAlternativa = true;
-						i = respuesta.indexOf(resp);
-						if(this.state.idTestPsicologico == 3){//DISC
-							document.querySelector(("#").concat(alternativasID[indiceAlternativa])).textContent = alternat.glosa;
-						}
-						respuesta.splice(i, 1);
-					}
-				});
-				
+			
+			// Si tiene glosa, entonces la pregunta es cerrada.
+			// Si no tiene glosa, entonces la pregunta es abierta.
+			if(alternativaGlosa.length > 0){
+			//if(respuestaPreguntaAbierta !== null){
 				if(this.state.respuestas.length >= cantMaxAlt[0].alternativaMaxSeleccion){
-					mensajeAlerta = {mensaje: ('SÓLO PUEDE SELECCIONAR ').concat(cantMaxAlt[0].alternativaMaxSeleccion,' ALTERNATIVA(S)'), estilo:"mensajeAlertaPeligro"};
-					marcarAlternativa = false;
+					//console.log(' Cantidad de alternativas seleccionadas es IGUAL o MAYOR a máximo de alternativas posibles de seleccionar.');
+					var i = -1;
+					var isSameAnswerSelected = this.state.respuestas.map( resp =>{
+						if(resp.respuesta == alternat.alternativa){
+							marcarAlternativa = true;
+							i = respuesta.indexOf(resp);
+							if(this.state.idTestPsicologico == 3){//DISC
+								document.querySelector(("#").concat(alternativasID[indiceAlternativa])).textContent = alternat.glosa;
+							}
+							respuesta.splice(i, 1);
+						}
+					});
+					
+					if(this.state.respuestas.length >= cantMaxAlt[0].alternativaMaxSeleccion){
+						mensajeAlerta = {mensaje: ('SÓLO PUEDE SELECCIONAR ').concat(cantMaxAlt[0].alternativaMaxSeleccion,' ALTERNATIVA(S)'), estilo:"mensajeAlertaPeligro"};
+						marcarAlternativa = false;
+					}
+				} else {
+					//console.log(' Cantidad de alternativas seleccionadas es MENOR al máximo de alternativas posibles de seleccionar.');
+					if(respuesta.length == 0){
+						if(this.obtenerIdTestPsicologico() == 3){//DISC
+							document.querySelector(("#").concat(alternativasID[indiceAlternativa])).textContent = alternat.glosa + " (+)";
+						}
+						respuesta.push({ respuesta : alternat.alternativa });
+					} else {
+						if(respuesta[0].respuesta == alternat.alternativa){
+							document.querySelector(("#").concat(alternativasID[indiceAlternativa])).textContent = alternat.glosa;/*.substring(valorAlternativa.length -4, 0);*/
+							respuesta.splice(0, 1);
+						} else {
+							if(this.obtenerIdTestPsicologico() == 3){//DISC
+								/* Lógica para saber si es (+) ó (-) */
+								for(i = 0; i < 4; i++){
+									var valorAlternativa = document.querySelector(("#").concat(alternativasID[i])).textContent;
+									if(valorAlternativa.substring(valorAlternativa.length -4, valorAlternativa.length) == " (+)"){
+										document.querySelector(("#").concat(alternativasID[indiceAlternativa])).textContent = alternat.glosa + " (-)";
+										respuesta.push({ respuesta : alternat.alternativa });
+										i = 5;
+									} else if(valorAlternativa.substring(valorAlternativa.length -4, valorAlternativa.length) == " (-)") {
+										document.querySelector(("#").concat(alternativasID[indiceAlternativa])).textContent = alternat.glosa + " (+)";
+										respuesta.splice(0, 0, { respuesta : alternat.alternativa });
+										i = 5;
+									}
+								}
+							} else {
+								respuesta.push({ respuesta : alternat.alternativa });
+							}
+						}
+					}
+				}
+
+				if(marcarAlternativa){
+					this.marcarAlternativa(indiceAlternativa);
 				}
 			} else {
-				//console.log(' Cantidad de alternativas seleccionadas es MENOR al máximo de alternativas posibles de seleccionar.');
-				if(respuesta.length == 0){
-					if(this.obtenerIdTestPsicologico() == 3){//DISC
-						document.querySelector(("#").concat(alternativasID[indiceAlternativa])).textContent = alternat.glosa + " (+)";
-					}
-					respuesta.push({ respuesta : alternat.alternativa });
-				} else {
-					if(respuesta[0].respuesta == alternat.alternativa){
-						document.querySelector(("#").concat(alternativasID[indiceAlternativa])).textContent = alternat.glosa;/*.substring(valorAlternativa.length -4, 0);*/
-						respuesta.splice(0, 1);
-					} else {
-						if(this.obtenerIdTestPsicologico() == 3){//DISC
-							/* Lógica para saber si es (+) ó (-) */
-							for(i = 0; i < 4; i++){
-								var valorAlternativa = document.querySelector(("#").concat(alternativasID[i])).textContent;
-								if(valorAlternativa.substring(valorAlternativa.length -4, valorAlternativa.length) == " (+)"){
-									document.querySelector(("#").concat(alternativasID[indiceAlternativa])).textContent = alternat.glosa + " (-)";
-									respuesta.push({ respuesta : alternat.alternativa });
-									i = 5;
-								} else if(valorAlternativa.substring(valorAlternativa.length -4, valorAlternativa.length) == " (-)") {
-									document.querySelector(("#").concat(alternativasID[indiceAlternativa])).textContent = alternat.glosa + " (+)";
-									respuesta.splice(0, 0, { respuesta : alternat.alternativa });
-									i = 5;
-								}
-							}
-						} else {
-							respuesta.push({ respuesta : alternat.alternativa });
-						}
-					}
+				if(respuestaPreguntaAbiert.length == 0){
+					mensajeAlerta = {mensaje: ('Debe ingresar una respuesta'), estilo:"mensajeAlertaPeligro"};
 				}
-			}
-			
-			if(marcarAlternativa){
-				this.marcarAlternativa(indiceAlternativa);
+				document.querySelector(("#").concat(alternativasID[indiceAlternativa])).textContent = alternat.glosa;/*.substring(valorAlternativa.length -4, 0);*/
+				
+				this.setState({
+					respuestaPreguntaAbierta: respuestaPreguntaAbiert
+				});
+				console.log('respuestaPreguntaAbierta', respuestaPreguntaAbiert)
+				respuesta = [{ respuesta : respuestaPreguntaAbiert }]
+				console.log('respuesta', respuesta)
 			}
 			
 			this.setState({
@@ -176,14 +198,14 @@ class ExamenPsicologicoWeb extends Component {
 				mensajeContador: {
 					mensaje: this.state.mensajeContador.mensaje,
 					flag: this.obtenerIdTestPsicologico() + "-" + this.obtenerIdParte(),
-					visible: (this.obtenerIdTestPsicologico() == 2 && !this.state.flagInstrucciones) ? true : false,
+					visible: ((this.obtenerIdTestPsicologico() == 2 || this.obtenerIdTestPsicologico() == 4) && !this.state.flagInstrucciones) ? true : false, //GATB
 					estilo: 'mensajeContador'
 				}
 			});
 			//console.log(" respuesta::", this.state.respuestas);
 		}
 	}
-	
+
 	mostrarBotonInicio(){
 		this.setState({
 			flagMostrarBotonInicio: !this.state.flagMostrarBotonInicio
@@ -481,7 +503,7 @@ class ExamenPsicologicoWeb extends Component {
 		//console.log('asignarMensajeContador:IdTest:', this.obtenerIdTestPsicologico());
 		//console.log('asignarMensajeContador:flag:', this.state.flagInstrucciones);
 		//console.log('asignarMensajeContador:flag:', flagInstrucciones);
-		if(this.obtenerIdTestPsicologico() == 2 && !/*this.state.*/flagInstrucciones){//GATB
+		if((this.obtenerIdTestPsicologico() == 2 || this.obtenerIdTestPsicologico() == 4) && !/*this.state.*/flagInstrucciones){//GATB
 			const idTestPsicologico = this.obtenerIdTestPsicologico();
 			const idParte = this.obtenerIdParte();
 			const contadorMensaje = idTestPsicologico + "-" + idParte;
@@ -497,9 +519,10 @@ class ExamenPsicologicoWeb extends Component {
 	
 	asignarContador(idTestPsicologico, idParte){//GATB
 		var contador = 0;
-		if(idTestPsicologico == 2){
+		if(idTestPsicologico == 2 || idTestPsicologico == 4){
 			var cantMaxAlt = this.props.testPsicologicosPartesResponse.filter(test => test.idTestPsicologico == idTestPsicologico && test.idParte == idParte);
-			contador = cantMaxAlt[0].duracion * 60;
+			// Los valores desde base de datos vienen en unidad de medida "segundos".
+			contador = cantMaxAlt[0].duracion;
 		}
 		//console.log('asignarContador:contador:', contador);
 		return contador;
@@ -916,22 +939,26 @@ class ExamenPsicologicoWeb extends Component {
 	limpiarAlternativas(){
 		if(this.state.numeroPreguntaActualIndex <= this.obtenerTestPsicologico().preguntas.length){
 			this.setState({
-				listaAlternativasSeleccionadas: [false, false, false, false, false]
+				listaAlternativasSeleccionadas: [false, false, false, false, false],
+				respuestaPreguntaAbierta: ''
 			});
 		}
 	}
 	/*
 	 * Inicio Mensajes
 	 */
-	mostrarEnunciado(pregunta, listaAlternativasSeleccionadas, mensajeAlerta, mensajeContador){
+	mostrarEnunciado(pregunta, listaAlternativasSeleccionadas, respuestaPreguntaAbierta, mensajeAlerta, mensajeContador){
 		return (<TableroEnunciadoWeb 
 			pregunta={pregunta}
 			listaAlternativasSeleccionadas={listaAlternativasSeleccionadas}
+			respuestaPreguntaAbierta={respuestaPreguntaAbierta}
+			alternativaRespuestaPreguntaAbierta={this.alternativaRespuestaPreguntaAbierta}
 			estiloTablero={''}
 			alternativaSeleccionar={this.alternativaSeleccionar}
 			mensajeAlerta={mensajeAlerta}
 			mensajeContador={mensajeContador}
 		/>);
+		//respuestaPreguntaAbierta={respuestaPreguntaAbierta}
 	}
 	
 	mostrarEnunciadoImg(pregunta, listaAlternativasSeleccionadas, mensajeAlerta, mensajeContador, enunciadoImg, alternativasImg){
@@ -1021,6 +1048,7 @@ class ExamenPsicologicoWeb extends Component {
 					
 					alternativaSeleccionar={this.alternativaSeleccionar}
 					listaAlternativasSeleccionadas={this.state.listaAlternativasSeleccionadas}
+					respuestaPreguntaAbierta={this.state.respuestaPreguntaAbierta}
 					
 					mostrarEnunciado={this.mostrarEnunciado}
 					mostrarEnunciadoImg={this.mostrarEnunciadoImg}

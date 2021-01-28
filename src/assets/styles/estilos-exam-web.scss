@@ -140,6 +140,17 @@ html, body {
 	font-size: 15px;
 }
 
+.botonAlternativaPreguntaAbierta {
+	width: 100%;/*width: 70%;*/
+	height: 150px;
+	padding: 5px;
+	/*text-align: center;*/
+	/*vertical-align: middle;*/
+	/*line-height: 3;*/
+	margin: 0 0 5px 0;
+	font-size: 15px;
+}
+
 .botonOpcionPrueba {
 	background: linear-gradient(to left, #0684d3 0%, #0684d3 50%, #0790e4 100%);
 	color: #FFF;
@@ -345,6 +356,10 @@ html, body {
 		text-align: center;
 	}
 	.botonAlternativa {
+		/*width: 100%;*/
+		height: 35px;
+	}
+	.botonAlternativaPreguntaAbierta {
 		/*width: 100%;*/
 		height: 35px;
 	}

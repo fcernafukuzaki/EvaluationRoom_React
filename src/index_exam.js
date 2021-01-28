@@ -12,8 +12,8 @@ import EvaluationRoomExam from './entries/candidate_view/candidate_tests_web/con
 
 import './assets/styles/estilos.scss'
 import './assets/styles/estilos-exam-web.scss'
-import './assets/styles/candidate-card.scss'
-import './assets/styles/selectionprocess-list.scss'
+//import './assets/styles/candidate-card.scss'
+//import './assets/styles/selectionprocess-list.scss'
 
 /* Redux */
 const store = createStore(

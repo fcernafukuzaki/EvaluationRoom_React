@@ -109,7 +109,7 @@ class TestPsicologicos extends Component {
 						<td>{row.idParte}</td>
 						<td>{row.instrucciones}</td>
 						<td>Se puede seleccionar hasta un máximo de {row.alternativaMaxSeleccion} alternativas</td>
-						<td>{row.duracion == 0 ? 'No hay tiempo límite' : (row.duracion + " minutos")}</td>
+						<td>{row.duracion == 0 ? 'No hay tiempo límite' : (row.duracion + " segundos")}</td>
 					</tr>);
 		} else {
 			return (<tr><td>Cargando</td></tr>)
