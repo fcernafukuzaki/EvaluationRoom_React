@@ -17,7 +17,7 @@ import {
 export function addClient(client) {
 	console.log(client)
 	return (dispatch, getState) => {
-		axios.post('https://apirest.evaluationroom.com/v1/client', client)
+		axios.post('https://evaluationroom.herokuapp.com/v1/client', client)
 			.then((response) => { dispatch({ type: CLIENTE_GUARDAR, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
@@ -32,7 +32,7 @@ export function addClient(client) {
 export function updateClient(client) {
 	console.log(client)
 	return (dispatch, getState) => {
-		axios.put('https://apirest.evaluationroom.com/v1/client', client)
+		axios.put('https://evaluationroom.herokuapp.com/v1/client', client)
 			.then((response) => { dispatch({ type: CLIENTE_ACTUALIZAR, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
@@ -46,7 +46,7 @@ export function updateClient(client) {
 
 export function obtenerCliente(idclient) {
 	return (dispatch, getState) => {
-		axios.get(('https://apirest.evaluationroom.com/v1/client')
+		axios.get(('https://evaluationroom.herokuapp.com/v1/client')
 					.concat(idclient ? ('/' + idclient) : ''))
 			.then((response) => { dispatch({ type: CLIENTE_OBTENER, payload: response.data }) })
 			.catch((error) => {
@@ -61,7 +61,7 @@ export function obtenerCliente(idclient) {
 
 export function obtenerClientes() {
 	return (dispatch, getState) => {
-		axios.get(('https://apirest.evaluationroom.com/v1/client_info'))
+		axios.get(('https://evaluationroom.herokuapp.com/v1/client_info'))
 			.then((response) => { dispatch({ type: CLIENTES_OBTENER, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
@@ -76,7 +76,7 @@ export function obtenerClientes() {
 export function guardarPuestosLaborales(datos) {
 	console.log(datos)
 	return (dispatch, getState) => {
-		axios.post('https://apirest.evaluationroom.com/v1/jobposition', datos)
+		axios.post('https://evaluationroom.herokuapp.com/v1/jobposition', datos)
 			.then((response) => { dispatch({ type: PUESTOS_LABORALES_GUARDAR, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
@@ -91,7 +91,7 @@ export function guardarPuestosLaborales(datos) {
 export function actualizarPuestosLaborales(datos) {
 	console.log(datos)
 	return (dispatch, getState) => {
-		axios.put('https://apirest.evaluationroom.com/v1/jobposition', datos)
+		axios.put('https://evaluationroom.herokuapp.com/v1/jobposition', datos)
 			.then((response) => { dispatch({ type: PUESTOS_LABORALES_ACTUALIZAR, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
@@ -105,7 +105,7 @@ export function actualizarPuestosLaborales(datos) {
 
 export function getJobPosition(idclient, idjobposition){
 	return (dispatch, getState) => {
-		axios.get(('https://apirest.evaluationroom.com/v1/jobposition')
+		axios.get(('https://evaluationroom.herokuapp.com/v1/jobposition')
 					.concat(idclient ? ('/' + idclient) : '')
 					.concat(idjobposition ? ('/' + idjobposition) : ''))
 			.then((response) => { dispatch({ type: JOBPOSITIONS_GET, payload: response.data }) })
@@ -121,7 +121,7 @@ export function getJobPosition(idclient, idjobposition){
 
 export function getCandidatesFromJobPosition(idclient, idjobposition){
 	return (dispatch, getState) => {
-		axios.get(('https://apirest.evaluationroom.com/v1/jobpositioncandidate')
+		axios.get(('https://evaluationroom.herokuapp.com/v1/jobpositioncandidate')
 					.concat(idclient ? ('/' + idclient) : '')
 					.concat(idjobposition ? ('/' + idjobposition) : ''))
 			.then((response) => { dispatch({ type: JOBPOSITION_CANDIDATES_GET, payload: response.data }) })
@@ -145,7 +145,7 @@ export function addCandidateToJobPosition(datos) {
 	*/
 	return (dispatch, getState) => {
 		console.log(datos)
-		axios.post('https://apirest.evaluationroom.com/v1/jobpositioncandidate', datos)
+		axios.post('https://evaluationroom.herokuapp.com/v1/jobpositioncandidate', datos)
 			.then((response) => { dispatch({ type: JOBPOSITION_CANDIDATE_ADD, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
@@ -167,7 +167,7 @@ export function deleteCandidateToJobPosition(datos) {
 	*/
 	return (dispatch, getState) => {
 		console.log(datos)
-		axios.put('https://apirest.evaluationroom.com/v1/jobpositioncandidate', datos)
+		axios.put('https://evaluationroom.herokuapp.com/v1/jobpositioncandidate', datos)
 			.then((response) => { dispatch({ type: JOBPOSITION_CANDIDATE_DELETE, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){

@@ -68,7 +68,7 @@ export function obtenerCandidatos() {
 
 export function getCandidates() {
 	return (dispatch, getState) => {
-		axios.get('https://apirest.evaluationroom.com/v1/candidate_info')
+		axios.get('https://evaluationroom.herokuapp.com/v1/candidate_info')
 			.then((response) => { dispatch({ type: CANDIDATES_GET, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
@@ -270,7 +270,7 @@ export function obtenerCandidatosSinAsignacion(token, email) {
 	}
 
 	return (dispatch, getState) => {
-		axios.post('https://apirest.evaluationroom.com/v1/candidatewithoutselectionprocess', body)
+		axios.post('https://evaluationroom.herokuapp.com/v1/candidatewithoutselectionprocess', body)
 			.then((response) => { dispatch({ type: CANDIDATOS_SIN_PUESTO_LABORAL_OBTENER, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
