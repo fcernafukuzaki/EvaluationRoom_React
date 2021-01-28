@@ -13,6 +13,7 @@ function generarTablaResultado(idTestPsicologico, elementos, caracteristicasPrin
 	if(elementos != null){
 		if(3 == idTestPsicologico){
 			rows.push(obtenerTableBodyTdResultadoDISC(elementos, caracteristicasPrincipales));
+		} else if(4 == idTestPsicologico) {
 		} else {
 			elementos.map((row) => {
 				rows.push(

@@ -110,7 +110,7 @@ class ExamenPsicologicoWeb extends Component {
 			//console.log('Pregunta sin contador.');
 			var cantMaxAlt = this.props.testPsicologicosPartesResponse.filter(test => test.idTestPsicologico == this.obtenerIdTestPsicologico() && test.idParte == this.obtenerIdParte() );
 			var alternat = this.obtenerTestPsicologico().preguntas[this.state.numeroPreguntaActualIndex].alternativa[indiceAlternativa];
-			//console.log('alternat.', alternat);
+			console.log('alternat.', alternat);
 			var alternativaGlosa = alternat.glosa;
 			let respuesta = this.state.respuestas;
 			//let respuestaPreguntaAbiert = this.state.respuestaPreguntaAbierta;
@@ -119,8 +119,20 @@ class ExamenPsicologicoWeb extends Component {
 			
 			// Si tiene glosa, entonces la pregunta es cerrada.
 			// Si no tiene glosa, entonces la pregunta es abierta.
-			if(alternativaGlosa.length > 0){
-			//if(respuestaPreguntaAbierta !== null){
+			//if(alternativaGlosa.length > 0){
+			if(respuestaPreguntaAbiert != null){
+				if(respuestaPreguntaAbiert.length == 0){
+					mensajeAlerta = {mensaje: ('Debe ingresar una respuesta'), estilo:"mensajeAlertaPeligro"};
+				}
+				//document.querySelector(("#").concat(alternativasID[indiceAlternativa])).textContent = alternat.glosa;
+				
+				this.setState({
+					respuestaPreguntaAbierta: respuestaPreguntaAbiert
+				});
+				//console.log('respuestaPreguntaAbierta', respuestaPreguntaAbiert)
+				respuesta = [{ respuesta : respuestaPreguntaAbiert }]
+				//console.log('respuesta', respuesta)
+			} else {
 				if(this.state.respuestas.length >= cantMaxAlt[0].alternativaMaxSeleccion){
 					//console.log(' Cantidad de alternativas seleccionadas es IGUAL o MAYOR a máximo de alternativas posibles de seleccionar.');
 					var i = -1;
@@ -175,18 +187,6 @@ class ExamenPsicologicoWeb extends Component {
 				if(marcarAlternativa){
 					this.marcarAlternativa(indiceAlternativa);
 				}
-			} else {
-				if(respuestaPreguntaAbiert.length == 0){
-					mensajeAlerta = {mensaje: ('Debe ingresar una respuesta'), estilo:"mensajeAlertaPeligro"};
-				}
-				document.querySelector(("#").concat(alternativasID[indiceAlternativa])).textContent = alternat.glosa;/*.substring(valorAlternativa.length -4, 0);*/
-				
-				this.setState({
-					respuestaPreguntaAbierta: respuestaPreguntaAbiert
-				});
-				console.log('respuestaPreguntaAbierta', respuestaPreguntaAbiert)
-				respuesta = [{ respuesta : respuestaPreguntaAbiert }]
-				console.log('respuesta', respuesta)
 			}
 			
 			this.setState({

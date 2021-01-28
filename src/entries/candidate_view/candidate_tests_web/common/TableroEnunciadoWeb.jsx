@@ -24,21 +24,17 @@ export default class TableroEnunciadoWeb extends Component {
 		this.seleccionarAlternativa(pregunta, indice);
 	}
 	
-	seleccionarAlternativa(pregunta, indice, e){
+	seleccionarAlternativa(pregunta, indice){
 		this.props.alternativaSeleccionar(pregunta, indice, null);
 	}
 
 	handleOnChange(pregunta, indice, e){
-		//console.log(e)
 		let respuestaPreguntaAbierta = e.target.value
-		console.log(respuestaPreguntaAbierta)
-		//console.log(pregunta)
-		//console.log(indice)
-		//this.props.alternativaSeleccionar(e);
+		//console.log(respuestaPreguntaAbierta)
 		this.setState({
             [e.target.name]: e.target.value
 		});
-		console.log('handleOnChange', this.state, this.props.respuestaPreguntaAbierta)
+		//console.log('handleOnChange', this.state, this.props.respuestaPreguntaAbierta)
 		this.props.alternativaSeleccionar(pregunta, indice, respuestaPreguntaAbierta);
 	}
 	
