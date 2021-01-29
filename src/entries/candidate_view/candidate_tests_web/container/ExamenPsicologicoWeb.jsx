@@ -113,13 +113,11 @@ class ExamenPsicologicoWeb extends Component {
 			console.log('alternat.', alternat);
 			var alternativaGlosa = alternat.glosa;
 			let respuesta = this.state.respuestas;
-			//let respuestaPreguntaAbiert = this.state.respuestaPreguntaAbierta;
 			let respuestaPreguntaAbiert = respuestaPreguntaAbierta
 			//console.log('Pregunta sin contador. cantMaxAlt:', cantMaxAlt[0].alternativaMaxSeleccion);
 			
 			// Si tiene glosa, entonces la pregunta es cerrada.
 			// Si no tiene glosa, entonces la pregunta es abierta.
-			//if(alternativaGlosa.length > 0){
 			if(respuestaPreguntaAbiert != null){
 				if(respuestaPreguntaAbiert.length == 0){
 					mensajeAlerta = {mensaje: ('Debe ingresar una respuesta'), estilo:"mensajeAlertaPeligro"};

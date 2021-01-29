@@ -14,6 +14,8 @@ function generarTablaResultado(idTestPsicologico, elementos, caracteristicasPrin
 		if(3 == idTestPsicologico){
 			rows.push(obtenerTableBodyTdResultadoDISC(elementos, caracteristicasPrincipales));
 		} else if(4 == idTestPsicologico) {
+			// El tipo de prueba es de pregunta abierta.
+			// Sólo se mostrará los resultados del candidato. No existe interpretación.
 		} else {
 			elementos.map((row) => {
 				rows.push(
