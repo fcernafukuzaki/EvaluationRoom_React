@@ -88,7 +88,7 @@ export default class TableroEnunciadoWeb extends Component {
 						id={alternativasID[i]} 
 						name={alternativasID[i]} 
 						rows="10" cols="70" 
-						maxLength="500"
+						maxLength="50000"
 						value={this.props.respuestaPreguntaAbierta}
 						className={classnames('botonAlternativaPreguntaAbierta', (true ? 'visible' : 'noVisible') )}
 						placeholder={placeholder}
