@@ -196,7 +196,7 @@ class ExamenPsicologicoWeb extends Component {
 				mensajeContador: {
 					mensaje: this.state.mensajeContador.mensaje,
 					flag: this.obtenerIdTestPsicologico() + "-" + this.obtenerIdParte(),
-					visible: ((this.obtenerIdTestPsicologico() == 2 || this.obtenerIdTestPsicologico() == 4) && !this.state.flagInstrucciones) ? true : false, //GATB
+					visible: ((this.obtenerIdTestPsicologico() == 2 || this.obtenerIdTestPsicologico() == 4 || this.obtenerIdTestPsicologico() == 5) && !this.state.flagInstrucciones) ? true : false, //GATB
 					estilo: 'mensajeContador'
 				}
 			});
@@ -501,7 +501,7 @@ class ExamenPsicologicoWeb extends Component {
 		//console.log('asignarMensajeContador:IdTest:', this.obtenerIdTestPsicologico());
 		//console.log('asignarMensajeContador:flag:', this.state.flagInstrucciones);
 		//console.log('asignarMensajeContador:flag:', flagInstrucciones);
-		if((this.obtenerIdTestPsicologico() == 2 || this.obtenerIdTestPsicologico() == 4) && !/*this.state.*/flagInstrucciones){//GATB
+		if((this.obtenerIdTestPsicologico() == 2 || this.obtenerIdTestPsicologico() == 4 || this.obtenerIdTestPsicologico() == 5) && !/*this.state.*/flagInstrucciones){//GATB
 			const idTestPsicologico = this.obtenerIdTestPsicologico();
 			const idParte = this.obtenerIdParte();
 			const contadorMensaje = idTestPsicologico + "-" + idParte;
@@ -517,7 +517,7 @@ class ExamenPsicologicoWeb extends Component {
 	
 	asignarContador(idTestPsicologico, idParte){//GATB
 		var contador = 0;
-		if(idTestPsicologico == 2 || idTestPsicologico == 4){
+		if(idTestPsicologico == 2 || idTestPsicologico == 4 || idTestPsicologico == 5){
 			var cantMaxAlt = this.props.testPsicologicosPartesResponse.filter(test => test.idTestPsicologico == idTestPsicologico && test.idParte == idParte);
 			// Los valores desde base de datos vienen en unidad de medida "segundos".
 			contador = cantMaxAlt[0].duracion;

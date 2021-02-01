@@ -13,9 +13,18 @@ function generarTablaResultado(idTestPsicologico, elementos, caracteristicasPrin
 	if(elementos != null){
 		if(3 == idTestPsicologico){
 			rows.push(obtenerTableBodyTdResultadoDISC(elementos, caracteristicasPrincipales));
-		} else if(4 == idTestPsicologico) {
+		} else if(4 == idTestPsicologico || 5 == idTestPsicologico) {
 			// El tipo de prueba es de pregunta abierta.
 			// Sólo se mostrará los resultados del candidato. No existe interpretación.
+			elementos.map((row) => {
+				rows.push(
+					<tr key={('').concat(row.factor)}>
+						<td>{row.factor}</td>
+						<td></td>
+						<td>{row.resultado}</td>
+					</tr>
+				)
+			})
 		} else {
 			elementos.map((row) => {
 				rows.push(
@@ -103,6 +112,13 @@ function obtenerTableBodyRespuestas(row){
 					respuestaCandidato += ('').concat(row.respuestas[i].alternativaRespuestaCandidato,' ');
 					alternativasGATBParte3 = (<img src={('/').concat(row.respuestas[i].glosaRespuestaCandidato)} alt={('Alternativa ').concat(row.respuestas[i].alternativaRespuestaCandidato)} height="40" width="auto" />);
 					respuestaTestPsicologico += ('').concat(row.respuestas[i].alternativaRespuestaTestPsicologico,' ');
+				} else if(4 == row.idTestPsicologico || 5 == row.idTestPsicologico) {
+					// El tipo de prueba es de pregunta abierta.
+					// Sólo se mostrará los resultados del candidato. No existe interpretación.
+					respuestaCandidato += ('').concat(row.respuestas[i].alternativaRespuestaCandidato);
+					if(row.respuestas[i].alternativaRespuestaTestPsicologico != null){
+						respuestaTestPsicologico += ('').concat(row.respuestas[i].alternativaRespuestaTestPsicologico);
+					}
 				} else {
 					respuestaCandidato += ('').concat(row.respuestas[i].alternativaRespuestaCandidato,' (',row.respuestas[i].glosaRespuestaCandidato,') ');
 					if(row.respuestas[i].alternativaRespuestaTestPsicologico != null){
