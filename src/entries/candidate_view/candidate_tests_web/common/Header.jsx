@@ -26,7 +26,8 @@ const Header = (props) => {
 								</p>
 							) : ('')
 						}
-						{testPsicologicoActual >= 0 && testPsicologicoActual < testPsicologicosAsignados &&
+						{/*testPsicologicoActual >= 0 && testPsicologicoActual < testPsicologicosAsignados &&*/
+							testPsicologicosAsignados > 0 &&
 							<Fragment>
 								<p>Cantidad de pruebas asignadas: {testPsicologicosAsignados}</p>
 								<p>Prueba psicológica {idTestPsicologicoActual} de {testPsicologicosAsignados} (Parte {idTestPsicologicoParte})</p>

@@ -11,21 +11,22 @@ class Tablero extends Component {
 	
 	obtenerTestPsicologico(){
 		//console.log('  [Tablero] obtenerTestPsicologico.', this.props.testPsicologicoActual);
-		if(typeof this.props.testPsicologicoActualObjeto.preguntas != "undefined"){
+		//console.log('  [Tablero] obtenerTestPsicologico.', this.props.testPsicologicoActualObjeto);
+		/*if(typeof this.props.testPsicologicoActualObjeto.preguntas != "undefined"){
 			return this.props.testPsicologicoActualObjeto;
 		} else {
 			return this.props.candidato.testPsicologicos[this.props.testPsicologicoActual];
-		}
-		
+		}*/
+		return this.props.testPsicologicoActualObjeto
 	}
 	
-	obtenerIdTestPsicologico(){
+	/*obtenerIdTestPsicologico(){
 		return this.obtenerTestPsicologico().idTestPsicologico;
-	}
+	}*/
 	
-	obtenerIdParte(){
+	/*obtenerIdParte(){
 		return this.obtenerTestPsicologico().preguntas[this.props.numeroPreguntaActualIndex].idParte;
-	}
+	}*/
 	
 	mostrarTablero(){
 		var enunciado = '';
@@ -53,16 +54,14 @@ class Tablero extends Component {
 				//console.log('Se acabaron las pruebas.');
 				enunciado = this.props.mensaje.mensajeFinalizado;
 			} else {
-				if( cantidadTestAsignados > 0 ){
+				if(cantidadTestAsignados > 0){
 					
 					if(this.props.flagMostrarInstrucciones){
-						const objetoParteTestPsicologico = this.props.testPsicologico.filter(parte =>
-								parte.idTestPsicologico == this.props.testPsicologicoActualObjeto.idTestPsicologico && 
-								parte.idParte == this.props.testPsicologicoParteActual
-								)[0];
+						const objetoParteTestPsicologico = this.props.testPsicologicoInstrucciones;
+						console.log('   [Tablero] Objeto con preguntas de Test psicologico:', objetoParteTestPsicologico)
 						/*console.log('   [Tablero] Objeto con preguntas de Test psicologico:', objetoParteTestPsicologico,
-								this.obtenerIdTestPsicologico(), this.obtenerIdParte());
-						console.log('   [Tablero] Mostrar instrucciones del test:', this.props.testPsicologicoActualObjeto,
+								this.obtenerIdTestPsicologico(), this.obtenerIdParte());*/
+						/*console.log('   [Tablero] Mostrar instrucciones del test:', this.props.testPsicologicoActualObjeto,
 								this.props.testPsicologicoActualObjeto.idTestPsicologico, this.props.testPsicologicoParteActual);*/
 						enunciado = this.props.mostrarInstrucciones(objetoParteTestPsicologico);
 					} else {
@@ -71,7 +70,7 @@ class Tablero extends Component {
 								this.props.numeroPreguntaActualIndex,
 								this.props.testPsicologicoParteActual, 
 								this.props.testPsicologicoActual);*/
-						var preguntas = this.obtenerTestPsicologico().preguntas;
+						/*var preguntas = this.obtenerTestPsicologico().preguntas;
 						if(preguntas[this.props.numeroPreguntaActualIndex].idTestPsicologico == 2 && preguntas[this.props.numeroPreguntaActualIndex].idParte == 3){//GATB
 							var enunciadoSplit = preguntas[this.props.numeroPreguntaActualIndex].enunciado.split(",");
 							let pregunta = preguntas[this.props.numeroPreguntaActualIndex];
@@ -83,6 +82,25 @@ class Tablero extends Component {
 									, enunciadoSplit[1]);
 						} else {
 							let pregunta = preguntas[this.props.numeroPreguntaActualIndex];
+							enunciado = this.props.mostrarEnunciado(pregunta
+									, this.props.listaAlternativasSeleccionadas
+									, this.props.respuestaPreguntaAbierta
+									, this.props.mensaje.mensajeAlerta
+									, this.props.mensaje.mensajeContador);
+						}*/
+						var pregunta = this.obtenerTestPsicologico();
+						//if(pregunta.idtestpsicologico == 2 && pregunta.idparte == 3){//GATB
+						if(this.props.esTestPsicologicoConImagen(pregunta)){
+							var enunciadoSplit = pregunta.enunciado.split(",");
+							//let pregunta = preguntas[this.props.numeroPreguntaActualIndex];
+							enunciado = this.props.mostrarEnunciadoImg(pregunta
+									, this.props.listaAlternativasSeleccionadas
+									, this.props.mensaje.mensajeAlerta
+									, this.props.mensaje.mensajeContador
+									, enunciadoSplit[0]
+									, enunciadoSplit[1]);
+						} else {
+							//let pregunta = pregunta;
 							enunciado = this.props.mostrarEnunciado(pregunta
 									, this.props.listaAlternativasSeleccionadas
 									, this.props.respuestaPreguntaAbierta

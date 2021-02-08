@@ -41,10 +41,11 @@ export default class TableroEnunciadoWeb extends Component {
 	mostrarEnunciado(pregunta, enunciadoImg){
 		var enunciadoPregunta = '';
 		let textoAux = '';
-		if(this.isGATBParte3(pregunta)){
+		//if(this.isGATBParte3(pregunta)){
+		if(this.props.esTestPsicologicoConImagen(pregunta)){
 			textoAux = this.mostrarEnunciadoImg(enunciadoImg);
 		} else {
-			enunciadoPregunta = ('').concat(pregunta.idPregunta,') ',pregunta.enunciado);
+			enunciadoPregunta = ('').concat(pregunta.idpregunta,') ',pregunta.enunciado);
 			textoAux = enunciadoPregunta.split('\\n').map((parrafo, i) => <p key={i}>{parrafo}</p> );
 		}
 		return textoAux;
@@ -53,7 +54,8 @@ export default class TableroEnunciadoWeb extends Component {
 	mostrarAlternativas(pregunta){
 		var alternativasID = ["alternativa1", "alternativa2", "alternativa3", "alternativa4", "alternativa5"];
 		var alternativas = '';
-		if(this.isGATBParte3(pregunta)){
+		//if(this.isGATBParte3(pregunta)){
+		if(this.props.esTestPsicologicoConImagen(pregunta)){
 			let alternativaBotones = pregunta.alternativa.map( (alternativa, i) =>
 				<AlternativaImagenBoton key={alternativasID[i]} id={alternativasID[i]} label={alternativa.alternativa}
 					visible={true} 
@@ -108,9 +110,11 @@ export default class TableroEnunciadoWeb extends Component {
 		return alternativas;
 	}
 	
-	isGATBParte3(pregunta){
-		return (pregunta.idTestPsicologico == 2 && pregunta.idParte == 3) ? true : false;
-	}
+	/*isGATBParte3(pregunta){
+		console.log(pregunta)
+		//return (pregunta.idTestPsicologico == 2 && pregunta.idParte == 3) ? true : false;
+		return (pregunta.idtestpsicologico == 2 && pregunta.idparte == 3) ? true : false;
+	}*/
 	
 	mostrarEnunciadoImg(texto){
 		//console.log('mostrarEnunciadoImg', texto);
