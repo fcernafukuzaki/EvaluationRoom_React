@@ -5,14 +5,14 @@ import TableroMensaje from './TableroMensaje';
 import {obtenerTextoFinalizadoPorParrafos} from './Mensajes';
 
 const MensajeFinalizacionExamWeb = (props) => {
-	const { nombreCandidato, estiloTablero } = props;
+	const { mensaje, estiloTablero } = props;
 	return (
 		<TableroMensaje estilo={estiloTablero} >
 			<Fragment>
 			{
-				typeof nombreCandidato != "undefined" ? (
+				typeof mensaje != "undefined" ? (
 				<Fragment>
-					{obtenerTextoFinalizadoPorParrafos(nombreCandidato)}
+					{obtenerTextoFinalizadoPorParrafos(mensaje)}
 					<i className="far fa-smile icono12em"></i>
 				</Fragment>
 				) : (

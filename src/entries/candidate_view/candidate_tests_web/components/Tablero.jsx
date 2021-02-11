@@ -32,12 +32,21 @@ class Tablero extends Component {
 		var enunciado = '';
 		var alternativas = '';
 		var imagen = '';
-		var haTerminado = false;
+		var haTerminado = Object.entries(this.props.mensajeFinalizacion).length > 0 ? true : false;
 		/*
 		 * Validar si objeto candidato retorna valor.
 		 */
-		if(Object.entries(this.props.candidato).length > 0){
-			haTerminado = !this.props.flagContinuarTest;
+		console.log('listaInstruccionesDePreguntasPendientes', this.props.listaInstruccionesDePreguntasPendientes)
+		console.log('mensajeFinalizacion', this.props.mensajeFinalizacion)
+		//if(Object.entries(this.props.listaInstruccionesDePreguntasPendientes).length > 0){
+		if(this.props.listaInstruccionesDePreguntasPendientes.length == 0){
+			//console.log('Se acabaron las pruebas.');
+			return this.props.mensaje.mensajeFinalizado;
+		} else if(this.props.listaInstruccionesDePreguntasPendientes.length > 0){
+			if(this.props.flagMostrarMensajeBienvenida){
+				return this.props.mensaje.mensajeBienvenida;
+			}
+			//haTerminado = !this.props.flagContinuarTest;
 			const cantidadTestAsignados = this.props.testPsicologicosAsignados;
 			/*console.log('   [Tablero] [cantidadTestAsignados]:' + cantidadTestAsignados);
 			console.log('   [Tablero] this.props.flagMostrarInstrucciones:' + this.props.flagMostrarInstrucciones);
@@ -50,10 +59,10 @@ class Tablero extends Component {
 			/*
 			 * Si Candidato ha terminado las pruebas, entonces mostrar mensaje de finalización
 			 */
-			if(haTerminado){
+			/*if(haTerminado){
 				//console.log('Se acabaron las pruebas.');
 				enunciado = this.props.mensaje.mensajeFinalizado;
-			} else {
+			} else {*/
 				if(cantidadTestAsignados > 0){
 					
 					if(this.props.flagMostrarInstrucciones){
@@ -109,7 +118,7 @@ class Tablero extends Component {
 						}
 					}
 				}
-			}
+			//}
 		} else {
 			enunciado = this.props.mensaje.mensajeBienvenida;
 		}

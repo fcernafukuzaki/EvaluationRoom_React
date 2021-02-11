@@ -9,11 +9,6 @@ export function obtenerTextoBienvenida(texto){
 	return textBienvenida;
 }
 
-export function obtenerTextoFinalizado(nombre){
-	var textFinalizado = "¡Felicidades " + nombre + "! \nAcabaste todas las pruebas."
-	return textFinalizado;
-}
-
 export function splitParrafo(texto){
 	if (typeof texto !== 'undefined'){
 		return texto.split('\\n').map((parrafo, i) => <p key={i}>{parrafo}</p> );
@@ -25,6 +20,6 @@ export function obtenerTextoBienvenidaPorParrafos(nombre){
 	return splitParrafo(obtenerTextoBienvenida(nombre));
 }
 
-export function obtenerTextoFinalizadoPorParrafos(nombre){
-	return splitParrafo(obtenerTextoFinalizado(nombre));
+export function obtenerTextoFinalizadoPorParrafos(mensaje){
+	return splitParrafo(mensaje);
 }
