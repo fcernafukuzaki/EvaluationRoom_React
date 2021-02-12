@@ -62,6 +62,7 @@ module.exports = {
             filename: './evaluacion/index.html'
         }),
         new HtmlWebPackPlugin({
+            template: './public/index_exam.html',
             chunks: ['index_exam'],
             filename: './pages/examen.html'
         }),
