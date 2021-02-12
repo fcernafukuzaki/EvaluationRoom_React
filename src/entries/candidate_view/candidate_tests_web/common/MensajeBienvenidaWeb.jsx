@@ -5,14 +5,14 @@ import TableroMensaje from './TableroMensaje';
 import {obtenerTextoBienvenidaPorParrafos} from './Mensajes';
 
 const MensajeBienvenidaWeb = (props) => {
-	const { nombreCandidato, estiloTablero } = props;
+	const { mensaje, estiloTablero } = props;
 	return (
 		<TableroMensaje estilo={estiloTablero} >
 			<Fragment>
 			{
-				typeof nombreCandidato != "undefined" ? (
+				typeof mensaje !== "undefined" ? (
 				<Fragment>
-					{obtenerTextoBienvenidaPorParrafos(nombreCandidato)}
+					{obtenerTextoBienvenidaPorParrafos(mensaje)}
 				</Fragment>
 				) : (
 					<Fragment>

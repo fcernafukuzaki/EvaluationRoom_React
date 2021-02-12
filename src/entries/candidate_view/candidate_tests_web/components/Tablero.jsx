@@ -32,7 +32,7 @@ class Tablero extends Component {
 		var enunciado = '';
 		var alternativas = '';
 		var imagen = '';
-		var haTerminado = Object.entries(this.props.mensajeFinalizacion).length > 0 ? true : false;
+		//var haTerminado = Object.entries(this.props.mensajeFinalizacion).length > 0 ? true : false;
 		/*
 		 * Validar si objeto candidato retorna valor.
 		 */
@@ -119,8 +119,8 @@ class Tablero extends Component {
 					}
 				}
 			//}
-		} else {
-			enunciado = this.props.mensaje.mensajeBienvenida;
+		/*} else {
+			enunciado = this.props.mensaje.mensajeBienvenida;*/
 		}
 		return enunciado;
 	}
