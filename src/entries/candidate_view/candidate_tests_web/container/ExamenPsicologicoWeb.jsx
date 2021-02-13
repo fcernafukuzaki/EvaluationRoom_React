@@ -70,25 +70,32 @@ class ExamenPsicologicoWeb extends Component {
 		//this.props.obtenerCandidatoRespuestas(obtenerValorParametro('id'));
 		//this.props.obtenerTestPsicologicosPartes();
 		// Examen finalizado
-		//this.props.obtenerCandidatoTestPsicologicoIniciarExamen('geancarlopineda25@gmail.com');
+		//this.props.obtenerCandidatoTestPsicologicoIniciarExamen('geancarlopineda25@gmail.com')
 		// Examen nuevo
-		this.props.obtenerCandidatoTestPsicologicoIniciarExamen('carolinatorres.12@hotmail.com');
+		this.obtenerCandidatoTestPsicologicoIniciarExamen('carolinatorres.12@hotmail.com')
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (prevProps.candidatoTestPsicologicoIniciarExamenResponse !== this.props.candidatoTestPsicologicoIniciarExamenResponse) {
+		if(prevProps.candidatoTestPsicologicoIniciarExamenResponse !== this.props.candidatoTestPsicologicoIniciarExamenResponse) {
+			let candidatoTestPsicologicoIniciarExamen = this.props.candidatoTestPsicologicoIniciarExamenResponse
 			this.setState({
-				testPsicologicosAsignados: typeof this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato !== 'undefined' ? this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato.cantidad_pruebas_asignadas : 0,
-				listaPreguntasPendientes: typeof this.props.candidatoTestPsicologicoIniciarExamenResponse.preguntas_pendientes !== 'undefined' ? this.props.candidatoTestPsicologicoIniciarExamenResponse.preguntas_pendientes : [],
-				listaInstruccionesDePreguntasPendientes: typeof this.props.candidatoTestPsicologicoIniciarExamenResponse.testpsicologicos_instrucciones !== 'undefined' ? this.props.candidatoTestPsicologicoIniciarExamenResponse.testpsicologicos_instrucciones : [],
+				testPsicologicosAsignados: typeof candidatoTestPsicologicoIniciarExamen.candidato !== 'undefined' ? 
+											candidatoTestPsicologicoIniciarExamen.candidato.cantidad_pruebas_asignadas : 0,
+				listaPreguntasPendientes: typeof candidatoTestPsicologicoIniciarExamen.preguntas_pendientes !== 'undefined' ? 
+											candidatoTestPsicologicoIniciarExamen.preguntas_pendientes : [],
+				listaInstruccionesDePreguntasPendientes: typeof candidatoTestPsicologicoIniciarExamen.testpsicologicos_instrucciones !== 'undefined' ? 
+											candidatoTestPsicologicoIniciarExamen.testpsicologicos_instrucciones : [],
 				flagMostrarMensajeBienvenida: true,
-				mensajeFinalizacion: typeof this.props.candidatoTestPsicologicoIniciarExamenResponse.mensaje !== 'undefined' ? this.props.candidatoTestPsicologicoIniciarExamenResponse.mensaje : '',
-				testPsicologicoActualObjeto: typeof this.props.candidatoTestPsicologicoIniciarExamenResponse.preguntas_pendientes !== 'undefined' ? {
-					idtestpsicologico: this.props.candidatoTestPsicologicoIniciarExamenResponse.preguntas_pendientes[0].idtestpsicologico,
-					idparte: this.props.candidatoTestPsicologicoIniciarExamenResponse.preguntas_pendientes[0].idparte,
-					idpregunta: this.props.candidatoTestPsicologicoIniciarExamenResponse.preguntas_pendientes[0].idpregunta
+				mensajeFinalizacion: typeof candidatoTestPsicologicoIniciarExamen.mensaje !== 'undefined' ? this.obtenerMensajeFinalizacionYNotificarReclutador() : '',
+				testPsicologicoActualObjeto: typeof candidatoTestPsicologicoIniciarExamen.preguntas_pendientes !== 'undefined' ? {
+					idtestpsicologico: candidatoTestPsicologicoIniciarExamen.preguntas_pendientes[0].idtestpsicologico,
+					idparte: candidatoTestPsicologicoIniciarExamen.preguntas_pendientes[0].idparte,
+					idpregunta: candidatoTestPsicologicoIniciarExamen.preguntas_pendientes[0].idpregunta
 				} : {}
 			});
+		}
+		if(prevProps.candidatoInterpretacionResponse !== this.props.candidatoInterpretacionResponse) {
+			this.obtenerCandidatoTestPsicologicoIniciarExamen('carolinatorres.12@hotmail.com')
 		}
 	}
 	
@@ -260,6 +267,14 @@ class ExamenPsicologicoWeb extends Component {
 		} else {
 			return false;
 		}
+	}
+
+	obtenerMensajeFinalizacionYNotificarReclutador(){
+		let candidatoTestPsicologicoIniciarExamen = this.props.candidatoTestPsicologicoIniciarExamenResponse
+		if(!candidatoTestPsicologicoIniciarExamen.reclutadornotificacion){
+			this.notificarReclutador()
+		}
+		return candidatoTestPsicologicoIniciarExamen.mensaje
 	}
 	
 	obtenerSiguientePregunta(){
@@ -857,6 +872,10 @@ class ExamenPsicologicoWeb extends Component {
 				 * No existen más preguntas pendientes.
 				 * Mostrar mensaje de finalización.
 				 */
+				console.log('Ya no existen más preguntas pendientes.')
+				
+				this.obtenerCandidatoInterpretacion()
+				//
 			}
 		}
 		return {
@@ -1437,9 +1456,14 @@ class ExamenPsicologicoWeb extends Component {
 		this.props.obtenerInterpretacion(this.state.idCandidato);
 	}
 	
-	notificarReclutador(){
+	notificarReclutador() {
 		//Notificar por EMAIL y SMS
-		this.props.notificarReclutador(this.props.candidatoResponse);
+		//this.props.notificarReclutador(this.props.candidatoResponse);
+		this.props.notificarReclutador(this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato)
+	}
+
+	obtenerCandidatoTestPsicologicoIniciarExamen(email) {
+		this.props.obtenerCandidatoTestPsicologicoIniciarExamen(email)
 	}
 	
 	obtenerFormatoRespuesta(respuestas) {
@@ -1620,7 +1644,7 @@ function mapStateToProps(state){
 		//candidatoResponse : state.reducerCandidato.obtenerCandidatoTestPsicologicosPreguntasResponse,
 		//candidatoRespuestasResponse : state.reducerCandidato.obtenerCandidatoRespuestasResponse,
 		//candidatoRespuestaResponse : state.reducerCandidato.guardarCandidatoRespuestaResponse,
-		//candidatoInterpretacionResponse : state.reducerCandidato.obtenerInterpretacionResponse,
+		candidatoInterpretacionResponse : state.reducerCandidato.obtenerInterpretacionResponse,
 		//candidatoTestPsicologicosFinalizadoResponse: state.reducerCandidato.validarTestPsicologicosFinalizadoResponse,
 		testPsicologicosFinalizadoNotificarReclutadorResponse: state.reducerReclutador.notificarReclutadorResponse
 	}
