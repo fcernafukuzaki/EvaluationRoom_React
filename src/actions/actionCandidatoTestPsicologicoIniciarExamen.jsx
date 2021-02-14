@@ -5,10 +5,11 @@ import {
 	OBJ_ERROR_TIME_OUT
 } from './actionTypes';
 
-export function obtenerCandidatoTestPsicologicoIniciarExamen(token) {
+export function obtenerCandidatoTestPsicologicoIniciarExamen(token, obtenerCandidatoTestPsicologicoIniciarExamen) {
 	return (dispatch, getState) => {
 		//axios.get('https://evaluationroom-iniciarexamen.herokuapp.com/v1/iniciar_examen'
-		axios.get('http://localhost:5000/v1/iniciar_examen'
+		axios.post('http://localhost:5000/v1/iniciar_examen'
+					, obtenerCandidatoTestPsicologicoIniciarExamen
 					,{headers: { Authorization: token }}
 					)
 			.then((response) => { dispatch({ type: CANDIDATO_TESTPSICOLOGICO_INICIAREXAMEN_OBTENER, payload: response.data }) })
