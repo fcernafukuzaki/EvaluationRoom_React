@@ -72,7 +72,9 @@ class ExamenPsicologicoWeb extends Component {
 		// Examen finalizado
 		//this.props.obtenerCandidatoTestPsicologicoIniciarExamen('geancarlopineda25@gmail.com')
 		// Examen nuevo
-		this.obtenerCandidatoTestPsicologicoIniciarExamen('carolinatorres.12@hotmail.com')
+		//this.obtenerCandidatoTestPsicologicoIniciarExamen('carolinatorres.12@hotmail.com')
+		// Un solo examen
+		this.obtenerCandidatoTestPsicologicoIniciarExamen('ari@gmail.com')
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -95,7 +97,12 @@ class ExamenPsicologicoWeb extends Component {
 			});
 		}
 		if(prevProps.candidatoInterpretacionResponse !== this.props.candidatoInterpretacionResponse) {
-			this.obtenerCandidatoTestPsicologicoIniciarExamen('carolinatorres.12@hotmail.com')
+			let testpsicologicos_asignados = this.props.candidatoTestPsicologicoIniciarExamenResponse.testpsicologicos_asignados
+			let lista_testpsicologicos_asignados = []
+			for(let i in testpsicologicos_asignados){
+				lista_testpsicologicos_asignados.push(testpsicologicos_asignados[i].idtestpsicologico)
+			}
+			this.obtenerCandidatoTestPsicologicoIniciarExamen('ari@gmail.com', lista_testpsicologicos_asignados)
 		}
 	}
 	
@@ -271,7 +278,7 @@ class ExamenPsicologicoWeb extends Component {
 
 	obtenerMensajeFinalizacionYNotificarReclutador(){
 		let candidatoTestPsicologicoIniciarExamen = this.props.candidatoTestPsicologicoIniciarExamenResponse
-		if(!candidatoTestPsicologicoIniciarExamen.reclutadornotificacion){
+		if(!candidatoTestPsicologicoIniciarExamen.reclutador_notificado){
 			this.notificarReclutador()
 		}
 		return candidatoTestPsicologicoIniciarExamen.mensaje
@@ -1160,7 +1167,7 @@ class ExamenPsicologicoWeb extends Component {
 			
 			this.setState({
 				//testPsicologicosAsignados: testPsicologicosAsignadosACandidato.length,
-				idCandidato: this.props.candidatoTestPsicologicoIniciarExamenResponse.idcandidato,
+				idCandidato: this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato.idcandidato,
 				candidatoResponse: this.props.candidatoTestPsicologicoIniciarExamenResponse,
 				numeroPreguntaActualIndex: stateNumeroPreguntaActualIndex,
 				testPsicologicoParteActual: stateTestPsicologicoParteActual,
@@ -1434,8 +1441,7 @@ class ExamenPsicologicoWeb extends Component {
 		console.log('Guardar respuesta del candidato.')
 		this.setState({
 			candidato:{
-				//idCandidato: this.state.idCandidato,
-				idCandidato: 54,
+				idCandidato: this.state.idCandidato,
 				idTestPsicologico: this.obtenerIdTestPsicologico(),
 				idParte: this.obtenerIdParte(),
 				idPregunta: this.obtenerIdPregunta(),
@@ -1462,8 +1468,8 @@ class ExamenPsicologicoWeb extends Component {
 		this.props.notificarReclutador(this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato)
 	}
 
-	obtenerCandidatoTestPsicologicoIniciarExamen(email) {
-		this.props.obtenerCandidatoTestPsicologicoIniciarExamen(email)
+	obtenerCandidatoTestPsicologicoIniciarExamen(email, listaIdTestPsicologicos) {
+		this.props.obtenerCandidatoTestPsicologicoIniciarExamen(email, listaIdTestPsicologicos)
 	}
 	
 	obtenerFormatoRespuesta(respuestas) {
@@ -1653,6 +1659,7 @@ function mapStateToProps(state){
 export default connect(mapStateToProps, { 
 	obtenerCandidatoTestPsicologicoIniciarExamen, 
 	//obtenerTestPsicologicosPartes, obtenerCandidatoTestPsicologicosPreguntas, obtenerCandidatoRespuestas, 
-	//guardarCandidatoRespuesta, obtenerInterpretacion, validarTestPsicologicosFinalizado, 
+	guardarCandidatoRespuesta, 
+	obtenerInterpretacion, //validarTestPsicologicosFinalizado, 
 	notificarReclutador 
 })(ExamenPsicologicoWeb);
