@@ -8,10 +8,11 @@ function getLogo(){
 }
 
 const Header = (props) => {
-	const { nombreCandidato, testPsicologicoActual, testPsicologicosAsignados, numeroPreguntaActualIndex, candidatoDatos, estiloTablero } = props;
-	let idTestPsicologicoActual = testPsicologicoActual + 1;
-	let idTestPsicologicoParte = (testPsicologicoActual >= 0 && numeroPreguntaActualIndex >= 0 
-			&& testPsicologicoActual < testPsicologicosAsignados) ? candidatoDatos.testPsicologicos[testPsicologicoActual].preguntas[numeroPreguntaActualIndex].idParte /*+ 1*/ : 0;
+	const { nombreCandidato, numeroTestPsicologicoActual, numeroTestPsicologicoParteActual, testPsicologicosAsignados, numeroPreguntaActualIndex, candidatoDatos, estiloTablero } = props;
+	let numero_TestPsicologicoActual = numeroTestPsicologicoActual + 1;
+	let numero_TestPsicologicoParte = numeroTestPsicologicoActual > 0 ? numeroTestPsicologicoParteActual + 1 : 0
+	//let idTestPsicologicoParte = (numeroTestPsicologicoActual >= 0 && numeroPreguntaActualIndex >= 0 
+	//		&& numeroTestPsicologicoActual < testPsicologicosAsignados) ? candidatoDatos.testPsicologicos[testPsicologicoActual].preguntas[numeroPreguntaActualIndex].idParte /*+ 1*/ : 0;
 	return (
 		<header id="header" className="header">
 			<div id="header-container" className="lineaSubrayado">
@@ -30,7 +31,7 @@ const Header = (props) => {
 							testPsicologicosAsignados > 0 &&
 							<Fragment>
 								<p>Cantidad de pruebas asignadas: {testPsicologicosAsignados}</p>
-								<p>Prueba psicológica {idTestPsicologicoActual} de {testPsicologicosAsignados} (Parte {idTestPsicologicoParte})</p>
+								<p>Prueba psicológica {numero_TestPsicologicoActual} de {testPsicologicosAsignados} (Parte {numero_TestPsicologicoParte})</p>
 							</Fragment>
 						}
 					</div>

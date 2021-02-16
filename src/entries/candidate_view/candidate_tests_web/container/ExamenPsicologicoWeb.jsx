@@ -33,6 +33,10 @@ class ExamenPsicologicoWeb extends Component {
 			candidatoResponse: {},
 			numeroPreguntaActualIndex: -1,
 			testPsicologicoActual: -1,
+			
+			numeroTestPsicologicoActual: -1,
+			numeroTestPsicologicoParteActual: -1,
+
 			testPsicologicoActualObjeto: {},
 			testPsicologicoParteActual: 0,
 			cantidadAlterPregActual: 0,
@@ -82,7 +86,7 @@ class ExamenPsicologicoWeb extends Component {
 		if(prevProps.candidatoTestPsicologicoIniciarExamenResponse !== this.props.candidatoTestPsicologicoIniciarExamenResponse) {
 			let candidatoTestPsicologicoIniciarExamen = this.props.candidatoTestPsicologicoIniciarExamenResponse
 			this.setState({
-				candidatoDatos: typeof this.state.candidato === 'undefined' ? 
+				candidatoDatos: typeof this.state.candidatoDatos === 'undefined' ? 
 									candidatoTestPsicologicoIniciarExamen.candidato : {},
 				testPsicologicosAsignados: typeof candidatoTestPsicologicoIniciarExamen.candidato !== 'undefined' ? 
 											candidatoTestPsicologicoIniciarExamen.candidato.cantidad_pruebas_asignadas : 0,
@@ -92,14 +96,29 @@ class ExamenPsicologicoWeb extends Component {
 											candidatoTestPsicologicoIniciarExamen.testpsicologicos_instrucciones : [],
 				flagMostrarMensajeBienvenida: true,
 				mensajeFinalizacion: typeof candidatoTestPsicologicoIniciarExamen.mensaje !== 'undefined' && 
-										candidatoTestPsicologicoIniciarExamen.reclutador_notificado !== 'undefined' &&
-										!candidatoTestPsicologicoIniciarExamen.reclutador_notificado 
+										candidatoTestPsicologicoIniciarExamen.reclutador_notificado !== 'undefined' 
 										? this.obtenerMensajeFinalizacionYNotificarReclutador() : '',
 				testPsicologicoActualObjeto: typeof candidatoTestPsicologicoIniciarExamen.preguntas_pendientes !== 'undefined' ? {
 					idtestpsicologico: candidatoTestPsicologicoIniciarExamen.preguntas_pendientes[0].idtestpsicologico,
 					idparte: candidatoTestPsicologicoIniciarExamen.preguntas_pendientes[0].idparte,
 					idpregunta: candidatoTestPsicologicoIniciarExamen.preguntas_pendientes[0].idpregunta
-				} : {}
+				} : {},
+				numeroTestPsicologicoActual: typeof candidatoTestPsicologicoIniciarExamen.testpsicologicos_asignados !== 'undefined' &&
+					typeof candidatoTestPsicologicoIniciarExamen.preguntas_pendientes !== 'undefined' ? 
+					candidatoTestPsicologicoIniciarExamen.testpsicologicos_asignados.filter((test, indice) => {
+						if(test.idtestpsicologico == candidatoTestPsicologicoIniciarExamen.testpsicologicos_asignados[0].idtestpsicologico){
+							return indice
+						}
+						return 0
+					}) : 0,
+				/*numeroTestPsicologicoParteActual: typeof candidatoTestPsicologicoIniciarExamen.testpsicologicos_asignados !== 'undefined' &&
+					typeof candidatoTestPsicologicoIniciarExamen.preguntas_pendientes !== 'undefined' ? 
+					candidatoTestPsicologicoIniciarExamen.testpsicologicos_asignados.filter((test, indice) => {
+						if(test.idtestpsicologico == candidatoTestPsicologicoIniciarExamen.testpsicologicos_asignados[0].idtestpsicologico){
+							return indice
+						}
+						return 0
+					}) : 0*/
 			});
 		}
 		if(prevProps.candidatoInterpretacionResponse !== this.props.candidatoInterpretacionResponse) {
@@ -135,7 +154,7 @@ class ExamenPsicologicoWeb extends Component {
 	
 	continuarExamen(){
 		var flagInstrucciones = false;
-		this.mostrarBotonInicioInstrucciones2();
+		this.mostrarBotonInicioInstrucciones2(false);
 		this.mostrarBotonSiguiente();
 		this.setState({
 			flagInstrucciones: flagInstrucciones,
@@ -269,10 +288,12 @@ class ExamenPsicologicoWeb extends Component {
 		});
 	}
 	
-	mostrarBotonInicioInstrucciones2(){
+	mostrarBotonInicioInstrucciones2(flag){
 		this.setState({
-			flagMostrarBotonInicioInstrucciones2: !this.state.flagMostrarBotonInicioInstrucciones2
+			//flagMostrarBotonInicioInstrucciones2: !this.state.flagMostrarBotonInicioInstrucciones2
+			flagMostrarBotonInicioInstrucciones2: flag
 		});
+		console.log('mostrarBotonInicioInstrucciones2:', flag, this.state.flagMostrarBotonInicioInstrucciones2)
 	}
 	
 	seAcaboElTiempo(mensajeContador){
@@ -285,7 +306,8 @@ class ExamenPsicologicoWeb extends Component {
 
 	obtenerMensajeFinalizacionYNotificarReclutador(){
 		let candidatoTestPsicologicoIniciarExamen = this.props.candidatoTestPsicologicoIniciarExamenResponse
-		if(!candidatoTestPsicologicoIniciarExamen.reclutador_notificado){
+		console.log('obtenerMensajeFinalizacionYNotificarReclutador:', candidatoTestPsicologicoIniciarExamen)
+		if(candidatoTestPsicologicoIniciarExamen.reclutador_notificado){
 			this.notificarReclutador()
 		}
 		return candidatoTestPsicologicoIniciarExamen.mensaje
@@ -368,7 +390,7 @@ class ExamenPsicologicoWeb extends Component {
 				
 				stateFlagInstrucciones = true;
 				this.limpiarAlternativas();
-				this.mostrarBotonInicioInstrucciones2();
+				this.mostrarBotonInicioInstrucciones2(true);
 				this.mostrarBotonSiguiente();
 				this.limpiarValorContador();
 				
@@ -403,7 +425,7 @@ class ExamenPsicologicoWeb extends Component {
 					respuestasSeleccionadas = [];
 					stateFlagInstrucciones = true;
 					this.limpiarAlternativas();
-					this.mostrarBotonInicioInstrucciones2();
+					this.mostrarBotonInicioInstrucciones2(true);
 					this.mostrarBotonSiguiente();
 					this.limpiarValorContador();
 					
@@ -436,6 +458,7 @@ class ExamenPsicologicoWeb extends Component {
 					});
 					
 					this.limpiarAlternativas();
+					this.mostrarBotonInicioInstrucciones2(false);//
 					this.mostrarBotonSiguiente();
 					this.limpiarValorContador();
 
@@ -481,7 +504,7 @@ class ExamenPsicologicoWeb extends Component {
 				} else {
 					console.log('El test NO tiene siguiente pregunta.', objetoSiguientePreguntaSiguientePregunta)
 					this.limpiarAlternativas();
-					this.mostrarBotonInicioInstrucciones2();
+					this.mostrarBotonInicioInstrucciones2(false);
 					this.mostrarBotonSiguiente();
 					this.limpiarValorContador();
 				}
@@ -880,7 +903,7 @@ class ExamenPsicologicoWeb extends Component {
 				// Volver a consultar el servicio rest para recuperar el campo :
 				// mensajeFinalizacion: typeof this.props.candidatoTestPsicologicoIniciarExamenResponse.mensaje
 				return {
-					flag: false, 
+					flag: false
 				}
 			} else {
 				/**
@@ -888,10 +911,11 @@ class ExamenPsicologicoWeb extends Component {
 				 * Mostrar mensaje de finalización.
 				 */
 				console.log('Ya no existen más preguntas pendientes.')
-				
 				this.obtenerCandidatoInterpretacion()
 				
-				this.mostrarBotonInicioInstrucciones2()
+				return {
+					flag: false
+				}
 			}
 		}
 		return {
@@ -1477,7 +1501,8 @@ class ExamenPsicologicoWeb extends Component {
 	notificarReclutador() {
 		//Notificar por EMAIL y SMS
 		//this.props.notificarReclutador(this.props.candidatoResponse);
-		this.props.notificarReclutador(this.state.candidatoDatos)
+		console.log('notificarReclutador:', this.state.candidatoDatos)
+		//this.props.notificarReclutador(this.state.candidatoDatos)
 	}
 
 	obtenerCandidatoTestPsicologicoIniciarExamen(email, listaIdTestPsicologicos) {
@@ -1599,7 +1624,8 @@ class ExamenPsicologicoWeb extends Component {
 		
 		//var header = <Header nombreCandidato={this.props.candidatoResponse.nombreCompleto} testPsicologicoActual={this.state.testPsicologicoActual} testPsicologicosAsignados={this.state.testPsicologicosAsignados} numeroPreguntaActualIndex={this.state.numeroPreguntaActualIndex} candidatoDatos={this.props.candidatoResponse} />;
 		var header = <Header nombreCandidato={this.obtenerObjetoDatosCandidato().nombre_completo} 
-							//testPsicologicoActual={this.state.testPsicologicoActual} 
+							numeroTestPsicologicoActual={this.state.numeroTestPsicologicoActual} 
+							numeroTestPsicologicoParteActual={this.state.numeroTestPsicologicoParteActual} 
 							testPsicologicosAsignados={this.state.testPsicologicosAsignados} 
 							numeroPreguntaActualIndex={this.state.numeroPreguntaActualIndex} 
 							candidatoDatos={this.props.candidatoResponse} />;
