@@ -54,7 +54,8 @@ class ExamenPsicologicoWeb extends Component {
 			listaPreguntasPendientes: [],
 			listaInstruccionesDePreguntasPendientes: [],
 			flagMostrarMensajeBienvenida: undefined,
-			mensajeFinalizacion: undefined
+			mensajeFinalizacion: undefined,
+			candidatoDatos: undefined
 		}
 		
 		this.guardarCandidatoRespuesta = this.guardarCandidatoRespuesta.bind(this)
@@ -81,6 +82,8 @@ class ExamenPsicologicoWeb extends Component {
 		if(prevProps.candidatoTestPsicologicoIniciarExamenResponse !== this.props.candidatoTestPsicologicoIniciarExamenResponse) {
 			let candidatoTestPsicologicoIniciarExamen = this.props.candidatoTestPsicologicoIniciarExamenResponse
 			this.setState({
+				candidatoDatos: typeof this.state.candidato === 'undefined' ? 
+									candidatoTestPsicologicoIniciarExamen.candidato : {},
 				testPsicologicosAsignados: typeof candidatoTestPsicologicoIniciarExamen.candidato !== 'undefined' ? 
 											candidatoTestPsicologicoIniciarExamen.candidato.cantidad_pruebas_asignadas : 0,
 				listaPreguntasPendientes: typeof candidatoTestPsicologicoIniciarExamen.preguntas_pendientes !== 'undefined' ? 
@@ -88,7 +91,10 @@ class ExamenPsicologicoWeb extends Component {
 				listaInstruccionesDePreguntasPendientes: typeof candidatoTestPsicologicoIniciarExamen.testpsicologicos_instrucciones !== 'undefined' ? 
 											candidatoTestPsicologicoIniciarExamen.testpsicologicos_instrucciones : [],
 				flagMostrarMensajeBienvenida: true,
-				mensajeFinalizacion: typeof candidatoTestPsicologicoIniciarExamen.mensaje !== 'undefined' ? this.obtenerMensajeFinalizacionYNotificarReclutador() : '',
+				mensajeFinalizacion: typeof candidatoTestPsicologicoIniciarExamen.mensaje !== 'undefined' && 
+										candidatoTestPsicologicoIniciarExamen.reclutador_notificado !== 'undefined' &&
+										!candidatoTestPsicologicoIniciarExamen.reclutador_notificado 
+										? this.obtenerMensajeFinalizacionYNotificarReclutador() : '',
 				testPsicologicoActualObjeto: typeof candidatoTestPsicologicoIniciarExamen.preguntas_pendientes !== 'undefined' ? {
 					idtestpsicologico: candidatoTestPsicologicoIniciarExamen.preguntas_pendientes[0].idtestpsicologico,
 					idparte: candidatoTestPsicologicoIniciarExamen.preguntas_pendientes[0].idparte,
@@ -102,7 +108,8 @@ class ExamenPsicologicoWeb extends Component {
 			for(let i in testpsicologicos_asignados){
 				lista_testpsicologicos_asignados.push(testpsicologicos_asignados[i].idtestpsicologico)
 			}
-			this.obtenerCandidatoTestPsicologicoIniciarExamen('ari@gmail.com', lista_testpsicologicos_asignados)
+			var objeto_lista_testpsicologicos_asignados = {lista_test_psicologicos: lista_testpsicologicos_asignados}
+			this.obtenerCandidatoTestPsicologicoIniciarExamen('ari@gmail.com', objeto_lista_testpsicologicos_asignados)
 		}
 	}
 	
@@ -419,7 +426,7 @@ class ExamenPsicologicoWeb extends Component {
 					stateValorContador = 0;
 					
 					this.obtenerCandidatoInterpretacion();
-					this.notificarReclutador();
+					//this.notificarReclutador();//
 					
 					this.setState({
 						flagContinuarTest: flagContinuarTest,
@@ -431,6 +438,7 @@ class ExamenPsicologicoWeb extends Component {
 					this.limpiarAlternativas();
 					this.mostrarBotonSiguiente();
 					this.limpiarValorContador();
+
 				}
 				
 			}
@@ -882,7 +890,8 @@ class ExamenPsicologicoWeb extends Component {
 				console.log('Ya no existen más preguntas pendientes.')
 				
 				this.obtenerCandidatoInterpretacion()
-				//
+				
+				this.mostrarBotonInicioInstrucciones2()
 			}
 		}
 		return {
@@ -1402,6 +1411,9 @@ class ExamenPsicologicoWeb extends Component {
 	}
 
 	obtenerObjetoPregunta(idTestpsicologico, idParte, idPregunta){
+		console.log('= Cantidad de preguntas pendientes:', this.state.listaPreguntasPendientes.length)
+		console.log('= Lista de preguntas pendientes:', this.state.listaPreguntasPendientes)
+		console.log('= IdTest ', idTestpsicologico, idParte, idPregunta)
 		return this.state.listaPreguntasPendientes
 					.filter(test => test.idtestpsicologico == idTestpsicologico &&
 									test.idparte == idParte &&
@@ -1465,7 +1477,7 @@ class ExamenPsicologicoWeb extends Component {
 	notificarReclutador() {
 		//Notificar por EMAIL y SMS
 		//this.props.notificarReclutador(this.props.candidatoResponse);
-		this.props.notificarReclutador(this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato)
+		this.props.notificarReclutador(this.state.candidatoDatos)
 	}
 
 	obtenerCandidatoTestPsicologicoIniciarExamen(email, listaIdTestPsicologicos) {
