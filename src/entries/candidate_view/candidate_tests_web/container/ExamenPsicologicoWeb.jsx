@@ -15,10 +15,11 @@ import MensajeInstruccionesWeb from '../common/MensajeInstruccionesWeb';
 import MensajeFinalizacionExamWeb from '../common/MensajeFinalizacionExamWeb';
 import MensajeContador from '../common/MensajeContador';
 
-import {obtenerTestPsicologicosPartes} from '../../../../actions/actionTestPsicologico';
-import {obtenerCandidatoTestPsicologicosPreguntas, obtenerCandidatoRespuestas, guardarCandidatoRespuesta, obtenerInterpretacion, validarTestPsicologicosFinalizado} from '../../../../actions/actionCandidato';
+//import {obtenerTestPsicologicosPartes} from '../../../../actions/actionTestPsicologico';
+//import {obtenerCandidatoTestPsicologicosPreguntas, obtenerCandidatoRespuestas, guardarCandidatoRespuesta, obtenerInterpretacion, validarTestPsicologicosFinalizado} from '../../../../actions/actionCandidato';
+import {obtenerInterpretacion} from '../../../../actions/actionCandidato';
 import {notificarReclutador} from '../../../../actions/actionReclutador';
-import {obtenerCandidatoTestPsicologicoIniciarExamen} from '../../../../actions/actionCandidatoTestPsicologicoIniciarExamen'
+import {obtenerCandidatoTestPsicologicoIniciarExamen, guardarCandidatoTestPsicologicoRespuesta} from '../../../../actions/actionCandidatoTestPsicologicoIniciarExamen'
 
 class ExamenPsicologicoWeb extends Component {
 	constructor(props){
@@ -128,7 +129,7 @@ class ExamenPsicologicoWeb extends Component {
 				lista_testpsicologicos_asignados.push(testpsicologicos_asignados[i].idtestpsicologico)
 			}
 			var objeto_lista_testpsicologicos_asignados = {lista_test_psicologicos: lista_testpsicologicos_asignados}
-			this.obtenerCandidatoTestPsicologicoIniciarExamen('ari@gmail.com', objeto_lista_testpsicologicos_asignados)
+			this.obtenerCandidatoTestPsicologicoIniciarExamen(this.state.candidatoDatos.correoelectronico, objeto_lista_testpsicologicos_asignados)
 		}
 	}
 	
@@ -1477,15 +1478,16 @@ class ExamenPsicologicoWeb extends Component {
 		console.log('Guardar respuesta del candidato.')
 		this.setState({
 			candidato:{
-				idCandidato: this.state.idCandidato,
-				idTestPsicologico: this.obtenerIdTestPsicologico(),
-				idParte: this.obtenerIdParte(),
-				idPregunta: this.obtenerIdPregunta(),
+				idcandidato: this.state.idCandidato,
+				idtestpsicologico: this.obtenerIdTestPsicologico(),
+				idparte: this.obtenerIdParte(),
+				idpregunta: this.obtenerIdPregunta(),
 				respuesta : this.obtenerFormatoRespuesta(this.state.respuestas)
 			}
 		}, () => {
 			if(this.state.candidato.respuesta.length > 0){
 				//this.props.guardarCandidatoRespuesta(this.state.candidato);
+				this.props.guardarCandidatoTestPsicologicoRespuesta(this.state.candidatoDatos.correoelectronico, this.state.candidato)
 				console.log('Guardar respuesta del candidato.', this.state.candidato);
 			} else {
 				console.log('No ha seleccionado respuesta');
@@ -1688,6 +1690,7 @@ function mapStateToProps(state){
 		//candidatoResponse : state.reducerCandidato.obtenerCandidatoTestPsicologicosPreguntasResponse,
 		//candidatoRespuestasResponse : state.reducerCandidato.obtenerCandidatoRespuestasResponse,
 		//candidatoRespuestaResponse : state.reducerCandidato.guardarCandidatoRespuestaResponse,
+		candidatoRespuestaResponse: state.reducerCandidatoTestPsicologico.registrarCandidatoTestPsicologicoRespuestaResponse,
 		candidatoInterpretacionResponse : state.reducerCandidato.obtenerInterpretacionResponse,
 		//candidatoTestPsicologicosFinalizadoResponse: state.reducerCandidato.validarTestPsicologicosFinalizadoResponse,
 		testPsicologicosFinalizadoNotificarReclutadorResponse: state.reducerReclutador.notificarReclutadorResponse
@@ -1697,7 +1700,8 @@ function mapStateToProps(state){
 export default connect(mapStateToProps, { 
 	obtenerCandidatoTestPsicologicoIniciarExamen, 
 	//obtenerTestPsicologicosPartes, obtenerCandidatoTestPsicologicosPreguntas, obtenerCandidatoRespuestas, 
-	guardarCandidatoRespuesta, 
+	//guardarCandidatoRespuesta, 
+	guardarCandidatoTestPsicologicoRespuesta,
 	obtenerInterpretacion, //validarTestPsicologicosFinalizado, 
 	notificarReclutador 
 })(ExamenPsicologicoWeb);
