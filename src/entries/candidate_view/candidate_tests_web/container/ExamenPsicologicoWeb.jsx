@@ -15,8 +15,6 @@ import MensajeInstruccionesWeb from '../common/MensajeInstruccionesWeb';
 import MensajeFinalizacionExamWeb from '../common/MensajeFinalizacionExamWeb';
 import MensajeContador from '../common/MensajeContador';
 
-//import {obtenerTestPsicologicosPartes} from '../../../../actions/actionTestPsicologico';
-//import {obtenerCandidatoTestPsicologicosPreguntas, obtenerCandidatoRespuestas, guardarCandidatoRespuesta, obtenerInterpretacion, validarTestPsicologicosFinalizado} from '../../../../actions/actionCandidato';
 import {obtenerInterpretacion} from '../../../../actions/actionCandidato';
 import {notificarReclutador} from '../../../../actions/actionReclutador';
 import {obtenerCandidatoTestPsicologicoIniciarExamen, guardarCandidatoTestPsicologicoRespuesta, guardarCandidatoTestPsicologicoLog} from '../../../../actions/actionCandidatoTestPsicologicoIniciarExamen'
@@ -72,10 +70,6 @@ class ExamenPsicologicoWeb extends Component {
 	}
 	
 	componentWillMount() {
-		//this.props.validarTestPsicologicosFinalizado(obtenerValorParametro('id'));
-		//this.props.obtenerCandidatoTestPsicologicosPreguntas(obtenerValorParametro('id'));
-		//this.props.obtenerCandidatoRespuestas(obtenerValorParametro('id'));
-		//this.props.obtenerTestPsicologicosPartes();
 		// Examen finalizado
 		//this.props.obtenerCandidatoTestPsicologicoIniciarExamen('geancarlopineda25@gmail.com')
 		// Examen nuevo
@@ -180,18 +174,12 @@ class ExamenPsicologicoWeb extends Component {
 			//console.log('Pregunta sin contador.');
 			var cantMaxAlt = this.obtenerObjetoTestPsicologicoInstrucciones(this.obtenerIdTestPsicologico(), 
 																			this.obtenerIdParte()).alternativamaxseleccion;
-			//var alternat = this.obtenerTestPsicologico().preguntas[this.state.numeroPreguntaActualIndex].alternativa[indiceAlternativa];
 			
 			var alternat = this.obtenerObjetoPregunta(this.obtenerIdTestPsicologico(),
 														this.obtenerIdParte(),
 														this.obtenerIdPregunta()).alternativa[indiceAlternativa]
-			//console.log('alternativaSeleccionar. indiceAlternativa', indiceAlternativa, '. alternat', alternat_aux)
-			//var alternat = alternat_aux.alternativa[indiceAlternativa]
-			//console.log('alternat.', alternat);
-			//var alternativaGlosa = alternat.glosa;
 			let respuesta = this.state.respuestas;
 			let respuestaPreguntaAbiert = respuestaPreguntaAbierta
-			//console.log('Pregunta sin contador. cantMaxAlt:', cantMaxAlt);
 			
 			// Si tiene glosa, entonces la pregunta es cerrada.
 			// Si no tiene glosa, entonces la pregunta es abierta.
@@ -199,14 +187,11 @@ class ExamenPsicologicoWeb extends Component {
 				if(respuestaPreguntaAbiert.length == 0){
 					mensajeAlerta = {mensaje: ('Debe ingresar una respuesta'), estilo:"mensajeAlertaPeligro"};
 				}
-				//document.querySelector(("#").concat(alternativasID[indiceAlternativa])).textContent = alternat.glosa;
 				
 				this.setState({
 					respuestaPreguntaAbierta: respuestaPreguntaAbiert
 				});
-				//console.log('respuestaPreguntaAbierta', respuestaPreguntaAbiert)
 				respuesta = [{ respuesta : respuestaPreguntaAbiert }]
-				//console.log('respuesta', respuesta)
 			} else {
 				if(this.state.respuestas.length >= cantMaxAlt){
 					//console.log(' Cantidad de alternativas seleccionadas es IGUAL o MAYOR a máximo de alternativas posibles de seleccionar.');
@@ -297,7 +282,6 @@ class ExamenPsicologicoWeb extends Component {
 	
 	mostrarBotonInicioInstrucciones2(flag){
 		this.setState({
-			//flagMostrarBotonInicioInstrucciones2: !this.state.flagMostrarBotonInicioInstrucciones2
 			flagMostrarBotonInicioInstrucciones2: flag
 		});
 		console.log('mostrarBotonInicioInstrucciones2:', flag, this.state.flagMostrarBotonInicioInstrucciones2)
@@ -347,11 +331,6 @@ class ExamenPsicologicoWeb extends Component {
 		
 		const cantTestPsicologicosAsignados = this.state.testPsicologicosAsignados;
 		
-		//const testPsicologicosAsignadosACandidato = this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato.testpsicologicos;
-		//const objetoUltimoTestPsicologico = testPsicologicosAsignadosACandidato.filter(pregunta => (
-		//		pregunta.idTestPsicologico == this.obtenerIdTestPsicologico()) );
-		
-
 		const testPsicologicosAsignadosACandidato = this.obtenerListaTestPsicologicoInstrucciones();
 		console.log('testPsicologicosAsignadosACandidato', testPsicologicosAsignadosACandidato)
 		const objetoSiguienteInstruccionTestPsicologico = testPsicologicosAsignadosACandidato[0]
@@ -362,59 +341,10 @@ class ExamenPsicologicoWeb extends Component {
 		console.log('objetoSiguientePreguntaTestPsicologico', objetoSiguientePreguntaTestPsicologico)
 		const objetoUltimoTestPsicologico = testPsicologicosAsignadosACandidato.filter(test => (
 			test.idtestpsicologico == objetoSiguientePreguntaTestPsicologico.idtestpsicologico) );
-		/*const objetoPreguntaUltimoTestPsicologico = objetoUltimoTestPsicologico[0].preguntas.filter(pregunta => (
-				pregunta.idTestPsicologico == this.obtenerIdTestPsicologico() && 
-				pregunta.idParte == this.obtenerIdParte() && 
-				pregunta.idPregunta == ultimaPregunta.idPregunta ) );*/
-		//const objetoPreguntaUltimoTestPsicologicoIndex = objetoUltimoTestPsicologico[0].preguntas.indexOf(objetoPreguntaUltimoTestPsicologico[0]);
 		const objetoPreguntaUltimoTestPsicologicoIndex = this.state.numeroPreguntaActualIndex;
 		
 		if(this.seAcaboElTiempo(this.state.mensajeContador)){
 			console.log('Se acabó el tiempo del test.')
-			/*
-				//Siguiente Pregunta
-				this.guardarCandidatoRespuesta();
-				//console.log('....', this.state.listaPreguntasPendientes)
-				//this.validarTieneSiguientePregunta(this.state.listaPreguntasPendientes, this.state.listaInstruccionesDePreguntasPendientes)
-				var objetoSiguientePreguntaSiguientePregunta = this.validarTieneSiguientePregunta(
-					this.obtenerListaPreguntasPendientesPorTest(this.obtenerIdTestPsicologico()),
-					this.state.listaPreguntasPendientes,
-					this.obtenerIdTestPsicologico(),
-					this.obtenerIdParte(),
-					this.obtenerIdPregunta())
-				
-				if(objetoSiguientePreguntaSiguientePregunta.flag){
-					console.log('El test SI tiene siguiente pregunta.', objetoSiguientePreguntaSiguientePregunta.objeto)
-
-					respuestasSeleccionadas = [];
-					stateMensajeAlerta = {mensaje: '', estilo: ''};
-
-					stateTestPsicologicoActualObjeto = this.obtenerObjetoPregunta(
-						objetoSiguientePreguntaSiguientePregunta.objeto.idtestpsicologico, 
-						objetoSiguientePreguntaSiguientePregunta.objeto.idparte, 
-						objetoSiguientePreguntaSiguientePregunta.objeto.idpregunta)
-					
-					this.limpiarAlternativas();
-
-					this.setState({
-						respuestas : respuestasSeleccionadas,
-						testPsicologicoActualObjeto: stateTestPsicologicoActualObjeto,
-						mensajeAlerta: stateMensajeAlerta
-					});
-				} else {
-					console.log('El test NO tiene siguiente pregunta.', objetoSiguientePreguntaSiguientePregunta)
-					this.limpiarAlternativas();
-					this.mostrarBotonInicioInstrucciones2(false);
-					this.mostrarBotonSiguiente();
-					this.limpiarValorContador();
-
-					this.setState({
-						flagMostrarPantallaCarga: true
-					})
-
-					this.registrarCandidatoTestPsicologicoLog('F')
-				}
-			*/
 			var listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.filtrarListaPorIdTestIdParte(this.state.listaInstruccionesDePreguntasPendientes, this.obtenerIdTestPsicologico(), this.obtenerIdParte())
 			console.log('obtenerSiguientePregunta: listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte', listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte)
 			var nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.eliminarInstrucciones(this.state.listaInstruccionesDePreguntasPendientes, listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte[0])
@@ -436,9 +366,7 @@ class ExamenPsicologicoWeb extends Component {
 						listaPreguntasPendientesPorTestPsicologicoYParte[0].idpregunta)
 					console.log('obtenerSiguientePregunta: stateTestPsicologicoActualObjeto', stateTestPsicologicoActualObjeto)
 					stateValorContador = 0;
-					
 					respuestasSeleccionadas = [];
-					
 					stateFlagInstrucciones = true;
 					this.limpiarAlternativas();
 					this.mostrarBotonInicioInstrucciones2(true);
@@ -472,25 +400,11 @@ class ExamenPsicologicoWeb extends Component {
 				var nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.eliminarInstrucciones(this.state.listaInstruccionesDePreguntasPendientes, listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte[0])
 				console.log('obtenerSiguientePregunta: nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte', nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte)
 				
-				/*this.setState({
-					listaInstruccionesDePreguntasPendientes: nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte,
-				});
-				*/
-				//const testPsicologicoActualIndexAux = stateTestPsicologicoActualIndex + 1;
-				//if(this.tienePendienteResponderTestAsignados()){
 				if(nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte.length > 0){
 					//AUMENTAR EN 1 idTestPsicologico, idParte = 1, idPregunta = 1
 					//console.log('Siguiente Test|tienePendienteResponderTestAsignados TRUE|AUMENTAR EN 1 idTestPsicologico, idParte = 1, idPregunta = 1');
 					console.log('Tiene test psicológicos pendientes por responder.')
-					/*
-					stateNumeroPreguntaActualIndex = 0;
-					stateTestPsicologicoParteActual = 1;
-					stateTestPsicologicoActualIndex = stateTestPsicologicoActualIndex + 1;
-					
-					stateTestPsicologicoActualObjeto = testPsicologicosAsignadosACandidato[stateTestPsicologicoActualIndex];
-					*/
 					stateValorContador = 0;
-					
 					respuestasSeleccionadas = [];
 					stateFlagInstrucciones = true;
 					this.limpiarAlternativas();
@@ -522,7 +436,6 @@ class ExamenPsicologicoWeb extends Component {
 					stateValorContador = 0;
 					
 					this.obtenerCandidatoInterpretacion();
-					//this.notificarReclutador();//
 					
 					this.setState({
 						flagContinuarTest: flagContinuarTest,
@@ -552,8 +465,7 @@ class ExamenPsicologicoWeb extends Component {
 			} else {
 				//Siguiente Pregunta
 				this.guardarCandidatoRespuesta();
-				//console.log('....', this.state.listaPreguntasPendientes)
-				//this.validarTieneSiguientePregunta(this.state.listaPreguntasPendientes, this.state.listaInstruccionesDePreguntasPendientes)
+				
 				var objetoSiguientePreguntaSiguientePregunta = this.validarTieneSiguientePregunta(
 					this.obtenerListaPreguntasPendientesPorTest(this.obtenerIdTestPsicologico()),
 					this.state.listaPreguntasPendientes,
@@ -695,9 +607,7 @@ class ExamenPsicologicoWeb extends Component {
 				}
 				*/
 			}
-			
 		}
-		
 	}
 	
 	mostrarBotonSiguiente(){
@@ -730,13 +640,8 @@ class ExamenPsicologicoWeb extends Component {
 		//console.log('asignarMensajeContador:IdTest:', this.obtenerIdTestPsicologico());
 		//console.log('asignarMensajeContador:flag:', this.state.flagInstrucciones);
 		//console.log('asignarMensajeContador:flag:', flagInstrucciones);
-		//if((this.obtenerIdTestPsicologico() == 2 || this.obtenerIdTestPsicologico() == 4 || this.obtenerIdTestPsicologico() == 5) && !/*this.state.*/flagInstrucciones){//GATB
-		
-		//if(this.esTestPsicologicoConTiempo(this.obtenerTestPsicologico()) && !/*this.state.*/flagInstrucciones){//GATB
 		let objetoTestPsicologicoInstrucciones = this.obtenerObjetoTestPsicologicoInstrucciones(this.obtenerIdTestPsicologico(), this.obtenerIdParte())
 		if(this.esTestPsicologicoConTiempo(objetoTestPsicologicoInstrucciones) && !flagInstrucciones){//GATB
-			//const idTestPsicologico = this.obtenerIdTestPsicologico();
-			//const idParte = this.obtenerIdParte();
 			const idTestPsicologico = this.obtenerIdTestPsicologico()
 			const idParte = this.obtenerIdParte()
 			const contadorMensaje = idTestPsicologico + "-" + idParte
@@ -756,7 +661,6 @@ class ExamenPsicologicoWeb extends Component {
 		 * Los valores desde base de datos vienen en unidad de medida "segundos".
 		 */
 		var contador = 0;
-		//if(idTestPsicologico == 2 || idTestPsicologico == 4 || idTestPsicologico == 5){
 		let objetoTestPsicologicoInstrucciones = this.obtenerObjetoTestPsicologicoInstrucciones(testPsicologico.idtestpsicologico, testPsicologico.idparte)
 		if(this.esTestPsicologicoConTiempo(objetoTestPsicologicoInstrucciones)){
 			contador = this.obtenerObjetoTestPsicologicoInstrucciones(testPsicologico.idtestpsicologico, testPsicologico.idparte).duracion
@@ -767,7 +671,6 @@ class ExamenPsicologicoWeb extends Component {
 	
 	asignarValorContador(){//GATB
 		this.interval = setInterval(() => {
-				//var duracion = this.inicializarContador(this.obtenerIdTestPsicologico(), this.obtenerIdParte());
 				var duracion = this.inicializarContador(this.obtenerTestPsicologico());
 				if(this.state.valorContador <= duracion){
 					this.setState({
@@ -824,7 +727,6 @@ class ExamenPsicologicoWeb extends Component {
 	tienePartesPendienteResponder(cantidadTestPsicologicoPartesPendientesResponder){
 		//console.log('tienePartesPendienteResponder:', idParteUltimoTestRespondido, ':', cantidadPartesUltimoTestRespondido);
 		console.log('tienePartesPendienteResponder:', cantidadTestPsicologicoPartesPendientesResponder);
-		//return idParteUltimoTestRespondido < cantidadPartesUltimoTestRespondido ? true : false;
 		return cantidadTestPsicologicoPartesPendientesResponder > 0 ? true : false;
 	}
 
@@ -866,12 +768,8 @@ class ExamenPsicologicoWeb extends Component {
 		/**
 		 * Eliminar primera pregunta pendiente de la lista de preguntas_pendientes.
 		 */
-		//return listaPreguntasPendientes.slice(1)
 		const index = listaPreguntasPendientes.indexOf(objeto)
 		if(index > -1){
-			//return listaPreguntasPendientes.splice(index, 1)
-			//listaPreguntasPendientes.shift()
-			//listaPreguntasPendientes.splice(index, 1)
 			listaPreguntasPendientes = listaPreguntasPendientes.filter(pregunta_pendiente => { 
 				return pregunta_pendiente != objeto; 
 			});
@@ -889,8 +787,6 @@ class ExamenPsicologicoWeb extends Component {
 			return listaPreguntasPendientes
 		}
 		return null
-		//listaPreguntasPendientes.shift()
-		//return listaPreguntasPendientes
 	}
 
 	eliminarInstrucciones(listaInstruccionesDePreguntasPendientes, objeto){
@@ -905,8 +801,6 @@ class ExamenPsicologicoWeb extends Component {
 			return listaInstruccionesDePreguntasPendientes
 		}
 		return null
-		//listaInstruccionesDePreguntasPendientes.shift()
-		//return listaInstruccionesDePreguntasPendientes
 	}
 
 	validarTieneSiguientePregunta(listaPreguntasPendientesInicial, listaPreguntasPendientes, idTestPsicologico, idParte, idPregunta){
@@ -920,14 +814,12 @@ class ExamenPsicologicoWeb extends Component {
 			this.setState({
 				listaPreguntasPendientes: nuevaListaPreguntasPendientesPorTestPsicologicoYParte
 			});
-			//console.log('validarTieneSiguientePregunta: listaPreguntasPendientesInicial', listaPreguntasPendientesInicial)
-			//var listaPreguntasPendientesInicialPorTestPsicologicoYParte = this.filtrarListaPorIdTestIdParte(listaPreguntasPendientesInicial, idTestPsicologico, idParte)
 			var listaPreguntasPendientesInicialPorTestPsicologicoYParte = this.filtrarListaPorIdTestIdParte(this.state.listaInstruccionesDePreguntasPendientes, idTestPsicologico, idParte)
 			
 			console.log('validarTieneSiguientePregunta: listaPreguntasPendientesInicialPorTestPsicologicoYParte', listaPreguntasPendientesInicialPorTestPsicologicoYParte)
 			var objetoUltimoTestPsicologico = listaPreguntasPendientesInicialPorTestPsicologicoYParte.length > 0 ? listaPreguntasPendientesInicialPorTestPsicologicoYParte[0] : {}
 			var listaPreguntasPendientesPorTestPsicologicoYParte = this.filtrarListaPorIdTestIdParte(nuevaListaPreguntasPendientesPorTestPsicologicoYParte, idTestPsicologico, idParte)
-			if(this.tieneSiguientePregunta(listaPreguntasPendientesPorTestPsicologicoYParte.length, objetoUltimoTestPsicologico.cantidadpreguntas/*length*/)){
+			if(this.tieneSiguientePregunta(listaPreguntasPendientesPorTestPsicologicoYParte.length, objetoUltimoTestPsicologico.cantidadpreguntas)){
 				this.setState({
 					listaPreguntasPendientes: nuevaListaPreguntasPendientesPorTestPsicologicoYParte,
 					testPsicologicoActualObjeto: listaPreguntasPendientesPorTestPsicologicoYParte[0],
@@ -940,55 +832,24 @@ class ExamenPsicologicoWeb extends Component {
 					//flagInstrucciones: stateFlagInstrucciones
 				}
 			}
-			// retornar primer elemento de la siguiente parte
-			/*var listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.state.listaInstruccionesDePreguntasPendientes.filter(
-				test => (
-					test.idtestpsicologico == idTestPsicologico &&
-					test.idparte == idParte))
-			var listaInstruccionesDePreguntasPendientes = this.eliminarInstrucciones(this.state.listaInstruccionesDePreguntasPendientes, listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte[0])
-			this.setState({
-				//listaPreguntasPendientes: this.eliminarParte(listaPreguntasPendientesPorTestPsicologicoYParte),
-				listaInstruccionesDePreguntasPendientes: listaInstruccionesDePreguntasPendientes
-			});*/
-			//var instrucciones = this.filtrarListaPorIdTestIdParte(listaInstruccionesDePreguntasPendientes, idTestPsicologico, idParte)
-			
-			//var stateFlagInstrucciones = true
-			var listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.state.listaInstruccionesDePreguntasPendientes.filter(
-				test => (
-					test.idtestpsicologico == idTestPsicologico &&
-					test.idparte == idParte))
+			var listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.filtrarListaPorIdTestIdParte(this.state.listaInstruccionesDePreguntasPendientes, idTestPsicologico, idParte)
 			console.log('validarTieneSiguientePregunta: listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte', listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte)
 			var nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.eliminarInstrucciones(this.state.listaInstruccionesDePreguntasPendientes, listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte[0])
 			console.log('validarTieneSiguientePregunta: nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte', nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte)
 			
-			/*this.setState({
-				//testPsicologicoActualObjeto: listaPreguntasPendientes[0],
-				//flagInstrucciones: stateFlagInstrucciones,
-
-				//listaPreguntasPendientes: this.eliminarParte(listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte[0].idtestpsicologico),
-				listaInstruccionesDePreguntasPendientes: nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte
-			});*/
 			if(nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte.length > 0){
 				var objetoSiguientePreguntaSiguienteParte = this.obtenerSiguientePreguntaSiguienteParte(
-					//this.state.listaPreguntasPendientes,
 					nuevaListaPreguntasPendientesPorTestPsicologicoYParte,
-					//this.state.listaInstruccionesDePreguntasPendientes,
 					nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte,
-					//this.obtenerIdTestPsicologico(),
-					//nuevaListaPreguntasPendientesPorTestPsicologicoYParte[0].idtestpsicologico,
 					nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte[0].idtestpsicologico,
-					//this.obtenerIdParte())
-					//nuevaListaPreguntasPendientesPorTestPsicologicoYParte[0].idparte)
 					nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte[0].idparte,
 					true)
 				console.log('validarTieneSiguientePregunta: objetoSiguientePreguntaSiguienteParte', objetoSiguientePreguntaSiguienteParte)
 				if(objetoSiguientePreguntaSiguienteParte.flag){
 					return {
 						flag: false, 
-						//objeto: listaPreguntasPendientesPorTestPsicologicoYParteYPregunta[0], // retorna mismos valores
 						objeto: objetoSiguientePreguntaSiguienteParte.objeto, // retorna valores de la siguiente pregunta de la siguiente parte
 						instrucciones: objetoSiguientePreguntaSiguienteParte.instrucciones,
-						//flagInstrucciones: objetoSiguientePreguntaSiguienteParte.flagInstrucciones
 						flagInstrucciones: true
 					}
 				}
@@ -1035,10 +896,6 @@ class ExamenPsicologicoWeb extends Component {
 			console.log('obtenerSiguientePreguntaSiguienteParte: nuevaListaPreguntasPendientes', nuevaListaPreguntasPendientes)
 			if(flagMostrarInstrucciones != null){
 				stateFlagInstrucciones = flagMostrarInstrucciones
-				//var listaPreguntasPendientesPorTestPsicologicoYParte = this.filtrarListaPorIdTestIdParte(listaPreguntasPendientes, idTestPsicologico, idParte)
-				//console.log('obtenerSiguientePreguntaSiguienteParte: listaPreguntasPendientesPorTestPsicologicoYParte', listaPreguntasPendientesPorTestPsicologicoYParte)
-				//nuevaListaPreguntasPendientes = this.eliminarParte(listaPreguntasPendientesPorTestPsicologicoYParte)
-				//nuevaListaInstruccionesDePreguntasPendientes = this.eliminarInstrucciones(listaInstruccionesDePreguntasPendientes, listaInstruccionesDePreguntasPendientes[0])
 			} else {
 				const idTestYParte = idTestPsicologico + '.' + idParte
 				const idTestYParteAux = idTest_aux + '.' + idParte_aux
@@ -1049,7 +906,6 @@ class ExamenPsicologicoWeb extends Component {
 			}
 
 			this.setState({
-				//testPsicologicoActualObjeto: listaPreguntasPendientesPorTestPsicologico[0],
 				testPsicologicoActualObjeto: nuevaListaPreguntasPendientes[0],
 				listaPreguntasPendientes: nuevaListaPreguntasPendientes,
 				listaInstruccionesDePreguntasPendientes: nuevaListaInstruccionesDePreguntasPendientes,
@@ -1062,12 +918,6 @@ class ExamenPsicologicoWeb extends Component {
 				instrucciones: instrucciones,
 				flagInstrucciones: stateFlagInstrucciones
 			}
-			/*var listaPreguntasPendientesPorTestPsicologicoYParte = listaPreguntasPendientes.filter(
-				test => (
-					test.idtestpsicologico == idTestPsicologico &&
-					test.idparte == idParte_aux))
-			console.log('validarTieneSiguienteParte: listaPreguntasPendientesPorTestPsicologicoYParte', listaPreguntasPendientesPorTestPsicologicoYParte)
-			*/
 		} else {
 			if(listaPreguntasPendientes.length > 0){
 				// Aun posee preguntas pendientes.
@@ -1109,42 +959,23 @@ class ExamenPsicologicoWeb extends Component {
 				instrucciones: null
 			}
 		}
-		
 	}
 
 	validarTieneSiguienteParte(listaPreguntasPendientesInicial, listaPreguntasPendientes, listaInstruccionesDePreguntasPendientes, idTestPsicologico, idParte, idPregunta){
-		
-		
-		
-		var listaPreguntasPendientesPorTestPsicologicoYParte = listaPreguntasPendientes.filter(
-			test => (
-				test.idtestpsicologico == idTestPsicologico &&
-				test.idparte == idParte &&
-				test.idpregunta == idPregunta))
+		var listaPreguntasPendientesPorTestPsicologicoYParte = this.filtrarListaPorIdTestIdParteIdPregunta(listaPreguntasPendientes, idTestPsicologico, idParte, idPregunta)
 		console.log('validarTieneSiguienteParte: listaPreguntasPendientesPorTestPsicologicoYParte', listaPreguntasPendientesPorTestPsicologicoYParte)
-		var listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = listaInstruccionesDePreguntasPendientes.filter(
-			test => (
-				test.idtestpsicologico == idTestPsicologico &&
-				test.idparte == idParte))
+		var listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.filtrarListaPorIdTestIdParte(listaInstruccionesDePreguntasPendientes, idTestPsicologico, idParte)
 		console.log('validarTieneSiguienteParte: listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte', listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte)
 		if(listaPreguntasPendientesPorTestPsicologicoYParte.length > 0){
-			/*this.setState({
-				listaPreguntasPendientes: this.eliminarParte(listaPreguntasPendientesPorTestPsicologicoYParte),
-				listaInstruccionesDePreguntasPendientes: this.eliminarInstrucciones(listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte)
-			});*/
 			return true
 		}
 		return false
 	}
 
 	validarTieneSiguienteTestPsicologico(listaPreguntasPendientes, listaInstruccionesDePreguntasPendientes, idTestPsicologico){
-		var listaPreguntasPendientesPorTestPsicologicoYParte = listaPreguntasPendientes.filter(
-			test => (
-				test.idtestpsicologico == idTestPsicologico))
+		var listaPreguntasPendientesPorTestPsicologicoYParte = this.filtrarListaPorIdTest(listaPreguntasPendientes, idTestPsicologico)
 		console.log('validarTieneSiguienteTestPsicologico: listaPreguntasPendientesPorTestPsicologicoYParte', listaPreguntasPendientesPorTestPsicologicoYParte)
-		var listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = listaInstruccionesDePreguntasPendientes.filter(
-			test => (
-				test.idtestpsicologico == idTestPsicologico))
+		var listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.filtrarListaPorIdTest(listaInstruccionesDePreguntasPendientes, idTestPsicologico)
 		console.log('validarTieneSiguienteTestPsicologico: listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte', listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte)
 		if(listaPreguntasPendientesPorTestPsicologicoYParte.length > 0){
 			this.setState({
@@ -1174,74 +1005,85 @@ class ExamenPsicologicoWeb extends Component {
 			const objetoSiguientePreguntaTestPsicologico = this.iniciarPreguntaPendiente(siguienteIdTestPsicologico);
 			console.log(' (validarCandidatoPreguntasRespondidas) Siguiente pregunta ha responder por candidato', objetoSiguientePreguntaTestPsicologico)
 			
-			//let objetoUltimoTestPsicologico = testPsicologicosAsignadosACandidato.filter(test => (
-			//	test.idtestpsicologico == objetoSiguientePreguntaTestPsicologico.idtestpsicologico) );
-			//const listaPreguntasUltimoTestPsicologico = this.obtenerListaPreguntasPendientes(objetoSiguientePreguntaTestPsicologico.idtestpsicologico).filter(pregunta => (
-			//	pregunta.idtestpsicologico == objetoSiguientePreguntaTestPsicologico.idtestpsicologico) );
-			//console.log(' (validarCandidatoPreguntasRespondidas) Lista Preguntas del último test', listaPreguntasUltimoTestPsicologico);
-			/*const objetoPreguntaUltimoTestPsicologico = listaPreguntasUltimoTestPsicologico.filter(pregunta => (
-					pregunta.idtestpsicologico == ultimaPregunta.idtestpsicologico && 
-					pregunta.idparte == ultimaPregunta.idparte && 
-					pregunta.idpregunta == ultimaPregunta.idpregunta ) );
-			*/
-			//console.log(' (validarCandidatoPreguntasRespondidas) objetoPreguntaUltimoTestPsicologico', objetoPreguntaUltimoTestPsicologico[0]);
-			//const objetoPreguntaUltimoTestPsicologicoIndex = objetoUltimoTestPsicologico[0].preguntas.indexOf(objetoPreguntaUltimoTestPsicologico[0]);
-			//console.log(' (validarCandidatoPreguntasRespondidas) objetoPreguntaUltimoTestPsicologicoIndex', objetoPreguntaUltimoTestPsicologicoIndex);
-			
-			//const testPsicologicoActualIndex = testPsicologicosAsignadosACandidato.indexOf(objetoUltimoTestPsicologico[0]);
-			/*console.log(' (validarCandidatoPreguntasRespondidas) Indice ultimo test asignado al candidato', 
-					testPsicologicoActualIndex);			
-			console.log(' (validarCandidatoPreguntasRespondidas) ultimaPregunta.idTestPsicologico', ultimaPregunta.idTestPsicologico);*/
 			const cantTestPsicologicosAsignados = testPsicologicosAsignadosACandidato.length;
-			/*console.log(' (validarCandidatoPreguntasRespondidas) Cantidad Test asignados al candidato', 
-					cantTestPsicologicosAsignados);*/
 			
-			//const testPsicologicoPartes = this.obtenerListaPreguntasPendientes(objetoSiguientePreguntaTestPsicologico.idtestpsicologico);
-			//console.log(' (validarCandidatoPreguntasRespondidas) Lista Objeto Test Partes pendientes', 
-			//		testPsicologicoPartes);
 			var listaInstruccionesDePreguntasPendientesPorTestPsicologico = this.filtrarListaPorIdTest(this.state.listaInstruccionesDePreguntasPendientes, this.obtenerIdTestPsicologico())
-			//const cantidadTestPsicologicoPartes = testPsicologicoPartes.length;
 			console.log(' (validarCandidatoPreguntasRespondidas) Lista de instrucciones de partes del test ', listaInstruccionesDePreguntasPendientesPorTestPsicologico);
 			let listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.filtrarListaPorIdTestIdParte(this.state.listaInstruccionesDePreguntasPendientes, this.obtenerIdTestPsicologico(), this.obtenerIdParte())
 			console.log(' (validarCandidatoPreguntasRespondidas) listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte', listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte);
 			let objetoUltimoTestPsicologicoInstrucciones = listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte.length > 0 ? listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte[0] : {}
-			//if(this.tienePendienteResponderTestAsignados(testPsicologicoActualIndex, cantTestPsicologicosAsignados)){
-				const resultado = this.validarPartesPendienteResponder(
-						//objetoSiguientePreguntaTestPsicologico,
-						//testPsicologicoPartes
-						objetoUltimoTestPsicologicoInstrucciones,
-						listaInstruccionesDePreguntasPendientesPorTestPsicologico
-						);
-				console.log("Resultado:", resultado);
-				if(resultado == 0){//Siguiente Parte
-					//AUMENTAR EN 1 idParte, idPregunta = 1
-					//console.log('Siguiente Parte|AUMENTAR EN 1 idParte, idPregunta = 1');
+			const resultado = this.validarPartesPendienteResponder(
+					//objetoSiguientePreguntaTestPsicologico,
+					//testPsicologicoPartes
+					objetoUltimoTestPsicologicoInstrucciones,
+					listaInstruccionesDePreguntasPendientesPorTestPsicologico
+					);
+			console.log("Resultado:", resultado);
+			if(resultado == 0){//Siguiente Parte
+				//AUMENTAR EN 1 idParte, idPregunta = 1
+				//console.log('Siguiente Parte|AUMENTAR EN 1 idParte, idPregunta = 1');
+				
+				//BackEnd retorna una lista de todas las preguntas, sin filtrar por partes.
+				/*var i = 0;
+				var cantPreguntasTestPsicologico = 0;
+				for(i = 1; i <= objetoSiguientePreguntaTestPsicologico.idParte; i++){
+					cantPreguntasTestPsicologico += objetoUltimoTestPsicologico[0].preguntas.filter( test => 
+							test.idParte == i
+						).length;
+				}*
+				
+				//stateNumeroPreguntaActualIndex = 0;
+				/*stateNumeroPreguntaActualIndex = cantPreguntasTestPsicologico;
+				stateTestPsicologicoParteActual = objetoSiguientePreguntaTestPsicologico.idParte + 1;
+				stateTestPsicologicoActualIndex = testPsicologicoActualIndex;
+				
+				stateTestPsicologicoActualObjeto = objetoUltimoTestPsicologico[0];*/
+				stateTestPsicologicoActualObjeto = this.obtenerObjetoPregunta(this.obtenerIdTestPsicologico(),
+					this.obtenerIdParte(),
+					this.obtenerIdPregunta());
+			} else if(resultado == 1){//Siguiente Test
+				//console.log('Siguiente Test');
+				
+				const testPsicologicoActualIndexAux = testPsicologicoActualIndex + 1;
+				if(this.tienePendienteResponderTestAsignados(/*testPsicologicoActualIndexAux, cantTestPsicologicosAsignados*/) ){
+					//AUMENTAR EN 1 idTestPsicologico, idParte = 1, idPregunta = 1
+					//console.log('Siguiente Test|tienePendienteResponderTestAsignados TRUE|AUMENTAR EN 1 idTestPsicologico, idParte = 1, idPregunta = 1');
 					
-					//BackEnd retorna una lista de todas las preguntas, sin filtrar por partes.
-					/*var i = 0;
-					var cantPreguntasTestPsicologico = 0;
-					for(i = 1; i <= objetoSiguientePreguntaTestPsicologico.idParte; i++){
-						cantPreguntasTestPsicologico += objetoUltimoTestPsicologico[0].preguntas.filter( test => 
-								test.idParte == i
-							).length;
-					}*
+					stateNumeroPreguntaActualIndex = 0;
+					stateTestPsicologicoParteActual = 1;
+					stateTestPsicologicoActualIndex = testPsicologicoActualIndexAux;
 					
-					//stateNumeroPreguntaActualIndex = 0;
-					/*stateNumeroPreguntaActualIndex = cantPreguntasTestPsicologico;
-					stateTestPsicologicoParteActual = objetoSiguientePreguntaTestPsicologico.idParte + 1;
+					stateTestPsicologicoActualObjeto = testPsicologicosAsignadosACandidato[stateTestPsicologicoActualIndex];
+					
+				} else {
+					//console.log("Acabó el examen!");
+					flagContinuarTest = false;
+				}
+			} else if(resultado == 2){//Siguiente Pregunta
+				//console.log('Siguiente Pregunta');
+				
+				if(this.tieneSiguientePregunta(objetoSiguientePreguntaTestPsicologico.idpregunta, objetoUltimoTestPsicologico.cantidadpreguntas/*length*/)){
+					//AUMENTAR EN 1 LA PREGUNTA
+					//console.log('Siguiente Pregunta|tieneSiguientePregunta TRUE|AUMENTAR EN 1 LA PREGUNTA');
+					
+					/*stateNumeroPreguntaActualIndex = objetoPreguntaUltimoTestPsicologicoIndex + 1;
+					stateTestPsicologicoParteActual = objetoSiguientePreguntaTestPsicologico.idParte;
 					stateTestPsicologicoActualIndex = testPsicologicoActualIndex;
 					
 					stateTestPsicologicoActualObjeto = objetoUltimoTestPsicologico[0];*/
-					stateTestPsicologicoActualObjeto = this.obtenerObjetoPregunta(this.obtenerIdTestPsicologico(),
-						this.obtenerIdParte(),
-						this.obtenerIdPregunta());
-				} else if(resultado == 1){//Siguiente Test
-					//console.log('Siguiente Test');
+					
+					stateNumeroPreguntaActualIndex = objetoSiguientePreguntaTestPsicologico.idpregunta;
+					stateTestPsicologicoParteActual = objetoSiguientePreguntaTestPsicologico.idparte;
+					stateTestPsicologicoActualIndex = objetoSiguientePreguntaTestPsicologico.idpregunta;
+					
+					stateTestPsicologicoActualObjeto = objetoSiguientePreguntaTestPsicologico
+				} else {
+					//console.log('Siguiente Pregunta|tieneSiguientePregunta FALSE');
 					
 					const testPsicologicoActualIndexAux = testPsicologicoActualIndex + 1;
 					if(this.tienePendienteResponderTestAsignados(/*testPsicologicoActualIndexAux, cantTestPsicologicosAsignados*/) ){
-						//AUMENTAR EN 1 idTestPsicologico, idParte = 1, idPregunta = 1
-						//console.log('Siguiente Test|tienePendienteResponderTestAsignados TRUE|AUMENTAR EN 1 idTestPsicologico, idParte = 1, idPregunta = 1');
+						//AUMENTAR EN 1 TEST PSICOLOGICO, idParte = 1, idPregunta = 1
+						//console.log('Siguiente Pregunta|tieneSiguientePregunta FALSE|tienePendienteResponderTestAsignados TRUE|AUMENTAR EN 1 TEST PSICOLOGICO, idParte = 1, idPregunta = 1');
 						
 						stateNumeroPreguntaActualIndex = 0;
 						stateTestPsicologicoParteActual = 1;
@@ -1253,48 +1095,8 @@ class ExamenPsicologicoWeb extends Component {
 						//console.log("Acabó el examen!");
 						flagContinuarTest = false;
 					}
-				} else if(resultado == 2){//Siguiente Pregunta
-					//console.log('Siguiente Pregunta');
-					
-					if(this.tieneSiguientePregunta(objetoSiguientePreguntaTestPsicologico.idpregunta, objetoUltimoTestPsicologico.cantidadpreguntas/*length*/)){
-						//AUMENTAR EN 1 LA PREGUNTA
-						//console.log('Siguiente Pregunta|tieneSiguientePregunta TRUE|AUMENTAR EN 1 LA PREGUNTA');
-						
-						/*stateNumeroPreguntaActualIndex = objetoPreguntaUltimoTestPsicologicoIndex + 1;
-						stateTestPsicologicoParteActual = objetoSiguientePreguntaTestPsicologico.idParte;
-						stateTestPsicologicoActualIndex = testPsicologicoActualIndex;
-						
-						stateTestPsicologicoActualObjeto = objetoUltimoTestPsicologico[0];*/
-						
-						stateNumeroPreguntaActualIndex = objetoSiguientePreguntaTestPsicologico.idpregunta;
-						stateTestPsicologicoParteActual = objetoSiguientePreguntaTestPsicologico.idparte;
-						stateTestPsicologicoActualIndex = objetoSiguientePreguntaTestPsicologico.idpregunta;
-						
-						stateTestPsicologicoActualObjeto = objetoSiguientePreguntaTestPsicologico
-					} else {
-						//console.log('Siguiente Pregunta|tieneSiguientePregunta FALSE');
-						
-						const testPsicologicoActualIndexAux = testPsicologicoActualIndex + 1;
-						if(this.tienePendienteResponderTestAsignados(/*testPsicologicoActualIndexAux, cantTestPsicologicosAsignados*/) ){
-							//AUMENTAR EN 1 TEST PSICOLOGICO, idParte = 1, idPregunta = 1
-							//console.log('Siguiente Pregunta|tieneSiguientePregunta FALSE|tienePendienteResponderTestAsignados TRUE|AUMENTAR EN 1 TEST PSICOLOGICO, idParte = 1, idPregunta = 1');
-							
-							stateNumeroPreguntaActualIndex = 0;
-							stateTestPsicologicoParteActual = 1;
-							stateTestPsicologicoActualIndex = testPsicologicoActualIndexAux;
-							
-							stateTestPsicologicoActualObjeto = testPsicologicosAsignadosACandidato[stateTestPsicologicoActualIndex];
-							
-						} else {
-							//console.log("Acabó el examen!");
-							flagContinuarTest = false;
-						}
-					}
 				}
-			/*} else {
-				//console.log("Acabó el examen!");
-				flagContinuarTest = false;
-			}*/
+			}
 			
 			this.setState({
 				//testPsicologicosAsignados: testPsicologicosAsignadosACandidato.length,
@@ -1317,19 +1119,6 @@ class ExamenPsicologicoWeb extends Component {
 			this.setState({
 				flagContinuarTest: false
 			});
-
-			// Candidato no ha respondido preguntas previamente. Se inicializa los valores.
-			//console.log('Candidato no ha respondido preguntas previamente. Se inicializa los valores.');
-			/*this.setState({
-				testPsicologicosAsignados: testPsicologicosAsignadosACandidato.length,
-				idCandidato: this.props.candidatoResponse.idCandidato,
-				candidatoResponse: this.props.candidatoResponse,
-				numeroPreguntaActualIndex: this.state.numeroPreguntaActualIndex + 1,
-				testPsicologicoParteActual: this.state.testPsicologicoParteActual + 1,
-				testPsicologicoActual: this.state.testPsicologicoActual + 1,
-				testPsicologicoActualObjeto: testPsicologicosAsignadosACandidato[this.state.testPsicologicoActual + 1],
-				flagContinuarTest: true
-			});*/
 		}
 		return true;
 	}
@@ -1460,20 +1249,14 @@ class ExamenPsicologicoWeb extends Component {
 	}
 
 	obtenerTestPsicologico(){
-		//return this.props.candidatoResponse.testPsicologicos[this.state.testPsicologicoActual];
 		return this.state.testPsicologicoActualObjeto
 	}
 	
 	obtenerIdTestPsicologico(){
-		//return this.obtenerTestPsicologico().idTestPsicologico;
 		return this.obtenerTestPsicologico().idtestpsicologico
 	}
 	
 	obtenerIdParte(){
-		//var obtenerTestPsicologico = this.obtenerTestPsicologico();
-		//console.log("[] obtenerIdParte obtenerTestPsicologico", obtenerTestPsicologico);
-		//console.log("[] obtenerIdParte this.state.numeroPreguntaActualIndex", this.state.numeroPreguntaActualIndex);
-		//return obtenerTestPsicologico.preguntas[this.state.numeroPreguntaActualIndex].idParte;
 		return this.obtenerTestPsicologico().idparte
 	}
 
@@ -1595,7 +1378,6 @@ class ExamenPsicologicoWeb extends Component {
 			}
 		}, () => {
 			if(this.state.candidato.respuesta.length > 0){
-				//this.props.guardarCandidatoRespuesta(this.state.candidato);
 				this.props.guardarCandidatoTestPsicologicoRespuesta(this.state.candidatoDatos.correoelectronico, this.state.candidato)
 				console.log('Guardar respuesta del candidato.', this.state.candidato);
 			} else {
@@ -1620,7 +1402,6 @@ class ExamenPsicologicoWeb extends Component {
 	
 	notificarReclutador() {
 		//Notificar por EMAIL y SMS
-		//this.props.notificarReclutador(this.props.candidatoResponse);
 		console.log('notificarReclutador:', this.state.candidatoDatos)
 		//this.props.notificarReclutador(this.state.candidatoDatos)
 	}
@@ -1673,7 +1454,6 @@ class ExamenPsicologicoWeb extends Component {
 
 			esTestPsicologicoConImagen={this.esTestPsicologicoConImagen}
 		/>);
-		//respuestaPreguntaAbierta={respuestaPreguntaAbierta}
 	}
 	
 	mostrarEnunciadoImg(pregunta, listaAlternativasSeleccionadas, mensajeAlerta, mensajeContador, enunciadoImg, alternativasImg){
@@ -1742,7 +1522,6 @@ class ExamenPsicologicoWeb extends Component {
 			return (<Boton key={boton.key} id={boton.key} label={boton.label} onClick={boton.onClick} visible={boton.visible} />);
 		});
 		
-		//var header = <Header nombreCandidato={this.props.candidatoResponse.nombreCompleto} testPsicologicoActual={this.state.testPsicologicoActual} testPsicologicosAsignados={this.state.testPsicologicosAsignados} numeroPreguntaActualIndex={this.state.numeroPreguntaActualIndex} candidatoDatos={this.props.candidatoResponse} />;
 		var header = <Header nombreCandidato={this.obtenerObjetoDatosCandidato().nombre_completo} 
 							numeroTestPsicologicoActual={this.state.numeroTestPsicologicoActual} 
 							numeroTestPsicologicoParteActual={this.state.numeroTestPsicologicoParteActual} 
@@ -1808,24 +1587,17 @@ class ExamenPsicologicoWeb extends Component {
 function mapStateToProps(state){
 	return{
 		candidatoTestPsicologicoIniciarExamenResponse: state.reducerCandidatoTestPsicologico.candidatoTestPsicologicoIniciarExamenResponse,
-		//testPsicologicosPartesResponse : state.reducerTestPsicologico.obtenerTestPsicologicosPartesResponse,
-		//candidatoResponse : state.reducerCandidato.obtenerCandidatoTestPsicologicosPreguntasResponse,
-		//candidatoRespuestasResponse : state.reducerCandidato.obtenerCandidatoRespuestasResponse,
-		//candidatoRespuestaResponse : state.reducerCandidato.guardarCandidatoRespuestaResponse,
 		candidatoRespuestaResponse: state.reducerCandidatoTestPsicologico.registrarCandidatoTestPsicologicoRespuestaResponse,
 		candidatoTestPsicologicoLogResponse: state.reducerCandidatoTestPsicologico.registrarCandidatoTestPsicologicoLogResponse,
 		candidatoInterpretacionResponse : state.reducerCandidato.obtenerInterpretacionResponse,
-		//candidatoTestPsicologicosFinalizadoResponse: state.reducerCandidato.validarTestPsicologicosFinalizadoResponse,
 		testPsicologicosFinalizadoNotificarReclutadorResponse: state.reducerReclutador.notificarReclutadorResponse
 	}
 }
 
 export default connect(mapStateToProps, { 
 	obtenerCandidatoTestPsicologicoIniciarExamen, 
-	//obtenerTestPsicologicosPartes, obtenerCandidatoTestPsicologicosPreguntas, obtenerCandidatoRespuestas, 
-	//guardarCandidatoRespuesta, 
 	guardarCandidatoTestPsicologicoRespuesta,
 	guardarCandidatoTestPsicologicoLog,
-	obtenerInterpretacion, //validarTestPsicologicosFinalizado, 
+	obtenerInterpretacion, 
 	notificarReclutador 
 })(ExamenPsicologicoWeb);
