@@ -19,7 +19,7 @@ import MensajeContador from '../common/MensajeContador';
 //import {obtenerCandidatoTestPsicologicosPreguntas, obtenerCandidatoRespuestas, guardarCandidatoRespuesta, obtenerInterpretacion, validarTestPsicologicosFinalizado} from '../../../../actions/actionCandidato';
 import {obtenerInterpretacion} from '../../../../actions/actionCandidato';
 import {notificarReclutador} from '../../../../actions/actionReclutador';
-import {obtenerCandidatoTestPsicologicoIniciarExamen, guardarCandidatoTestPsicologicoRespuesta} from '../../../../actions/actionCandidatoTestPsicologicoIniciarExamen'
+import {obtenerCandidatoTestPsicologicoIniciarExamen, guardarCandidatoTestPsicologicoRespuesta, guardarCandidatoTestPsicologicoLog} from '../../../../actions/actionCandidatoTestPsicologicoIniciarExamen'
 
 class ExamenPsicologicoWeb extends Component {
 	constructor(props){
@@ -60,7 +60,8 @@ class ExamenPsicologicoWeb extends Component {
 			listaInstruccionesDePreguntasPendientes: [],
 			flagMostrarMensajeBienvenida: undefined,
 			mensajeFinalizacion: undefined,
-			candidatoDatos: undefined
+			candidatoDatos: undefined,
+			flagMostrarPantallaCarga: false
 		}
 		
 		this.guardarCandidatoRespuesta = this.guardarCandidatoRespuesta.bind(this)
@@ -87,6 +88,7 @@ class ExamenPsicologicoWeb extends Component {
 		if(prevProps.candidatoTestPsicologicoIniciarExamenResponse !== this.props.candidatoTestPsicologicoIniciarExamenResponse) {
 			let candidatoTestPsicologicoIniciarExamen = this.props.candidatoTestPsicologicoIniciarExamenResponse
 			this.setState({
+				flagMostrarPantallaCarga: false,
 				candidatoDatos: typeof this.state.candidatoDatos === 'undefined' ? 
 									candidatoTestPsicologicoIniciarExamen.candidato : {},
 				testPsicologicosAsignados: typeof candidatoTestPsicologicoIniciarExamen.candidato !== 'undefined' ? 
@@ -144,25 +146,27 @@ class ExamenPsicologicoWeb extends Component {
 	}
 	
 	iniciarExamen(){
-		var flagInstrucciones = false;
-		this.mostrarBotonInicioInstrucciones();
-		this.mostrarBotonSiguiente();
+		var flagInstrucciones = false
+		this.mostrarBotonInicioInstrucciones()
+		this.mostrarBotonSiguiente()
 		this.setState({
 			flagInstrucciones: flagInstrucciones
-		});
-		this.asignarMensajeContador(flagInstrucciones);
+		})
+		this.asignarMensajeContador(flagInstrucciones)
+		this.registrarCandidatoTestPsicologicoLog('I')
 	}
 	
 	continuarExamen(){
-		var flagInstrucciones = false;
-		this.mostrarBotonInicioInstrucciones2(false);
-		this.mostrarBotonSiguiente();
+		var flagInstrucciones = false
+		this.mostrarBotonInicioInstrucciones2(false)
+		this.mostrarBotonSiguiente()
 		this.setState({
 			flagInstrucciones: flagInstrucciones,
 			valorContador: 0,
 			mensajeAlerta: {mensaje: '', estilo: ''}
-		});
-		this.asignarMensajeContador(flagInstrucciones);
+		})
+		this.asignarMensajeContador(flagInstrucciones)
+		this.registrarCandidatoTestPsicologicoLog('I')
 	}
 	
 	alternativaSeleccionar(pregunta, indiceAlternativa, respuestaPreguntaAbierta){
@@ -394,6 +398,8 @@ class ExamenPsicologicoWeb extends Component {
 				this.mostrarBotonInicioInstrucciones2(true);
 				this.mostrarBotonSiguiente();
 				this.limpiarValorContador();
+
+				this.registrarCandidatoTestPsicologicoLog('F')
 				
 				this.setState({
 					respuestas : respuestasSeleccionadas,
@@ -429,6 +435,8 @@ class ExamenPsicologicoWeb extends Component {
 					this.mostrarBotonInicioInstrucciones2(true);
 					this.mostrarBotonSiguiente();
 					this.limpiarValorContador();
+
+					this.registrarCandidatoTestPsicologicoLog('F')
 					
 					this.setState({
 						respuestas : respuestasSeleccionadas,
@@ -455,7 +463,9 @@ class ExamenPsicologicoWeb extends Component {
 						flagContinuarTest: flagContinuarTest,
 						mensajeContador: stateMensajeContador,
 						valorContador: stateValorContador,
-						mensajeAlerta: stateMensajeAlerta
+						mensajeAlerta: stateMensajeAlerta,
+
+						flagMostrarPantallaCarga: true
 					});
 					
 					this.limpiarAlternativas();
@@ -463,6 +473,7 @@ class ExamenPsicologicoWeb extends Component {
 					this.mostrarBotonSiguiente();
 					this.limpiarValorContador();
 
+					this.registrarCandidatoTestPsicologicoLog('F')
 				}
 				
 			}
@@ -508,6 +519,12 @@ class ExamenPsicologicoWeb extends Component {
 					this.mostrarBotonInicioInstrucciones2(false);
 					this.mostrarBotonSiguiente();
 					this.limpiarValorContador();
+
+					this.setState({
+						flagMostrarPantallaCarga: true
+					})
+
+					this.registrarCandidatoTestPsicologicoLog('F')
 				}
 				/*
 				const cantidadPreguntasPendientes = this.obtenerListaPreguntasPendientesPorTest(this.obtenerIdTestPsicologico()).length
@@ -913,7 +930,7 @@ class ExamenPsicologicoWeb extends Component {
 				 */
 				console.log('Ya no existen más preguntas pendientes.')
 				this.obtenerCandidatoInterpretacion()
-				
+
 				return {
 					flag: false
 				}
@@ -1495,6 +1512,15 @@ class ExamenPsicologicoWeb extends Component {
 			this.limpiar();
 		});
 	}
+
+	registrarCandidatoTestPsicologicoLog(flag){
+		var objetoGuardarCandidatoTestPsicologicoLog = {idcandidato: this.state.idCandidato,
+			idtestpsicologico: this.obtenerIdTestPsicologico(),
+			idparte: this.obtenerIdParte(),
+			flag: flag
+		}
+		this.props.guardarCandidatoTestPsicologicoLog(this.state.candidatoDatos.correoelectronico, objetoGuardarCandidatoTestPsicologicoLog)
+	}
 	
 	obtenerCandidatoInterpretacion() {
 		this.props.obtenerInterpretacion(this.state.idCandidato);
@@ -1636,9 +1662,14 @@ class ExamenPsicologicoWeb extends Component {
 		//console.log(this.state)
 		return(
 			<Fragment>
-				{(typeof this.state.flagMostrarMensajeBienvenida !== 'undefined') ? (
+				{(true) ? (
 					<Fragment>
 					{header}
+					{(this.state.flagMostrarPantallaCarga) ? (
+						<CargandoImagen />
+					) : (''
+					)
+					}
 					<Tablero
 						flagMostrarMensajeBienvenida={this.state.flagMostrarMensajeBienvenida}
 						mensajeFinalizacion={this.state.mensajeFinalizacion} 
@@ -1691,6 +1722,7 @@ function mapStateToProps(state){
 		//candidatoRespuestasResponse : state.reducerCandidato.obtenerCandidatoRespuestasResponse,
 		//candidatoRespuestaResponse : state.reducerCandidato.guardarCandidatoRespuestaResponse,
 		candidatoRespuestaResponse: state.reducerCandidatoTestPsicologico.registrarCandidatoTestPsicologicoRespuestaResponse,
+		candidatoTestPsicologicoLogResponse: state.reducerCandidatoTestPsicologico.registrarCandidatoTestPsicologicoLogResponse,
 		candidatoInterpretacionResponse : state.reducerCandidato.obtenerInterpretacionResponse,
 		//candidatoTestPsicologicosFinalizadoResponse: state.reducerCandidato.validarTestPsicologicosFinalizadoResponse,
 		testPsicologicosFinalizadoNotificarReclutadorResponse: state.reducerReclutador.notificarReclutadorResponse
@@ -1702,6 +1734,7 @@ export default connect(mapStateToProps, {
 	//obtenerTestPsicologicosPartes, obtenerCandidatoTestPsicologicosPreguntas, obtenerCandidatoRespuestas, 
 	//guardarCandidatoRespuesta, 
 	guardarCandidatoTestPsicologicoRespuesta,
+	guardarCandidatoTestPsicologicoLog,
 	obtenerInterpretacion, //validarTestPsicologicosFinalizado, 
 	notificarReclutador 
 })(ExamenPsicologicoWeb);

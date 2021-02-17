@@ -10,23 +10,8 @@ class Tablero extends Component {
 	}
 	
 	obtenerTestPsicologico(){
-		//console.log('  [Tablero] obtenerTestPsicologico.', this.props.testPsicologicoActual);
-		//console.log('  [Tablero] obtenerTestPsicologico.', this.props.testPsicologicoActualObjeto);
-		/*if(typeof this.props.testPsicologicoActualObjeto.preguntas != "undefined"){
-			return this.props.testPsicologicoActualObjeto;
-		} else {
-			return this.props.candidato.testPsicologicos[this.props.testPsicologicoActual];
-		}*/
 		return this.props.testPsicologicoActualObjeto
 	}
-	
-	/*obtenerIdTestPsicologico(){
-		return this.obtenerTestPsicologico().idTestPsicologico;
-	}*/
-	
-	/*obtenerIdParte(){
-		return this.obtenerTestPsicologico().preguntas[this.props.numeroPreguntaActualIndex].idParte;
-	}*/
 	
 	mostrarTablero(){
 		var enunciado = '';
@@ -64,7 +49,6 @@ class Tablero extends Component {
 				enunciado = this.props.mensaje.mensajeFinalizado;
 			} else {*/
 				if(cantidadTestAsignados > 0){
-					
 					if(this.props.flagMostrarInstrucciones){
 						const objetoParteTestPsicologico = this.props.testPsicologicoInstrucciones;
 						console.log('   [Tablero] Objeto con preguntas de Test psicologico:', objetoParteTestPsicologico)
