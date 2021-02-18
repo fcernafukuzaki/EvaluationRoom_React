@@ -468,6 +468,13 @@ class ExamenPsicologicoWeb extends Component {
 						testPsicologicoActualObjeto: stateTestPsicologicoActualObjeto,
 						mensajeAlerta: stateMensajeAlerta
 					});
+				} else if(!objetoSiguientePreguntaSiguientePregunta.flag && typeof objetoSiguientePreguntaSiguientePregunta.objeto !== 'undefined') {
+					console.log('El test NO tiene siguiente pregunta. Se muestra valores del sigueinte test.', objetoSiguientePreguntaSiguientePregunta)
+					this.limpiarAlternativas();
+					this.mostrarBotonInicioInstrucciones2(true);
+					this.mostrarBotonSiguiente();
+					this.limpiarValorContador();
+					this.registrarCandidatoTestPsicologicoLog('F')
 				} else {
 					console.log('El test NO tiene siguiente pregunta.', objetoSiguientePreguntaSiguientePregunta)
 					this.limpiarAlternativas();
@@ -1176,7 +1183,7 @@ class ExamenPsicologicoWeb extends Component {
 	}
 	
 	guardarCandidatoRespuesta() {
-		console.log('Guardar respuesta del candidato.')
+		//console.log('Guardar respuesta del candidato.')
 		this.setState({
 			candidato:{
 				idcandidato: this.state.idCandidato,
@@ -1188,7 +1195,7 @@ class ExamenPsicologicoWeb extends Component {
 		}, () => {
 			if(this.state.candidato.respuesta.length > 0){
 				this.props.guardarCandidatoTestPsicologicoRespuesta(this.state.candidatoDatos.correoelectronico, this.state.candidato)
-				console.log('Guardar respuesta del candidato.', this.state.candidato);
+				//console.log('Guardar respuesta del candidato.', this.state.candidato);
 			} else {
 				console.log('No ha seleccionado respuesta');
 			}
@@ -1238,9 +1245,9 @@ class ExamenPsicologicoWeb extends Component {
 	}
 	
 	limpiarAlternativas(){
-		console.log('limpiarAlternativas', this.state)
+		//console.log('limpiarAlternativas', this.state)
 		if(this.state.numeroPreguntaActualIndex <= this.obtenerObjetoTestPsicologicoInstrucciones(this.obtenerIdTestPsicologico(), this.obtenerIdParte()).cantidadpreguntas){
-			console.log('limpiarAlternativas')
+			//console.log('limpiarAlternativas')
 			this.setState({
 				listaAlternativasSeleccionadas: [false, false, false, false, false],
 				respuestaPreguntaAbierta: ''
@@ -1336,7 +1343,8 @@ class ExamenPsicologicoWeb extends Component {
 							numeroTestPsicologicoParteActual={this.state.numeroTestPsicologicoParteActual} 
 							testPsicologicosAsignados={this.state.testPsicologicosAsignados} 
 							numeroPreguntaActualIndex={this.state.numeroPreguntaActualIndex} 
-							candidatoDatos={this.props.candidatoResponse} />;
+							candidatoDatos={this.props.candidatoResponse} 
+							getLogo={this.props.logoEmpresa} />;
 		
 		var footer = <Footer />;
 		//console.log(this.state)

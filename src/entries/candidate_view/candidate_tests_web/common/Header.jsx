@@ -1,14 +1,7 @@
 import React, {Component, Fragment} from 'react';
-import Logo from '../../../../assets/img/logo.jpg'
-
-function getLogo(){
-	const logo = new Image();
-	logo.src = Logo;
-	return logo.src;
-}
 
 const Header = (props) => {
-	const { nombreCandidato, numeroTestPsicologicoActual, numeroTestPsicologicoParteActual, testPsicologicosAsignados, numeroPreguntaActualIndex, candidatoDatos, estiloTablero } = props;
+	const { nombreCandidato, numeroTestPsicologicoActual, numeroTestPsicologicoParteActual, testPsicologicosAsignados, getLogo, numeroPreguntaActualIndex, candidatoDatos, estiloTablero } = props;
 	let numero_TestPsicologicoActual = numeroTestPsicologicoActual + 1;
 	let numero_TestPsicologicoParte = numeroTestPsicologicoActual > 0 ? numeroTestPsicologicoParteActual + 1 : 0
 	//let idTestPsicologicoParte = (numeroTestPsicologicoActual >= 0 && numeroPreguntaActualIndex >= 0 
@@ -17,7 +10,7 @@ const Header = (props) => {
 		<header id="header" className="header">
 			<div id="header-container" className="lineaSubrayado">
 				<div className="headerDatos">
-					<img src={getLogo()} />
+					<img src={getLogo} />
 					<div>
 						{typeof nombreCandidato != "undefined" ? (
 								<p className="datosPersonales">
