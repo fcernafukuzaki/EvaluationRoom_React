@@ -19,7 +19,6 @@ class Tablero extends Component {
 		 * Validar si objeto candidato retorna valor.
 		 */
 		//console.log('listaInstruccionesDePreguntasPendientes', this.props.listaInstruccionesDePreguntasPendientes)
-		//console.log('mensajeFinalizacion', this.props.mensajeFinalizacion)
 		if(this.props.listaInstruccionesDePreguntasPendientes.length == 0){
 			//console.log('Se acabaron las pruebas.');
 			return this.props.mensaje.mensajeFinalizado;
