@@ -219,6 +219,7 @@ class CandidatesListJobPosition extends Component {
 			var evaluationRoom = '';
 			var descargarInforme = '';
 			var hashIdCandidato = encriptarAES(row.idcandidato.toString());
+			var hashCorreoElectronico = encriptarAES(row.correoelectronico.toString());
 			var actualizarCandidato = (
 				<Link to={{ pathname: this.state.rutaRegistrarCandidato, search: `?idc=${hashIdCandidato}`, state: { } }}>
 					<button type="button" className="btn btn-outline-secondary btn-sm" title="Actualizar datos">
@@ -252,7 +253,7 @@ class CandidatesListJobPosition extends Component {
 					);
 				}
 				evaluationRoom = (
-					<Link to={{ pathname: '/pages/examen.html', search: `?id=${hashIdCandidato}`, state: { } }}>
+					<Link to={{ pathname: '/pages/examen.html', search: `?id=${hashCorreoElectronico}`, state: { } }}>
 						<button type="button" className="btn btn-dark btn-sm" title="Sala de evaluación">
 							<i className="fas fa-door-closed"></i> Evaluación
 						</button>

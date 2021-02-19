@@ -87,8 +87,8 @@ class CandidatoDatosForm extends Component {
 		if (prevProps.validarCandidatoRegistradoResponse !== this.props.validarCandidatoRegistradoResponse) {
 			if(this.props.validarCandidatoRegistradoResponse.correoElectronico !== '' && 
 					this.props.validarCandidatoRegistradoResponse.selfRegistration){
-				var hashIdCandidato = encriptarAES(this.props.validarCandidatoRegistradoResponse.idCandidato.toString());
-				window.location.href = ('/pages/examen.html?id=').concat(hashIdCandidato);
+				var hashCorreoElectronico = encriptarAES(this.props.validarCandidatoRegistradoResponse.correoElectronico.toString());
+				window.location.href = ('/pages/examen.html?id=').concat(hashCorreoElectronico);
 			} else {
 				var candidatoResponse = this.props.validarCandidatoRegistradoResponse;
 				
@@ -187,8 +187,8 @@ class CandidatoDatosForm extends Component {
 				const { errors, isValid } = validateInput(candidatoValidarInput);
 				
 				if( isValid ){
-					var hashIdCandidato = encriptarAES(this.props.validarCandidatoRegistradoResponse.idCandidato.toString());
-					window.location.href = ('/pages/examen.html?id=').concat(hashIdCandidato);
+					var hashCorreoElectronico = encriptarAES(this.props.validarCandidatoRegistradoResponse.correoElectronico.toString());
+					window.location.href = ('/pages/examen.html?id=').concat(hashCorreoElectronico);
 				} else {
 					this.setState({ 
 						isLoading: false,
@@ -199,8 +199,8 @@ class CandidatoDatosForm extends Component {
 		}
 		if (prevProps.guardarCandidatoTestPsicologicoResponse !== this.props.guardarCandidatoTestPsicologicoResponse) {
 			if(this.props.guardarCandidatoTestPsicologicoResponse.idCandidato !== ''){
-				var hashIdCandidato = encriptarAES(this.props.guardarCandidatoTestPsicologicoResponse.idCandidato.toString());
-				window.location.href = ('/pages/examen.html?id=').concat(hashIdCandidato);
+				var hashCorreoElectronico = encriptarAES(this.props.guardarCandidatoTestPsicologicoResponse.correoElectronico.toString());
+				window.location.href = ('/pages/examen.html?id=').concat(hashCorreoElectronico);
 			} else {
 				this.setState({
 					errorMensaje: {status: 'ERROR_OTROS', mensaje: 'Ocurrió un error al registrar sus datos.'}

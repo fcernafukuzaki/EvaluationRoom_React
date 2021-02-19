@@ -530,6 +530,7 @@ class SelectionProcessForm extends Component {
             var evaluationRoom = '';
             var descargarInforme = '';
             var hashIdCandidato = encriptarAES(row.idcandidato.toString());
+			var hashCorreoElectronico = encriptarAES(row.correoelectronico.toString());
             var actualizarCandidato = (
                 <CandidateButtonUpdate 
                     pathname={this.state.rutaRegistrarCandidato}
@@ -562,7 +563,7 @@ class SelectionProcessForm extends Component {
                 evaluationRoom = (
                     <CandidateButtonExam 
                         pathname={'/pages/examen.html'}
-                        hashId={`?id=${hashIdCandidato}`}
+                        hashId={`?id=${hashCorreoElectronico}`}
                     />
                 );
             } else {
