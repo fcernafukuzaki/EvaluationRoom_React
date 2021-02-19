@@ -10,8 +10,7 @@ import {
 
 export function obtenerCandidatoTestPsicologicoIniciarExamen(token, obtenerCandidatoTestPsicologicoIniciarExamen) {
 	return (dispatch, getState) => {
-		//axios.get('https://evaluationroom-iniciarexamen.herokuapp.com/v1/iniciar_examen'
-		axios.post('http://localhost:5000/v1/iniciar_examen'
+		axios.get('https://evaluationroom-iniciarexamen.herokuapp.com/v1/iniciar_examen'
 					, obtenerCandidatoTestPsicologicoIniciarExamen
 					,{headers: { Authorization: token }}
 					)
@@ -28,8 +27,7 @@ export function obtenerCandidatoTestPsicologicoIniciarExamen(token, obtenerCandi
 
 export function guardarCandidatoTestPsicologicoRespuesta(token, guardarCandidatoTestPsicologicoRespuesta) {
 	return (dispatch, getState) => {
-		//axios.get('https://evaluationroom-iniciarexamen.herokuapp.com/v1/registrar_respuesta'
-		axios.post('http://localhost:5000/v1/registrar_respuesta'
+		axios.get('https://evaluationroom-iniciarexamen.herokuapp.com/v1/registrar_respuesta'
 					, guardarCandidatoTestPsicologicoRespuesta
 					,{headers: { Authorization: token }}
 					)
@@ -46,8 +44,7 @@ export function guardarCandidatoTestPsicologicoRespuesta(token, guardarCandidato
 
 export function guardarCandidatoTestPsicologicoLog(token, guardarCandidatoTestPsicologicoLog) {
 	return (dispatch, getState) => {
-		//axios.get('https://evaluationroom-iniciarexamen.herokuapp.com/v1/registrar_respuesta'
-		axios.post('http://localhost:5000/v1/guardar_accion'
+		axios.get('https://evaluationroom-iniciarexamen.herokuapp.com/v1/guardar_accion'
 					, guardarCandidatoTestPsicologicoLog
 					,{headers: { Authorization: token }}
 					)
