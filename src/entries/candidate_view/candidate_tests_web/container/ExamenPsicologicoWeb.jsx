@@ -287,7 +287,7 @@ class ExamenPsicologicoWeb extends Component {
 
 	obtenerMensajeFinalizacionYNotificarReclutador(){
 		let candidatoTestPsicologicoIniciarExamen = this.props.candidatoTestPsicologicoIniciarExamenResponse
-		console.log('obtenerMensajeFinalizacionYNotificarReclutador:', candidatoTestPsicologicoIniciarExamen)
+		//console.log('obtenerMensajeFinalizacionYNotificarReclutador:', candidatoTestPsicologicoIniciarExamen)
 		if(candidatoTestPsicologicoIniciarExamen.reclutador_notificado){
 			this.notificarReclutador()
 		}
