@@ -919,18 +919,18 @@ class ExamenPsicologicoWeb extends Component {
 		var stateTestPsicologicoActualObjeto = {};
 		
 		const listaTestPsicologicosAsignadosACandidato = this.obtenerListaTestPsicologicoInstrucciones();
-		console.log(' (validarCandidatoPreguntasRespondidas) Lista Test psicologicos asignados al candidato', listaTestPsicologicosAsignadosACandidato);
+		//console.log(' (validarCandidatoPreguntasRespondidas) Lista Test psicologicos asignados al candidato', listaTestPsicologicosAsignadosACandidato);
 		if(this.tienePendienteResponderTestAsignados()){
 			//console.log("Candidato ha vuelto a cargar la página de pruebas y ha respondido preguntas anteriormente.");
 			const objetoSiguienteInstruccionTestPsicologico = listaTestPsicologicosAsignadosACandidato[0]
 			var siguienteIdTestPsicologico = objetoSiguienteInstruccionTestPsicologico.idtestpsicologico
 			//console.log(' (validarCandidatoPreguntasRespondidas) Última test respondida por candidato', objetoSiguienteInstruccionTestPsicologico)
 			const objetoSiguientePreguntaTestPsicologico = this.iniciarPreguntaPendiente(siguienteIdTestPsicologico);
-			console.log(' (validarCandidatoPreguntasRespondidas) Siguiente pregunta ha responder por candidato', objetoSiguientePreguntaTestPsicologico)
+			//console.log(' (validarCandidatoPreguntasRespondidas) Siguiente pregunta ha responder por candidato', objetoSiguientePreguntaTestPsicologico)
 			var listaInstruccionesDePreguntasPendientesPorTestPsicologico = this.filtrarListaPorIdTest(this.state.listaInstruccionesDePreguntasPendientes, this.obtenerIdTestPsicologico())
-			console.log(' (validarCandidatoPreguntasRespondidas) Lista de instrucciones de partes del test ', listaInstruccionesDePreguntasPendientesPorTestPsicologico);
+			//console.log(' (validarCandidatoPreguntasRespondidas) Lista de instrucciones de partes del test ', listaInstruccionesDePreguntasPendientesPorTestPsicologico);
 			let listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.filtrarListaPorIdTestIdParte(this.state.listaInstruccionesDePreguntasPendientes, this.obtenerIdTestPsicologico(), this.obtenerIdParte())
-			console.log(' (validarCandidatoPreguntasRespondidas) listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte', listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte);
+			//console.log(' (validarCandidatoPreguntasRespondidas) listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte', listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte);
 			let objetoUltimoTestPsicologicoInstrucciones = listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte.length > 0 ? listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte[0] : {}
 			const resultado = this.validarPartesPendienteResponder(
 					objetoUltimoTestPsicologicoInstrucciones,

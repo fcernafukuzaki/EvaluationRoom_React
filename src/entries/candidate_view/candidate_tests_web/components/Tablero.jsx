@@ -33,7 +33,7 @@ class Tablero extends Component {
 			if(cantidadTestAsignados > 0){
 				if(this.props.flagMostrarInstrucciones){
 					const objetoParteTestPsicologico = this.props.testPsicologicoInstrucciones;
-					console.log('   [Tablero] Objeto con preguntas de Test psicologico:', objetoParteTestPsicologico)
+					//console.log('   [Tablero] Objeto con preguntas de Test psicologico:', objetoParteTestPsicologico)
 					enunciado = this.props.mostrarInstrucciones(objetoParteTestPsicologico);
 				} else {
 					var pregunta = this.obtenerTestPsicologico();
