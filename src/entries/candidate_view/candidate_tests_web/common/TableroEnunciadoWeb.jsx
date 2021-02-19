@@ -41,7 +41,6 @@ export default class TableroEnunciadoWeb extends Component {
 	mostrarEnunciado(pregunta, enunciadoImg){
 		var enunciadoPregunta = '';
 		let textoAux = '';
-		//if(this.isGATBParte3(pregunta)){
 		if(this.props.esTestPsicologicoConImagen(pregunta)){
 			textoAux = this.mostrarEnunciadoImg(enunciadoImg);
 		} else {
@@ -54,7 +53,6 @@ export default class TableroEnunciadoWeb extends Component {
 	mostrarAlternativas(pregunta){
 		var alternativasID = ["alternativa1", "alternativa2", "alternativa3", "alternativa4", "alternativa5"];
 		var alternativas = '';
-		//if(this.isGATBParte3(pregunta)){
 		if(this.props.esTestPsicologicoConImagen(pregunta)){
 			let alternativaBotones = pregunta.alternativa.map( (alternativa, i) =>
 				<AlternativaImagenBoton key={alternativasID[i]} id={alternativasID[i]} label={alternativa.alternativa}
@@ -78,13 +76,8 @@ export default class TableroEnunciadoWeb extends Component {
 			alternativas = pregunta.alternativa.map( (alternativa, i) => {
 				// Si tiene glosa, entonces la pregunta es cerrada.
 				// Si no tiene glosa, entonces la pregunta es abierta.
-				if(alternativa.glosa.length > 0){
-					return(<Alternativa key={alternativasID[i]} id={alternativasID[i]} label={alternativa.glosa}
-						visible={true} 
-						estaSeleccionada={this.props.listaAlternativasSeleccionadas[i]}
-						onClick={this.handleClick.bind(this, pregunta, i)}
-					/>)
-				} else {
+				//if(alternativa.glosa.length > 0){
+				if(this.props.esTestPsicologicoConPreguntaAbierta(pregunta)){
 					const placeholder = 'Colocar aquí su respuesta.'
 					return (<textarea key={alternativasID[i]}
 						id={alternativasID[i]} 
@@ -103,6 +96,12 @@ export default class TableroEnunciadoWeb extends Component {
 						valor={this.props.respuestaPreguntaAbierta}
 						onChange={this.handleOnChange.bind(this)}
 					/>)*/
+				} else {
+					return(<Alternativa key={alternativasID[i]} id={alternativasID[i]} label={alternativa.glosa}
+						visible={true} 
+						estaSeleccionada={this.props.listaAlternativasSeleccionadas[i]}
+						onClick={this.handleClick.bind(this, pregunta, i)}
+					/>)
 				}
 			}
 			);
@@ -126,7 +125,7 @@ export default class TableroEnunciadoWeb extends Component {
 	}
 	
 	render() {
-		const { pregunta, estiloTablero, listaAlternativasSeleccionadas, mensajeAlerta, mensajeContador, enunciadoImg, alternativasImg } = this.props;
+		const { pregunta, estiloTablero, mensajeAlerta, mensajeContador, enunciadoImg } = this.props;
 		//console.log('   TableroEnunciadoWeb:this.props:', this.props.listaAlternativasSeleccionadas);
 		let textoAux = this.mostrarEnunciado(pregunta, enunciadoImg);
 		var listaAlternativas = this.mostrarAlternativas(pregunta);

@@ -2,10 +2,8 @@ import React, {Component, Fragment} from 'react';
 
 const Header = (props) => {
 	const { nombreCandidato, numeroTestPsicologicoActual, numeroTestPsicologicoParteActual, testPsicologicosAsignados, getLogo, numeroPreguntaActualIndex, candidatoDatos, estiloTablero } = props;
-	let numero_TestPsicologicoActual = numeroTestPsicologicoActual + 1;
-	let numero_TestPsicologicoParte = numeroTestPsicologicoActual > 0 ? numeroTestPsicologicoParteActual + 1 : 0
-	//let idTestPsicologicoParte = (numeroTestPsicologicoActual >= 0 && numeroPreguntaActualIndex >= 0 
-	//		&& numeroTestPsicologicoActual < testPsicologicosAsignados) ? candidatoDatos.testPsicologicos[testPsicologicoActual].preguntas[numeroPreguntaActualIndex].idParte /*+ 1*/ : 0;
+	let numero_TestPsicologicoActual = numeroTestPsicologicoActual;
+	let numero_TestPsicologicoParte = numeroTestPsicologicoParteActual > 0 ? numeroTestPsicologicoParteActual : 0
 	return (
 		<header id="header" className="header">
 			<div id="header-container" className="lineaSubrayado">
@@ -20,7 +18,7 @@ const Header = (props) => {
 								</p>
 							) : ('')
 						}
-						{/*testPsicologicoActual >= 0 && testPsicologicoActual < testPsicologicosAsignados &&*/
+						{
 							testPsicologicosAsignados > 0 &&
 							<Fragment>
 								<p>Cantidad de pruebas asignadas: {testPsicologicosAsignados}</p>
