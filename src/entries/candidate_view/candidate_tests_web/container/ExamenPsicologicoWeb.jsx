@@ -1001,9 +1001,15 @@ class ExamenPsicologicoWeb extends Component {
 
 	obtenerNumeroTestPsicologicoActual(idtestpsicologico){
 		var numero = 0
-		var testpsicologicos_asignados = this.props.candidatoTestPsicologicoIniciarExamenResponse.testpsicologicos_asignados
+		var lista_testpsicologicos_asignados = this.props.candidatoTestPsicologicoIniciarExamenResponse.testpsicologicos_asignados
+		var testpsicologicos_asignados = []
+		for(let i in lista_testpsicologicos_asignados) {
+			if(!testpsicologicos_asignados.includes(lista_testpsicologicos_asignados[i].idtestpsicologico)){
+				testpsicologicos_asignados.push(lista_testpsicologicos_asignados[i].idtestpsicologico)
+			}
+		}
 		for(let i in testpsicologicos_asignados) {
-			if(testpsicologicos_asignados[i].idtestpsicologico == idtestpsicologico){
+			if(testpsicologicos_asignados[i] == idtestpsicologico){
 				numero = parseInt(parseInt(i) + 1)
 				break
 			}
