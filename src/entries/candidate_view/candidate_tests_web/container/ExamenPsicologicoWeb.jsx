@@ -284,7 +284,6 @@ class ExamenPsicologicoWeb extends Component {
 		this.setState({
 			flagMostrarBotonInicioInstrucciones2: flag
 		});
-		console.log('mostrarBotonInicioInstrucciones2:', flag, this.state.flagMostrarBotonInicioInstrucciones2)
 	}
 	
 	seAcaboElTiempo(mensajeContador){
@@ -412,7 +411,6 @@ class ExamenPsicologicoWeb extends Component {
 					//console.log("Acabó el examen!");
 					console.log('No tiene test psicológicos pendientes por responder.')
 					flagContinuarTest = false;
-					
 					stateValorContador = 0;
 					
 					this.obtenerCandidatoInterpretacion();
@@ -488,108 +486,6 @@ class ExamenPsicologicoWeb extends Component {
 
 					this.registrarCandidatoTestPsicologicoLog('F')
 				}
-				/*
-				const cantidadPreguntasPendientes = this.obtenerListaPreguntasPendientesPorTest(this.obtenerIdTestPsicologico()).length
-
-				respuestasSeleccionadas = [];
-				stateMensajeAlerta = {mensaje: '', estilo: ''};
-				
-				const testPsicologicoActualIndexAux = stateNumeroPreguntaActualIndex + 1;
-				//if(this.tieneSiguientePregunta(testPsicologicoActualIndexAux, objetoUltimoTestPsicologico[0].preguntas.length)){
-				if(this.tieneSiguientePregunta(testPsicologicoActualIndexAux, cantidadPreguntasPendientes)){
-					//AUMENTAR EN 1 LA PREGUNTA
-					console.log('Siguiente Pregunta|tieneSiguientePregunta TRUE|AUMENTAR EN 1 LA PREGUNTA');
-					
-					stateNumeroPreguntaActualIndex = stateNumeroPreguntaActualIndex + 1;
-					stateTestPsicologicoParteActual = this.obtenerIdParte();
-					//stateTestPsicologicoActualIndex = testPsicologicoActualIndex;
-					
-					console.log('objetoUltimoTestPsicologico', objetoUltimoTestPsicologico)
-					//stateTestPsicologicoActualObjeto = objetoUltimoTestPsicologico[0];
-					stateTestPsicologicoActualObjeto = this.obtenerObjetoPregunta(this.obtenerIdTestPsicologico(), this.obtenerIdParte(), testPsicologicoActualIndexAux)
-					
-					stateFlagInstrucciones = false;
-					this.limpiarAlternativas();
-					//this.mostrarBotonInicioInstrucciones2();
-					//this.mostrarBotonSiguiente();
-					//this.limpiarValorContador();
-					
-					this.setState({
-						respuestas : respuestasSeleccionadas,
-						testPsicologicoParteActual: stateTestPsicologicoParteActual,
-						testPsicologicoActual: stateTestPsicologicoActualIndex,
-						numeroPreguntaActualIndex: stateNumeroPreguntaActualIndex,
-						flagInstrucciones: stateFlagInstrucciones,
-						testPsicologicoActualObjeto: stateTestPsicologicoActualObjeto,
-						//mensajeContador: stateMensajeContador,
-						//valorContador: stateValorContador,
-						mensajeAlerta: stateMensajeAlerta
-					});
-					
-				} else {
-					console.log('Siguiente Pregunta|tieneSiguientePregunta FALSE');
-					
-					const testPsicologicoActualIndexAux = stateTestPsicologicoActualIndex + 1;
-					if(this.tienePendienteResponderTestAsignados(testPsicologicoActualIndexAux, cantTestPsicologicosAsignados) ){
-						//AUMENTAR EN 1 TEST PSICOLOGICO, idParte = 1, idPregunta = 1
-						//console.log('Siguiente Pregunta|tieneSiguientePregunta FALSE|tienePendienteResponderTestAsignados TRUE|AUMENTAR EN 1 TEST PSICOLOGICO, idParte = 1, idPregunta = 1');
-						
-						stateNumeroPreguntaActualIndex = 0;
-						stateTestPsicologicoParteActual = 1;
-						stateTestPsicologicoActualIndex = stateTestPsicologicoActualIndex + 1;
-						
-						console.log('objetoUltimoTestPsicologico else', testPsicologicosAsignadosACandidato)
-						//stateTestPsicologicoActualObjeto = testPsicologicosAsignadosACandidato[stateTestPsicologicoActualIndex];
-						
-						stateValorContador = 0;
-						
-						stateFlagInstrucciones = true;
-						this.limpiarAlternativas();
-						this.mostrarBotonInicioInstrucciones2();
-						this.mostrarBotonSiguiente();
-						this.limpiarValorContador();
-						
-						this.setState({
-							respuestas : respuestasSeleccionadas,
-							testPsicologicoParteActual: stateTestPsicologicoParteActual,
-							testPsicologicoActual: stateTestPsicologicoActualIndex,
-							numeroPreguntaActualIndex: stateNumeroPreguntaActualIndex,
-							flagInstrucciones: stateFlagInstrucciones,
-							//testPsicologicoActualObjeto: stateTestPsicologicoActualObjeto,
-							testPsicologicoActualObjeto: this.obtenerTestPsicologico(),
-							mensajeContador: stateMensajeContador,
-							valorContador: stateValorContador,
-							mensajeAlerta: stateMensajeAlerta
-						});
-						
-					} else {
-						console.log("Acabó el examen!");
-						flagContinuarTest = false;
-						
-						this.obtenerCandidatoInterpretacion();
-						this.notificarReclutador();
-						
-						stateValorContador = 0;
-						
-						this.limpiarAlternativas();
-						this.mostrarBotonSiguiente();
-						this.limpiarValorContador();
-						
-						this.setState({
-							//respuestas : respuestasSeleccionadas,
-							//testPsicologicoParteActual: stateTestPsicologicoParteActual,
-							//testPsicologicoActual: stateTestPsicologicoActualIndex,
-							//numeroPreguntaActualIndex: stateNumeroPreguntaActualIndex,
-							//flagInstrucciones: stateFlagInstrucciones,
-							//testPsicologicoActualObjeto: stateTestPsicologicoActualObjeto,
-							flagContinuarTest: flagContinuarTest,
-							mensajeContador: stateMensajeContador,
-							valorContador: stateValorContador,
-							mensajeAlerta: stateMensajeAlerta
-						});
-					}
-				}
-				*/
 			}
 		}
 	}
@@ -699,10 +595,8 @@ class ExamenPsicologicoWeb extends Component {
 		return duracion > 0 ? true : false;
 	}
 
-	//tienePartesPendienteResponder(idParteUltimoTestRespondido, cantidadPartesUltimoTestRespondido){
 	tienePartesPendienteResponder(cantidadTestPsicologicoPartesPendientesResponder){
-		//console.log('tienePartesPendienteResponder:', idParteUltimoTestRespondido, ':', cantidadPartesUltimoTestRespondido);
-		console.log('tienePartesPendienteResponder:', cantidadTestPsicologicoPartesPendientesResponder);
+		//console.log('tienePartesPendienteResponder:', cantidadTestPsicologicoPartesPendientesResponder);
 		return cantidadTestPsicologicoPartesPendientesResponder > 0 ? true : false;
 	}
 
@@ -922,7 +816,7 @@ class ExamenPsicologicoWeb extends Component {
 		}
 	}
 
-	validarTieneSiguienteParte(listaPreguntasPendientesInicial, listaPreguntasPendientes, listaInstruccionesDePreguntasPendientes, idTestPsicologico, idParte, idPregunta){
+	/*validarTieneSiguienteParte(listaPreguntasPendientesInicial, listaPreguntasPendientes, listaInstruccionesDePreguntasPendientes, idTestPsicologico, idParte, idPregunta){
 		var listaPreguntasPendientesPorTestPsicologicoYParte = this.filtrarListaPorIdTestIdParteIdPregunta(listaPreguntasPendientes, idTestPsicologico, idParte, idPregunta)
 		console.log('validarTieneSiguienteParte: listaPreguntasPendientesPorTestPsicologicoYParte', listaPreguntasPendientesPorTestPsicologicoYParte)
 		var listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.filtrarListaPorIdTestIdParte(listaInstruccionesDePreguntasPendientes, idTestPsicologico, idParte)
@@ -931,9 +825,9 @@ class ExamenPsicologicoWeb extends Component {
 			return true
 		}
 		return false
-	}
+	}*/
 
-	validarTieneSiguienteTestPsicologico(listaPreguntasPendientes, listaInstruccionesDePreguntasPendientes, idTestPsicologico){
+	/*validarTieneSiguienteTestPsicologico(listaPreguntasPendientes, listaInstruccionesDePreguntasPendientes, idTestPsicologico){
 		var listaPreguntasPendientesPorTestPsicologicoYParte = this.filtrarListaPorIdTest(listaPreguntasPendientes, idTestPsicologico)
 		console.log('validarTieneSiguienteTestPsicologico: listaPreguntasPendientesPorTestPsicologicoYParte', listaPreguntasPendientesPorTestPsicologicoYParte)
 		var listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.filtrarListaPorIdTest(listaInstruccionesDePreguntasPendientes, idTestPsicologico)
@@ -946,7 +840,7 @@ class ExamenPsicologicoWeb extends Component {
 			return true
 		}
 		return false
-	}
+	}*/
 
 	validarCandidatoPreguntasRespondidas(){
 		var flagContinuarTest = true;//VALOR POR DEFAULT
@@ -1115,7 +1009,7 @@ class ExamenPsicologicoWeb extends Component {
 
 	obtenerListaPreguntasPendientesPorTest(idTestpsicologico){
 		if (typeof this.props.candidatoTestPsicologicoIniciarExamenResponse.preguntas_pendientes !== 'undefined') {
-			console.log('obtenerListaPreguntasPendientesPorTest', this.props.candidatoTestPsicologicoIniciarExamenResponse.preguntas_pendientes)
+			//console.log('obtenerListaPreguntasPendientesPorTest', this.props.candidatoTestPsicologicoIniciarExamenResponse.preguntas_pendientes)
 			let resultado = this.props.candidatoTestPsicologicoIniciarExamenResponse.preguntas_pendientes
 						.filter(test => test.idtestpsicologico == idTestpsicologico)
 			return resultado
@@ -1132,14 +1026,14 @@ class ExamenPsicologicoWeb extends Component {
 	}
 
 	obtenerObjetoPregunta(idTestpsicologico, idParte, idPregunta){
-		console.log('= Cantidad de preguntas pendientes:', this.state.listaPreguntasPendientes.length)
-		console.log('= Lista de preguntas pendientes:', this.state.listaPreguntasPendientes)
-		console.log('= IdTest ', idTestpsicologico, idParte, idPregunta)
-		return this.state.listaPreguntasPendientes
-					.filter(test => test.idtestpsicologico == idTestpsicologico &&
-									test.idparte == idParte &&
-									test.idpregunta == idPregunta
-						)[0]
+		//console.log('= Cantidad de preguntas pendientes:', this.state.listaPreguntasPendientes.length)
+		//console.log('= Lista de preguntas pendientes:', this.state.listaPreguntasPendientes)
+		//console.log('= IdTest ', idTestpsicologico, idParte, idPregunta)
+		return this.filtrarListaPorIdTestIdParteIdPregunta(this.state.listaPreguntasPendientes, 
+				idTestpsicologico, 
+				idParte, 
+				idPregunta
+			)[0]
 	}
 
 	iniciarPreguntaPendiente(idTestpsicologico){
@@ -1299,15 +1193,19 @@ class ExamenPsicologicoWeb extends Component {
 	 */
 	
 	render() {
-		const {idCandidato, idTestPsicologico, idParte, idPregunta, respuesta
-			, flagMostrarBotonInicio, flagMostrarBotonInicioInstrucciones, flagMostrarBotonInicioInstrucciones2, flagMostrarBotonSiguiente } = this.state;
+		const {flagMostrarPantallaCarga, flagMostrarBotonInicio, flagMostrarBotonInicioInstrucciones, flagMostrarBotonInicioInstrucciones2, flagMostrarBotonSiguiente} = this.state;
 		
 		var form = {
 			mensaje: {
-				mensajeBienvenida: (<MensajeBienvenidaWeb mensaje={this.obtenerObjetoTestPsicologicoMensajeBienvenida()} />),
-				mensajeFinalizado: (<MensajeFinalizacionExamWeb mensaje={this.obtenerObjetoTestPsicologicoMensajeFinalizacion()} estiloTablero="mensajeFinalizacion" />),
-				mensajeAlerta: (<MensajeAlerta mensaje={this.state.mensajeAlerta} />),
-				mensajeContador: (<MensajeContador mensaje={this.state.mensajeContador} />)
+				mensajeBienvenida: (<MensajeBienvenidaWeb 
+										mensaje={this.obtenerObjetoTestPsicologicoMensajeBienvenida()} />),
+				mensajeFinalizado: (<MensajeFinalizacionExamWeb 
+										mensaje={this.obtenerObjetoTestPsicologicoMensajeFinalizacion()} 
+										estiloTablero="mensajeFinalizacion" />),
+				mensajeAlerta: (<MensajeAlerta 
+										mensaje={this.state.mensajeAlerta} />),
+				mensajeContador: (<MensajeContador 
+										mensaje={this.state.mensajeContador} />)
 			},
 			botones: [
 				{
@@ -1335,7 +1233,11 @@ class ExamenPsicologicoWeb extends Component {
 		};
 		
 		var botonesForm = form.botones.map( boton =>{
-			return (<Boton key={boton.key} id={boton.key} label={boton.label} onClick={boton.onClick} visible={boton.visible} />);
+			return (<Boton key={boton.key} 
+							id={boton.key} 
+							label={boton.label} 
+							onClick={boton.onClick} 
+							visible={boton.visible} />);
 		});
 		
 		var header = <Header nombreCandidato={this.obtenerObjetoDatosCandidato().nombre_completo} 
@@ -1350,13 +1252,11 @@ class ExamenPsicologicoWeb extends Component {
 		//console.log(this.state)
 		return(
 			<Fragment>
-				{(true) ? (
-					<Fragment>
+				<Fragment>
 					{header}
-					{(this.state.flagMostrarPantallaCarga) ? (
+					{(flagMostrarPantallaCarga) ? (
 						<CargandoImagen />
-					) : (''
-					)
+					) : ('')
 					}
 					<Tablero
 						testPsicologicoActualObjeto={this.obtenerTestPsicologico()}
@@ -1385,11 +1285,7 @@ class ExamenPsicologicoWeb extends Component {
 						{botonesForm}
 					</Tablero>
 					{footer}
-					</Fragment>
-				) : (
-					<CargandoImagen />
-				)
-				}
+				</Fragment>
 			</Fragment>
 		);
 	}

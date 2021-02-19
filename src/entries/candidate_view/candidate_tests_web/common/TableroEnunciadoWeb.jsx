@@ -110,12 +110,6 @@ export default class TableroEnunciadoWeb extends Component {
 		return alternativas;
 	}
 	
-	/*isGATBParte3(pregunta){
-		console.log(pregunta)
-		//return (pregunta.idTestPsicologico == 2 && pregunta.idParte == 3) ? true : false;
-		return (pregunta.idtestpsicologico == 2 && pregunta.idparte == 3) ? true : false;
-	}*/
-	
 	mostrarEnunciadoImg(texto){
 		//console.log('mostrarEnunciadoImg', texto);
 		var textoValor = '';
