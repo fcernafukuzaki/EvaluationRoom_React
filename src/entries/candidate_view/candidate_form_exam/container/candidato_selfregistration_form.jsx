@@ -540,7 +540,7 @@ class CandidatoDatosForm extends Component {
 		});
 		
 		var formValidarCandidatoRegistrado = {
-			titulo: 'Debe ingresar su correo electrónico para realizar el test psicológico',
+			titulo: 'Ingrese su correo electrónico para empezar las pruebas',
 			campos: [
 				[{
 					key: 'idCandidato',
@@ -561,7 +561,7 @@ class CandidatoDatosForm extends Component {
 					error: errors.correoElectronico,
 					onChange: this.onChange,
 					labelClass: 'col-md-3',
-					fieldClass: 'col-md-5',
+					fieldClass: 'col-md-9',
 					//textClass: 'text-lowercase',
 					required: 'true'
 				}]
@@ -883,17 +883,26 @@ class CandidatoDatosForm extends Component {
 				onSubmit: this.onSubmit.bind(this)
 			}
 		return (
-			<div className="mt-3 mx-auto ancho1200">
+			<Fragment>
+				<Fragment>
+					<div className='candidato_view'>
+						<div className='candidato_view_img_empresa'>
+							<img src={this.props.logoEmpresa} />
+						</div>
+						<div className='candidato_view_form'>
+							{esCandidatoRegistrado == null && <Formulario form={formValidarCandidatoRegistrado} />}
+						</div>
+					</div>
+				</Fragment>
+				{esCandidatoRegistrado != null && !(esCandidatoRegistrado) && <Formulario form={form} />}
+				<MensajeGuardarExitoso cargando={guardado} mensaje={"Se guardó exitosamente!"} />
 				<Prompt
 					when={this.state.prompt}
 					message="¿Estás seguro de NO querer registrar el candidato?"
 				/>
 				{isLoading && <CargandoImagen />}
 				{errorMensaje != '' && <MensajeError error={errorMensaje} />}
-				{esCandidatoRegistrado == null && <Formulario form={formValidarCandidatoRegistrado} />}
-				{esCandidatoRegistrado != null && !(esCandidatoRegistrado) && <Formulario form={form} />}
-				<MensajeGuardarExitoso cargando={guardado} mensaje={"Se guardó exitosamente!"} />
-			</div>
+			</Fragment>
 		);
 	}
 }

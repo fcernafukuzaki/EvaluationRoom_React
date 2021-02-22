@@ -1,0 +1,149 @@
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#home-container {
+	min-height: 100%;
+	position: relative;
+	padding-bottom: 40px; /* Altura del footer */
+}
+
+.table {
+	border-collapse: collapse; 
+}
+
+#footer {
+	height: 40px;
+	width: 100%;
+	background-color: #343a40!important;
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+}
+
+#footer p{
+	text-align: center;
+	color: white;
+	font-size: 12px;
+	padding: 5px 0px 0px 0px;
+}
+
+.overlay {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color:#000;
+	opacity: .75;
+	z-index: 9999999;
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.imagenrotar {
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin:-60px 0 0 -60px;
+	-webkit-animation:spin 2s linear infinite;
+	-moz-animation:spin 2s linear infinite;
+	animation:spin 2s linear infinite;
+}
+
+.mensajeErrorCentro {
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -180px 0 0 -180px;
+	text-align: center;
+	width: 360px;
+}
+
+.icono2em{
+	font-size: 2em;
+}
+
+.icono6em{
+	font-size: 6em;
+}
+
+.iconoRojo{
+	color: red;
+}
+
+.iconoAmarillo{
+	color: #ffc107
+}
+
+.iconoVerde{
+	color: green;
+}
+
+.candidato_view{
+	display: flex;
+	align-items: center;
+    flex-direction: column;
+	justify-content: center;
+	height: 680px;
+}
+
+.candidato_view_img_empresa img{
+	height: 250px;
+}
+
+.candidato_view_form{
+
+}
+
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+.mensajeGuardar {
+	transition: opacity 1s;
+	opacity: 1;
+}
+.mensajeGuardar.ocultarMensajeGuardar {
+	opacity: 0;
+	pointer-events:none;
+}
+
+.mensaje {
+	transition: opacity 7s;
+	opacity: 1;
+}
+.mensaje.ocultarMensaje {
+	opacity: 0;
+	pointer-events:none;
+}
+
+a 
+{ 
+	text-decoration:none; 
+}
+
+a.nounderline:link 
+{ 
+	text-decoration:none; 
+}
+
+.ancho1200{
+	//width: 1200px;
+	width: auto;
+}
+
+.ancho800{
+	width: 800px;
+}
+
+.botonesBusqueda{
+	display: flex;
+	align-items: center;
+}
