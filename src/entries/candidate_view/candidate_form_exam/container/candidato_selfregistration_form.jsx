@@ -886,15 +886,28 @@ class CandidatoDatosForm extends Component {
 			<Fragment>
 				<Fragment>
 					<div className='candidato_view'>
-						<div className='candidato_view_img_empresa'>
-							<img src={this.props.logoEmpresa} />
-						</div>
-						<div className='candidato_view_form'>
-							{esCandidatoRegistrado == null && <Formulario form={formValidarCandidatoRegistrado} />}
-						</div>
+					{esCandidatoRegistrado == null && 
+						<Fragment>
+							<div className='candidato_view_img_empresa'>
+								<img src={this.props.logoEmpresa} />
+							</div>
+							<div className='candidato_view_form'>
+								<Formulario form={formValidarCandidatoRegistrado} />
+							</div>
+						</Fragment>
+					}
+					{esCandidatoRegistrado != null && !(esCandidatoRegistrado) && 
+						<Fragment>
+							<div className='candidato_view_img_empresa_form'>
+								<img src={this.props.logoEmpresa} />
+							</div>
+							<div className='candidato_view_form'>
+								<Formulario form={form} />
+							</div>
+						</Fragment>
+					}
 					</div>
 				</Fragment>
-				{esCandidatoRegistrado != null && !(esCandidatoRegistrado) && <Formulario form={form} />}
 				<MensajeGuardarExitoso cargando={guardado} mensaje={"Se guardó exitosamente!"} />
 				<Prompt
 					when={this.state.prompt}

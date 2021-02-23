@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
 import reducers from './reducers';
-import EvaluationRoomAppPublico from './entries/candidate_view/EvaluationRoomAppPublico';
+import EvaluationRoomAppPublico from './entries/candidate_view/candidate_form_exam/container/EvaluationRoomAppPublico';
 
 import './assets/styles/estilos-candidate-view.scss'
 import './assets/styles/estilos-exam-web.scss'
