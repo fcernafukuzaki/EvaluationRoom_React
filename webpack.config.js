@@ -9,8 +9,8 @@ module.exports = {
         'index_exam': './src/index_exam.js',
     }, 
     output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'js/[name].[contenthash].js'
+        path: path.resolve(__dirname, '../EvaluationRoom/src/main/resources/public/'),
+        filename: 'js/[name].js'
     },
     resolve: {
         extensions: ['.js', '.jsx']
@@ -67,7 +67,7 @@ module.exports = {
             filename: './pages/examen.html'
         }),
         new MiniCssExtractPlugin({
-            filename: 'css/[name].[contenthash].css',
+            filename: 'css/[name].css',
         }),
     ]
 }
