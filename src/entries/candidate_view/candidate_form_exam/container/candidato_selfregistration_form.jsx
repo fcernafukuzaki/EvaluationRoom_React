@@ -20,6 +20,7 @@ import {obtenerSexos } from '../../../../actions/actionSexo';
 import {obtenerEstadosCiviles } from '../../../../actions/actionEstadoCivil';
 import {obtenerDocumentosIdentidad } from '../../../../actions/actionDocumentoIdentidad';
 import {guardarCandidatoTestPsicologico, validarCandidatoRegistrado} from '../../../../actions/actionCandidato';
+import {getSoporteTecnicoNotificacionMensajesError} from '../../../../actions/actionSoporteTecnicoNotificacion'
 
 class CandidatoDatosForm extends Component {
 	constructor(props){
@@ -209,6 +210,9 @@ class CandidatoDatosForm extends Component {
 					errorMensaje: {status: 'ERROR_OTROS', mensaje: 'Ocurrió un error al registrar sus datos.'}
 				})
 			}
+		}
+		if(prevProps.obtenerSoporteTecnicoNotificacionMensajesErrorResponse !== this.props.obtenerSoporteTecnicoNotificacionMensajesErrorResponse){
+			
 		}
 		if (prevProps.errorResponse !== this.props.errorResponse) {
 			//console.log('error', this.props.errorResponse);
@@ -963,8 +967,13 @@ function mapStateToProps(state){
 		documentosIdentidadResponse : state.reducerDocumentoIdentidad.obtenerDocumentosIdentidadResponse,
 		guardarCandidatoTestPsicologicoResponse : state.reducerCandidato.guardarCandidatoTestPsicologicoResponse,
 		validarCandidatoRegistradoResponse : state.reducerCandidato.validarCandidatoRegistradoResponse,
+		obtenerSoporteTecnicoNotificacionMensajesErrorResponse: state.reducerSoporteTecnicoNotificacion.getSoporteTecnicoNotificacionMensajesErrorResponse,
 		errorResponse : state.reducerCandidato.errorResponse
 	}
 }
 
-export default connect(mapStateToProps, { guardarCandidatoTestPsicologico, validarCandidatoRegistrado, obtenerEstadosCiviles, obtenerDocumentosIdentidad, obtenerSexos, obtenerTipoDirecciones, obtenerPaises, obtenerPaisesNacimiento, obtenerDepartamentos, obtenerDepartamentosNacimiento, obtenerProvincias, obtenerProvinciasNacimiento, obtenerDistritos, obtenerDistritosNacimiento })(CandidatoDatosForm);
+export default connect(mapStateToProps, { guardarCandidatoTestPsicologico, validarCandidatoRegistrado, 
+	getSoporteTecnicoNotificacionMensajesError,
+	obtenerEstadosCiviles, obtenerDocumentosIdentidad, obtenerSexos, obtenerTipoDirecciones, 
+	obtenerPaises, obtenerPaisesNacimiento, obtenerDepartamentos, obtenerDepartamentosNacimiento, 
+	obtenerProvincias, obtenerProvinciasNacimiento, obtenerDistritos, obtenerDistritosNacimiento })(CandidatoDatosForm);

@@ -16,6 +16,7 @@ import { actionReclutador } from './reducerReclutador';
 import { actionSelectionProcess } from './reducerSelectionProcess';
 import { actionCandidatoApreciacion } from './reducerCandidatoApreciacion';
 import { actionCandidatoTestPsicologicoIniciarExamen } from './reducerCandidatoTestPsicologicoIniciarExamen'
+import { actionSoporteTecnicoNotificacion } from './reducerSoporteTecnicoNotificacion'
 
 const rootReducer = combineReducers({
 	reducerUsuario: actionUsuario,
@@ -33,7 +34,8 @@ const rootReducer = combineReducers({
 	reducerReclutador: actionReclutador,
 	reducerSelectionProcess: actionSelectionProcess,
 	reducerCandidatoApreciacion: actionCandidatoApreciacion,
-	reducerCandidatoTestPsicologico: actionCandidatoTestPsicologicoIniciarExamen
+	reducerCandidatoTestPsicologico: actionCandidatoTestPsicologicoIniciarExamen,
+	reducerSoporteTecnicoNotificacion: actionSoporteTecnicoNotificacion
 });
 
 export default rootReducer;
