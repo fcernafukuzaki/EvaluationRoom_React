@@ -7,7 +7,8 @@ import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExit
 import MensajeError from '../../../components/common/MensajeError';
 import CargandoImagen from '../../../components/common/CargandoImagen';
 import {encriptarAES} from '../../../common/components/encriptar_aes';
-
+import {SoporteTecnicoNotificacionButtonAbrirModal} from '../components/soportetecnico_notificacion_boton'
+import SoporteTecnicoNotificacionModal from '../components/soportetecnico_notificacion_modal'
 import {validateInput, validateInputCandidatoRegistrado} from '../components/candidate_selfregistration_form_validate';
 
 import {obtenerTipoDirecciones } from '../../../../actions/actionTipoDireccion';
@@ -56,13 +57,15 @@ class CandidatoDatosForm extends Component {
 			prompt: false,
 			errorMensaje: '',
 			guardado: false,
-			esCandidatoRegistrado: null
+			esCandidatoRegistrado: null,
+			modalCerrado: true
 		}
 		
 		this.validarCandidatoRegistrado = this.validarCandidatoRegistrado.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
 		this.onChange = this.onChange.bind(this);
 		this.onClickCancelar = this.onClickCancelar.bind(this);
+		this.handleOpenModal = this.handleOpenModal.bind(this)
 	}
 	
 	componentWillMount() {
@@ -411,6 +414,16 @@ class CandidatoDatosForm extends Component {
 		})
 	}
 	
+	handleOpenModal(){
+		this.setState({
+            modalCerrado: !this.state.modalCerrado
+		})
+	}
+
+	handleCloseModal(){
+
+	}
+
 	render() {
 		const { idCandidato, nombre, apellidoPaterno, apellidoMaterno, correoElectronico,
 		idDocumentoIdentidad, numeroDocumentoIdentidad, idEstadoCivil, cantidadHijos,
@@ -906,6 +919,11 @@ class CandidatoDatosForm extends Component {
 							</div>
 						</Fragment>
 					}
+						<Fragment>
+							<SoporteTecnicoNotificacionButtonAbrirModal
+								onClick={this.handleOpenModal}
+							/>
+						</Fragment>
 					</div>
 				</Fragment>
 				<MensajeGuardarExitoso cargando={guardado} mensaje={"Se guardó exitosamente!"} />
@@ -915,6 +933,15 @@ class CandidatoDatosForm extends Component {
 				/>
 				{isLoading && <CargandoImagen />}
 				{errorMensaje != '' && <MensajeError error={errorMensaje} />}
+				<SoporteTecnicoNotificacionModal cerrado={this.state.modalCerrado} 
+                    onClose={this.handleCloseModal.bind(this)} 
+                    //onGuardar={this.guardarCandidatoApreciacion.bind(this)}
+                    datosCandidatosApreciacion={this.props.candidatosApreciacion}
+                    datosCandidato={this.state.datosCandidato}
+                    idreclutador={this.props.idreclutador}
+                    guardado={this.props.guardado}
+                    tipoConsulta={this.state.tipoConsulta}
+                />
 			</Fragment>
 		);
 	}
