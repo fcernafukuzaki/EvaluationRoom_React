@@ -7,8 +7,8 @@ import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExit
 import MensajeError from '../../../components/common/MensajeError';
 import CargandoImagen from '../../../components/common/CargandoImagen';
 import {encriptarAES} from '../../../common/components/encriptar_aes';
-import {SoporteTecnicoNotificacionButtonAbrirModal} from '../components/soportetecnico_notificacion_boton'
-import SoporteTecnicoNotificacionModal from '../container/soportetecnico_notificacion_modal'
+import {SoporteTecnicoNotificacionButtonAbrirModal} from '../../soportetecnico_notificacion/components/soportetecnico_notificacion_boton'
+import SoporteTecnicoNotificacionModal from '../../soportetecnico_notificacion/container/soportetecnico_notificacion_modal'
 import {validateInput, validateInputCandidatoRegistrado} from '../components/candidate_selfregistration_form_validate';
 
 import {obtenerTipoDirecciones } from '../../../../actions/actionTipoDireccion';
@@ -20,7 +20,7 @@ import {obtenerSexos } from '../../../../actions/actionSexo';
 import {obtenerEstadosCiviles } from '../../../../actions/actionEstadoCivil';
 import {obtenerDocumentosIdentidad } from '../../../../actions/actionDocumentoIdentidad';
 import {guardarCandidatoTestPsicologico, validarCandidatoRegistrado} from '../../../../actions/actionCandidato';
-import {getSoporteTecnicoNotificacionMensajesError} from '../../../../actions/actionSoporteTecnicoNotificacion'
+import {getSoporteTecnicoNotificacionMensajesError, addSoporteTecnicoNotificacion} from '../../../../actions/actionSoporteTecnicoNotificacion'
 
 class CandidatoDatosForm extends Component {
 	constructor(props){
@@ -59,7 +59,8 @@ class CandidatoDatosForm extends Component {
 			errorMensaje: '',
 			guardado: false,
 			esCandidatoRegistrado: null,
-			modalCerrado: true
+			modalCerrado: true,
+			listaObservaciones: []
 		}
 		
 		this.validarCandidatoRegistrado = this.validarCandidatoRegistrado.bind(this);
@@ -67,10 +68,12 @@ class CandidatoDatosForm extends Component {
 		this.onChange = this.onChange.bind(this);
 		this.onClickCancelar = this.onClickCancelar.bind(this);
 		this.handleOpenModal = this.handleOpenModal.bind(this)
+		this.handleCloseModal = this.handleCloseModal.bind(this)
+		this.notificarSoporteTecnicoError = this.notificarSoporteTecnicoError.bind(this)
 	}
 	
 	componentWillMount() {
-		this.props.obtenerSexos();
+		/*this.props.obtenerSexos();
 		this.props.obtenerEstadosCiviles();
 		this.props.obtenerDocumentosIdentidad();
 		this.props.obtenerTipoDirecciones();
@@ -81,7 +84,8 @@ class CandidatoDatosForm extends Component {
 		this.props.obtenerDistritos(1,15,1501);
 		this.props.obtenerDepartamentosNacimiento(1);
 		this.props.obtenerProvinciasNacimiento(1,15);
-		this.props.obtenerDistritosNacimiento(1,15,1501);
+		this.props.obtenerDistritosNacimiento(1,15,1501);*/
+		this.props.getSoporteTecnicoNotificacionMensajesError()
 		this.setState({
 			isLoading: false
 		});
@@ -212,7 +216,21 @@ class CandidatoDatosForm extends Component {
 			}
 		}
 		if(prevProps.obtenerSoporteTecnicoNotificacionMensajesErrorResponse !== this.props.obtenerSoporteTecnicoNotificacionMensajesErrorResponse){
-
+			let rows = []
+			this.props.obtenerSoporteTecnicoNotificacionMensajesErrorResponse.mensajes.map( elemento =>{
+				if(elemento.id_mensaje != 5){
+					rows.push(
+						{
+							label: elemento.mensaje,
+							value: elemento.id_mensaje
+						}
+					)
+				}
+			});
+			
+			this.setState({
+				listaObservaciones: rows
+			})
 		}
 		if (prevProps.errorResponse !== this.props.errorResponse) {
 			//console.log('error', this.props.errorResponse);
@@ -419,13 +437,22 @@ class CandidatoDatosForm extends Component {
 	}
 	
 	handleOpenModal(){
+		console.log('Abrir modal')
+		
 		this.setState({
             modalCerrado: !this.state.modalCerrado
 		})
 	}
 
-	handleCloseModal(){
+	handleCloseModal(event){
+		console.log('Cerrar modal')
+		this.setState({
+            modalCerrado: !this.state.modalCerrado
+		})
+	}
 
+	notificarSoporteTecnicoError(correoelectronico, observacion, detalle){
+		this.props.addSoporteTecnicoNotificacion(correoelectronico, correoelectronico, observacion, detalle)
 	}
 
 	render() {
@@ -899,6 +926,25 @@ class CandidatoDatosForm extends Component {
 				}],
 				onSubmit: this.onSubmit.bind(this)
 			}
+		
+		var formModalError = {
+			titulo: 'Notificar error',
+			campos: [
+				[{
+					key: 'correoElectronico',
+					name: 'correoElectronico',
+					id: 'correoElectronico',
+					label: 'Correo electrónico : ',
+					type: 'text-linea',
+					value: correoElectronico.toLowerCase(),
+					error: errors.correoElectronico,
+					onChange: this.onChange,
+					labelClass: 'col-md-3',
+					fieldClass: 'col-md-9',
+					required: 'true'
+				}]
+			]
+		}
 		return (
 			<Fragment>
 				<Fragment>
@@ -937,14 +983,15 @@ class CandidatoDatosForm extends Component {
 				/>
 				{isLoading && <CargandoImagen />}
 				{errorMensaje != '' && <MensajeError error={errorMensaje} />}
-				<SoporteTecnicoNotificacionModal cerrado={this.state.modalCerrado} 
+				<SoporteTecnicoNotificacionModal 
+					cerrado={this.state.modalCerrado} 
                     onClose={this.handleCloseModal.bind(this)} 
-                    //onGuardar={this.guardarCandidatoApreciacion.bind(this)}
-                    datosCandidatosApreciacion={this.props.candidatosApreciacion}
-                    datosCandidato={this.state.datosCandidato}
-                    idreclutador={this.props.idreclutador}
+                    onGuardar={this.notificarSoporteTecnicoError.bind(this)}
+                    listaObservaciones={this.state.listaObservaciones}
+                    correoElectronico={this.state.correoElectronico}
+                    observacion={this.props.observacion}
                     guardado={this.props.guardado}
-                    tipoConsulta={this.state.tipoConsulta}
+					detalle={''}
                 />
 			</Fragment>
 		);

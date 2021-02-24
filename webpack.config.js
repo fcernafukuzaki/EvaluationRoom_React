@@ -57,7 +57,7 @@ module.exports = {
             filename: './index.html'
         }),
         new HtmlWebPackPlugin({
-            template: './public/index.html',
+            template: './public/index_public.html',
             chunks: ['index_public'],
             filename: './evaluacion/index.html'
         }),

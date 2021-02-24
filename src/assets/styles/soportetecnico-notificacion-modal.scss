@@ -1,0 +1,50 @@
+.soportetecnico_notificacion_overlay {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color:#000;
+	opacity: .75;
+	z-index: 99;
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.soportetecnico_notificacion_modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 100;
+  font-size: 13px;
+}
+
+.soportetecnico_notificacion_modal_container {
+  position: relative;
+  top: 10rem;
+  background-color: #ffffff;
+  padding: 1rem;
+  width: auto;
+  border-radius: 10px;
+  overflow: auto;
+  max-height: 680px;
+}
+
+.soportetecnico_notificacion_modal_close_button_align {
+  justify-content: flex-end;
+  display: flex;
+}
+
+.soportetecnico_notificacion_modal_close_button {
+  position: absolute;
+  background-color: #F5F5F5;
+  padding: 0.3rem 0.8rem;
+  border-radius: 10px;
+  border: 2px solid #b9b9b9;
+}
