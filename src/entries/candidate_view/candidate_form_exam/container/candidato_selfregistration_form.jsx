@@ -60,7 +60,8 @@ class CandidatoDatosForm extends Component {
 			guardado: false,
 			esCandidatoRegistrado: null,
 			modalCerrado: true,
-			listaObservaciones: []
+			listaObservaciones: [],
+			guardadoModal: false
 		}
 		
 		this.validarCandidatoRegistrado = this.validarCandidatoRegistrado.bind(this);
@@ -219,17 +220,20 @@ class CandidatoDatosForm extends Component {
 			let rows = []
 			this.props.obtenerSoporteTecnicoNotificacionMensajesErrorResponse.mensajes.map( elemento =>{
 				if(elemento.id_mensaje != 5){
-					rows.push(
-						{
+					rows.push({
 							label: elemento.mensaje,
 							value: elemento.id_mensaje
-						}
-					)
+					})
 				}
 			});
 			
 			this.setState({
 				listaObservaciones: rows
+			})
+		}
+		if(prevProps.addSoporteTecnicoNotificacionResponse !== this.props.addSoporteTecnicoNotificacionResponse){
+			this.setState({
+				guardadoModal: !this.state.guardadoModal
 			})
 		}
 		if (prevProps.errorResponse !== this.props.errorResponse) {
@@ -437,22 +441,27 @@ class CandidatoDatosForm extends Component {
 	}
 	
 	handleOpenModal(){
-		console.log('Abrir modal')
-		
 		this.setState({
             modalCerrado: !this.state.modalCerrado
 		})
 	}
 
 	handleCloseModal(event){
-		console.log('Cerrar modal')
 		this.setState({
-            modalCerrado: !this.state.modalCerrado
+            modalCerrado: !this.state.modalCerrado,
+			guardadoModal: false
 		})
 	}
 
 	notificarSoporteTecnicoError(correoelectronico, observacion, detalle){
 		this.props.addSoporteTecnicoNotificacion(correoelectronico, correoelectronico, observacion, detalle)
+		this.limpiarModal()
+	}
+
+	limpiarModal(){
+		this.setState({
+			guardadoModal: false
+		})
 	}
 
 	render() {
@@ -927,7 +936,7 @@ class CandidatoDatosForm extends Component {
 				onSubmit: this.onSubmit.bind(this)
 			}
 		
-		var formModalError = {
+		/*var formModalError = {
 			titulo: 'Notificar error',
 			campos: [
 				[{
@@ -943,8 +952,18 @@ class CandidatoDatosForm extends Component {
 					fieldClass: 'col-md-9',
 					required: 'true'
 				}]
-			]
-		}
+			],
+			botones: [
+				{
+					key: 'guardar',
+					label: 'Realizar test psicológico',
+					divClass: 'col-md-1',
+					botonClass: 'btn-primary btn-md',
+					tipo: 'button-submit',
+					isLoading: isLoading
+				}],
+				onSubmit: this.onSubmit.bind(this)
+		}*/
 		return (
 			<Fragment>
 				<Fragment>
@@ -989,9 +1008,8 @@ class CandidatoDatosForm extends Component {
                     onGuardar={this.notificarSoporteTecnicoError.bind(this)}
                     listaObservaciones={this.state.listaObservaciones}
                     correoElectronico={this.state.correoElectronico}
-                    observacion={this.props.observacion}
-                    guardado={this.props.guardado}
-					detalle={''}
+                    guardado={this.state.guardadoModal}
+					
                 />
 			</Fragment>
 		);
@@ -1015,12 +1033,13 @@ function mapStateToProps(state){
 		guardarCandidatoTestPsicologicoResponse : state.reducerCandidato.guardarCandidatoTestPsicologicoResponse,
 		validarCandidatoRegistradoResponse : state.reducerCandidato.validarCandidatoRegistradoResponse,
 		obtenerSoporteTecnicoNotificacionMensajesErrorResponse: state.reducerSoporteTecnicoNotificacion.getSoporteTecnicoNotificacionMensajesErrorResponse,
+		addSoporteTecnicoNotificacionResponse: state.reducerSoporteTecnicoNotificacion.addSoporteTecnicoNotificacionResponse,
 		errorResponse : state.reducerCandidato.errorResponse
 	}
 }
 
 export default connect(mapStateToProps, { guardarCandidatoTestPsicologico, validarCandidatoRegistrado, 
-	getSoporteTecnicoNotificacionMensajesError,
+	getSoporteTecnicoNotificacionMensajesError, addSoporteTecnicoNotificacion,
 	obtenerEstadosCiviles, obtenerDocumentosIdentidad, obtenerSexos, obtenerTipoDirecciones, 
 	obtenerPaises, obtenerPaisesNacimiento, obtenerDepartamentos, obtenerDepartamentosNacimiento, 
 	obtenerProvincias, obtenerProvinciasNacimiento, obtenerDistritos, obtenerDistritosNacimiento })(CandidatoDatosForm);
