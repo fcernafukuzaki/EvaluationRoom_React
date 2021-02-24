@@ -8,7 +8,7 @@ import MensajeError from '../../../components/common/MensajeError';
 import CargandoImagen from '../../../components/common/CargandoImagen';
 import {encriptarAES} from '../../../common/components/encriptar_aes';
 import {SoporteTecnicoNotificacionButtonAbrirModal} from '../components/soportetecnico_notificacion_boton'
-import SoporteTecnicoNotificacionModal from '../components/soportetecnico_notificacion_modal'
+import SoporteTecnicoNotificacionModal from '../container/soportetecnico_notificacion_modal'
 import {validateInput, validateInputCandidatoRegistrado} from '../components/candidate_selfregistration_form_validate';
 
 import {obtenerTipoDirecciones } from '../../../../actions/actionTipoDireccion';
@@ -212,7 +212,7 @@ class CandidatoDatosForm extends Component {
 			}
 		}
 		if(prevProps.obtenerSoporteTecnicoNotificacionMensajesErrorResponse !== this.props.obtenerSoporteTecnicoNotificacionMensajesErrorResponse){
-			
+
 		}
 		if (prevProps.errorResponse !== this.props.errorResponse) {
 			//console.log('error', this.props.errorResponse);
