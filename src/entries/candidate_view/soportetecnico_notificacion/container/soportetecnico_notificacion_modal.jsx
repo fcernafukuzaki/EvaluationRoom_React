@@ -3,10 +3,15 @@ import ModalError from '../../../common/components/modal_error'
 import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExitoso';
 import {SoporteTecnicoNotificacionButtonRegistrar} from '../components/soportetecnico_notificacion_boton'
 import FormControl from '@material-ui/core/FormControl';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormLabel from '@material-ui/core/FormLabel'
+import RadioGroup from '@material-ui/core/RadioGroup'
+import Radio from '@material-ui/core/Radio'
+//import MenuItem from '@material-ui/core/MenuItem';
+//import Select from '@material-ui/core/Select';
+//import InputLabel from '@material-ui/core/InputLabel';
 import TextField from '@material-ui/core/TextField';
+import FormHelperText from '@material-ui/core/FormHelperText';
 //import Formulario from '../../../common/components/formulario/formulario'
 
 class SoporteTecnicoNotificacionModal extends Component {
@@ -14,26 +19,38 @@ class SoporteTecnicoNotificacionModal extends Component {
         super(props);
 
         this.state = {
-            apreciacionCandidatoTexto: '',
             listaObservaciones: [],
-            tipoErrorSeleccionado: '',
-            correoElectronico: null,
-            observacion: null,
-            detalle: null
+            tipoErrorSeleccionado: 3,
+            correoElectronico: '',
+            observacion: '',
+            mensajeError: ''
         }
 
         this.onChangeDetalleError = this.onChangeDetalleError.bind(this)
     }
 
     componentDidUpdate(prevProps, prevState){
+        if(prevProps.limpiarModalForm !== this.props.limpiarModalForm){
+            this.setState({
+                tipoErrorSeleccionado: 3,
+                correoElectronico: '',
+                observacion: '',
+                mensajeError: ''
+            })
+        }
         if(prevProps.listaObservaciones !== this.props.listaObservaciones){
             let rows = []
             this.props.listaObservaciones.map(e => {
-                rows.push(<MenuItem key={e.value} value={e.value}>{e.label}</MenuItem>)
+                //rows.push(<MenuItem key={e.value} value={e.value}>{e.label}</MenuItem>)
+                rows.push(<FormControlLabel key={e.value} 
+                    value={e.value} 
+                    control={<Radio color="default" />} 
+                    label={e.label} />)
             })
 
             this.setState({
-                listaObservaciones: rows
+                listaObservaciones: rows,
+                observacion: this.props.listaObservaciones.filter(e => e.value == this.state.tipoErrorSeleccionado)[0].label
             })
         }
         if(prevProps.correoElectronico !== this.props.correoElectronico){
@@ -43,23 +60,14 @@ class SoporteTecnicoNotificacionModal extends Component {
         }
     }
 
-    actualizarMensajeDetalleError(mensajeError){
-        console.log('actualizarMensajeDetalleError', mensajeError)
-        this.setState({
-            mensajeError: mensajeError
-        });
-    }
-
     onChangeDetalleError(e){
-        console.log(e)
-        this.actualizarMensajeDetalleError(e.target.value)
         this.setState({
-            [e.target.name]: e.target.value
+            mensajeError: e.target.value
         });
     }
 
     textarea(detalle){
-        const placeholder = 'Colocar aquí el error a notificar.'
+        const placeholder = 'Colocar aquí el detalle del error a notificar (opcional).'
         return (
             <textarea id='text-area-error' 
                     name='text-area-error'
@@ -69,10 +77,11 @@ class SoporteTecnicoNotificacionModal extends Component {
                     onChange={this.onChangeDetalleError.bind(this)} />
         );
     }
-
+    
     onChange(value){
+        console.log(value)
         this.setState({
-            tipoErrorSeleccionado: value,
+            tipoErrorSeleccionado: parseInt(value),
             observacion: this.props.listaObservaciones.filter(e => e.value == value)[0].label
         })
     }
@@ -84,8 +93,8 @@ class SoporteTecnicoNotificacionModal extends Component {
     }
 
     render () {
-        const {cerrado, onGuardar, guardado, onClose, correoElectronico} = this.props
-        const {listaObservaciones, tipoErrorSeleccionado, observacion, detalle} = this.state
+        const {cerrado, onGuardar, guardado, onClose, errors} = this.props
+        const {listaObservaciones, tipoErrorSeleccionado, correoElectronico, observacion, mensajeError} = this.state
         
         if(cerrado) {
             return null
@@ -93,59 +102,82 @@ class SoporteTecnicoNotificacionModal extends Component {
             return (
                 <Fragment>
                     <ModalError onClose={onClose}>
-                        
                         <form className="form" autoComplete="off">
-                            <h5>Notificar error </h5>
-                            <FormControl key='select-mensajes-error' className='col-md-8'>
-                                <InputLabel id="demo-simple-select-helper-label">Seleccione tipo de error a notificar</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-helper-label"
-                                    id="demo-simple-select-helper"
-                                    value={tipoErrorSeleccionado}
-                                    onChange={(event) => {
-                                        this.onChange(event.target.value);
-                                    }}
-                                >
-                                    {listaObservaciones}
-                                </Select>
-                            </FormControl>
-
-                            
-                            <FormControl key={'correoElectronico'} 
-                                className={'col-md-8'} 
-                                error={true}>
-                                <TextField 
-                                    //error={typeof c.error !== 'undefined' ? true : false}
-                                    //id={typeof c.error !== 'undefined' ? 'standard-error' : "filled-basic"}
-                                    label={'Email: '}
-                                    type={'text-linea'}
-                                    defaultValue={this.state.correoElectronico}
-                                    style={{ width: 450 }}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    onChange={(event) => {
-                                        this.onChangeTextField(event.target.value);
-                                    }}
-                                />
-                                
-                            </FormControl>
-
-                            <div className="mt-4 mb-2">
-                                {this.textarea(this.state.mensajeError)}
-                            </div>
-                            <div className="form-group">
-                                <div className="alert alert-secondary">
-                                    <SoporteTecnicoNotificacionButtonRegistrar 
-                                        onClick={onGuardar.bind(this, this.state.correoElectronico, 
-                                            observacion, 
-                                            detalle)}
-                                    />
-                                </div>
-                            </div>
+                            {guardado &&
+                                (<Fragment>
+                                    <div className='mt-5'></div>
+                                    <MensajeGuardarExitoso 
+                                        cargando={guardado} 
+                                        classNameOcultarMensaje={guardado} 
+                                        mensaje={"¡Se envió notificación exitosamente!"} />
+                                </Fragment>)
+                            }
+                            {!guardado && (
+                                <Fragment>
+                                    <h5>Notificar error </h5>
+                                    <div className='mt-4'>
+                                        {/*
+                                        <FormControl key='select-mensajes-error' className='col-md-8'>
+                                            <InputLabel id="demo-simple-select-helper-label">Seleccione tipo de error a notificar</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-helper-label"
+                                                id="demo-simple-select-helper"
+                                                value={tipoErrorSeleccionado}
+                                                onChange={(event) => {
+                                                    this.onChange(event.target.value);
+                                                }}
+                                            >
+                                                {listaObservaciones}
+                                            </Select>
+                                        </FormControl>*/}
+                                        <FormControl component="fieldset">
+                                            <FormLabel component="legend">Tipo de error a notificar: </FormLabel>
+                                            <RadioGroup aria-label="radio-tipo-error" 
+                                                name="radio-tipo-error1" 
+                                                value={tipoErrorSeleccionado} 
+                                                onChange={(event) => {
+                                                    this.onChange(event.target.value);
+                                                }}>
+                                                {listaObservaciones}
+                                            </RadioGroup>
+                                            <FormHelperText>{errors.observacion}</FormHelperText>
+                                        </FormControl>
+                                        <FormControl key={'correoElectronico'} 
+                                            className={'col-md-8'} 
+                                            error={true}>
+                                            <TextField 
+                                                //error={typeof c.error !== 'undefined' ? true : false}
+                                                //id={typeof c.error !== 'undefined' ? 'standard-error' : "filled-basic"}
+                                                label={'Email: '}
+                                                type={'text-linea'}
+                                                defaultValue={this.state.correoElectronico}
+                                                style={{ width: 450 }}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                                onChange={(event) => {
+                                                    this.onChangeTextField(event.target.value);
+                                                }}
+                                            />
+                                            <FormHelperText>{errors.correoElectronico}</FormHelperText>
+                                        </FormControl>
+                                    </div>
+                                    <div className="mt-4 mb-2">
+                                        {this.textarea(mensajeError)}
+                                    </div>
+                                    <div className="form-group">
+                                        <div className="alert alert-secondary">
+                                            <SoporteTecnicoNotificacionButtonRegistrar 
+                                                onClick={onGuardar.bind(this, correoElectronico, 
+                                                    observacion, 
+                                                    mensajeError)}
+                                            />
+                                        </div>
+                                    </div>
+                                </Fragment>
+                            )}
                         </form>
                     </ModalError>
-                    <MensajeGuardarExitoso cargando={guardado} mensaje={"¡Se envió error exitosamente!"} />
                 </Fragment>
             );
         }

@@ -13,7 +13,7 @@ export function getSoporteTecnicoNotificacionMensajesError(token) {
 			}
 		}
 	return (dispatch, getState) => {
-		axios.post((''), body)
+		axios.get(('https://evaluationroom-support-notific.herokuapp.com/v1/candidato_soportetecnico_notificar'), body)
 			.then((response) => { dispatch({ type: SOPORTE_TECNICO_NOTIFICACION_MENSAJES_ERROR_GET, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
@@ -26,16 +26,14 @@ export function getSoporteTecnicoNotificacionMensajesError(token) {
 }
 
 export function addSoporteTecnicoNotificacion(token, correoelectronico, observacion, detalle) {
-	var body = {
-		headers: {
-			Authorization: token
-		},
-		correoelectronico: correoelectronico, 
+	var body = {headers: { Authorization: token },
+		correo_electronico: correoelectronico, 
 		observacion: observacion, 
-		detalle: detalle
+		detalle: detalle.length > 0 ? {mensaje: detalle} : null
 	}
+	var header ={headers: { Authorization: token }}
 	return (dispatch, getState) => {
-		axios.post((''), body)
+		axios.post(('https://evaluationroom-support-notific.herokuapp.com/v1/candidato_soportetecnico_notificar'), body, header)
 			.then((response) => { dispatch({ type: SOPORTE_TECNICO_NOTIFICACION_ADD, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){

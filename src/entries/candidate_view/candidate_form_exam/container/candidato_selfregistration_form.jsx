@@ -10,6 +10,7 @@ import {encriptarAES} from '../../../common/components/encriptar_aes';
 import {SoporteTecnicoNotificacionButtonAbrirModal} from '../../soportetecnico_notificacion/components/soportetecnico_notificacion_boton'
 import SoporteTecnicoNotificacionModal from '../../soportetecnico_notificacion/container/soportetecnico_notificacion_modal'
 import {validateInput, validateInputCandidatoRegistrado} from '../components/candidate_selfregistration_form_validate';
+import {validateModalFormInput} from '../../soportetecnico_notificacion/components/soportetecnico_notificacion_form_validate'
 
 import {obtenerTipoDirecciones } from '../../../../actions/actionTipoDireccion';
 import {obtenerPaises, obtenerPaisesNacimiento } from '../../../../actions/actionPais';
@@ -61,7 +62,9 @@ class CandidatoDatosForm extends Component {
 			esCandidatoRegistrado: null,
 			modalCerrado: true,
 			listaObservaciones: [],
-			guardadoModal: false
+			guardadoModal: false,
+			errorsModalForm: {},
+			limpiarModalForm: false
 		}
 		
 		this.validarCandidatoRegistrado = this.validarCandidatoRegistrado.bind(this);
@@ -446,21 +449,31 @@ class CandidatoDatosForm extends Component {
 		})
 	}
 
-	handleCloseModal(event){
+	handleCloseModal(){
 		this.setState({
             modalCerrado: !this.state.modalCerrado,
 			guardadoModal: false
 		})
 	}
 
+	isValidModalForm(correoelectronico, observacion, detalle){
+		const { errors, isValid } = validateModalFormInput(correoelectronico, observacion, detalle);
+		if (!isValid) { this.setState({	errorsModalForm : errors}) }
+		if (isValid) { this.setState({	errorsModalForm : {}}) }
+		return isValid;
+	}
+
 	notificarSoporteTecnicoError(correoelectronico, observacion, detalle){
-		this.props.addSoporteTecnicoNotificacion(correoelectronico, correoelectronico, observacion, detalle)
-		this.limpiarModal()
+		if (this.isValidModalForm(correoelectronico, observacion, detalle)) {
+			this.props.addSoporteTecnicoNotificacion(correoelectronico, correoelectronico, observacion, detalle)
+			this.limpiarModal()
+		}
 	}
 
 	limpiarModal(){
 		this.setState({
-			guardadoModal: false
+			guardadoModal: false,
+			limpiarModalForm: true
 		})
 	}
 
@@ -1003,13 +1016,14 @@ class CandidatoDatosForm extends Component {
 				{isLoading && <CargandoImagen />}
 				{errorMensaje != '' && <MensajeError error={errorMensaje} />}
 				<SoporteTecnicoNotificacionModal 
+					limpiarModalForm={this.state.limpiarModalForm}
 					cerrado={this.state.modalCerrado} 
                     onClose={this.handleCloseModal.bind(this)} 
                     onGuardar={this.notificarSoporteTecnicoError.bind(this)}
                     listaObservaciones={this.state.listaObservaciones}
                     correoElectronico={this.state.correoElectronico}
                     guardado={this.state.guardadoModal}
-					
+					errors={this.state.errorsModalForm}
                 />
 			</Fragment>
 		);
