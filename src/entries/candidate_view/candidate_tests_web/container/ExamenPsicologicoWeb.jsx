@@ -21,6 +21,8 @@ import {obtenerInterpretacion} from '../../../../actions/actionCandidato';
 import {notificarReclutador} from '../../../../actions/actionReclutador';
 import {obtenerCandidatoTestPsicologicoIniciarExamen, guardarCandidatoTestPsicologicoRespuesta, guardarCandidatoTestPsicologicoLog} from '../../../../actions/actionCandidatoTestPsicologicoIniciarExamen'
 import {getSoporteTecnicoNotificacionMensajesError, addSoporteTecnicoNotificacion} from '../../../../actions/actionSoporteTecnicoNotificacion'
+import {validateModalFormInput} from '../../soportetecnico_notificacion/components/soportetecnico_notificacion_form_validate'
+import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExitoso';
 
 class ExamenPsicologicoWeb extends Component {
 	constructor(props){
@@ -144,6 +146,11 @@ class ExamenPsicologicoWeb extends Component {
 			
 			this.setState({
 				listaObservaciones: rows
+			})
+		}
+		if(prevProps.addSoporteTecnicoNotificacionResponse !== this.props.addSoporteTecnicoNotificacionResponse){
+			this.setState({
+				guardadoModal: !this.state.guardadoModal
 			})
 		}
 		if (prevProps.errorCandidatoTestPsicologicoIniciarExamenResponse !== this.props.errorCandidatoTestPsicologicoIniciarExamenResponse) {

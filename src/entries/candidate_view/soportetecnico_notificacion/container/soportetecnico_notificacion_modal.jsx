@@ -73,7 +73,7 @@ class SoporteTecnicoNotificacionModal extends Component {
                 rows.push(<FormControlLabel key={e.value} 
                     value={e.value} 
                     control={<Radio color="default" />} 
-                    label={nuevaEtiqueta} />)
+                    label={nuevaEtiqueta.nuevoTextoLabel} />)
             })
             
             var observacion = this.props.listaObservaciones.length > 0 ?
@@ -85,7 +85,7 @@ class SoporteTecnicoNotificacionModal extends Component {
             
             this.setState({
                 listaObservaciones: rows,
-                observacion: observacion
+                observacion: observacion.nuevoTexto
             })
         }
     }
@@ -95,7 +95,10 @@ class SoporteTecnicoNotificacionModal extends Component {
         for (let k in listaArgumentos) {
             nuevoTexto = nuevoTexto.replace("{}", listaArgumentos[k])
         }
-        return nuevoTexto
+        var nuevoTextoLabel = texto
+        var nuevoTextoLabel_ = nuevoTextoLabel.split("{}");
+
+        return {nuevoTextoLabel: nuevoTextoLabel_[0], nuevoTexto: nuevoTexto}
     }
 
     onChangeDetalleError(e){
