@@ -2,8 +2,8 @@ import React, {Component, Fragment} from 'react';
 
 const Header = (props) => {
 	const { nombreCandidato, numeroTestPsicologicoActual, numeroTestPsicologicoParteActual, 
-		testPsicologicosAsignados, testPsicologicosFaltantes, 
-		getLogo, numeroPreguntaActualIndex, candidatoDatos, estiloTablero } = props;
+		testPsicologicosAsignados, testPsicologicosFaltantes, flagMostrarMensajeBienvenida, 
+		getLogo } = props;
 	let numero_TestPsicologicoActual = numeroTestPsicologicoActual;
 	let numero_TestPsicologicoParte = numeroTestPsicologicoParteActual > 0 ? numeroTestPsicologicoParteActual : 0
 	return (
@@ -21,7 +21,7 @@ const Header = (props) => {
 							) : ('')
 						}
 						{
-							testPsicologicosAsignados > 0 && numero_TestPsicologicoActual > 0 &&
+							testPsicologicosAsignados > 0 && !flagMostrarMensajeBienvenida &&
 							<Fragment>
 								<p>Cantidad de pruebas asignadas: {testPsicologicosAsignados}</p>
 								<p>Cantidad de pruebas faltantes: {testPsicologicosFaltantes + 1 >= 0 ? testPsicologicosFaltantes + 1 : 0}</p>
