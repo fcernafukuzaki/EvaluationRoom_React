@@ -77,7 +77,7 @@ class CandidatoDatosForm extends Component {
 	}
 	
 	componentWillMount() {
-		/*this.props.obtenerSexos();
+		this.props.obtenerSexos();
 		this.props.obtenerEstadosCiviles();
 		this.props.obtenerDocumentosIdentidad();
 		this.props.obtenerTipoDirecciones();
@@ -88,7 +88,7 @@ class CandidatoDatosForm extends Component {
 		this.props.obtenerDistritos(1,15,1501);
 		this.props.obtenerDepartamentosNacimiento(1);
 		this.props.obtenerProvinciasNacimiento(1,15);
-		this.props.obtenerDistritosNacimiento(1,15,1501);*/
+		this.props.obtenerDistritosNacimiento(1,15,1501);
 		this.props.getSoporteTecnicoNotificacionMensajesError()
 		this.setState({
 			isLoading: false

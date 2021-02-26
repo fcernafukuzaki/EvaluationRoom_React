@@ -1451,6 +1451,7 @@ class ExamenPsicologicoWeb extends Component {
 							numeroTestPsicologicoActual={this.state.numeroTestPsicologicoActual} 
 							numeroTestPsicologicoParteActual={this.state.numeroTestPsicologicoParteActual} 
 							testPsicologicosAsignados={this.state.testPsicologicosAsignados} 
+							testPsicologicosFaltantes={this.state.listaInstruccionesDePreguntasPendientes.length}
 							numeroPreguntaActualIndex={this.state.numeroPreguntaActualIndex} 
 							candidatoDatos={this.props.candidatoResponse} 
 							getLogo={this.props.logoEmpresa} />;
