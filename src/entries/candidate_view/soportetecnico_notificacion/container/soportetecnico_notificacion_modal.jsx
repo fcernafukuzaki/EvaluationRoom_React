@@ -68,7 +68,7 @@ class SoporteTecnicoNotificacionModal extends Component {
             let argumentosAdicionales = this.props.argumentosAdicionales
             let rows = []
             this.props.listaObservaciones.map(e => {
-                var nuevaEtiqueta = this.reemplazar(e.label, [argumentosAdicionales.idtestpsicologico, argumentosAdicionales.idpregunta])
+                var nuevaEtiqueta = this.reemplazar(e.label, [argumentosAdicionales.idtestpsicologico, argumentosAdicionales.idparte, argumentosAdicionales.idpregunta])
                 //rows.push(<MenuItem key={e.value} value={e.value}>{e.label}</MenuItem>)
                 rows.push(<FormControlLabel key={e.value} 
                     value={e.value} 
@@ -112,7 +112,7 @@ class SoporteTecnicoNotificacionModal extends Component {
         return (
             <textarea id='text-area-error' 
                     name='text-area-error'
-                    rows="10" cols="70" 
+                    rows="5" cols="70" 
                     value={detalle} 
                     placeholder={placeholder}
                     onChange={this.onChangeDetalleError.bind(this)} />
