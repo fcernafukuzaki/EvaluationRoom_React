@@ -24,7 +24,7 @@ const Header = (props) => {
 							testPsicologicosAsignados > 0 &&
 							<Fragment>
 								<p>Cantidad de pruebas asignadas: {testPsicologicosAsignados}</p>
-								<p>Cantidad de pruebas faltantes: {testPsicologicosFaltantes}</p>
+								<p>Cantidad de pruebas faltantes: {testPsicologicosFaltantes + 1 >= 0 ? testPsicologicosFaltantes + 1 : 0}</p>
 								<p>Prueba psicológica {numero_TestPsicologicoActual} de {testPsicologicosAsignados} (Parte {numero_TestPsicologicoParte})</p>
 							</Fragment>
 						}

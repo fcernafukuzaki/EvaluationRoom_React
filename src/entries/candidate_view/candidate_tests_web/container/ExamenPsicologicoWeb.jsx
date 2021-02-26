@@ -400,11 +400,7 @@ class ExamenPsicologicoWeb extends Component {
 						valorContador: stateValorContador,
 						mensajeAlerta: stateMensajeAlerta,
 						listaInstruccionesDePreguntasPendientes: nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte,
-						testPsicologicosPendientes: typeof this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato !== 'undefined' ? 
-											(this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato.cantidad_pruebas_asignadas - 
-												this.obtenerNumeroTestPsicologicoActual(
-													stateTestPsicologicoActualObjeto.idtestpsicologico)
-											) : 0,
+						testPsicologicosPendientes: this.state.testPsicologicosAsignados - this.obtenerNumeroTestPsicologicoActual(stateTestPsicologicoActualObjeto.idtestpsicologico),
 						numeroTestPsicologicoActual: this.obtenerNumeroTestPsicologicoActual(stateTestPsicologicoActualObjeto.idtestpsicologico),
 						numeroTestPsicologicoParteActual: this.obtenerNumeroTestPsicologicoParteActual(stateTestPsicologicoActualObjeto.idtestpsicologico, stateTestPsicologicoActualObjeto.idparte),
 					});
@@ -452,11 +448,7 @@ class ExamenPsicologicoWeb extends Component {
 							valorContador: stateValorContador,
 							mensajeAlerta: stateMensajeAlerta,
 							listaInstruccionesDePreguntasPendientes: nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte,
-							testPsicologicosPendientes: typeof this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato !== 'undefined' ? 
-											(this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato.cantidad_pruebas_asignadas - 
-												this.obtenerNumeroTestPsicologicoActual(
-													stateTestPsicologicoActualObjeto.idtestpsicologico)
-											) : 0,
+							testPsicologicosPendientes: this.state.testPsicologicosAsignados - this.obtenerNumeroTestPsicologicoActual(stateTestPsicologicoActualObjeto.idtestpsicologico),
 							numeroTestPsicologicoActual: this.obtenerNumeroTestPsicologicoActual(stateTestPsicologicoActualObjeto.idtestpsicologico),
 							numeroTestPsicologicoParteActual: this.obtenerNumeroTestPsicologicoParteActual(stateTestPsicologicoActualObjeto.idtestpsicologico, stateTestPsicologicoActualObjeto.idparte),
 						});
@@ -892,11 +884,7 @@ class ExamenPsicologicoWeb extends Component {
 				testPsicologicoActualObjeto: nuevaListaPreguntasPendientes[0],
 				listaPreguntasPendientes: nuevaListaPreguntasPendientes,
 				listaInstruccionesDePreguntasPendientes: nuevaListaInstruccionesDePreguntasPendientes,
-				testPsicologicosPendientes: typeof this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato !== 'undefined' ? 
-											(this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato.cantidad_pruebas_asignadas - 
-												this.obtenerNumeroTestPsicologicoActual(
-													nuevaListaPreguntasPendientes[0].idtestpsicologico)
-											) : 0,
+				testPsicologicosPendientes: this.state.testPsicologicosAsignados - this.obtenerNumeroTestPsicologicoActual(nuevaListaPreguntasPendientes[0].idtestpsicologico),
 				flagInstrucciones: stateFlagInstrucciones,
 				numeroTestPsicologicoActual: this.obtenerNumeroTestPsicologicoActual(nuevaListaPreguntasPendientes[0].idtestpsicologico),
 				numeroTestPsicologicoParteActual: this.obtenerNumeroTestPsicologicoParteActual(nuevaListaPreguntasPendientes[0].idtestpsicologico, nuevaListaPreguntasPendientes[0].idparte),
@@ -926,11 +914,7 @@ class ExamenPsicologicoWeb extends Component {
 					flagInstrucciones: stateFlagInstrucciones,
 					listaPreguntasPendientes: this.eliminarParte(listaPreguntasPendientesPorTestPsicologicoYParte),
 					listaInstruccionesDePreguntasPendientes: nuevoListaInstruccionesDePreguntasPendientes,
-					testPsicologicosPendientes: typeof this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato !== 'undefined' ? 
-											(this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato.cantidad_pruebas_asignadas - 
-												this.obtenerNumeroTestPsicologicoActual(
-													listaPreguntasPendientes[0].idtestpsicologico)
-											) : 0,
+					testPsicologicosPendientes: this.state.testPsicologicosAsignados - this.obtenerNumeroTestPsicologicoActual(listaPreguntasPendientes[0].idtestpsicologico),
 					numeroTestPsicologicoActual: this.obtenerNumeroTestPsicologicoActual(listaPreguntasPendientes[0].idtestpsicologico),
 					numeroTestPsicologicoParteActual: this.obtenerNumeroTestPsicologicoParteActual(listaPreguntasPendientes[0].idtestpsicologico, listaPreguntasPendientes[0].idparte),
 				});
@@ -1059,11 +1043,7 @@ class ExamenPsicologicoWeb extends Component {
 				flagContinuarTest: flagContinuarTest,
 				//listaPreguntasPendientes: this.props.candidatoTestPsicologicoIniciarExamenResponse.preguntas_pendientes,
 				listaInstruccionesDePreguntasPendientes: this.props.candidatoTestPsicologicoIniciarExamenResponse.testpsicologicos_instrucciones,
-				testPsicologicosPendientes: typeof this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato !== 'undefined' ? 
-											(this.props.candidatoTestPsicologicoIniciarExamenResponse.candidato.cantidad_pruebas_asignadas - 
-												this.obtenerNumeroTestPsicologicoActual(
-													stateTestPsicologicoActualObjeto.idtestpsicologico)
-											) : 0,
+				testPsicologicosPendientes: this.state.testPsicologicosAsignados - this.obtenerNumeroTestPsicologicoActual(stateTestPsicologicoActualObjeto.idtestpsicologico),
 				numeroTestPsicologicoActual: this.obtenerNumeroTestPsicologicoActual(stateTestPsicologicoActualObjeto.idtestpsicologico),
 				numeroTestPsicologicoParteActual: this.obtenerNumeroTestPsicologicoParteActual(stateTestPsicologicoActualObjeto.idtestpsicologico, stateTestPsicologicoActualObjeto.idparte),
 			});
