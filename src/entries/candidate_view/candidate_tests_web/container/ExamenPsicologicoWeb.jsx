@@ -15,10 +15,12 @@ import TableroEnunciadoWeb from '../common/TableroEnunciadoWeb';
 import MensajeInstruccionesWeb from '../common/MensajeInstruccionesWeb';
 import MensajeFinalizacionExamWeb from '../common/MensajeFinalizacionExamWeb';
 import MensajeContador from '../common/MensajeContador';
-
+import {SoporteTecnicoNotificacionButtonAbrirModal} from '../../soportetecnico_notificacion/components/soportetecnico_notificacion_boton'
+import SoporteTecnicoNotificacionModal from '../../soportetecnico_notificacion/container/soportetecnico_notificacion_modal'
 import {obtenerInterpretacion} from '../../../../actions/actionCandidato';
 import {notificarReclutador} from '../../../../actions/actionReclutador';
 import {obtenerCandidatoTestPsicologicoIniciarExamen, guardarCandidatoTestPsicologicoRespuesta, guardarCandidatoTestPsicologicoLog} from '../../../../actions/actionCandidatoTestPsicologicoIniciarExamen'
+import {getSoporteTecnicoNotificacionMensajesError, addSoporteTecnicoNotificacion} from '../../../../actions/actionSoporteTecnicoNotificacion'
 
 class ExamenPsicologicoWeb extends Component {
 	constructor(props){
@@ -62,6 +64,13 @@ class ExamenPsicologicoWeb extends Component {
 			candidatoDatos: undefined,
 			flagMostrarPantallaCarga: false,
 			errorMensaje: '',
+			// Modal
+			correoElectronico: '',
+			modalCerrado: true,
+			listaObservaciones: [],
+			guardadoModal: false,
+			errorsModalForm: {},
+			limpiarModalForm: false
 		}
 		
 		this.guardarCandidatoRespuesta = this.guardarCandidatoRespuesta.bind(this)
@@ -70,16 +79,22 @@ class ExamenPsicologicoWeb extends Component {
 		this.alternativaSeleccionar = this.alternativaSeleccionar.bind(this)
 		this.esTestPsicologicoConPreguntaAbierta = this.esTestPsicologicoConPreguntaAbierta.bind(this)
 		this.esTestPsicologicoConImagen = this.esTestPsicologicoConImagen.bind(this)
+		// Modal
+		this.handleOpenModal = this.handleOpenModal.bind(this)
+		this.handleCloseModal = this.handleCloseModal.bind(this)
+		this.notificarSoporteTecnicoError = this.notificarSoporteTecnicoError.bind(this)
 	}
 	
 	componentWillMount() {
 		this.obtenerCandidatoTestPsicologicoIniciarExamen(obtenerValorParametro('id'))
+		this.props.getSoporteTecnicoNotificacionMensajesError()
 	}
 
 	componentDidUpdate(prevProps, prevState) {
 		if(prevProps.candidatoTestPsicologicoIniciarExamenResponse !== this.props.candidatoTestPsicologicoIniciarExamenResponse) {
 			let candidatoTestPsicologicoIniciarExamen = this.props.candidatoTestPsicologicoIniciarExamenResponse
 			this.setState({
+				correoElectronico: obtenerValorParametro('id'),
 				flagMostrarPantallaCarga: false,
 				candidatoDatos: typeof this.state.candidatoDatos === 'undefined' ? 
 									candidatoTestPsicologicoIniciarExamen.candidato : {},
@@ -115,6 +130,21 @@ class ExamenPsicologicoWeb extends Component {
 			}
 			var objeto_lista_testpsicologicos_asignados = {lista_test_psicologicos: lista_testpsicologicos_asignados}
 			this.obtenerCandidatoTestPsicologicoIniciarExamen(this.state.candidatoDatos.correoelectronico, objeto_lista_testpsicologicos_asignados)
+		}
+		if(prevProps.obtenerSoporteTecnicoNotificacionMensajesErrorResponse !== this.props.obtenerSoporteTecnicoNotificacionMensajesErrorResponse){
+			let rows = []
+			this.props.obtenerSoporteTecnicoNotificacionMensajesErrorResponse.mensajes.map( elemento =>{
+				if(elemento.id_mensaje == 5){
+					rows.push({
+							label: elemento.mensaje,
+							value: elemento.id_mensaje
+					})
+				}
+			});
+			
+			this.setState({
+				listaObservaciones: rows
+			})
 		}
 		if (prevProps.errorCandidatoTestPsicologicoIniciarExamenResponse !== this.props.errorCandidatoTestPsicologicoIniciarExamenResponse) {
 			let errorResponse = this.props.errorCandidatoTestPsicologicoIniciarExamenResponse
@@ -1321,6 +1351,46 @@ class ExamenPsicologicoWeb extends Component {
 	/*
 	 * Fin Mensajes
 	 */
+
+	/**
+	 * Inicio Modal
+	 */
+	handleOpenModal(){
+		this.setState({
+            modalCerrado: !this.state.modalCerrado
+		})
+	}
+
+	handleCloseModal(){
+		this.setState({
+            modalCerrado: !this.state.modalCerrado,
+			guardadoModal: false
+		})
+	}
+
+	isValidModalForm(correoelectronico, observacion, detalle){
+		const { errors, isValid } = validateModalFormInput(correoelectronico, observacion, detalle);
+		if (!isValid) { this.setState({	errorsModalForm : errors}) }
+		if (isValid) { this.setState({	errorsModalForm : {}}) }
+		return isValid;
+	}
+
+	notificarSoporteTecnicoError(correoelectronico, observacion, detalle){
+		if (this.isValidModalForm(correoelectronico, observacion, detalle)) {
+			this.props.addSoporteTecnicoNotificacion(correoelectronico, correoelectronico, observacion, detalle)
+			this.limpiarModal()
+		}
+	}
+
+	limpiarModal(){
+		this.setState({
+			guardadoModal: false,
+			limpiarModalForm: true
+		})
+	}
+	/**
+	 * Fin Modal
+	 */
 	
 	render() {
 		const {flagMostrarPantallaCarga, flagMostrarBotonInicio, flagMostrarBotonInicioInstrucciones, flagMostrarBotonInicioInstrucciones2, flagMostrarBotonSiguiente, errorMensaje} = this.state;
@@ -1379,7 +1449,7 @@ class ExamenPsicologicoWeb extends Component {
 							getLogo={this.props.logoEmpresa} />;
 		
 		var footer = <Footer />;
-		//console.log(this.state)
+		
 		return(
 			<Fragment>
 				<Fragment>
@@ -1415,9 +1485,31 @@ class ExamenPsicologicoWeb extends Component {
 						esTestPsicologicoConPreguntaAbierta={this.esTestPsicologicoConPreguntaAbierta}
 					>
 						{botonesForm}
+						{
+							this.state.listaInstruccionesDePreguntasPendientes.length > 0 &&
+							!this.state.flagMostrarMensajeBienvenida &&
+								(<Fragment>
+									<div className="mt-4">
+										<SoporteTecnicoNotificacionButtonAbrirModal
+											onClick={this.handleOpenModal}
+										/>
+									</div>
+								</Fragment>)
+						}
 					</Tablero>
 					{footer}
 				</Fragment>
+				<SoporteTecnicoNotificacionModal 
+					limpiarModalForm={this.state.limpiarModalForm}
+					cerrado={this.state.modalCerrado} 
+					onClose={this.handleCloseModal.bind(this)} 
+					onGuardar={this.notificarSoporteTecnicoError.bind(this)}
+					listaObservaciones={this.state.listaObservaciones}
+					correoElectronico={this.state.correoElectronico}
+					guardado={this.state.guardadoModal}
+					errors={this.state.errorsModalForm}
+					argumentosAdicionales={this.state.testPsicologicoActualObjeto}
+				/>
 			</Fragment>
 		);
 	}
@@ -1430,6 +1522,8 @@ function mapStateToProps(state){
 		candidatoTestPsicologicoLogResponse: state.reducerCandidatoTestPsicologico.registrarCandidatoTestPsicologicoLogResponse,
 		candidatoInterpretacionResponse: state.reducerCandidato.obtenerInterpretacionResponse,
 		testPsicologicosFinalizadoNotificarReclutadorResponse: state.reducerReclutador.notificarReclutadorResponse,
+		obtenerSoporteTecnicoNotificacionMensajesErrorResponse: state.reducerSoporteTecnicoNotificacion.getSoporteTecnicoNotificacionMensajesErrorResponse,
+		addSoporteTecnicoNotificacionResponse: state.reducerSoporteTecnicoNotificacion.addSoporteTecnicoNotificacionResponse,
 		errorCandidatoTestPsicologicoIniciarExamenResponse: state.reducerCandidatoTestPsicologico.errorCandidatoTestPsicologicoIniciarExamenResponse
 	}
 }
@@ -1439,5 +1533,6 @@ export default connect(mapStateToProps, {
 	guardarCandidatoTestPsicologicoRespuesta,
 	guardarCandidatoTestPsicologicoLog,
 	obtenerInterpretacion, 
-	notificarReclutador 
+	notificarReclutador,
+	getSoporteTecnicoNotificacionMensajesError, addSoporteTecnicoNotificacion
 })(ExamenPsicologicoWeb);

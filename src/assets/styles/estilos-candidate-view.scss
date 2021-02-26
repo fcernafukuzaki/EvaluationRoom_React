@@ -90,7 +90,23 @@ html, body {
 	align-items: center;
     flex-direction: column;
 	justify-content: center;
+	//height: 680px;
+}
+
+.candidato_validar_view{
+	display: flex;
+	align-items: center;
+    flex-direction: column;
+	justify-content: center;
 	height: 680px;
+}
+
+.candidato_nuevo_view{
+	display: flex;
+	align-items: center;
+    flex-direction: column;
+	justify-content: center;
+	//height: 680px;
 }
 
 .candidato_view_img_empresa img{

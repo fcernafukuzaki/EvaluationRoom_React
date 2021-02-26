@@ -29,10 +29,14 @@ class SoporteTecnicoNotificacionModal extends Component {
         this.onChangeDetalleError = this.onChangeDetalleError.bind(this)
     }
 
+    obtenerIdentificadorPrimerElementoDeLista(){
+        return this.props.listaObservaciones.length > 0 ? this.props.listaObservaciones[0].value : 3
+    }
+
     componentDidUpdate(prevProps, prevState){
         if(prevProps.limpiarModalForm !== this.props.limpiarModalForm){
             this.setState({
-                tipoErrorSeleccionado: 3,
+                tipoErrorSeleccionado: this.obtenerIdentificadorPrimerElementoDeLista(),
                 correoElectronico: '',
                 observacion: '',
                 mensajeError: ''
@@ -50,7 +54,8 @@ class SoporteTecnicoNotificacionModal extends Component {
 
             this.setState({
                 listaObservaciones: rows,
-                observacion: this.props.listaObservaciones.filter(e => e.value == this.state.tipoErrorSeleccionado)[0].label
+                tipoErrorSeleccionado: this.obtenerIdentificadorPrimerElementoDeLista(),
+                observacion: this.props.listaObservaciones.filter(e => e.value == this.obtenerIdentificadorPrimerElementoDeLista())[0].label
             })
         }
         if(prevProps.correoElectronico !== this.props.correoElectronico){
@@ -58,6 +63,39 @@ class SoporteTecnicoNotificacionModal extends Component {
                 correoElectronico: this.props.correoElectronico
             })
         }
+        if(prevProps.argumentosAdicionales !== this.props.argumentosAdicionales){
+            // Cambiar glosa del mensaje de notificación de error
+            let argumentosAdicionales = this.props.argumentosAdicionales
+            let rows = []
+            this.props.listaObservaciones.map(e => {
+                var nuevaEtiqueta = this.reemplazar(e.label, [argumentosAdicionales.idtestpsicologico, argumentosAdicionales.idpregunta])
+                //rows.push(<MenuItem key={e.value} value={e.value}>{e.label}</MenuItem>)
+                rows.push(<FormControlLabel key={e.value} 
+                    value={e.value} 
+                    control={<Radio color="default" />} 
+                    label={nuevaEtiqueta} />)
+            })
+            
+            var observacion = this.props.listaObservaciones.length > 0 ?
+                this.reemplazar(
+                    this.props.listaObservaciones.filter(e => 
+                        e.value == this.obtenerIdentificadorPrimerElementoDeLista())[0].label, 
+                    [argumentosAdicionales.idtestpsicologico, argumentosAdicionales.idpregunta])
+                : ''
+            
+            this.setState({
+                listaObservaciones: rows,
+                observacion: observacion
+            })
+        }
+    }
+
+    reemplazar(texto, listaArgumentos) {
+        var nuevoTexto = texto
+        for (let k in listaArgumentos) {
+            nuevoTexto = nuevoTexto.replace("{}", listaArgumentos[k])
+        }
+        return nuevoTexto
     }
 
     onChangeDetalleError(e){
@@ -71,7 +109,7 @@ class SoporteTecnicoNotificacionModal extends Component {
         return (
             <textarea id='text-area-error' 
                     name='text-area-error'
-                    rows="10" cols="100" 
+                    rows="10" cols="70" 
                     value={detalle} 
                     placeholder={placeholder}
                     onChange={this.onChangeDetalleError.bind(this)} />
@@ -142,6 +180,8 @@ class SoporteTecnicoNotificacionModal extends Component {
                                             </RadioGroup>
                                             <FormHelperText>{errors.observacion}</FormHelperText>
                                         </FormControl>
+                                    </div>
+                                    <div className="mt-2 mb-2">
                                         <FormControl key={'correoElectronico'} 
                                             className={'col-md-8'} 
                                             error={true}>

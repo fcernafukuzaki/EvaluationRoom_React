@@ -77,7 +77,7 @@ class CandidatoDatosForm extends Component {
 	}
 	
 	componentWillMount() {
-		/*this.props.obtenerSexos();
+		this.props.obtenerSexos();
 		this.props.obtenerEstadosCiviles();
 		this.props.obtenerDocumentosIdentidad();
 		this.props.obtenerTipoDirecciones();
@@ -88,7 +88,7 @@ class CandidatoDatosForm extends Component {
 		this.props.obtenerDistritos(1,15,1501);
 		this.props.obtenerDepartamentosNacimiento(1);
 		this.props.obtenerProvinciasNacimiento(1,15);
-		this.props.obtenerDistritosNacimiento(1,15,1501);*/
+		this.props.obtenerDistritosNacimiento(1,15,1501);
 		this.props.getSoporteTecnicoNotificacionMensajesError()
 		this.setState({
 			isLoading: false
@@ -442,7 +442,10 @@ class CandidatoDatosForm extends Component {
 			prompt: false
 		})
 	}
-	
+
+	/**
+	 * Inicio Modal
+	 */
 	handleOpenModal(){
 		this.setState({
             modalCerrado: !this.state.modalCerrado
@@ -476,6 +479,9 @@ class CandidatoDatosForm extends Component {
 			limpiarModalForm: true
 		})
 	}
+	/**
+	 * Fin Modal
+	 */
 
 	render() {
 		const { idCandidato, nombre, apellidoPaterno, apellidoMaterno, correoElectronico,
@@ -983,29 +989,38 @@ class CandidatoDatosForm extends Component {
 					<div className='candidato_view'>
 					{esCandidatoRegistrado == null && 
 						<Fragment>
-							<div className='candidato_view_img_empresa'>
-								<img src={this.props.logoEmpresa} />
-							</div>
-							<div className='candidato_view_form'>
-								<Formulario form={formValidarCandidatoRegistrado} />
+							<div className='candidato_validar_view'>
+								<div className='candidato_view_img_empresa'>
+									<img src={this.props.logoEmpresa} />
+								</div>
+								<div className='candidato_view_form'>
+									<Formulario form={formValidarCandidatoRegistrado} />
+								</div>
+								<Fragment>
+									<SoporteTecnicoNotificacionButtonAbrirModal
+										onClick={this.handleOpenModal}
+									/>
+								</Fragment>
 							</div>
 						</Fragment>
 					}
 					{esCandidatoRegistrado != null && !(esCandidatoRegistrado) && 
 						<Fragment>
-							<div className='candidato_view_img_empresa_form'>
-								<img src={this.props.logoEmpresa} />
-							</div>
-							<div className='candidato_view_form'>
-								<Formulario form={form} />
+							<div className='candidato_nuevo_view'>
+								<div className='candidato_view_img_empresa_form'>
+									<img src={this.props.logoEmpresa} />
+								</div>
+								<div className='candidato_view_form'>
+									<Formulario form={form} />
+								</div>
+								<Fragment>
+									<SoporteTecnicoNotificacionButtonAbrirModal
+										onClick={this.handleOpenModal}
+									/>
+								</Fragment>
 							</div>
 						</Fragment>
 					}
-						<Fragment>
-							<SoporteTecnicoNotificacionButtonAbrirModal
-								onClick={this.handleOpenModal}
-							/>
-						</Fragment>
 					</div>
 				</Fragment>
 				<MensajeGuardarExitoso cargando={guardado} mensaje={"Se guardó exitosamente!"} />

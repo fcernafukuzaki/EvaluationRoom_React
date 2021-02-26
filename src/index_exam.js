@@ -14,6 +14,7 @@ import './assets/styles/estilos.scss'
 import './assets/styles/estilos-exam-web.scss'
 //import './assets/styles/candidate-card.scss'
 //import './assets/styles/selectionprocess-list.scss'
+import './assets/styles/soportetecnico-notificacion-modal.scss'
 
 /* Redux */
 const store = createStore(
