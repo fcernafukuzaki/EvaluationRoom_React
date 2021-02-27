@@ -80,7 +80,7 @@ class SoporteTecnicoNotificacionModal extends Component {
                 this.reemplazar(
                     this.props.listaObservaciones.filter(e => 
                         e.value == this.obtenerIdentificadorPrimerElementoDeLista())[0].label, 
-                    [argumentosAdicionales.idtestpsicologico, argumentosAdicionales.idpregunta])
+                    [argumentosAdicionales.idtestpsicologico, argumentosAdicionales.idparte, argumentosAdicionales.idpregunta])
                 : ''
             
             this.setState({
