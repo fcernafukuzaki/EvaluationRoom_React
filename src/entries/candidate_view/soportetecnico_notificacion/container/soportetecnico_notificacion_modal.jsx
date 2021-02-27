@@ -134,7 +134,7 @@ class SoporteTecnicoNotificacionModal extends Component {
     }
 
     render () {
-        const {cerrado, onGuardar, guardado, onClose, errors} = this.props
+        const {cerrado, onGuardar, guardado, limpiarEmail, onClose, errors} = this.props
         const {listaObservaciones, tipoErrorSeleccionado, correoElectronico, observacion, mensajeError} = this.state
         
         if(cerrado) {
@@ -192,6 +192,10 @@ class SoporteTecnicoNotificacionModal extends Component {
                                                 //error={typeof c.error !== 'undefined' ? true : false}
                                                 //id={typeof c.error !== 'undefined' ? 'standard-error' : "filled-basic"}
                                                 label={'Email: '}
+                                                placeholder={limpiarEmail ? 
+                                                    'Coloca aquí el email con el cual has tratado de registrarte.' : 
+                                                    'Coloca aquí el email con el cual estás realizando la evaluación.'
+                                                }
                                                 type={'text-linea'}
                                                 defaultValue={correoElectronico}
                                                 style={{ width: 450 }}
