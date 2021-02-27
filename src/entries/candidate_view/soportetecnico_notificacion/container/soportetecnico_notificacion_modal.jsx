@@ -198,7 +198,7 @@ class SoporteTecnicoNotificacionModal extends Component {
                                                 }
                                                 type={'text-linea'}
                                                 defaultValue={correoElectronico}
-                                                style={{ width: 450 }}
+                                                style={{ width: 480 }}
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
