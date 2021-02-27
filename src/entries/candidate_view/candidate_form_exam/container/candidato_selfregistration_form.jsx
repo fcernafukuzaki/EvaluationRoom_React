@@ -1032,6 +1032,7 @@ class CandidatoDatosForm extends Component {
 				{errorMensaje != '' && <MensajeError error={errorMensaje} />}
 				<SoporteTecnicoNotificacionModal 
 					limpiarModalForm={this.state.limpiarModalForm}
+					limpiarEmail={true}
 					cerrado={this.state.modalCerrado} 
                     onClose={this.handleCloseModal.bind(this)} 
                     onGuardar={this.notificarSoporteTecnicoError.bind(this)}

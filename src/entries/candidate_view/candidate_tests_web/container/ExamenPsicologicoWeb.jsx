@@ -1521,6 +1521,7 @@ class ExamenPsicologicoWeb extends Component {
 				</Fragment>
 				<SoporteTecnicoNotificacionModal 
 					limpiarModalForm={this.state.limpiarModalForm}
+					limpiarEmail={false}
 					cerrado={this.state.modalCerrado} 
 					onClose={this.handleCloseModal.bind(this)} 
 					onGuardar={this.notificarSoporteTecnicoError.bind(this)}

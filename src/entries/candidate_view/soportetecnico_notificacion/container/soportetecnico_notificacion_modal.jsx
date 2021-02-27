@@ -37,7 +37,7 @@ class SoporteTecnicoNotificacionModal extends Component {
         if(prevProps.limpiarModalForm !== this.props.limpiarModalForm){
             this.setState({
                 tipoErrorSeleccionado: this.obtenerIdentificadorPrimerElementoDeLista(),
-                correoElectronico: '',
+                correoElectronico: (this.props.limpiarEmail ? '' : this.state.correoElectronico),
                 observacion: '',
                 mensajeError: ''
             })
@@ -193,7 +193,7 @@ class SoporteTecnicoNotificacionModal extends Component {
                                                 //id={typeof c.error !== 'undefined' ? 'standard-error' : "filled-basic"}
                                                 label={'Email: '}
                                                 type={'text-linea'}
-                                                defaultValue={this.state.correoElectronico}
+                                                defaultValue={correoElectronico}
                                                 style={{ width: 450 }}
                                                 InputLabelProps={{
                                                     shrink: true,
