@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import TextFieldGroupCampos from './TextFieldGroupCampos';
 import ButtonGroup from './ButtonGroup';
 import TablePaginado from './TablePaginado';
+import {obtenerTextoBienvenidaPorParrafos} from '../../candidate_view/candidate_tests_web/common/Mensajes';
 
 export default function Formulario(props) {
 	const {form} = props;
@@ -36,7 +37,10 @@ export default function Formulario(props) {
 			<form onSubmit={form.onSubmit} className="form">
 				<div className="container-fluid">
 					<div className="mt-4 mb-4">
-						<h4>{form.titulo}</h4>
+						{typeof form.tituloConfiguracion !== 'undefined' ? 
+						<h5>{obtenerTextoBienvenidaPorParrafos(form.titulo)}</h5> :
+						<h4>{obtenerTextoBienvenidaPorParrafos(form.titulo)}</h4>
+						}
 					</div>
 					{camposForm}
 					{tablaSelect}

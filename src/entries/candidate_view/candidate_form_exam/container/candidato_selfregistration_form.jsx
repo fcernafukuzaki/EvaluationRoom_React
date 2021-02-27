@@ -612,7 +612,10 @@ class CandidatoDatosForm extends Component {
 		});
 		
 		var formValidarCandidatoRegistrado = {
-			titulo: 'Ingrese su correo electrónico para empezar las pruebas',
+			titulo: 'Bienvenido al sistema de evaluaciones de Humanum Management Group.\\n\\nPara iniciar con las pruebas debe ingresar su correo electrónico.',
+			tituloConfiguracion: {
+				tamanoCabecera: "h5"
+			},
 			campos: [
 				[{
 					key: 'idCandidato',
