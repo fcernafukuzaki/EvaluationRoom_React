@@ -74,6 +74,7 @@ class CandidatosSinAsignacionList extends Component {
                                     name={candidate.nombre}
                                     paternal_surname={candidate.apellidopaterno}
                                     maternal_surname={candidate.apellidomaterno}
+                                    full_name={candidate.nombre_completo}
                                     birth_date={candidate.fechanacimiento}
                                     email_address={candidate.correoelectronico}
                                     telefono_fijo={candidate.telefono_fijo}

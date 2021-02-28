@@ -669,7 +669,8 @@ class SelectionProcessForm extends Component {
 		//console.log(row);
 		this.setState({
 			informe: {
-				idCandidato: row.idcandidato
+				idCandidato: row.idcandidato,
+                nombreCompleto: row.nombre_completo
 			}
 		}, () => {
 			this.props.generarInforme(this.state.informe);

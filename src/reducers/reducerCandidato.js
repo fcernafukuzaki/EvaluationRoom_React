@@ -80,7 +80,7 @@ export function actionCandidato(state = initialState, action){
 		case INTERPRETACION_OBTENER:
 			return Object.assign({}, state, {obtenerInterpretacionResponse: action.payload})
 		case INFORME_GENERAR:
-			fileSaver.saveAs(action.payload, "Informe.docx");
+			fileSaver.saveAs(action.payload.url, "Informe_".concat(action.payload.nombreCompleto, '.docx'));
 			return state;
 		case CANDIDATO_PUESTO_LABORAL_OBTENER:
 			return Object.assign({}, state, {obtenerCandidatoPuestoLaboralResponse: action.payload})

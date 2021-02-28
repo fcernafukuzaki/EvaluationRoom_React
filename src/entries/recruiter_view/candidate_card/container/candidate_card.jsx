@@ -15,11 +15,12 @@ class CandidateCard extends Component {
 		this.descargarInforme = this.descargarInforme.bind(this);
     }
 
-    descargarInforme(idcandidato) {
+    descargarInforme(idcandidato, nombreCompleto) {
         console.log(idcandidato);
         this.setState({
             informe: {
-                idCandidato: idcandidato
+                idCandidato: idcandidato,
+                nombreCompleto: nombreCompleto
             }
         }, () => {
             this.props.generarInforme(this.state.informe);
@@ -40,7 +41,7 @@ class CandidateCard extends Component {
                         telefono_fijo={this.props.telefono_fijo}
                         telefono_movil={this.props.telefono_movil}
                         psychologicaltests={this.props.psychologicaltests}
-                        descargar_informe={this.descargarInforme.bind(this, this.props.id)}
+                        descargar_informe={this.descargarInforme.bind(this, this.props.id, this.props.full_name)}
                         onOpen={this.props.onOpenModal}
                     />
                     <div className={classnames('candidate-card-tests')} >

@@ -240,7 +240,7 @@ export function generarInforme(datosInforme) {
 	return (dispatch, getState) => {
 		let url = ('/testpsicologico/download/informe/').concat(datosInforme.idCandidato);
 		axios.get(url) 
-			.then((response) => { dispatch({ type: INFORME_GENERAR, payload: url }) })
+			.then((response) => { console.log('response', response); return dispatch({ type: INFORME_GENERAR, payload: {url: url, nombreCompleto: datosInforme.nombreCompleto} }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
