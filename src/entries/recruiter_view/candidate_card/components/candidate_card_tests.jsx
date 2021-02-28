@@ -11,6 +11,9 @@ export default function CandidateCardTests (props) {
                 <div>
                     {(props.psychologicaltest.fechaexamen == '1900-01-01T00:00:00') ? '(Pendiente)' : '(Completo)'}
                 </div>
+                <div>
+                    {props.psychologicaltest.cantidad_preguntas_respondidas}/{props.psychologicaltest.cantidad_preguntas_test}
+                </div>
             </div>
 		</Fragment>
 	);

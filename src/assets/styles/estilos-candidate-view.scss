@@ -85,6 +85,10 @@ html, body {
 	color: green;
 }
 
+.texto_centrado{
+	text-align: center;
+}
+
 .candidato_view{
 	display: flex;
 	align-items: center;
@@ -161,6 +165,10 @@ a.nounderline:link
 
 .ancho800{
 	width: 800px;
+}
+
+.ancho450{
+	width: 450px;
 }
 
 .botonesBusqueda{

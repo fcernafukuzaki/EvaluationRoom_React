@@ -188,7 +188,7 @@ class ClientsSelectionProcessList extends Component {
                             }
                         });
                     }
-                    //console.log('id_candidate', candidatesPsychologicalTestList)
+                    //console.log('candidatos con asignación', candidatesPsychologicalTestList)
                     return (<Fragment key={candidate.idcandidato}>
                                 <CandidateCard 
                                         id={candidate.idcandidato}

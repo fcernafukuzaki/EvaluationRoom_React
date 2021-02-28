@@ -45,24 +45,28 @@ class CandidateCardInfo extends Component {
             <Fragment>
                 <div key={props.id}>
                     <div className='candidate-info'>
-                        <div className='candidate-photo'>
-                            <i className="fas fa-user icono6em"></i>
-                        </div>
-                        <div className='candidate-info-personal'>
-                            <div>Nombre: <strong>{props.name}</strong></div>
-                            <div>Ap. Pat: <strong>{props.paternal_surname}</strong></div>
-                            <div>Ap. Mat: <strong>{props.maternal_surname}</strong></div>
-                            <div>Edad: <strong>{getAge(props.birth_date)}</strong></div>
+                        <div>
+                            <div className='candidate-info'>
+                                <div className='candidate-photo'>
+                                    <i className="fas fa-user icono6em"></i>
+                                </div>
+                                <div className='candidate-info-personal'>
+                                    <div>Nombre: <strong>{props.name}</strong></div>
+                                    <div>Ap. Pat: <strong>{props.paternal_surname}</strong></div>
+                                    <div>Ap. Mat: <strong>{props.maternal_surname}</strong></div>
+                                    <div>Edad: <strong>{getAge(props.birth_date)}</strong></div>
+                                </div>
+                            </div>
+                            <div>Email: <strong>{props.email_address}</strong></div>
+                            <div>Tel.: 
+                                <strong>{(!telefono_movil && !telefono_fijo) ? (<i> No posee número de contacto.</i>) : telefono_movil.concat(telefono_fijo)}</strong>
+                            </div>
                         </div>
                         <div className='button-right-absolute flex-column'>
                             {actualizarCandidato}
                             {descargarInforme}
                             {obtenerApreciacion}
                         </div>
-                    </div>
-                    <div>Email: <strong>{props.email_address}</strong></div>
-                    <div>Tel.: 
-                        <strong>{(!telefono_movil && !telefono_fijo) ? (<i> No posee número de contacto.</i>) : telefono_movil.concat(telefono_fijo)}</strong>
                     </div>
                 </div>
             </Fragment>

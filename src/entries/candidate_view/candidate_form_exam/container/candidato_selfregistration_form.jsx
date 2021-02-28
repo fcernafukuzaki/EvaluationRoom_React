@@ -612,9 +612,13 @@ class CandidatoDatosForm extends Component {
 		});
 		
 		var formValidarCandidatoRegistrado = {
-			titulo: 'Bienvenido al sistema de evaluaciones de Humanum Management Group.\\n\\nPara iniciar con las pruebas debe ingresar su correo electrónico.',
+			titulo: 'Bienvenido al sistema de evaluaciones de Humanum Group.\\n\\nInicia las pruebas ingresando tu correo electrónico:',
 			tituloConfiguracion: {
-				tamanoCabecera: "h5"
+				tamanoCabecera: "h5",
+				tituloCentrado: true
+			},
+			botonesConfiguracion: {
+				botonesCentrado: true
 			},
 			campos: [
 				[{
@@ -635,17 +639,17 @@ class CandidatoDatosForm extends Component {
 					value: correoElectronico.toLowerCase(),
 					error: errors.correoElectronico,
 					onChange: this.onChange,
-					labelClass: 'col-md-3',
-					fieldClass: 'col-md-9',
+					labelClass: 'col-md-4',
+					fieldClass: 'col-md-8',
 					//textClass: 'text-lowercase',
 					required: 'true'
 				}]
 			] ,
 			botones: [{
 					key: 'guardar',
-					label: 'Realizar test psicológico',
+					label: 'Inicio',
 					divClass: 'col-md-1',
-					botonClass: 'btn-primary btn-md',
+					botonClass: 'btn-primary btn-md ancho450',
 					tipo: 'button-submit',
 					isLoading: isLoading
 				}],

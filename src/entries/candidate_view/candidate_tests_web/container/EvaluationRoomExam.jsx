@@ -9,9 +9,10 @@ export default class EvaluationRoomExam extends Component {
 	}
 
 	obtenerLogoEmpresa(){
-		const logo = new Image();
+		/*const logo = new Image();
 		logo.src = Logo;
-		return logo.src;
+		return logo.src;*/
+		return 'https://s3.amazonaws.com/www.evaluationroom.com/logo_humanum_group.jpg'
 	}
 	
 	render() {

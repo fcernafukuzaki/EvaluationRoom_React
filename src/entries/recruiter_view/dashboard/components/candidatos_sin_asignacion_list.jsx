@@ -67,7 +67,7 @@ class CandidatosSinAsignacionList extends Component {
                         }
                     });
                 }
-                //console.log('id_candidate', candidatosTestPsicologicosSinPuestoLaboralList)
+                //console.log('candidatos sin asignación', candidatosTestPsicologicosSinPuestoLaboralList)
                 return (<Fragment key={candidate.idcandidato}>
                             <CandidateCard 
                                     id={candidate.idcandidato}

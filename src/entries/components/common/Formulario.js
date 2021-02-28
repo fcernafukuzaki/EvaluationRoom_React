@@ -36,7 +36,13 @@ export default function Formulario(props) {
 		<Fragment>
 			<form onSubmit={form.onSubmit} className="form">
 				<div className="container-fluid">
-					<div className="mt-4 mb-4">
+					<div className={classnames('mt-4 mb-4', (
+							typeof form.tituloConfiguracion !== 'undefined' ? 
+							(typeof form.tituloConfiguracion.tituloCentrado !== 'undefined' ? 
+								(form.tituloConfiguracion.tituloCentrado ? 'texto_centrado' : '')
+								: ''
+							) : ''
+						))}>
 						{typeof form.tituloConfiguracion !== 'undefined' ? 
 						<h5>{obtenerTextoBienvenidaPorParrafos(form.titulo)}</h5> :
 						<h4>{obtenerTextoBienvenidaPorParrafos(form.titulo)}</h4>
@@ -44,8 +50,14 @@ export default function Formulario(props) {
 					</div>
 					{camposForm}
 					{tablaSelect}
-					<div className="form-group row">
-						<div className="col-sm-offset-2 col-sm-10">
+					<div className={classnames('form-group row', (
+							typeof form.botonesConfiguracion !== 'undefined' ? 
+							(typeof form.botonesConfiguracion.botonesCentrado !== 'undefined' ? 
+								(form.botonesConfiguracion.botonesCentrado ? 'texto_centrado' : '')
+								: ''
+							) : ''
+						))}>
+						<div className="col-sm-offset-2 col-sm-12">
 							{botonesForm}
 						</div>
 					</div>
