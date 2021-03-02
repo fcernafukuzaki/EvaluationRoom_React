@@ -72,7 +72,7 @@ class CandidatesListInfo extends Component {
 		this.setState({
 			informe: {
 				idCandidato: row.idCandidato,
-                nombreCompleto: row.nombre_completo
+                nombreCompleto: row.nombreCompleto
 			}
 		}, () => {
 			this.props.generarInforme(this.state.informe);
