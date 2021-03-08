@@ -7,9 +7,9 @@ export default function CandidateCardTests (props) {
 		<Fragment>
             <div key={props.psychologicaltest.idtestpsicologico} 
                 className={classnames('candidate-card-test', status)} >
-                <div>{props.psychologicaltest.nombre}</div>
-                <div>
-                    {(props.psychologicaltest.fechaexamen == '1900-01-01T00:00:00') ? '(Pendiente)' : '(Completo)'}
+                <div>{props.psychologicaltest.nombre} {(props.psychologicaltest.fechaexamen == '1900-01-01T00:00:00') ? 
+                    (<i className="fas fa-exclamation-circle iconoVino" title="Pendiente"></i>) : 
+                    (<i className="fas fa-check-circle iconoVerde" title="Completo"></i>)}
                 </div>
                 <div>
                     {props.psychologicaltest.cantidad_preguntas_respondidas}/{props.psychologicaltest.cantidad_preguntas_test}
