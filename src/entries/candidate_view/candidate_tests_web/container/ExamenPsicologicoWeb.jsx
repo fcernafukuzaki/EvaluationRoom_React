@@ -179,6 +179,10 @@ class ExamenPsicologicoWeb extends Component {
 				this.mostrarBotonInicioInstrucciones();
 			}
 		}
+		/**
+		 * Registrar cuando el candidato ingresa al portal
+		 */
+		this.registrarCandidatoTestPsicologicoLog('IngresoPortal')
 	}
 	
 	iniciarExamen(){
@@ -1273,9 +1277,16 @@ class ExamenPsicologicoWeb extends Component {
 	}
 
 	registrarCandidatoTestPsicologicoLog(flag){
-		var objetoGuardarCandidatoTestPsicologicoLog = {idcandidato: this.state.idCandidato,
-			idtestpsicologico: this.obtenerIdTestPsicologico(),
-			idparte: this.obtenerIdParte(),
+		var idtestpsicologico = -1
+		var idparte = -1
+		if(flag != 'IngresoPortal'){
+			idtestpsicologico = this.obtenerIdTestPsicologico()
+			idparte = this.obtenerIdParte()
+		}
+		var objetoGuardarCandidatoTestPsicologicoLog = {
+			idcandidato: this.state.idCandidato,
+			idtestpsicologico: idtestpsicologico,
+			idparte: idparte,
 			flag: flag
 		}
 		this.props.guardarCandidatoTestPsicologicoLog(this.state.candidatoDatos.correoelectronico, objetoGuardarCandidatoTestPsicologicoLog)
