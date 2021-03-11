@@ -362,6 +362,15 @@ class ExamenPsicologicoWeb extends Component {
 		
 		if(this.seAcaboElTiempo(this.state.mensajeContador)){
 			console.log('Se acabó el tiempo del test.')
+
+			/** 
+			 * Guardar la última pregunta del candidato si se acabó el tiempo
+			 * Sólo si la cantidad de alternativas es mayor o igual a la cantidad de alternativas máxima.
+			 */
+			if(respuestasSeleccionadas.length >= cantMaxAlt){
+				this.guardarCandidatoRespuesta()
+			}
+			
 			var listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.filtrarListaPorIdTestIdParte(this.state.listaInstruccionesDePreguntasPendientes, this.obtenerIdTestPsicologico(), this.obtenerIdParte())
 			//console.log('obtenerSiguientePregunta: listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte', listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte)
 			var nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.eliminarInstrucciones(this.state.listaInstruccionesDePreguntasPendientes, listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte[0])
