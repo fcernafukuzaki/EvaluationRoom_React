@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import {CandidateButtonUpdate, CandidateButtonDownloadInform} from './candidate_button'
 import {CandidatoApreciacionButtonObtener} from '../../candidato_apreciacion/components/candidato_apreciacion_button'
 import {encriptarAES} from '../../../common/components/encriptar_aes';
-import {getAge} from '../../../common/components/date_util'
+import {getAge, isDatetimeFinishedExam} from '../../../common/components/date_util'
 
 class CandidateCardInfo extends Component {
     constructor(props){
@@ -25,7 +25,7 @@ class CandidateCardInfo extends Component {
         );
         
         var tieneInforme = props.psychologicaltests.map(p => {
-            return (p.fechaexamen == '1900-01-01T00:00:00') ? 0 : 1;
+            return (isDatetimeFinishedExam(p.fechaexamen)) ? 0 : 1;
         })
         var descargarInforme = (tieneInforme.includes(1)) ? 
             (<CandidateButtonDownloadInform 

@@ -57,3 +57,28 @@ export function calculate_age(birth_month,birth_day,birth_year) {
     }
     return age;
 }
+
+export function getDateTimeWithoutTimeZone(string_datetime_with_timezone){
+    if(string_datetime_with_timezone != null){
+        let date_ob = new Date(string_datetime_with_timezone)
+        let date = ("0" + date_ob.getDate()).slice(-2)
+        let month = ("0" + (date_ob.getMonth() + 1)).slice(-2)
+        let year = date_ob.getFullYear()
+        let hours = ("0" + (date_ob.getHours())).slice(-2)
+        let minutes = ("0" + (date_ob.getMinutes())).slice(-2)
+        let seconds = ("0" + (date_ob.getSeconds())).slice(-2)
+        return (date + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds)
+    }
+    return ""
+}
+
+export function isDatetimeFinishedExam(datetime_finished_exam){
+    // "1900-01-01T00:00:00+00:00"
+    if(datetime_finished_exam != null){
+        let date_ob = new Date(datetime_finished_exam)
+        if(date_ob.getFullYear() <= 1901){
+            return true
+        }
+    }
+    return false
+}
