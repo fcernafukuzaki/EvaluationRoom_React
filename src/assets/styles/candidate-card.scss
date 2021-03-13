@@ -69,7 +69,16 @@
     margin-left: auto;
 }
 
+.button-candidate-width{
+    width: 40px;
+}
+
 .flex-column{
     display: flex;
     flex-direction: column;
+}
+
+.flex-row{
+    display: flex;
+    flex-direction: row!important;
 }

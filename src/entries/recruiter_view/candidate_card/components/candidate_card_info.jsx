@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import classnames from 'classnames';
-import {CandidateButtonUpdate, CandidateButtonDownloadInform} from './candidate_button'
+import {CandidateButtonInformation, CandidateButtonUpdate, CandidateButtonDownloadInform} from './candidate_button'
 import {CandidatoApreciacionButtonObtener} from '../../candidato_apreciacion/components/candidato_apreciacion_button'
 import {encriptarAES} from '../../../common/components/encriptar_aes';
 import {getAge, isDatetimeFinishedExam} from '../../../common/components/date_util'
@@ -17,6 +17,13 @@ class CandidateCardInfo extends Component {
         const {props} = this;
 
         var hashIdCandidato = encriptarAES(props.id.toString());
+
+        var informacionCandidato = (
+            <CandidateButtonInformation 
+                fechaRegistro={props.registered_date}
+            />
+        );
+
         var actualizarCandidato = (
             <CandidateButtonUpdate 
                 pathname={'/registrarCandidato'}
@@ -62,10 +69,11 @@ class CandidateCardInfo extends Component {
                                 <strong>{(!telefono_movil && !telefono_fijo) ? (<i> No posee número de contacto.</i>) : telefono_movil.concat(telefono_fijo)}</strong>
                             </div>
                         </div>
-                        <div className='button-right-absolute flex-column'>
+                        <div className='button-right-absolute flex-row'>
+                            {props.registered_date != null ? informacionCandidato : <Fragment></Fragment>}
                             {actualizarCandidato}
                             {descargarInforme}
-                            {obtenerApreciacion}
+                            {/*obtenerApreciacion*/}
                         </div>
                     </div>
                 </div>

@@ -37,6 +37,7 @@ class CandidateCard extends Component {
                         paternal_surname={this.props.paternal_surname}
                         maternal_surname={this.props.maternal_surname}
                         birth_date={this.props.birth_date}
+                        registered_date={this.props.registered_date}
                         email_address={this.props.email_address}
                         telefono_fijo={this.props.telefono_fijo}
                         telefono_movil={this.props.telefono_movil}
