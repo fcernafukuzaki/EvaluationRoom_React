@@ -100,8 +100,6 @@ class CandidatoDatosForm extends Component {
 		if (prevProps.validarCandidatoRegistradoResponse !== this.props.validarCandidatoRegistradoResponse) {
 			if(this.props.validarCandidatoRegistradoResponse.correoElectronico !== '' && 
 					this.props.validarCandidatoRegistradoResponse.selfRegistration){
-				//var hashCorreoElectronico = encriptarAES(this.props.validarCandidatoRegistradoResponse.correoElectronico.toString());
-				//window.location.href = ('/pages/examen.html?id=').concat(hashCorreoElectronico);
 				this.setState({ 
 					isLoading: true
 				})
@@ -204,8 +202,6 @@ class CandidatoDatosForm extends Component {
 				const { errors, isValid } = validateInput(candidatoValidarInput);
 				
 				if( isValid ){
-					//var hashCorreoElectronico = encriptarAES(this.props.validarCandidatoRegistradoResponse.correoElectronico.toString());
-					//window.location.href = ('/pages/examen.html?id=').concat(hashCorreoElectronico);
 					this.setState({ 
 						isLoading: true
 					})
@@ -220,8 +216,6 @@ class CandidatoDatosForm extends Component {
 		}
 		if (prevProps.guardarCandidatoTestPsicologicoResponse !== this.props.guardarCandidatoTestPsicologicoResponse) {
 			if(this.props.guardarCandidatoTestPsicologicoResponse.idCandidato !== ''){
-				//var hashCorreoElectronico = encriptarAES(this.props.guardarCandidatoTestPsicologicoResponse.correoElectronico.toString());
-				//window.location.href = ('/pages/examen.html?id=').concat(hashCorreoElectronico);
 				this.setState({ 
 					isLoading: true
 				})
