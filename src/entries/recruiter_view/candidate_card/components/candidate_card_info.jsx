@@ -20,7 +20,8 @@ class CandidateCardInfo extends Component {
 
         var informacionCandidato = (
             <CandidateButtonInformation 
-                fechaRegistro={props.registered_date}
+                registered_date={props.registered_date}
+                self_registration={props.self_registration}
             />
         );
 
@@ -72,7 +73,7 @@ class CandidateCardInfo extends Component {
                             </div>
                         </div>
                         <div className='button-right-absolute flex-row'>
-                            {props.registered_date != null ? informacionCandidato : <Fragment></Fragment>}
+                            {informacionCandidato}
                             {actualizarCandidato}
                             {descargarInforme}
                             {/*obtenerApreciacion*/}

@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '../../../common/components/button_link'
-import {getDateTimeWithoutTimeZone} from '../../../common/components/date_util'
+import {getMessageCandidateInfo} from '../../../common/components/candidate_util'
 
 export function CandidateButtonUpdate (props) {
     return(
@@ -67,15 +67,17 @@ export function CandidateButtonDownloadInform(props) {
 }
 
 export function CandidateButtonInformation(props) {
-    var informacion = props.fechaRegistro != null ? 
-                    "Se registró el ".concat(getDateTimeWithoutTimeZone(props.fechaRegistro))
-                    : ""
+    var information = getMessageCandidateInfo(props.self_registration, props.registered_date)
+
     return (
-        <div>
-            <button type="button" 
-                className="btn btn-info btn-sm button-candidate-width" 
-                title={informacion}>
-                <i class="fas fa-info-circle"></i>
-            </button>
-        </div>)
+        information != null && (
+            <div>
+                <button type="button" 
+                    className="btn btn-info btn-sm button-candidate-width" 
+                    title={information}>
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+        )
+    )
 }
