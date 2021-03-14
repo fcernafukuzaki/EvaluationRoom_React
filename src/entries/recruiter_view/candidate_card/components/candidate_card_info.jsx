@@ -34,11 +34,13 @@ class CandidateCardInfo extends Component {
         var tieneInforme = props.psychologicaltests.map(p => {
             return (isDatetimeFinishedExam(p.fechaexamen)) ? 0 : 1;
         })
+
         var descargarInforme = (tieneInforme.includes(1)) ? 
             (<CandidateButtonDownloadInform 
                 onClick={props.descargar_informe}
             />)
             : ''
+        
         var obtenerApreciacion = (
             <CandidatoApreciacionButtonObtener
                 onClick={props.onOpen}
