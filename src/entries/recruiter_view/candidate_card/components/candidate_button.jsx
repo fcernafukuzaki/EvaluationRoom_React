@@ -68,7 +68,7 @@ export function CandidateButtonDownloadInform(props) {
 
 export function CandidateButtonInformation(props) {
     var informacion = props.fechaRegistro != null ? 
-                    "Se registró el".concat(getDateTimeWithoutTimeZone(props.fechaRegistro))
+                    "Se registró el ".concat(getDateTimeWithoutTimeZone(props.fechaRegistro))
                     : ""
     return (
         <div>
