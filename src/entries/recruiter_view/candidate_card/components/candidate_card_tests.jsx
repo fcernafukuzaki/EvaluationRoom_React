@@ -9,7 +9,9 @@ export default function CandidateCardTests (props) {
 		<Fragment>
             <div key={props.psychologicaltest.idtestpsicologico} 
                 className={classnames('candidate-card-test', status)}
-                title={(isDatetimeFinishedExam(props.psychologicaltest.fechaexamen)) ? "Pendiente" : "Completado".concat(" ", datetime_finished_exam)} >
+                title={(isDatetimeFinishedExam(props.psychologicaltest.fechaexamen)) ? 
+                        "Pendiente" : 
+                        "Completado".concat(" ", datetime_finished_exam)} >
                 <div>{props.psychologicaltest.nombre} {(isDatetimeFinishedExam(props.psychologicaltest.fechaexamen)) ? 
                     (<i className="fas fa-exclamation-circle iconoVino"></i>) : 
                     (<Fragment><i className="fas fa-check-circle iconoVerde"></i> {}</Fragment>)}
