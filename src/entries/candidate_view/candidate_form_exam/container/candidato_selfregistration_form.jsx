@@ -7,6 +7,7 @@ import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExit
 import MensajeError from '../../../components/common/MensajeError';
 import CargandoImagen from '../../../components/common/CargandoImagen';
 import {encriptarAES} from '../../../common/components/encriptar_aes';
+import {getURLTests} from '../../../common/components/candidate_util';
 import {SoporteTecnicoNotificacionButtonAbrirModal} from '../../soportetecnico_notificacion/components/soportetecnico_notificacion_boton'
 import SoporteTecnicoNotificacionModal from '../../soportetecnico_notificacion/container/soportetecnico_notificacion_modal'
 import {validateInput, validateInputCandidatoRegistrado} from '../components/candidate_selfregistration_form_validate';
@@ -99,8 +100,12 @@ class CandidatoDatosForm extends Component {
 		if (prevProps.validarCandidatoRegistradoResponse !== this.props.validarCandidatoRegistradoResponse) {
 			if(this.props.validarCandidatoRegistradoResponse.correoElectronico !== '' && 
 					this.props.validarCandidatoRegistradoResponse.selfRegistration){
-				var hashCorreoElectronico = encriptarAES(this.props.validarCandidatoRegistradoResponse.correoElectronico.toString());
-				window.location.href = ('/pages/examen.html?id=').concat(hashCorreoElectronico);
+				//var hashCorreoElectronico = encriptarAES(this.props.validarCandidatoRegistradoResponse.correoElectronico.toString());
+				//window.location.href = ('/pages/examen.html?id=').concat(hashCorreoElectronico);
+				this.setState({ 
+					isLoading: true
+				})
+				window.location.href = getURLTests(this.props.validarCandidatoRegistradoResponse.correoElectronico)
 			} else {
 				var candidatoResponse = this.props.validarCandidatoRegistradoResponse;
 				
@@ -199,8 +204,12 @@ class CandidatoDatosForm extends Component {
 				const { errors, isValid } = validateInput(candidatoValidarInput);
 				
 				if( isValid ){
-					var hashCorreoElectronico = encriptarAES(this.props.validarCandidatoRegistradoResponse.correoElectronico.toString());
-					window.location.href = ('/pages/examen.html?id=').concat(hashCorreoElectronico);
+					//var hashCorreoElectronico = encriptarAES(this.props.validarCandidatoRegistradoResponse.correoElectronico.toString());
+					//window.location.href = ('/pages/examen.html?id=').concat(hashCorreoElectronico);
+					this.setState({ 
+						isLoading: true
+					})
+					window.location.href = getURLTests(this.props.validarCandidatoRegistradoResponse.correoElectronico)
 				} else {
 					this.setState({ 
 						isLoading: false,
@@ -211,8 +220,12 @@ class CandidatoDatosForm extends Component {
 		}
 		if (prevProps.guardarCandidatoTestPsicologicoResponse !== this.props.guardarCandidatoTestPsicologicoResponse) {
 			if(this.props.guardarCandidatoTestPsicologicoResponse.idCandidato !== ''){
-				var hashCorreoElectronico = encriptarAES(this.props.guardarCandidatoTestPsicologicoResponse.correoElectronico.toString());
-				window.location.href = ('/pages/examen.html?id=').concat(hashCorreoElectronico);
+				//var hashCorreoElectronico = encriptarAES(this.props.guardarCandidatoTestPsicologicoResponse.correoElectronico.toString());
+				//window.location.href = ('/pages/examen.html?id=').concat(hashCorreoElectronico);
+				this.setState({ 
+					isLoading: true
+				})
+				window.location.href = getURLTests(this.props.guardarCandidatoTestPsicologicoResponse.correoElectronico)
 			} else {
 				this.setState({
 					errorMensaje: {status: 'ERROR_OTROS', mensaje: 'Ocurrió un error al registrar sus datos.'}
