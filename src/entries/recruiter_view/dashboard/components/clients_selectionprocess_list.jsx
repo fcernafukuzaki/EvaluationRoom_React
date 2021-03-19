@@ -204,6 +204,7 @@ class ClientsSelectionProcessList extends Component {
                                         telefono_movil={candidate.telefono_movil}
                                         psychologicaltests={candidatesPsychologicalTestList}
                                         onOpenModal={this.handleOpenCandidatoApreciacionModal.bind(this, candidate.idcandidato, candidate)}
+                                        onOpenModalResetTests={this.props.onOpenModalResetTests.bind(this, candidate, candidatesPsychologicalTestList)}
                                     />
                     </Fragment>)
                 })

@@ -75,9 +75,22 @@ export function CandidateButtonInformation(props) {
                 <button type="button" 
                     className="btn btn-info btn-sm button-candidate-width" 
                     title={information}>
-                    <i class="fas fa-info-circle"></i>
+                    <i className="fas fa-info-circle"></i>
                 </button>
             </div>
         )
     )
+}
+
+export function CandidateButtonResetTests(props) {
+    return(
+        <div>
+            <button type="button" 
+                className="btn-danger btn-sm button-candidate-width" 
+                onClick={props.onClick} 
+                title="Resetear una prueba">
+                <i className="fas fa-share"></i>
+            </button>
+        </div>
+    );
 }

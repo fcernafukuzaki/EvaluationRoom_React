@@ -11,6 +11,7 @@ import ClientsSelectionProcessList from '../components/clients_selectionprocess_
 import CandidatosSinAsignacionList from '../components/candidatos_sin_asignacion_list'
 import {ClientsSelectionProcessButtonNew} from '../components/clients_selectionprocess_button'
 import AlertBoxMessageForm from '../../../components/common/AlertBoxMessageForm';
+import CandidatoResetTestsModal from '../../candidate_reset_tests/components/candidate_reset_test_modal'
 
 class DashBoard extends Component {
     constructor(props){
@@ -33,11 +34,15 @@ class DashBoard extends Component {
             candidatosSinPuestoLaboral: {},
             candidatesPsychologicalTestSinPuestoLaboral: {},
             guardado: false
+            modalResetTestsCerrado: true,
+            modalResetTestsDataCandidate: null,
+            modalResetTestsDataCandidatePsychologicalTestList: []
         }
 
         this.getSelectionProcessByStatus.bind(this);
         this.getCandidatoApreciacionPorIdCandidato.bind(this);
         this.addCandidatoApreciacion.bind(this);
+        this.handleOpenCandidatoResetTestsModal = this.handleOpenCandidatoResetTestsModal.bind(this);
     }
 
     mensajeInformativo(cantidadProcesosSeleccion){
@@ -148,6 +153,22 @@ class DashBoard extends Component {
         this.props.addCandidatoApreciacion(this.props.token, this.props.correoelectronico, idcandidato, idcliente_idpuestolaboral, idcliente, idpuestolaboral, idreclutador, apreciacion)
     }
 
+    handleOpenCandidatoResetTestsModal(candidate, candidatePsychologicalTestList){
+        this.setState({
+            modalResetTestsCerrado: false,
+            modalResetTestsDataCandidate: candidate,
+            modalResetTestsDataCandidatePsychologicalTestList: candidatePsychologicalTestList
+        })
+    }
+
+    handleCloseCandidatoResetTestsModal(){
+        this.setState({
+            modalResetTestsCerrado: true,
+            modalResetTestsDataCandidate: null,
+            modalResetTestsDataCandidatePsychologicalTestList: []
+        })
+    }
+
     tableSelectionProcess() {
         return (<Fragment>
                     <AlertBoxMessageForm 
@@ -159,12 +180,11 @@ class DashBoard extends Component {
                         candidatosSinPuestoLaboral={this.state.candidatosSinPuestoLaboral} 
                         candidatosTestPsicologicosSinPuestoLaboral={this.state.candidatesPsychologicalTestSinPuestoLaboral}
                         getCandidatoApreciacionPorIdCandidato={this.getCandidatoApreciacionPorIdCandidato.bind(this)}
-                        
                         addCandidatoApreciacion={this.addCandidatoApreciacion.bind(this)}
                         candidatosApreciacion={this.state.candidatosApreciacion}
-                        
                         idreclutador={this.props.idusuario}
                         guardado={this.state.guardado}
+                        onOpenModalResetTests={this.handleOpenCandidatoResetTestsModal.bind(this)}
                     />
                     <div className="dashboard-button">
                         <ClientsSelectionProcessButtonNew 
@@ -184,6 +204,13 @@ class DashBoard extends Component {
                         glosaModalDatosCandidato={this.state.datosCandidato}
                         idreclutador={this.props.idusuario}
                         guardado={this.state.guardado}
+                        onOpenModalResetTests={this.handleOpenCandidatoResetTestsModal.bind(this)}
+                    />
+                    <CandidatoResetTestsModal closed={this.state.modalResetTestsCerrado} 
+                        onClose={this.handleCloseCandidatoResetTestsModal.bind(this)} 
+                        candidate={this.state.modalResetTestsDataCandidate}
+                        candidatePsychologicalTestList={this.state.modalResetTestsDataCandidatePsychologicalTestList}
+                        guardado={this.props.guardado}
                     />
                 </Fragment>)
     }

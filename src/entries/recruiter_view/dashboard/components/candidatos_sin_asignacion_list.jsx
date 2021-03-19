@@ -70,20 +70,21 @@ class CandidatosSinAsignacionList extends Component {
                 //console.log('candidatos sin asignación', candidatosTestPsicologicosSinPuestoLaboralList)
                 return (<Fragment key={candidate.idcandidato}>
                             <CandidateCard 
-                                    id={candidate.idcandidato}
-                                    name={candidate.nombre}
-                                    paternal_surname={candidate.apellidopaterno}
-                                    maternal_surname={candidate.apellidomaterno}
-                                    full_name={candidate.nombre_completo}
-                                    birth_date={candidate.fechanacimiento}
-                                    selfregistration={candidate.selfregistration}
-                                    registered_date={candidate.fecha_registro}
-                                    email_address={candidate.correoelectronico}
-                                    telefono_fijo={candidate.telefono_fijo}
-                                    telefono_movil={candidate.telefono_movil}
-                                    psychologicaltests={candidatosTestPsicologicosSinPuestoLaboralList}
-                                    onOpenModal={this.handleOpenCandidatoApreciacionModal.bind(this, candidate.idcandidato, candidate)}
-                                />
+                                id={candidate.idcandidato}
+                                name={candidate.nombre}
+                                paternal_surname={candidate.apellidopaterno}
+                                maternal_surname={candidate.apellidomaterno}
+                                full_name={candidate.nombre_completo}
+                                birth_date={candidate.fechanacimiento}
+                                selfregistration={candidate.selfregistration}
+                                registered_date={candidate.fecha_registro}
+                                email_address={candidate.correoelectronico}
+                                telefono_fijo={candidate.telefono_fijo}
+                                telefono_movil={candidate.telefono_movil}
+                                psychologicaltests={candidatosTestPsicologicosSinPuestoLaboralList}
+                                onOpenModal={this.handleOpenCandidatoApreciacionModal.bind(this, candidate.idcandidato, candidate)}
+                                onOpenModalResetTests={this.props.onOpenModalResetTests.bind(this, candidate, candidatosTestPsicologicosSinPuestoLaboralList)}
+                            />
                 </Fragment>)
             })
 

@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import classnames from 'classnames';
-import {CandidateButtonInformation, CandidateButtonUpdate, CandidateButtonDownloadInform} from './candidate_button'
+import {CandidateButtonInformation, CandidateButtonUpdate, CandidateButtonDownloadInform, CandidateButtonResetTests} from './candidate_button'
 import {CandidatoApreciacionButtonObtener} from '../../candidato_apreciacion/components/candidato_apreciacion_button'
 import {encriptarAES} from '../../../common/components/encriptar_aes';
 import {getAge, isDatetimeFinishedExam} from '../../../common/components/date_util'
@@ -42,6 +42,12 @@ class CandidateCardInfo extends Component {
             />)
             : ''
         
+        var resetTest = props.psychologicaltests.length > 0 ? (
+            <CandidateButtonResetTests
+                onClick={props.onOpenModalResetTests}
+            />
+        ) : '';
+        
         var obtenerApreciacion = (
             <CandidatoApreciacionButtonObtener
                 onClick={props.onOpen}
@@ -72,10 +78,11 @@ class CandidateCardInfo extends Component {
                                 <strong>{(!telefono_movil && !telefono_fijo) ? (<i> No posee número de contacto.</i>) : telefono_movil.concat(telefono_fijo)}</strong>
                             </div>
                         </div>
-                        <div className='button-right-absolute flex-row'>
+                        <div className='button-right-absolute flex-row flex-wrap-candidate-buttons'>
                             {informacionCandidato}
                             {actualizarCandidato}
                             {descargarInforme}
+                            {resetTest}
                             {/*obtenerApreciacion*/}
                         </div>
                     </div>

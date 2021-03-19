@@ -67,7 +67,7 @@ export function getDateTimeWithoutTimeZone(string_datetime_with_timezone){
         let hours = ("0" + (date_ob.getHours())).slice(-2)
         let minutes = ("0" + (date_ob.getMinutes())).slice(-2)
         let seconds = ("0" + (date_ob.getSeconds())).slice(-2)
-        return (date + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds)
+        return (date + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds + " Hrs")
     }
     return ""
 }

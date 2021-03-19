@@ -45,6 +45,7 @@ class CandidateCard extends Component {
                         psychologicaltests={this.props.psychologicaltests}
                         descargar_informe={this.descargarInforme.bind(this, this.props.id, this.props.full_name)}
                         onOpen={this.props.onOpenModal}
+                        onOpenModalResetTests={this.props.onOpenModalResetTests}
                     />
                     <div className={classnames('candidate-card-tests')} >
                     {
