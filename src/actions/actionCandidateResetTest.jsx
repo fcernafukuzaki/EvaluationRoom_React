@@ -5,10 +5,11 @@ import {
 	OBJ_ERROR_TIME_OUT
 } from './actionTypes';
 
-export function resetCandidateTest(token, idCandidate, idPsychologicalTest) {
+export function resetCandidateTest(token, email, idCandidate, idPsychologicalTest) {
 	var body = {
 		headers: {
-			Authorization: token
+			Authorization: token,
+			email: email
 		},
 		idcandidate: idCandidate, 
 		idpsychologicaltest: idPsychologicalTest

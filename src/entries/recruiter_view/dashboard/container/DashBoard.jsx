@@ -184,7 +184,7 @@ class DashBoard extends Component {
     }
 
     handleResetCandidateTest(idCandidate, idPsychologicalTest){
-        this.props.resetCandidateTest(this.props.token, idCandidate, idPsychologicalTest)
+        this.props.resetCandidateTest(this.props.token, this.props.correoelectronico, idCandidate, idPsychologicalTest)
     }
 
     handleCloseConfirmationModal(){
@@ -230,7 +230,6 @@ class DashBoard extends Component {
                     />
                     <CandidatoResetTestsModal closed={this.state.modalResetTestsCerrado} 
                         onClose={this.handleCloseCandidatoResetTestsModal.bind(this)}
-                        token={this.props.token}
                         candidate={this.state.modalResetTestsDataCandidate}
                         candidatePsychologicalTestList={this.state.modalResetTestsDataCandidatePsychologicalTestList}
                         handleResetCandidateTest={this.handleResetCandidateTest.bind(this)}
