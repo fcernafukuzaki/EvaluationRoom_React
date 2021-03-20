@@ -16,7 +16,7 @@ class CandidateCard extends Component {
     }
 
     descargarInforme(idcandidato, nombreCompleto) {
-        console.log(idcandidato);
+        //console.log(idcandidato);
         this.setState({
             informe: {
                 idCandidato: idcandidato,

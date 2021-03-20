@@ -12,6 +12,7 @@ import CandidatosSinAsignacionList from '../components/candidatos_sin_asignacion
 import {ClientsSelectionProcessButtonNew} from '../components/clients_selectionprocess_button'
 import AlertBoxMessageForm from '../../../components/common/AlertBoxMessageForm';
 import CandidatoResetTestsModal from '../../candidate_reset_tests/components/candidate_reset_test_modal'
+import {resetCandidateTest} from '../../../../actions/actionCandidateResetTest'
 
 class DashBoard extends Component {
     constructor(props){
@@ -33,7 +34,9 @@ class DashBoard extends Component {
             candidatosApreciacion: [],
             candidatosSinPuestoLaboral: {},
             candidatesPsychologicalTestSinPuestoLaboral: {},
-            guardado: false
+            guardado: false,
+            savedCandidatoResetTestsModal: false,
+            savedErrorCandidatoResetTestsModal: false,
             modalResetTestsCerrado: true,
             modalResetTestsDataCandidate: null,
             modalResetTestsDataCandidatePsychologicalTestList: []
@@ -43,6 +46,7 @@ class DashBoard extends Component {
         this.getCandidatoApreciacionPorIdCandidato.bind(this);
         this.addCandidatoApreciacion.bind(this);
         this.handleOpenCandidatoResetTestsModal = this.handleOpenCandidatoResetTestsModal.bind(this);
+        this.handleResetCandidateTest = this.handleResetCandidateTest.bind(this);
     }
 
     mensajeInformativo(cantidadProcesosSeleccion){
@@ -101,6 +105,9 @@ class DashBoard extends Component {
                 this.props.getCandidatoApreciacion(this.props.token, this.props.correoelectronico, this.state.idcandidato_apreciacion, undefined, undefined)
             }
         }
+        if (prevProps.resetCandidateTest !== this.props.resetCandidateTest) {
+            this.setState({savedCandidatoResetTestsModal: true, savedErrorCandidatoResetTestsModal: false})
+        }
         if (prevProps.errorResponse !== this.props.errorResponse) {
             console.log('E', this.props.errorResponse)
             if(409 == this.props.errorResponse.status){
@@ -108,9 +115,14 @@ class DashBoard extends Component {
             } else {
 				this.setState({
 					isLoading: false,
-					errorMensaje: {status: this.props.errorResponse.status, mensaje: this.props.errorResponse.message}
+					errorMensaje: {
+                        status: this.props.errorResponse.status, 
+                        mensaje: this.props.errorResponse.mensaje !== 'undefined' ? 
+                            this.props.errorResponse.mensaje : this.props.errorResponse.message
+                    }
 				})
 			}
+            this.setState({savedCandidatoResetTestsModal: false, savedErrorCandidatoResetTestsModal: true})
         }
     }
 
@@ -155,6 +167,8 @@ class DashBoard extends Component {
 
     handleOpenCandidatoResetTestsModal(candidate, candidatePsychologicalTestList){
         this.setState({
+            savedCandidatoResetTestsModal: false,
+            savedErrorCandidatoResetTestsModal: false,
             modalResetTestsCerrado: false,
             modalResetTestsDataCandidate: candidate,
             modalResetTestsDataCandidatePsychologicalTestList: candidatePsychologicalTestList
@@ -167,6 +181,14 @@ class DashBoard extends Component {
             modalResetTestsDataCandidate: null,
             modalResetTestsDataCandidatePsychologicalTestList: []
         })
+    }
+
+    handleResetCandidateTest(idCandidate, idPsychologicalTest){
+        this.props.resetCandidateTest(this.props.token, idCandidate, idPsychologicalTest)
+    }
+
+    handleCloseConfirmationModal(){
+        this.setState({savedCandidatoResetTestsModal: false, savedErrorCandidatoResetTestsModal: false})
     }
 
     tableSelectionProcess() {
@@ -207,10 +229,14 @@ class DashBoard extends Component {
                         onOpenModalResetTests={this.handleOpenCandidatoResetTestsModal.bind(this)}
                     />
                     <CandidatoResetTestsModal closed={this.state.modalResetTestsCerrado} 
-                        onClose={this.handleCloseCandidatoResetTestsModal.bind(this)} 
+                        onClose={this.handleCloseCandidatoResetTestsModal.bind(this)}
+                        token={this.props.token}
                         candidate={this.state.modalResetTestsDataCandidate}
                         candidatePsychologicalTestList={this.state.modalResetTestsDataCandidatePsychologicalTestList}
-                        guardado={this.props.guardado}
+                        handleResetCandidateTest={this.handleResetCandidateTest.bind(this)}
+                        handleCloseConfirmationModal={this.handleCloseConfirmationModal.bind(this)}
+                        saved={this.state.savedCandidatoResetTestsModal}
+                        savedError={this.state.savedErrorCandidatoResetTestsModal}
                     />
                 </Fragment>)
     }
@@ -232,8 +258,10 @@ function mapStateToProps(state){
         getCandidatoApreciacionResponse: state.reducerCandidatoApreciacion.getCandidatoApreciacionResponse,
         addCandidatoApreciacionResponse: state.reducerCandidatoApreciacion.addCandidatoApreciacionResponse,
         obtenerCandidatosSinPuestoLaboralResponse: state.reducerCandidato.obtenerCandidatosSinPuestoLaboralResponse,
-        errorResponse : state.reducerSelectionProcess.errorResponse
+        resetCandidateTest: state.reducerCandidateResetTest.resetCandidateTestResponse,
+        errorResponse: state.reducerCandidateResetTest.errorResponse,
+        errorResponse: state.reducerSelectionProcess.errorResponse
     }
 }
 
-export default connect(mapStateToProps, {getSelectionProcess, obtenerCandidatosSinAsignacion, getCandidatoApreciacion, addCandidatoApreciacion})(DashBoard);
+export default connect(mapStateToProps, {getSelectionProcess, obtenerCandidatosSinAsignacion, getCandidatoApreciacion, addCandidatoApreciacion, resetCandidateTest})(DashBoard);
