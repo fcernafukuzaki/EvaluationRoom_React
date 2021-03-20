@@ -82,6 +82,16 @@ class DashBoard extends Component {
             });
             this.tableSelectionProcess()
         }
+        if (prevState.candidatesPsychologicalTestSinPuestoLaboral !== this.state.candidatesPsychologicalTestSinPuestoLaboral){
+            /**
+             * Actualizar los datos del test del modal luego que han sido reseteados.
+             */
+            if(this.state.modalResetTestsDataCandidate != null){
+                this.setState({
+                    modalResetTestsDataCandidatePsychologicalTestList: this.state.candidatesPsychologicalTestSinPuestoLaboral[this.state.modalResetTestsDataCandidate.idcandidato]
+                })
+            }
+        }
         if (prevProps.obtenerCandidatosSinPuestoLaboralResponse !== this.props.obtenerCandidatosSinPuestoLaboralResponse) {
             this.setState({
                 isLoading: false,
@@ -105,8 +115,13 @@ class DashBoard extends Component {
                 this.props.getCandidatoApreciacion(this.props.token, this.props.correoelectronico, this.state.idcandidato_apreciacion, undefined, undefined)
             }
         }
-        if (prevProps.resetCandidateTest !== this.props.resetCandidateTest) {
+        if (prevProps.resetCandidateTestResponse !== this.props.resetCandidateTestResponse) {
             this.setState({savedCandidatoResetTestsModal: true, savedErrorCandidatoResetTestsModal: false})
+            /**
+             * Volver a consultar datos de los candidatos luego de resetear test.
+             */
+            this.props.getSelectionProcess(null, null, null, this.props.token);
+            this.props.obtenerCandidatosSinAsignacion(this.props.token, this.props.correoelectronico)
         }
         if (prevProps.errorResponse !== this.props.errorResponse) {
             console.log('E', this.props.errorResponse)
@@ -184,6 +199,10 @@ class DashBoard extends Component {
     }
 
     handleResetCandidateTest(idCandidate, idPsychologicalTest){
+        this.setState({
+            modalResetTestsIdCandidate: idCandidate,
+            modalResetTestsIdPsychologicalTest: idPsychologicalTest
+        })
         this.props.resetCandidateTest(this.props.token, this.props.correoelectronico, idCandidate, idPsychologicalTest)
     }
 
@@ -257,7 +276,7 @@ function mapStateToProps(state){
         getCandidatoApreciacionResponse: state.reducerCandidatoApreciacion.getCandidatoApreciacionResponse,
         addCandidatoApreciacionResponse: state.reducerCandidatoApreciacion.addCandidatoApreciacionResponse,
         obtenerCandidatosSinPuestoLaboralResponse: state.reducerCandidato.obtenerCandidatosSinPuestoLaboralResponse,
-        resetCandidateTest: state.reducerCandidateResetTest.resetCandidateTestResponse,
+        resetCandidateTestResponse: state.reducerCandidateResetTest.resetCandidateTestResponse,
         errorResponse: state.reducerCandidateResetTest.errorResponse,
         errorResponse: state.reducerSelectionProcess.errorResponse
     }
