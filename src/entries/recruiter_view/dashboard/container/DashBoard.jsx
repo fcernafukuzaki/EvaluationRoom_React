@@ -37,6 +37,7 @@ class DashBoard extends Component {
             guardado: false,
             savedCandidatoResetTestsModal: false,
             savedErrorCandidatoResetTestsModal: false,
+            isLoadingCandidatoResetTestsModal: false,
             modalResetTestsCerrado: true,
             modalResetTestsDataCandidate: null,
             modalResetTestsDataCandidatePsychologicalTestList: []
@@ -116,7 +117,7 @@ class DashBoard extends Component {
             }
         }
         if (prevProps.resetCandidateTestResponse !== this.props.resetCandidateTestResponse) {
-            this.setState({savedCandidatoResetTestsModal: true, savedErrorCandidatoResetTestsModal: false})
+            this.setState({savedCandidatoResetTestsModal: true, savedErrorCandidatoResetTestsModal: false, isLoadingCandidatoResetTestsModal: false})
             /**
              * Volver a consultar datos de los candidatos luego de resetear test.
              */
@@ -137,7 +138,7 @@ class DashBoard extends Component {
                     }
 				})
 			}
-            this.setState({savedCandidatoResetTestsModal: false, savedErrorCandidatoResetTestsModal: true})
+            this.setState({savedCandidatoResetTestsModal: false, savedErrorCandidatoResetTestsModal: true, isLoadingCandidatoResetTestsModal: false})
         }
     }
 
@@ -184,6 +185,7 @@ class DashBoard extends Component {
         this.setState({
             savedCandidatoResetTestsModal: false,
             savedErrorCandidatoResetTestsModal: false,
+            isLoadingCandidatoResetTestsModal: false,
             modalResetTestsCerrado: false,
             modalResetTestsDataCandidate: candidate,
             modalResetTestsDataCandidatePsychologicalTestList: candidatePsychologicalTestList
@@ -201,13 +203,14 @@ class DashBoard extends Component {
     handleResetCandidateTest(idCandidate, idPsychologicalTest){
         this.setState({
             modalResetTestsIdCandidate: idCandidate,
-            modalResetTestsIdPsychologicalTest: idPsychologicalTest
+            modalResetTestsIdPsychologicalTest: idPsychologicalTest,
+            isLoadingCandidatoResetTestsModal: true
         })
         this.props.resetCandidateTest(this.props.token, this.props.correoelectronico, idCandidate, idPsychologicalTest)
     }
 
     handleCloseConfirmationModal(){
-        this.setState({savedCandidatoResetTestsModal: false, savedErrorCandidatoResetTestsModal: false})
+        this.setState({savedCandidatoResetTestsModal: false, savedErrorCandidatoResetTestsModal: false, isLoadingCandidatoResetTestsModal: false})
     }
 
     tableSelectionProcess() {
@@ -255,6 +258,7 @@ class DashBoard extends Component {
                         handleCloseConfirmationModal={this.handleCloseConfirmationModal.bind(this)}
                         saved={this.state.savedCandidatoResetTestsModal}
                         savedError={this.state.savedErrorCandidatoResetTestsModal}
+                        isLoading={this.state.isLoadingCandidatoResetTestsModal}
                     />
                 </Fragment>)
     }

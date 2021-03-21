@@ -4,6 +4,7 @@ import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExit
 import {CandidatoResetTestButtonSave} from './candidate_reset_test_button'
 import {isDatetimeFinishedExam, getDateTimeWithoutTimeZone} from '../../../common/components/date_util'
 import Table from '../../../components/common/Table'
+import CargandoImagenSpinner from '../../../components/common/CargandoImagenSpinner'
 import ConfirmationModal from '../../../components/common/ConfirmationModal'
 
 class CandidatoResetTestsModal extends Component {
@@ -83,7 +84,7 @@ class CandidatoResetTestsModal extends Component {
     }
 
     render () {
-        const {closed, onClose, candidate, candidatePsychologicalTestList, saved, savedError} = this.props
+        const {closed, onClose, candidate, candidatePsychologicalTestList, saved, savedError, isLoading} = this.props
         const {isOpenConfirmationModal, idCandidate, candidateName, idPsychologicalTest, psychologicalTestName} = this.state
 
         if(closed) {
@@ -135,9 +136,13 @@ class CandidatoResetTestsModal extends Component {
                                         <strong>¿Está seguro de resetear el test <u><i>{psychologicalTestName}</i></u> del candidato <u><i>{candidateName}</i></u>?</strong>
                                     </div>
                                     <div className="mt-3">
-                                        <CandidatoResetTestButtonSave 
-                                            onClick={this.onClickResetExam.bind(this, idCandidate, idPsychologicalTest)}
-                                        />
+                                        {isLoading ? 
+                                            <CargandoImagenSpinner />
+                                             :
+                                            <CandidatoResetTestButtonSave 
+                                                onClick={this.onClickResetExam.bind(this, idCandidate, idPsychologicalTest)}
+                                            />
+                                        }
                                     </div>
                                 </Fragment>
                             }
