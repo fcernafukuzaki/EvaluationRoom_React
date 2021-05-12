@@ -4,6 +4,7 @@ import LogoEmpresa from '../../../../assets/img/logo_humanum_recortado.jpg'
 import Footer from '../../../common/components/Footer';
 import NotFound from '../../../common/components/NotFound';
 import CandidatoForm from './candidato_selfregistration_form';
+import CandidatoSCLForm from './candidato_selfregistration_scl_form';
 
 export default class EvaluationRoomAppPublico extends Component {
 	constructor(props){
@@ -36,6 +37,8 @@ export default class EvaluationRoomAppPublico extends Component {
 			<Fragment>
 				<Switch>
 					<Route exact path="/evaluacion/" render={()=>(<CandidatoForm logoEmpresa={this.obtenerLogoEmpresa()} errorResponse={this.state.errorMensaje} />)} />
+					<Route exact path="/evaluacion_nueva/" render={()=>(<CandidatoSCLForm logoEmpresa={this.obtenerLogoEmpresa()} errorResponse={this.state.errorMensaje} />)} />
+					<Redirect from="/evaluacion_nueva" to="evaluacion_nueva/" />
 					<Redirect from="/evaluacion" to="evaluacion/" />
 					<Redirect from="/evaluation" to="evaluacion/" />
 					<Route component={NotFound} />
