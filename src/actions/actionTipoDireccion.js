@@ -7,8 +7,10 @@ import {
 
 export function obtenerTipoDirecciones() {
 	return (dispatch, getState) => {
-		axios.get('/tipodireccion/')
-			.then((response) => { dispatch({ type: TIPO_DIRECCION_OBTENER, payload: response.data }) })
+		axios.get('https://evaluationroom.herokuapp.com/v1/candidateform/tipodireccion'
+				,{headers: { Authorization: 'token' }}
+				)
+			.then((response) => { dispatch({ type: TIPO_DIRECCION_OBTENER, payload: response.data.body.tipos_direccion }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })

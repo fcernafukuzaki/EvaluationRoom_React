@@ -122,16 +122,16 @@ class CandidatoDatosForm extends Component {
 				var idDistritoNacimiento = this.state.idDistritoNacimiento;
 				if(typeof candidatoResponse.direcciones != "undefined"){
 					idPaisDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].pais.idPais : '1';
-					idDepartamentoDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].departamento.idDepartamento : '0';
-					idProvinciaDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].provincia.idProvincia : '0';
-					idDistritoDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].distrito.idDistrito : '0';
+					idDepartamentoDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].departamento.iddepartamento : '0';
+					idProvinciaDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].provincia.idprovincia : '0';
+					idDistritoDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].distrito.iddistrito : '0';
 					
 					lugarDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].direccion : '';
 					
 					idPaisNacimiento = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2)[0].pais.idPais : '1';
-					idDepartamentoNacimiento = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2)[0].departamento.idDepartamento : '0';
-					idProvinciaNacimiento = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2)[0].provincia.idProvincia : '0';
-					idDistritoNacimiento = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2)[0].distrito.idDistrito : '0';
+					idDepartamentoNacimiento = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2)[0].departamento.iddepartamento : '0';
+					idProvinciaNacimiento = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2)[0].provincia.idprovincia : '0';
+					idDistritoNacimiento = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2)[0].distrito.iddistrito : '0';
 					
 					this.props.obtenerDepartamentos(idPaisDomicilio);
 					this.props.obtenerProvincias(idPaisDomicilio, idDepartamentoDomicilio);
@@ -496,7 +496,7 @@ class CandidatoDatosForm extends Component {
 			rowsDocumentoIdentidad.push(
 				{
 					label: elemento.nombre,
-					value: elemento.idDocumentoIdentidad
+					value: elemento.iddocumentoidentidad
 				}
 			)
 		});
@@ -506,7 +506,7 @@ class CandidatoDatosForm extends Component {
 			rowsEstadoCivil.push(
 				{
 					label: elemento.nombre,
-					value: elemento.idEstadoCivil
+					value: elemento.idestadocivil
 				}
 			)
 		});
@@ -516,7 +516,7 @@ class CandidatoDatosForm extends Component {
 			rowsSexo.push(
 				{
 					label: elemento.nombre,
-					value: elemento.idSexo
+					value: elemento.idsexo
 				}
 			)
 		});
@@ -526,7 +526,7 @@ class CandidatoDatosForm extends Component {
 			rowsTipoDireccion.push(
 				{
 					label: elemento.nombre,
-					value: elemento.idTipoDireccion
+					value: elemento.idtipodireccion
 				}
 			)
 		});
@@ -536,7 +536,7 @@ class CandidatoDatosForm extends Component {
 			rowsPais.push(
 				{
 					label: elemento.nombre,
-					value: elemento.idPais
+					value: elemento.idpais
 				}
 			)
 		});
@@ -546,7 +546,7 @@ class CandidatoDatosForm extends Component {
 			rowsPaisNacimiento.push(
 				{
 					label: elemento.nombre,
-					value: elemento.idPais
+					value: elemento.idpais
 				}
 			)
 		});
@@ -556,7 +556,7 @@ class CandidatoDatosForm extends Component {
 			rowsDepartamento.push(
 				{
 					label: elemento.nombre,
-					value: elemento.idDepartamento
+					value: elemento.iddepartamento
 				}
 			)
 		});
@@ -566,7 +566,7 @@ class CandidatoDatosForm extends Component {
 			rowsDepartamentoNacimiento.push(
 				{
 					label: elemento.nombre,
-					value: elemento.idDepartamento
+					value: elemento.iddepartamento
 				}
 			)
 		});
@@ -576,7 +576,7 @@ class CandidatoDatosForm extends Component {
 			rowsProvincia.push(
 				{
 					label: elemento.nombre,
-					value: elemento.idProvincia
+					value: elemento.idprovincia
 				}
 			)
 		});
@@ -586,7 +586,7 @@ class CandidatoDatosForm extends Component {
 			rowsProvinciaNacimiento.push(
 				{
 					label: elemento.nombre,
-					value: elemento.idProvincia
+					value: elemento.idprovincia
 				}
 			)
 		});
@@ -596,7 +596,7 @@ class CandidatoDatosForm extends Component {
 			rowsDistrito.push(
 				{
 					label: elemento.nombre,
-					value: elemento.idDistrito
+					value: elemento.iddistrito
 				}
 			)
 		});
@@ -606,7 +606,7 @@ class CandidatoDatosForm extends Component {
 			rowsDistritoNacimiento.push(
 				{
 					label: elemento.nombre,
-					value: elemento.idDistrito
+					value: elemento.iddistrito
 				}
 			)
 		});

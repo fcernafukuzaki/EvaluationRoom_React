@@ -8,8 +8,10 @@ import {
 
 export function obtenerProvincias(idPais, idDepartamento) {
 	return (dispatch, getState) => {
-		axios.get(('/provincia/').concat(idPais,'/',idDepartamento))
-			.then((response) => { dispatch({ type: PROVINCIA_OBTENER, payload: response.data }) })
+		axios.get(('https://evaluationroom.herokuapp.com/v1/candidateform/ubigeo/').concat(idPais,'/',idDepartamento)
+				,{headers: { Authorization: 'token' }}
+				)
+			.then((response) => { dispatch({ type: PROVINCIA_OBTENER, payload: response.data.body.provincias }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
@@ -22,8 +24,10 @@ export function obtenerProvincias(idPais, idDepartamento) {
 
 export function obtenerProvinciasNacimiento(idPais, idDepartamento) {
 	return (dispatch, getState) => {
-		axios.get(('/provincia/').concat(idPais,'/',idDepartamento))
-			.then((response) => { dispatch({ type: PROVINCIA_NACIMIENTO_OBTENER, payload: response.data }) })
+		axios.get(('https://evaluationroom.herokuapp.com/v1/candidateform/ubigeo/').concat(idPais,'/',idDepartamento)
+				,{headers: { Authorization: 'token' }}
+				)
+			.then((response) => { dispatch({ type: PROVINCIA_NACIMIENTO_OBTENER, payload: response.data.body.provincias }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })

@@ -8,8 +8,10 @@ import {
 
 export function obtenerDepartamentos(idPais) {
 	return (dispatch, getState) => {
-		axios.get(('/departamento/').concat(idPais))
-			.then((response) => { dispatch({ type: DEPARTAMENTO_OBTENER, payload: response.data }) })
+		axios.get(('https://evaluationroom.herokuapp.com/v1/candidateform/ubigeo/').concat(idPais)
+				  ,{headers: { Authorization: 'token' }}
+				 )
+			.then((response) => { dispatch({ type: DEPARTAMENTO_OBTENER, payload: response.data.body.departamentos }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
@@ -22,8 +24,10 @@ export function obtenerDepartamentos(idPais) {
 
 export function obtenerDepartamentosNacimiento(idPais) {
 	return (dispatch, getState) => {
-		axios.get(('/departamento/').concat(idPais))
-			.then((response) => { dispatch({ type: DEPARTAMENTO_NACIMIENTO_OBTENER, payload: response.data }) })
+		axios.get(('https://evaluationroom.herokuapp.com/v1/candidateform/ubigeo/').concat(idPais)
+				  ,{headers: { Authorization: 'token' }}
+				)
+			.then((response) => { dispatch({ type: DEPARTAMENTO_NACIMIENTO_OBTENER, payload: response.data.body.departamentos }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
