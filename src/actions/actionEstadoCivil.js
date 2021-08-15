@@ -7,8 +7,10 @@ import {
 
 export function obtenerEstadosCiviles() {
 	return (dispatch, getState) => {
-		axios.get('/estadocivil/')
-			.then((response) => { dispatch({ type: ESTADOCIVIL_OBTENER, payload: response.data }) })
+		axios.get('https://evaluationroom.herokuapp.com/v1/candidateform/estadocivil'
+				,{headers: { Authorization: 'token' }}
+				)
+			.then((response) => { dispatch({ type: ESTADOCIVIL_OBTENER, payload: response.data.body.estados_civil }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })

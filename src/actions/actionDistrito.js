@@ -8,8 +8,10 @@ import {
 
 export function obtenerDistritos(idPais, idDepartamento, idProvincia) {
 	return (dispatch, getState) => {
-		axios.get(('/distrito/').concat(idPais,'/',idDepartamento,'/',idProvincia))
-			.then((response) => { dispatch({ type: DISTRITO_OBTENER, payload: response.data }) })
+		axios.get(('https://evaluationroom.herokuapp.com/v1/candidateform/ubigeo/').concat(idPais,'/',idDepartamento,'/',idProvincia)
+				,{headers: { Authorization: 'token' }}
+				)
+			.then((response) => { dispatch({ type: DISTRITO_OBTENER, payload: response.data.body.distritos }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
@@ -22,8 +24,10 @@ export function obtenerDistritos(idPais, idDepartamento, idProvincia) {
 
 export function obtenerDistritosNacimiento(idPais, idDepartamento, idProvincia) {
 	return (dispatch, getState) => {
-		axios.get(('/distrito/').concat(idPais,'/',idDepartamento,'/',idProvincia))
-			.then((response) => { dispatch({ type: DISTRITO_NACIMIENTO_OBTENER, payload: response.data }) })
+		axios.get(('https://evaluationroom.herokuapp.com/v1/candidateform/ubigeo/').concat(idPais,'/',idDepartamento,'/',idProvincia)
+				,{headers: { Authorization: 'token' }}
+				)
+			.then((response) => { dispatch({ type: DISTRITO_NACIMIENTO_OBTENER, payload: response.data.body.distritos }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
