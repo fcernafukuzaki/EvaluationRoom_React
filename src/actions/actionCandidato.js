@@ -23,7 +23,7 @@ import {
 	OBJ_ERROR_TIME_OUT
 } from './actionTypes';
 
-export function guardarCandidato(candidato) {
+/*export function guardarCandidato(candidato) {
 	return (dispatch, getState) => {
 		axios.post('/candidato/', candidato)
 			.then((response) => { dispatch({ type: CANDIDATO_GUARDAR, payload: response.data }) })
@@ -37,7 +37,7 @@ export function guardarCandidato(candidato) {
 				}
 			})
 	}
-}
+}*/
 
 export function obtenerCandidato(idCandidato) {
 	return (dispatch, getState) => {
