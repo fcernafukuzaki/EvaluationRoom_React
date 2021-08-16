@@ -112,7 +112,7 @@ export function guardarCandidatoTestPsicologicoRecruiter(candidatoTest) {
 
 export function guardarCandidatoTestPsicologico(candidatoTest) {
 	return (dispatch, getState) => {
-		axios.post('/candidato/test/',candidatoTest)
+		axios.post('https://evaluationroom.herokuapp.com/v1/candidate',candidatoTest)
 			.then((response) => { dispatch({ type: CANDIDATO_TESTPSICOLOGICO_GUARDAR, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
