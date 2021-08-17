@@ -80,12 +80,16 @@ export function getCandidates() {
 	}
 }
 
-export function validarCandidatoRegistrado(candidato) {
+export function validarCandidatoRegistrado(correoElectronico) {
 	return (dispatch, getState) => {
-		axios.post('/candidato/validar/', candidato)
-			.then((response) => { dispatch({ type: CANDIDATO_REGISTRADO_VALIDAR, payload: response.data }) })
+		axios.get(('https://evaluationroom.herokuapp.com/v1/candidate/').concat(correoElectronico),
+					{headers: { Authorization: 'token' }})
+			.then((response) => { dispatch({ type: CANDIDATO_REGISTRADO_VALIDAR, payload: response.data.body.candidato }) })
 			.catch((error) => {
-				if(error.toString().indexOf('Network Error') > -1){
+				if(error.toString().indexOf('NOT FOUND') > -1){
+					console.log(error.toString())
+					dispatch({ type: CANDIDATO_REGISTRADO_VALIDAR, payload: response.data.error })
+				} else if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
 				} else {
 					dispatch({ type: ERROR, payload: error.response.data })
@@ -226,7 +230,7 @@ export function guardarCandidatoRespuesta(candidatoTestDetalle) {
 
 export function obtenerInterpretacion(idCandidato) {
 	return (dispatch, getState) => {
-		axios.get(('/testpsicologico/interpretacion/candidato/').concat(idCandidato))
+		axios.get(('https://evaluationroom.com/testpsicologico/interpretacion/candidato/').concat(idCandidato))
 			.then((response) => { dispatch({ type: INTERPRETACION_OBTENER, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
