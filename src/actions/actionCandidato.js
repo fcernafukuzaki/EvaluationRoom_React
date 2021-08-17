@@ -227,7 +227,7 @@ export function guardarCandidatoRespuesta(candidatoTestDetalle) {
 
 export function obtenerInterpretacion(idCandidato) {
 	return (dispatch, getState) => {
-		axios.get(('https://evaluationroom.com/testpsicologico/interpretacion/candidato/').concat(idCandidato))
+		axios.get(('http://interpretacion.evaluationroom.com:8080/testpsicologico/interpretacion/candidato/').concat(idCandidato))
 			.then((response) => { dispatch({ type: INTERPRETACION_OBTENER, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
