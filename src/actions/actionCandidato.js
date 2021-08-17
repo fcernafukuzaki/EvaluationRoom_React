@@ -86,13 +86,10 @@ export function validarCandidatoRegistrado(correoElectronico) {
 					{headers: { Authorization: 'token' }})
 			.then((response) => { dispatch({ type: CANDIDATO_REGISTRADO_VALIDAR, payload: response.data.body.candidato }) })
 			.catch((error) => {
-				if(error.toString().indexOf('NOT FOUND') > -1){
-					console.log(error.toString())
-					dispatch({ type: CANDIDATO_REGISTRADO_VALIDAR, payload: response.data.error })
-				} else if(error.toString().indexOf('Network Error') > -1){
+				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
 				} else {
-					dispatch({ type: ERROR, payload: error.response.data })
+					dispatch({ type: ERROR, payload: error.response.data.error })
 				}
 			})
 	}

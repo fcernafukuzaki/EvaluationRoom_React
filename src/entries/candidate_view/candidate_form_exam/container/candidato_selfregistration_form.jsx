@@ -98,6 +98,7 @@ class CandidatoDatosForm extends Component {
 	
 	componentDidUpdate(prevProps, prevState) {
 		if (prevProps.validarCandidatoRegistradoResponse !== this.props.validarCandidatoRegistradoResponse) {
+			console.log(this.props.validarCandidatoRegistradoResponse)
 			if(this.props.validarCandidatoRegistradoResponse.correoelectronico !== '' && 
 					this.props.validarCandidatoRegistradoResponse.selfregistration){
 				this.setState({ 
@@ -152,7 +153,7 @@ class CandidatoDatosForm extends Component {
 					correoElectronico: candidatoResponse.correoelectronico,
 					idDocumentoIdentidad: candidatoResponse.iddocumentoidentidad,
 					numeroDocumentoIdentidad: candidatoResponse.numerodocumentoidentidad == null ? this.state.numerodocumentoidentidad : candidatoResponse.numerodocumentoidentidad,
-					idEstadoCivil: candidatoResponse.estadoCivil.idestadocivil,
+					idEstadoCivil: candidatoResponse.idestadocivil,
 					cantidadHijos: candidatoResponse.cantidadhijos,
 					numeroCelular: candidatoResponse.telephones.filter( t => t.idtelefono == 1).length > 0 ? candidatoResponse.telephones.filter( t => t.idtelefono == 1)[0].numero : '',
 					numeroTelefono: candidatoResponse.telephones.filter( t => t.idtelefono == 2).length > 0 ? candidatoResponse.telephones.filter( t => t.idtelefono == 2)[0].numero : '',
@@ -248,7 +249,7 @@ class CandidatoDatosForm extends Component {
 		}
 		if (prevProps.errorResponse !== this.props.errorResponse) {
 			//console.log('error', this.props.errorResponse);
-			if(404 == this.props.errorResponse.status){
+			if(404 == this.props.errorResponse.code){
 				this.setState({
 					isLoading: false,
 					esCandidatoRegistrado: false
@@ -538,84 +539,100 @@ class CandidatoDatosForm extends Component {
 		});
 		
 		let rowsPais = [{ label: "Seleccione..." , value: 0 }]
-		this.props.paisesResponse.map( elemento =>{
-			rowsPais.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idpais
-				}
-			)
-		});
+		if(typeof this.props.paisesResponse != "undefined"){
+			this.props.paisesResponse.map( elemento =>{
+				rowsPais.push(
+					{
+						label: elemento.nombre,
+						value: elemento.idpais
+					}
+				)
+			});
+		}
 		
 		let rowsPaisNacimiento = [{ label: "Seleccione..." , value: 0 }]
-		this.props.paisesNacimientoResponse.map( elemento =>{
-			rowsPaisNacimiento.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idpais
-				}
-			)
-		});
+		if(typeof this.props.paisesNacimientoResponse != "undefined"){
+			this.props.paisesNacimientoResponse.map( elemento =>{
+				rowsPaisNacimiento.push(
+					{
+						label: elemento.nombre,
+						value: elemento.idpais
+					}
+				)
+			});
+		}
 		
 		let rowsDepartamento = [{ label: "Seleccione..." , value: 0 }]
-		this.props.departamentosResponse.map( elemento =>{
-			rowsDepartamento.push(
-				{
-					label: elemento.nombre,
-					value: elemento.iddepartamento
-				}
-			)
-		});
+		if(typeof this.props.departamentosResponse != "undefined"){
+			this.props.departamentosResponse.map( elemento =>{
+				rowsDepartamento.push(
+					{
+						label: elemento.nombre,
+						value: elemento.iddepartamento
+					}
+				)
+			});
+		}
 		
 		let rowsDepartamentoNacimiento = [{ label: "Seleccione..." , value: 0 }]
-		this.props.departamentosNacimientoResponse.map( elemento =>{
-			rowsDepartamentoNacimiento.push(
-				{
-					label: elemento.nombre,
-					value: elemento.iddepartamento
-				}
-			)
-		});
+		if(typeof this.props.departamentosNacimientoResponse != "undefined"){
+			this.props.departamentosNacimientoResponse.map( elemento =>{
+				rowsDepartamentoNacimiento.push(
+					{
+						label: elemento.nombre,
+						value: elemento.iddepartamento
+					}
+				)
+			});
+		}
 		
 		let rowsProvincia = [{ label: "Seleccione..." , value: 0 }]
-		this.props.provinciasResponse.map( elemento =>{
-			rowsProvincia.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idprovincia
-				}
-			)
-		});
+		if(typeof this.props.provinciasResponse != "undefined"){
+			this.props.provinciasResponse.map( elemento =>{
+				rowsProvincia.push(
+					{
+						label: elemento.nombre,
+						value: elemento.idprovincia
+					}
+				)
+			});
+		}
 		
 		let rowsProvinciaNacimiento = [{ label: "Seleccione..." , value: 0 }]
-		this.props.provinciasNacimientoResponse.map( elemento =>{
-			rowsProvinciaNacimiento.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idprovincia
-				}
-			)
-		});
+		if(typeof this.props.provinciasNacimientoResponse != "undefined"){
+			this.props.provinciasNacimientoResponse.map( elemento =>{
+				rowsProvinciaNacimiento.push(
+					{
+						label: elemento.nombre,
+						value: elemento.idprovincia
+					}
+				)
+			});
+		}
 		
 		let rowsDistrito = [{ label: "Seleccione..." , value: 0 }]
-		this.props.distritosResponse.map( elemento =>{
-			rowsDistrito.push(
-				{
-					label: elemento.nombre,
-					value: elemento.iddistrito
-				}
-			)
-		});
+		if(typeof this.props.distritosResponse != "undefined"){
+			this.props.distritosResponse.map( elemento =>{
+				rowsDistrito.push(
+					{
+						label: elemento.nombre,
+						value: elemento.iddistrito
+					}
+				)
+			});
+		}
 		
 		let rowsDistritoNacimiento = [{ label: "Seleccione..." , value: 0 }]
-		this.props.distritosNacimientoResponse.map( elemento =>{
-			rowsDistritoNacimiento.push(
-				{
-					label: elemento.nombre,
-					value: elemento.iddistrito
-				}
-			)
-		});
+		if(typeof this.props.distritosNacimientoResponse != "undefined"){
+			this.props.distritosNacimientoResponse.map( elemento =>{
+				rowsDistritoNacimiento.push(
+					{
+						label: elemento.nombre,
+						value: elemento.iddistrito
+					}
+				)
+			});
+		}
 		
 		var formValidarCandidatoRegistrado = {
 			titulo: 'Bienvenido al sistema de evaluaciones de Humanum Group.\\n\\nInicia las pruebas ingresando tu correo electrónico:',
