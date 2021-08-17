@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import LogoEmpresa from '../../../../assets/img/logo_humanum_recortado.jpg'
 import Footer from '../../../common/components/Footer';
 import NotFound from '../../../common/components/NotFound';
 import CandidatoForm from './candidato_selfregistration_form';
@@ -20,9 +19,6 @@ export default class EvaluationRoomAppPublico extends Component {
 	}
 
 	obtenerLogoEmpresa(){
-		/*const logo = new Image();
-		logo.src = 'evaluacion/' + LogoEmpresa;
-		return logo.src;*/
 		return 'https://s3.amazonaws.com/www.evaluationroom.com/logo_humanum_group.jpg'
 	}
 	
