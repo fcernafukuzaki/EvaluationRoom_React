@@ -98,7 +98,6 @@ class CandidatoDatosForm extends Component {
 	
 	componentDidUpdate(prevProps, prevState) {
 		if (prevProps.validarCandidatoRegistradoResponse !== this.props.validarCandidatoRegistradoResponse) {
-			console.log(this.props.validarCandidatoRegistradoResponse)
 			if(this.props.validarCandidatoRegistradoResponse.correoelectronico !== '' && 
 					this.props.validarCandidatoRegistradoResponse.selfregistration){
 				this.setState({ 

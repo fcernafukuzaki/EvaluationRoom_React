@@ -98,19 +98,18 @@ class CandidatoSCLForm extends Component {
 	
 	componentDidUpdate(prevProps, prevState) {
 		if (prevProps.validarCandidatoRegistradoResponse !== this.props.validarCandidatoRegistradoResponse) {
-			if(this.props.validarCandidatoRegistradoResponse.correoElectronico !== '' && 
-					this.props.validarCandidatoRegistradoResponse.selfRegistration){
+			if(this.props.validarCandidatoRegistradoResponse.correoelectronico !== '' && 
+					this.props.validarCandidatoRegistradoResponse.selfregistration){
 				this.setState({ 
 					isLoading: true
 				})
-				window.location.href = getURLTests(this.props.validarCandidatoRegistradoResponse.correoElectronico)
+				window.location.href = getURLTests(this.props.validarCandidatoRegistradoResponse.correoelectronico)
 			} else {
 				var candidatoResponse = this.props.validarCandidatoRegistradoResponse;
 				
 				var fechaFormat = '';
-				if(typeof candidatoResponse.fechaNacimiento != "undefined"){
-					var fecha = new Date(candidatoResponse.fechaNacimiento);
-					fechaFormat = fecha.getFullYear() + "-" + (fecha.getMonth() < 9 ? "0" + (fecha.getMonth() + 1) : fecha.getMonth() + 1) + "-" + (fecha.getDate() < 10 ? "0" + fecha.getDate() : fecha.getDate());
+				if(typeof candidatoResponse.fechanacimiento != "undefined"){
+					fechaFormat = candidatoResponse.fechanacimiento.split('T')[0]
 				}
 				
 				var idPaisDomicilio = this.state.idPaisDomicilio;
@@ -123,18 +122,19 @@ class CandidatoSCLForm extends Component {
 				var idDepartamentoNacimiento = this.state.idDepartamentoNacimiento;
 				var idProvinciaNacimiento = this.state.idProvinciaNacimiento;
 				var idDistritoNacimiento = this.state.idDistritoNacimiento;
-				if(typeof candidatoResponse.direcciones != "undefined"){
-					idPaisDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].pais.idPais : '1';
-					idDepartamentoDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].departamento.idDepartamento : '0';
-					idProvinciaDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].provincia.idProvincia : '0';
-					idDistritoDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].distrito.idDistrito : '0';
+				let direcciones = candidatoResponse.addresses
+				if(typeof direcciones != "undefined"){
+					idPaisDomicilio = direcciones.filter( d => d.idtipodireccion == 1).length > 0 ? direcciones.filter( d => d.idtipodireccion == 1)[0].pais.idpais : '1';
+					idDepartamentoDomicilio = direcciones.filter( d => d.idtipodireccion == 1).length > 0 ? direcciones.filter( d => d.idtipodireccion == 1)[0].departamento.iddepartamento : '0';
+					idProvinciaDomicilio = direcciones.filter( d => d.idtipodireccion == 1).length > 0 ? direcciones.filter( d => d.idtipodireccion == 1)[0].provincia.idprovincia : '0';
+					idDistritoDomicilio = direcciones.filter( d => d.idtipodireccion == 1).length > 0 ? direcciones.filter( d => d.idtipodireccion == 1)[0].distrito.iddistrito : '0';
 					
-					lugarDomicilio = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 1)[0].direccion : '';
+					lugarDomicilio = direcciones.filter( d => d.idtipodireccion == 1).length > 0 ? direcciones.filter( d => d.idtipodireccion == 1)[0].direccion : '';
 					
-					idPaisNacimiento = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2)[0].pais.idPais : '1';
-					idDepartamentoNacimiento = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2)[0].departamento.idDepartamento : '0';
-					idProvinciaNacimiento = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2)[0].provincia.idProvincia : '0';
-					idDistritoNacimiento = candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? candidatoResponse.direcciones.filter( d => d.idTipoDireccion == 2)[0].distrito.idDistrito : '0';
+					idPaisNacimiento = direcciones.filter( d => d.idtipodireccion == 2).length > 0 ? direcciones.filter( d => d.idtipodireccion == 2)[0].pais.idpais : '1';
+					idDepartamentoNacimiento = direcciones.filter( d => d.idtipodireccion == 2).length > 0 ? direcciones.filter( d => d.idtipodireccion == 2)[0].departamento.iddepartamento : '0';
+					idProvinciaNacimiento = direcciones.filter( d => d.idtipodireccion == 2).length > 0 ? direcciones.filter( d => d.idtipodireccion == 2)[0].provincia.idprovincia : '0';
+					idDistritoNacimiento = direcciones.filter( d => d.idtipodireccion == 2).length > 0 ? direcciones.filter( d => d.idtipodireccion == 2)[0].distrito.iddistrito : '0';
 					
 					this.props.obtenerDepartamentos(idPaisDomicilio);
 					this.props.obtenerProvincias(idPaisDomicilio, idDepartamentoDomicilio);
@@ -145,20 +145,20 @@ class CandidatoSCLForm extends Component {
 				}
 				// Objeto candidatoValidarInput
 				var candidatoValidarInput = {
-					idCandidato: candidatoResponse.idCandidato,
+					idCandidato: candidatoResponse.idcandidato,
 					nombre: candidatoResponse.nombre == null ? this.state.nombre : candidatoResponse.nombre,
-					apellidoPaterno: candidatoResponse.apellidoPaterno == null ? this.state.apellidoPaterno : candidatoResponse.apellidoPaterno,
-					apellidoMaterno: candidatoResponse.apellidoMaterno == null ? this.state.apellidoMaterno : candidatoResponse.apellidoMaterno,
-					correoElectronico: candidatoResponse.correoElectronico,
-					idDocumentoIdentidad: candidatoResponse.documentoIdentidad.idDocumentoIdentidad,
-					numeroDocumentoIdentidad: candidatoResponse.numeroDocumentoIdentidad == null ? this.state.numeroDocumentoIdentidad : candidatoResponse.numeroDocumentoIdentidad,
-					idEstadoCivil: candidatoResponse.estadoCivil.idEstadoCivil,
-					cantidadHijos: candidatoResponse.cantidadHijos,
-					numeroCelular: candidatoResponse.telefonos.filter( t => t.idTelefono == 1).length > 0 ? candidatoResponse.telefonos.filter( t => t.idTelefono == 1)[0].numero : '',
-					numeroTelefono: candidatoResponse.telefonos.filter( t => t.idTelefono == 2).length > 0 ? candidatoResponse.telefonos.filter( t => t.idTelefono == 2)[0].numero : '',
+					apellidoPaterno: candidatoResponse.apellidopaterno == null ? this.state.apellidopaterno : candidatoResponse.apellidopaterno,
+					apellidoMaterno: candidatoResponse.apellidomaterno == null ? this.state.apellidomaterno : candidatoResponse.apellidomaterno,
+					correoElectronico: candidatoResponse.correoelectronico,
+					idDocumentoIdentidad: candidatoResponse.iddocumentoidentidad,
+					numeroDocumentoIdentidad: candidatoResponse.numerodocumentoidentidad == null ? this.state.numerodocumentoidentidad : candidatoResponse.numerodocumentoidentidad,
+					idEstadoCivil: candidatoResponse.idestadocivil,
+					cantidadHijos: candidatoResponse.cantidadhijos,
+					numeroCelular: candidatoResponse.telephones.filter( t => t.idtelefono == 1).length > 0 ? candidatoResponse.telephones.filter( t => t.idtelefono == 1)[0].numero : '',
+					numeroTelefono: candidatoResponse.telephones.filter( t => t.idtelefono == 2).length > 0 ? candidatoResponse.telephones.filter( t => t.idtelefono == 2)[0].numero : '',
 					lugarDomicilio: lugarDomicilio,
 					fechaNacimiento: fechaFormat,
-					idSexo: candidatoResponse.sexo.idSexo,
+					idSexo: candidatoResponse.idsexo,
 					idPaisDomicilio: idPaisDomicilio,
 					idDepartamentoDomicilio: idDepartamentoDomicilio,
 					idProvinciaDomicilio: idProvinciaDomicilio,
@@ -167,35 +167,35 @@ class CandidatoSCLForm extends Component {
 					idDepartamentoNacimiento: idDepartamentoNacimiento,
 					idProvinciaNacimiento: idProvinciaNacimiento,
 					idDistritoNacimiento: idDistritoNacimiento,
-					testPsicologicos: candidatoResponse.testPsicologicos
+					testPsicologicos: candidatoResponse.psychologicaltests
 				}
 				
 				this.setState({ 
 					isLoading: false,
 					esCandidatoRegistrado: false,
-					idCandidato: candidatoResponse.idCandidato,
-					nombre: candidatoResponse.nombre == null ? this.state.nombre : candidatoResponse.nombre,
-					apellidoPaterno: candidatoResponse.apellidoPaterno == null ? this.state.apellidoPaterno : candidatoResponse.apellidoPaterno,
-					apellidoMaterno: candidatoResponse.apellidoMaterno == null ? this.state.apellidoMaterno : candidatoResponse.apellidoMaterno,
-					correoElectronico: candidatoResponse.correoElectronico,
-					idDocumentoIdentidad: candidatoResponse.documentoIdentidad.idDocumentoIdentidad,
-					numeroDocumentoIdentidad: candidatoResponse.numeroDocumentoIdentidad == null ? this.state.numeroDocumentoIdentidad : candidatoResponse.numeroDocumentoIdentidad,
-					idEstadoCivil: candidatoResponse.estadoCivil.idEstadoCivil,
-					cantidadHijos: candidatoResponse.cantidadHijos,
-					numeroCelular: candidatoResponse.telefonos.filter( t => t.idTelefono == 1).length > 0 ? candidatoResponse.telefonos.filter( t => t.idTelefono == 1)[0].numero : '',
-					numeroTelefono: candidatoResponse.telefonos.filter( t => t.idTelefono == 2).length > 0 ? candidatoResponse.telefonos.filter( t => t.idTelefono == 2)[0].numero : '',
-					lugarDomicilio: lugarDomicilio,
-					fechaNacimiento: fechaFormat,
-					idSexo: candidatoResponse.sexo.idSexo,
-					idPaisDomicilio: idPaisDomicilio,
-					idDepartamentoDomicilio: idDepartamentoDomicilio,
-					idProvinciaDomicilio: idProvinciaDomicilio,
-					idDistritoDomicilio: idDistritoDomicilio,
-					idPaisNacimiento: idPaisNacimiento,
-					idDepartamentoNacimiento: idDepartamentoNacimiento,
-					idProvinciaNacimiento: idProvinciaNacimiento,
-					idDistritoNacimiento: idDistritoNacimiento,
-					testPsicologicos: candidatoResponse.testPsicologicos
+					idCandidato: candidatoValidarInput.idCandidato,
+					nombre: candidatoValidarInput.nombre,
+					apellidoPaterno: candidatoValidarInput.apellidoPaterno,
+					apellidoMaterno: candidatoValidarInput.apellidoMaterno,
+					correoElectronico: candidatoValidarInput.correoElectronico,
+					idDocumentoIdentidad: candidatoValidarInput.idDocumentoIdentidad,
+					numeroDocumentoIdentidad: candidatoValidarInput.numeroDocumentoIdentidad,
+					idEstadoCivil: candidatoValidarInput.idEstadoCivil,
+					cantidadHijos: candidatoValidarInput.cantidadHijos,
+					numeroCelular: candidatoValidarInput.numeroCelular,
+					numeroTelefono: candidatoValidarInput.numeroTelefono,
+					lugarDomicilio: candidatoValidarInput.lugarDomicilio,
+					fechaNacimiento: candidatoValidarInput.fechaNacimiento,
+					idSexo: candidatoValidarInput.idSexo,
+					idPaisDomicilio: candidatoValidarInput.idPaisDomicilio,
+					idDepartamentoDomicilio: candidatoValidarInput.idDepartamentoDomicilio,
+					idProvinciaDomicilio: candidatoValidarInput.idProvinciaDomicilio,
+					idDistritoDomicilio: candidatoValidarInput.idDistritoDomicilio,
+					idPaisNacimiento: candidatoValidarInput.idPaisNacimiento,
+					idDepartamentoNacimiento: candidatoValidarInput.idDepartamentoNacimiento,
+					idProvinciaNacimiento: candidatoValidarInput.idProvinciaNacimiento,
+					idDistritoNacimiento: candidatoValidarInput.idDistritoNacimiento,
+					testPsicologicos: candidatoValidarInput.testPsicologicos
 				})
 				
 				//const { errors, isValid } = validateInput(this.state);
@@ -205,7 +205,7 @@ class CandidatoSCLForm extends Component {
 					this.setState({ 
 						isLoading: true
 					})
-					window.location.href = getURLTests(this.props.validarCandidatoRegistradoResponse.correoElectronico)
+					window.location.href = getURLTests(this.props.validarCandidatoRegistradoResponse.correoelectronico)
 				} else {
 					this.setState({ 
 						isLoading: false,
@@ -248,7 +248,7 @@ class CandidatoSCLForm extends Component {
 		}
 		if (prevProps.errorResponse !== this.props.errorResponse) {
 			//console.log('error', this.props.errorResponse);
-			if(404 == this.props.errorResponse.status){
+			if(404 == this.props.errorResponse.code){
 				this.setState({
 					isLoading: false,
 					esCandidatoRegistrado: false
@@ -294,8 +294,7 @@ class CandidatoSCLForm extends Component {
 	validarCandidatoRegistrado(e){
 		e.preventDefault();
 		if (this.esValidoCandidatoRegistrado()) {
-			let candidato = {correoElectronico: this.state.correoElectronico}
-			this.props.validarCandidatoRegistrado(candidato);
+			this.props.validarCandidatoRegistrado(this.state.correoElectronico);
 		}
 	}
 	
@@ -503,7 +502,7 @@ class CandidatoSCLForm extends Component {
 			rowsDocumentoIdentidad.push(
 				{
 					label: elemento.nombre,
-					value: elemento.idDocumentoIdentidad
+					value: elemento.iddocumentoidentidad
 				}
 			)
 		});
@@ -513,7 +512,7 @@ class CandidatoSCLForm extends Component {
 			rowsEstadoCivil.push(
 				{
 					label: elemento.nombre,
-					value: elemento.idEstadoCivil
+					value: elemento.idestadocivil
 				}
 			)
 		});
@@ -523,7 +522,7 @@ class CandidatoSCLForm extends Component {
 			rowsSexo.push(
 				{
 					label: elemento.nombre,
-					value: elemento.idSexo
+					value: elemento.idsexo
 				}
 			)
 		});
@@ -533,90 +532,106 @@ class CandidatoSCLForm extends Component {
 			rowsTipoDireccion.push(
 				{
 					label: elemento.nombre,
-					value: elemento.idTipoDireccion
+					value: elemento.idtipodireccion
 				}
 			)
 		});
 		
 		let rowsPais = [{ label: "Seleccione..." , value: 0 }]
-		this.props.paisesResponse.map( elemento =>{
-			rowsPais.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idPais
-				}
-			)
-		});
+		if(typeof this.props.paisesResponse != "undefined"){
+			this.props.paisesResponse.map( elemento =>{
+				rowsPais.push(
+					{
+						label: elemento.nombre,
+						value: elemento.idpais
+					}
+				)
+			});
+		}
 		
 		let rowsPaisNacimiento = [{ label: "Seleccione..." , value: 0 }]
-		this.props.paisesNacimientoResponse.map( elemento =>{
-			rowsPaisNacimiento.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idPais
-				}
-			)
-		});
+		if(typeof this.props.paisesNacimientoResponse != "undefined"){
+			this.props.paisesNacimientoResponse.map( elemento =>{
+				rowsPaisNacimiento.push(
+					{
+						label: elemento.nombre,
+						value: elemento.idpais
+					}
+				)
+			});
+		}
 		
 		let rowsDepartamento = [{ label: "Seleccione..." , value: 0 }]
-		this.props.departamentosResponse.map( elemento =>{
-			rowsDepartamento.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idDepartamento
-				}
-			)
-		});
+		if(typeof this.props.departamentosResponse != "undefined"){
+			this.props.departamentosResponse.map( elemento =>{
+				rowsDepartamento.push(
+					{
+						label: elemento.nombre,
+						value: elemento.iddepartamento
+					}
+				)
+			});
+		}
 		
 		let rowsDepartamentoNacimiento = [{ label: "Seleccione..." , value: 0 }]
-		this.props.departamentosNacimientoResponse.map( elemento =>{
-			rowsDepartamentoNacimiento.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idDepartamento
-				}
-			)
-		});
+		if(typeof this.props.departamentosNacimientoResponse != "undefined"){
+			this.props.departamentosNacimientoResponse.map( elemento =>{
+				rowsDepartamentoNacimiento.push(
+					{
+						label: elemento.nombre,
+						value: elemento.iddepartamento
+					}
+				)
+			});
+		}
 		
 		let rowsProvincia = [{ label: "Seleccione..." , value: 0 }]
-		this.props.provinciasResponse.map( elemento =>{
-			rowsProvincia.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idProvincia
-				}
-			)
-		});
+		if(typeof this.props.provinciasResponse != "undefined"){
+			this.props.provinciasResponse.map( elemento =>{
+				rowsProvincia.push(
+					{
+						label: elemento.nombre,
+						value: elemento.idprovincia
+					}
+				)
+			});
+		}
 		
 		let rowsProvinciaNacimiento = [{ label: "Seleccione..." , value: 0 }]
-		this.props.provinciasNacimientoResponse.map( elemento =>{
-			rowsProvinciaNacimiento.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idProvincia
-				}
-			)
-		});
+		if(typeof this.props.provinciasNacimientoResponse != "undefined"){
+			this.props.provinciasNacimientoResponse.map( elemento =>{
+				rowsProvinciaNacimiento.push(
+					{
+						label: elemento.nombre,
+						value: elemento.idprovincia
+					}
+				)
+			});
+		}
 		
 		let rowsDistrito = [{ label: "Seleccione..." , value: 0 }]
-		this.props.distritosResponse.map( elemento =>{
-			rowsDistrito.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idDistrito
-				}
-			)
-		});
+		if(typeof this.props.distritosResponse != "undefined"){
+			this.props.distritosResponse.map( elemento =>{
+				rowsDistrito.push(
+					{
+						label: elemento.nombre,
+						value: elemento.iddistrito
+					}
+				)
+			});
+		}
 		
 		let rowsDistritoNacimiento = [{ label: "Seleccione..." , value: 0 }]
-		this.props.distritosNacimientoResponse.map( elemento =>{
-			rowsDistritoNacimiento.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idDistrito
-				}
-			)
-		});
+		if(typeof this.props.distritosNacimientoResponse != "undefined"){
+			this.props.distritosNacimientoResponse.map( elemento =>{
+				rowsDistritoNacimiento.push(
+					{
+						label: elemento.nombre,
+						value: elemento.iddistrito
+					}
+				)
+			});
+		}
 		
 		var formValidarCandidatoRegistrado = {
 			titulo: 'Bienvenido al sistema de evaluaciones de Humanum Group.\\n\\nInicia las pruebas ingresando tu correo electrónico:',
