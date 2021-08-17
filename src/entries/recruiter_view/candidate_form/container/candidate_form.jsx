@@ -105,14 +105,14 @@ class CandidatoDatosForm extends Component {
 			var fechaFormat = fecha.getFullYear() + "-" + (fecha.getMonth() < 9 ? "0" + (fecha.getMonth() + 1) : fecha.getMonth() + 1) + "-" + (fecha.getDate() < 10 ? "0" + fecha.getDate() : fecha.getDate());
 			
 			var idPaisDomicilio = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].pais.idPais : '0';
-			var idDepartamentoDomicilio = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].departamento.iddepartamento : '0';
-			var idProvinciaDomicilio = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].provincia.idprovincia : '0';
-			var idDistritoDomicilio = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].distrito.iddistrito : '0';
+			var idDepartamentoDomicilio = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].departamento.idDepartamento : '0';
+			var idProvinciaDomicilio = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].provincia.idProvincia : '0';
+			var idDistritoDomicilio = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].distrito.idDistrito : '0';
 			
 			var idPaisNacimiento = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2)[0].pais.idPais : '0';
-			var idDepartamentoNacimiento = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2)[0].departamento.iddepartamento : '0';
-			var idProvinciaNacimiento = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2)[0].provincia.idprovincia : '0';
-			var idDistritoNacimiento = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2)[0].distrito.iddistrito : '0';
+			var idDepartamentoNacimiento = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2)[0].departamento.idDepartamento : '0';
+			var idProvinciaNacimiento = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2)[0].provincia.idProvincia : '0';
+			var idDistritoNacimiento = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2)[0].distrito.idDistrito : '0';
 			
 			this.props.obtenerDepartamentos(idPaisDomicilio);
 			this.props.obtenerProvincias(idPaisDomicilio, idDepartamentoDomicilio);
@@ -445,124 +445,148 @@ class CandidatoDatosForm extends Component {
 		errors, isLoading , errorMensaje, guardado} = this.state;
 		
 		let rowsDocumentoIdentidad = [{ label: "Seleccione..." , value: 0 }]
-		this.props.documentosIdentidadResponse.map( elemento =>{
-			rowsDocumentoIdentidad.push(
-				{
-					label: elemento.nombre,
-					value: elemento.iddocumentoidentidad
-				}
-			)
-		});
+		if(typeof this.props.documentosIdentidadResponse != "undefined"){
+			this.props.documentosIdentidadResponse.map( elemento =>{
+				rowsDocumentoIdentidad.push(
+					{
+						label: elemento.nombre,
+						value: elemento.iddocumentoidentidad
+					}
+				)
+			});
+		}
 		
 		let rowsEstadoCivil = [{ label: "Seleccione..." , value: 0 }]
-		this.props.estadosCivilesResponse.map( elemento =>{
-			rowsEstadoCivil.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idestadocivil
-				}
-			)
-		});
+		if(typeof this.props.estadosCivilesResponse != "undefined"){
+			this.props.estadosCivilesResponse.map( elemento =>{
+				rowsEstadoCivil.push(
+					{
+						label: elemento.nombre,
+						value: elemento.idestadocivil
+					}
+				)
+			});
+		}
 		
 		let rowsSexo = [{ label: "Seleccione..." , value: 0 }]
-		this.props.sexosResponse.map( elemento =>{
-			rowsSexo.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idsexo
-				}
-			)
-		});
+		if(typeof this.props.sexosResponse != "undefined"){
+			this.props.sexosResponse.map( elemento =>{
+				rowsSexo.push(
+					{
+						label: elemento.nombre,
+						value: elemento.idsexo
+					}
+				)
+			});
+		}
 		
 		let rowsTipoDireccion = [{ label: "Seleccione..." , value: 0 }]
-		this.props.tipoDireccionesResponse.map( elemento =>{
-			rowsTipoDireccion.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idtipodireccion
-				}
-			)
-		});
+		if(typeof this.props.tipoDireccionesResponse != "undefined"){
+			this.props.tipoDireccionesResponse.map( elemento =>{
+				rowsTipoDireccion.push(
+					{
+						label: elemento.nombre,
+						value: elemento.idtipodireccion
+					}
+				)
+			});
+		}
 		
 		let rowsPais = [{ label: "Seleccione..." , value: 0 }]
-		this.props.paisesResponse.map( elemento =>{
-			rowsPais.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idpais
-				}
-			)
-		});
+		if(typeof this.props.paisesResponse != "undefined"){
+			this.props.paisesResponse.map( elemento =>{
+				rowsPais.push(
+					{
+						label: elemento.nombre,
+						value: elemento.idpais
+					}
+				)
+			});
+		}
 		
 		let rowsPaisNacimiento = [{ label: "Seleccione..." , value: 0 }]
-		this.props.paisesNacimientoResponse.map( elemento =>{
-			rowsPaisNacimiento.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idpais
-				}
-			)
-		});
+		if(typeof this.props.paisesNacimientoResponse != "undefined"){
+			this.props.paisesNacimientoResponse.map( elemento =>{
+				rowsPaisNacimiento.push(
+					{
+						label: elemento.nombre,
+						value: elemento.idpais
+					}
+				)
+			});
+		}
 		
 		let rowsDepartamento = [{ label: "Seleccione..." , value: 0 }]
-		this.props.departamentosResponse.map( elemento =>{
-			rowsDepartamento.push(
-				{
-					label: elemento.nombre,
-					value: elemento.iddepartamento
-				}
-			)
-		});
+		if(typeof this.props.departamentosResponse != "undefined"){
+			this.props.departamentosResponse.map( elemento =>{
+				rowsDepartamento.push(
+					{
+						label: elemento.nombre,
+						value: elemento.iddepartamento
+					}
+				)
+			});
+		}
 		
 		let rowsDepartamentoNacimiento = [{ label: "Seleccione..." , value: 0 }]
-		this.props.departamentosNacimientoResponse.map( elemento =>{
-			rowsDepartamentoNacimiento.push(
-				{
-					label: elemento.nombre,
-					value: elemento.iddepartamento
-				}
-			)
-		});
+		if(typeof this.props.departamentosNacimientoResponse != "undefined"){
+			this.props.departamentosNacimientoResponse.map( elemento =>{
+				rowsDepartamentoNacimiento.push(
+					{
+						label: elemento.nombre,
+						value: elemento.iddepartamento
+					}
+				)
+			});
+		}
 		
 		let rowsProvincia = [{ label: "Seleccione..." , value: 0 }]
-		this.props.provinciasResponse.map( elemento =>{
-			rowsProvincia.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idprovincia
-				}
-			)
-		});
+		if(typeof this.props.provinciasResponse != "undefined"){
+			this.props.provinciasResponse.map( elemento =>{
+				rowsProvincia.push(
+					{
+						label: elemento.nombre,
+						value: elemento.idprovincia
+					}
+				)
+			});
+		}
 		
 		let rowsProvinciaNacimiento = [{ label: "Seleccione..." , value: 0 }]
-		this.props.provinciasNacimientoResponse.map( elemento =>{
-			rowsProvinciaNacimiento.push(
-				{
-					label: elemento.nombre,
-					value: elemento.idprovincia
-				}
-			)
-		});
+		if(typeof this.props.provinciasNacimientoResponse != "undefined"){
+			this.props.provinciasNacimientoResponse.map( elemento =>{
+				rowsProvinciaNacimiento.push(
+					{
+						label: elemento.nombre,
+						value: elemento.idprovincia
+					}
+				)
+			});
+		}
 		
 		let rowsDistrito = [{ label: "Seleccione..." , value: 0 }]
-		this.props.distritosResponse.map( elemento =>{
-			rowsDistrito.push(
-				{
-					label: elemento.nombre,
-					value: elemento.iddistrito
-				}
-			)
-		});
+		if(typeof this.props.distritosResponse != "undefined"){
+			this.props.distritosResponse.map( elemento =>{
+				rowsDistrito.push(
+					{
+						label: elemento.nombre,
+						value: elemento.iddistrito
+					}
+				)
+			});
+		}
 		
 		let rowsDistritoNacimiento = [{ label: "Seleccione..." , value: 0 }]
-		this.props.distritosNacimientoResponse.map( elemento =>{
-			rowsDistritoNacimiento.push(
-				{
-					label: elemento.nombre,
-					value: elemento.iddistrito
-				}
-			)
-		});
+		if(typeof this.props.distritosNacimientoResponse != "undefined"){
+			this.props.distritosNacimientoResponse.map( elemento =>{
+				rowsDistritoNacimiento.push(
+					{
+						label: elemento.nombre,
+						value: elemento.iddistrito
+					}
+				)
+			});
+		}
 		
 		var form = {
 			titulo: (idCandidato == '' ? 'Registrar candidato' : ('Datos de candidato ').concat(nombreForm, ' ', apellidoPaternoForm, ' ',apellidoMaternoForm)),
