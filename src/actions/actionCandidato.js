@@ -40,12 +40,17 @@ import {
 }*/
 
 export function obtenerCandidato(idCandidato) {
+	/*
+	Obtener información de un candidato a partir de su uid.
+	*/
 	return (dispatch, getState) => {
-		axios.get(('/candidato/id/').concat(idCandidato))
-			.then((response) => { dispatch({ type: CANDIDATO_OBTENER, payload: response.data }) })
+		axios.get(('https://evaluationroom.herokuapp.com/v1/candidate/uid=').concat(idCandidato))
+			.then((response) => { dispatch({ type: CANDIDATO_OBTENER, payload: response.data.body.candidato }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
+				} else {
+					dispatch({ type: ERROR, payload: error.response.data.error })
 				}
 			})
 	}
@@ -82,7 +87,7 @@ export function getCandidates() {
 
 export function validarCandidatoRegistrado(correoElectronico) {
 	return (dispatch, getState) => {
-		axios.get(('https://evaluationroom.herokuapp.com/v1/candidate/').concat(correoElectronico),
+		axios.get(('https://evaluationroom.herokuapp.com/v1/candidate/email=').concat(correoElectronico),
 					{headers: { Authorization: 'token' }})
 			.then((response) => { dispatch({ type: CANDIDATO_REGISTRADO_VALIDAR, payload: response.data.body.candidato }) })
 			.catch((error) => {

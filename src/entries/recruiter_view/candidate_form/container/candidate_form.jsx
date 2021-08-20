@@ -99,50 +99,67 @@ class CandidatoDatosForm extends Component {
 	}
 	
 	componentDidUpdate(prevProps, prevState) {
-		if (prevProps.candidato !== this.props.candidato) {
-			//this.props.obtenerCandidato(this.state.candidato.idCandidato);
-			var fecha = new Date(this.props.candidato.fechaNacimiento);
-			var fechaFormat = fecha.getFullYear() + "-" + (fecha.getMonth() < 9 ? "0" + (fecha.getMonth() + 1) : fecha.getMonth() + 1) + "-" + (fecha.getDate() < 10 ? "0" + fecha.getDate() : fecha.getDate());
+		if (prevProps.candidatoResponse !== this.props.candidatoResponse) {
+			var candidatoResponse = this.props.candidatoResponse;
 			
-			var idPaisDomicilio = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].pais.idPais : '0';
-			var idDepartamentoDomicilio = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].departamento.idDepartamento : '0';
-			var idProvinciaDomicilio = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].provincia.idProvincia : '0';
-			var idDistritoDomicilio = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].distrito.idDistrito : '0';
+			var fechaFormat = '';
+			if(typeof candidatoResponse.fechanacimiento != "undefined"){
+				fechaFormat = candidatoResponse.fechanacimiento.split('T')[0]
+			}
 			
-			var idPaisNacimiento = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2)[0].pais.idPais : '0';
-			var idDepartamentoNacimiento = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2)[0].departamento.idDepartamento : '0';
-			var idProvinciaNacimiento = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2)[0].provincia.idProvincia : '0';
-			var idDistritoNacimiento = this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 2)[0].distrito.idDistrito : '0';
-			
-			this.props.obtenerDepartamentos(idPaisDomicilio);
-			this.props.obtenerProvincias(idPaisDomicilio, idDepartamentoDomicilio);
-			this.props.obtenerDistritos(idPaisDomicilio, idDepartamentoDomicilio, idProvinciaDomicilio);
-			this.props.obtenerDepartamentosNacimiento(idPaisNacimiento);
-			this.props.obtenerProvinciasNacimiento(idPaisNacimiento, idDepartamentoNacimiento);
-			this.props.obtenerDistritosNacimiento(idPaisNacimiento, idDepartamentoNacimiento, idProvinciaNacimiento);
-			
+			var idPaisDomicilio = this.state.idPaisDomicilio;
+			var idDepartamentoDomicilio = this.state.idDepartamentoDomicilio;
+			var idProvinciaDomicilio = this.state.idProvinciaDomicilio;
+			var idDistritoDomicilio = this.state.idDistritoDomicilio;
+			var lugarDomicilio = this.state.lugarDomicilio;
+				
+			var idPaisNacimiento = this.state.idPaisNacimiento;
+			var idDepartamentoNacimiento = this.state.idDepartamentoNacimiento;
+			var idProvinciaNacimiento = this.state.idProvinciaNacimiento;
+			var idDistritoNacimiento = this.state.idDistritoNacimiento;
+			let direcciones = candidatoResponse.addresses
+			if(typeof direcciones != "undefined"){
+				idPaisDomicilio = direcciones.filter( d => d.idtipodireccion == 1).length > 0 ? direcciones.filter( d => d.idtipodireccion == 1)[0].idpais : '1';
+				idDepartamentoDomicilio = direcciones.filter( d => d.idtipodireccion == 1).length > 0 ? direcciones.filter( d => d.idtipodireccion == 1)[0].iddepartamento : '0';
+				idProvinciaDomicilio = direcciones.filter( d => d.idtipodireccion == 1).length > 0 ? direcciones.filter( d => d.idtipodireccion == 1)[0].idprovincia : '0';
+				idDistritoDomicilio = direcciones.filter( d => d.idtipodireccion == 1).length > 0 ? direcciones.filter( d => d.idtipodireccion == 1)[0].iddistrito : '0';
+					
+				lugarDomicilio = direcciones.filter( d => d.idtipodireccion == 1).length > 0 ? direcciones.filter( d => d.idtipodireccion == 1)[0].direccion : '';
+					
+				idPaisNacimiento = direcciones.filter( d => d.idtipodireccion == 2).length > 0 ? direcciones.filter( d => d.idtipodireccion == 2)[0].idpais : '1';
+				idDepartamentoNacimiento = direcciones.filter( d => d.idtipodireccion == 2).length > 0 ? direcciones.filter( d => d.idtipodireccion == 2)[0].iddepartamento : '0';
+				idProvinciaNacimiento = direcciones.filter( d => d.idtipodireccion == 2).length > 0 ? direcciones.filter( d => d.idtipodireccion == 2)[0].idprovincia : '0';
+				idDistritoNacimiento = direcciones.filter( d => d.idtipodireccion == 2).length > 0 ? direcciones.filter( d => d.idtipodireccion == 2)[0].iddistrito : '0';
+					
+				this.props.obtenerDepartamentos(idPaisDomicilio);
+				this.props.obtenerProvincias(idPaisDomicilio, idDepartamentoDomicilio);
+				this.props.obtenerDistritos(idPaisDomicilio, idDepartamentoDomicilio, idProvinciaDomicilio);
+				this.props.obtenerDepartamentosNacimiento(idPaisNacimiento);
+				this.props.obtenerProvinciasNacimiento(idPaisNacimiento, idDepartamentoNacimiento);
+				this.props.obtenerDistritosNacimiento(idPaisNacimiento, idDepartamentoNacimiento, idProvinciaNacimiento);
+			}
 			this.setState({
-				idCandidato: this.props.candidato.idCandidato,
-				nombre: this.props.candidato.nombre,
-				apellidoPaterno: this.props.candidato.apellidoPaterno,
-				apellidoMaterno: this.props.candidato.apellidoMaterno,
-				nombreForm: this.props.candidato.nombre,
-				apellidoPaternoForm: this.props.candidato.apellidoPaterno,
-				apellidoMaternoForm: this.props.candidato.apellidoMaterno,
-				correoElectronico: this.props.candidato.correoElectronico,
-				idDocumentoIdentidad: this.props.candidato.documentoIdentidad.idDocumentoIdentidad,
-				numeroDocumentoIdentidad: this.props.candidato.numeroDocumentoIdentidad,
-				idEstadoCivil: this.props.candidato.estadoCivil.idEstadoCivil,
-				cantidadHijos: this.props.candidato.cantidadHijos,
-				numeroCelular: this.props.candidato.telefonos.filter( t => t.idTelefono == 1).length > 0 ? this.props.candidato.telefonos.filter( t => t.idTelefono == 1)[0].numero : '',
-				numeroTelefono: this.props.candidato.telefonos.filter( t => t.idTelefono == 2).length > 0 ? this.props.candidato.telefonos.filter( t => t.idTelefono == 2)[0].numero : '',
+				idCandidato: candidatoResponse.idcandidato,
+				nombre: candidatoResponse.nombre == null ? this.state.nombre : candidatoResponse.nombre,
+				apellidoPaterno: candidatoResponse.apellidopaterno == null ? this.state.apellidopaterno : candidatoResponse.apellidopaterno,
+				apellidoMaterno: candidatoResponse.apellidomaterno == null ? this.state.apellidomaterno : candidatoResponse.apellidomaterno,
+				nombreForm: candidatoResponse.nombre == null ? this.state.nombre : candidatoResponse.nombre,
+				apellidoPaternoForm: candidatoResponse.apellidopaterno == null ? this.state.apellidopaterno : candidatoResponse.apellidopaterno,
+				apellidoMaternoForm: candidatoResponse.apellidomaterno == null ? this.state.apellidomaterno : candidatoResponse.apellidomaterno,
+				correoElectronico: candidatoResponse.correoelectronico,
+				idDocumentoIdentidad: candidatoResponse.iddocumentoidentidad,
+				numeroDocumentoIdentidad: candidatoResponse.numerodocumentoidentidad == null ? this.state.numerodocumentoidentidad : candidatoResponse.numerodocumentoidentidad,
+				idEstadoCivil: candidatoResponse.idestadocivil,
+				cantidadHijos: candidatoResponse.cantidadhijos,
+				numeroCelular: candidatoResponse.telephones.filter( t => t.idtelefono == 1).length > 0 ? candidatoResponse.telephones.filter( t => t.idtelefono == 1)[0].numero : '',
+				numeroTelefono: candidatoResponse.telephones.filter( t => t.idtelefono == 2).length > 0 ? candidatoResponse.telephones.filter( t => t.idtelefono == 2)[0].numero : '',
+				lugarDomicilio: lugarDomicilio,
 				fechaNacimiento: fechaFormat,
-				idSexo: this.props.candidato.sexo.idSexo,
+				idSexo: candidatoResponse.idsexo,
 				idPaisDomicilio: idPaisDomicilio,
 				idDepartamentoDomicilio: idDepartamentoDomicilio,
 				idProvinciaDomicilio: idProvinciaDomicilio,
 				idDistritoDomicilio: idDistritoDomicilio,
-				lugarDomicilio: this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1).length > 0 ? this.props.candidato.direcciones.filter( d => d.idTipoDireccion == 1)[0].direccion : '',
 				idPaisNacimiento: idPaisNacimiento,
 				idDepartamentoNacimiento: idDepartamentoNacimiento,
 				idProvinciaNacimiento: idProvinciaNacimiento,
@@ -154,9 +171,9 @@ class CandidatoDatosForm extends Component {
 			this.props.testPsicologico.map( test =>{
 				var checked = false;//Valor Default, ningún test seleccionado.
 				// Si candidato tiene asignado test psicológicos
-				if(typeof this.props.candidato.testPsicologicos != "undefined"){
-					checked = this.props.candidato.testPsicologicos.filter(
-							t => t.idTestPsicologico == test.idTestPsicologico).length > 0 ? true : false;
+				if(typeof candidatoResponse.psychologicaltests != "undefined"){
+					checked = candidatoResponse.psychologicaltests.filter(
+							t => t.idtestpsicologico == test.idTestPsicologico).length > 0 ? true : false;
 				}
 				if(checked){
 					rowsTestPsicologicosChecked.push(
@@ -184,8 +201,8 @@ class CandidatoDatosForm extends Component {
 			this.props.testPsicologico.map( test =>{
 				var checked = true;//Valor Default al cargar formulario.
 				// Si candidato tiene asignado test psicológicos
-				if(this.state.idCandidato != '' && typeof this.props.candidato.testPsicologicos != "undefined"){
-					checked = this.props.candidato.testPsicologicos.filter(t => t.idTestPsicologico == test.idTestPsicologico).length > 0 ? true : false;
+				if(this.state.idCandidato != '' && typeof this.props.candidatoResponse.psychologicaltests != "undefined"){
+					checked = this.props.candidatoResponse.psychologicaltests.filter(t => t.idtestpsicologico == test.idTestPsicologico).length > 0 ? true : false;
 				} else {
 					checked = true;
 				}
@@ -217,12 +234,17 @@ class CandidatoDatosForm extends Component {
 			})
 		}
 		if (prevProps.errorResponse !== this.props.errorResponse) {
-			if(409 == this.props.errorResponse.status){
+			//console.log('error', this.props.errorResponse);
+			if(404 == this.props.errorResponse.code){
+				this.setState({
+					isLoading: false
+				})
+			} else if(409 == this.props.errorResponse.code){
 				let error = {};
-				if(this.props.errorResponse.mensaje.indexOf('Correo') > -1){
-					error = {correoElectronico: this.props.errorResponse.mensaje}
-				} else if(this.props.errorResponse.mensaje.indexOf('Número de documento') > -1){
-					error = {numeroDocumentoIdentidad: this.props.errorResponse.mensaje}
+				if(this.props.errorResponse.message.indexOf('Correo') > -1){
+					error = {correoElectronico: this.props.errorResponse.user_message}
+				} else if(this.props.errorResponse.message.indexOf('Número de documento') > -1){
+					error = {numeroDocumentoIdentidad: this.props.errorResponse.user_message}
 				}
 				this.setState({
 					errors : error,
@@ -939,7 +961,7 @@ function mapStateToProps(state){
 		estadosCivilesResponse : state.reducerEstadoCivil.obtenerEstadosCivilesResponse,
 		documentosIdentidadResponse : state.reducerDocumentoIdentidad.obtenerDocumentosIdentidadResponse,
 		testPsicologico : state.reducerTestPsicologico.obtenerTestPsicologicosResponse,
-		candidato : state.reducerCandidato.obtenerCandidatoResponse,
+		candidatoResponse : state.reducerCandidato.obtenerCandidatoResponse,
 		guardarCandidatoTestPsicologicoRecruiterResponse : state.reducerCandidato.guardarCandidatoTestPsicologicoRecruiterResponse,
 		errorResponse : state.reducerCandidato.errorResponse
 	}
