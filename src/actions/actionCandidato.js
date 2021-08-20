@@ -22,6 +22,7 @@ import {
 	ERROR,
 	OBJ_ERROR_TIME_OUT
 } from './actionTypes';
+import {EVALUATIONROOM_HOST} from './actionEnpoints';
 
 /*export function guardarCandidato(candidato) {
 	return (dispatch, getState) => {
@@ -44,7 +45,7 @@ export function obtenerCandidato(idCandidato, token) {
 	Obtener información de un candidato a partir de su uid.
 	*/
 	return (dispatch, getState) => {
-		axios.get(('https://evaluationroom.herokuapp.com/v1/candidate/uid=').concat(idCandidato),
+		axios.get((EVALUATIONROOM_HOST).concat('/v1/candidate/uid=').concat(idCandidato),
 					{headers: { Authorization: token }})
 			.then((response) => { dispatch({ type: CANDIDATO_OBTENER, payload: response.data.body.candidato }) })
 			.catch((error) => {
@@ -74,7 +75,7 @@ export function obtenerCandidatos() {
 
 export function getCandidates() {
 	return (dispatch, getState) => {
-		axios.get('https://evaluationroom.herokuapp.com/v1/candidate_info')
+		axios.get((EVALUATIONROOM_HOST).concat('/v1/candidate_info'))
 			.then((response) => { dispatch({ type: CANDIDATES_GET, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
@@ -88,7 +89,7 @@ export function getCandidates() {
 
 export function validarCandidatoRegistrado(correoElectronico) {
 	return (dispatch, getState) => {
-		axios.get(('https://evaluationroom.herokuapp.com/v1/candidate/email=').concat(correoElectronico),
+		axios.get((EVALUATIONROOM_HOST).concat('/v1/candidate/email=').concat(correoElectronico),
 					{headers: { Authorization: 'token' }})
 			.then((response) => { dispatch({ type: CANDIDATO_REGISTRADO_VALIDAR, payload: response.data.body.candidato }) })
 			.catch((error) => {
@@ -119,7 +120,7 @@ export function guardarCandidatoTestPsicologicoRecruiter(candidatoTest) {
 
 export function guardarCandidatoTestPsicologico(candidatoTest) {
 	return (dispatch, getState) => {
-		axios.post('https://evaluationroom.herokuapp.com/v1/candidate',candidatoTest)
+		axios.post((EVALUATIONROOM_HOST).concat('/v1/candidate'),candidatoTest)
 			.then((response) => { dispatch({ type: CANDIDATO_TESTPSICOLOGICO_GUARDAR, payload: response.data.body.candidato }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
@@ -277,7 +278,7 @@ export function obtenerCandidatosSinAsignacion(token, email) {
 	}
 
 	return (dispatch, getState) => {
-		axios.post('https://evaluationroom.herokuapp.com/v1/candidatewithoutselectionprocess', body)
+		axios.post((EVALUATIONROOM_HOST).concat('/v1/candidatewithoutselectionprocess'), body)
 			.then((response) => { dispatch({ type: CANDIDATOS_SIN_PUESTO_LABORAL_OBTENER, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){

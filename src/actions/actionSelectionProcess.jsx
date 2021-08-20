@@ -4,10 +4,11 @@ import {
 	ERROR,
 	OBJ_ERROR_TIME_OUT
 } from './actionTypes';
+import {EVALUATIONROOM_HOST} from './actionEnpoints';
 
 export function getSelectionProcess(idclient, idjobposition, process_status, token) {
 	return (dispatch, getState) => {
-		axios.get(('https://evaluationroom.herokuapp.com/v1/selectionprocess')
+		axios.get((EVALUATIONROOM_HOST).concat('/v1/selectionprocess')
 					.concat(process_status != null ? ('/' + process_status) : '')
 					.concat(idclient != null && idjobposition != null ? ('/' + idclient).concat('/' + idjobposition) : '')
 					,{headers: { Authorization: token }}

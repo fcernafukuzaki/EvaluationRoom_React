@@ -4,10 +4,11 @@ import {
 	ERROR,
 	OBJ_ERROR_TIME_OUT
 } from './actionTypes';
+import {EVALUATIONROOM_HOST} from './actionEnpoints';
 
 export function obtenerDocumentosIdentidad() {
 	return (dispatch, getState) => {
-		axios.get('https://evaluationroom.herokuapp.com/v1/candidateform/documentoidentidad'
+		axios.get((EVALUATIONROOM_HOST).concat('/v1/candidateform/documentoidentidad')
 				,{headers: { Authorization: 'token' }}
 				)
 			.then((response) => { dispatch({ type: DOCUMENTOIDENTIDAD_OBTENER, payload: response.data.body.documentos_identidad }) })

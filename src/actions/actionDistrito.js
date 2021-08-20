@@ -5,10 +5,11 @@ import {
 	ERROR,
 	OBJ_ERROR_TIME_OUT
 } from './actionTypes';
+import {EVALUATIONROOM_HOST} from './actionEnpoints';
 
 export function obtenerDistritos(idPais, idDepartamento, idProvincia) {
 	return (dispatch, getState) => {
-		axios.get(('https://evaluationroom.herokuapp.com/v1/candidateform/ubigeo/').concat(idPais,'/',idDepartamento,'/',idProvincia)
+		axios.get((EVALUATIONROOM_HOST).concat('/v1/candidateform/ubigeo/').concat(idPais,'/',idDepartamento,'/',idProvincia)
 				,{headers: { Authorization: 'token' }}
 				)
 			.then((response) => { dispatch({ type: DISTRITO_OBTENER, payload: response.data.body.distritos }) })
@@ -24,7 +25,7 @@ export function obtenerDistritos(idPais, idDepartamento, idProvincia) {
 
 export function obtenerDistritosNacimiento(idPais, idDepartamento, idProvincia) {
 	return (dispatch, getState) => {
-		axios.get(('https://evaluationroom.herokuapp.com/v1/candidateform/ubigeo/').concat(idPais,'/',idDepartamento,'/',idProvincia)
+		axios.get((EVALUATIONROOM_HOST).concat('/v1/candidateform/ubigeo/').concat(idPais,'/',idDepartamento,'/',idProvincia)
 				,{headers: { Authorization: 'token' }}
 				)
 			.then((response) => { dispatch({ type: DISTRITO_NACIMIENTO_OBTENER, payload: response.data.body.distritos }) })

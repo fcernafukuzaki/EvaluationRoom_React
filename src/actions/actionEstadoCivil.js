@@ -4,10 +4,11 @@ import {
 	ERROR,
 	OBJ_ERROR_TIME_OUT
 } from './actionTypes';
+import {EVALUATIONROOM_HOST} from './actionEnpoints';
 
 export function obtenerEstadosCiviles() {
 	return (dispatch, getState) => {
-		axios.get('https://evaluationroom.herokuapp.com/v1/candidateform/estadocivil'
+		axios.get((EVALUATIONROOM_HOST).concat('/v1/candidateform/estadocivil')
 				,{headers: { Authorization: 'token' }}
 				)
 			.then((response) => { dispatch({ type: ESTADOCIVIL_OBTENER, payload: response.data.body.estados_civil }) })
