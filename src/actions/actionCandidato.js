@@ -39,12 +39,13 @@ import {
 	}
 }*/
 
-export function obtenerCandidato(idCandidato) {
+export function obtenerCandidato(idCandidato, token) {
 	/*
 	Obtener información de un candidato a partir de su uid.
 	*/
 	return (dispatch, getState) => {
-		axios.get(('https://evaluationroom.herokuapp.com/v1/candidate/uid=').concat(idCandidato))
+		axios.get(('https://evaluationroom.herokuapp.com/v1/candidate/uid=').concat(idCandidato),
+					{headers: { Authorization: token }})
 			.then((response) => { dispatch({ type: CANDIDATO_OBTENER, payload: response.data.body.candidato }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){

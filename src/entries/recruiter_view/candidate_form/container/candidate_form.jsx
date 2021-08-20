@@ -90,7 +90,7 @@ class CandidatoDatosForm extends Component {
 		this.props.obtenerProvinciasNacimiento(1,15);
 		this.props.obtenerDistritosNacimiento(1,15,1501);
 		if(obtenerValorParametro('idc') != null){
-			this.props.obtenerCandidato(obtenerValorParametro('idc'));
+			this.props.obtenerCandidato(obtenerValorParametro('idc'), this.props.usuario.token);
 		} else {
 			this.setState({
 				isLoading: false
