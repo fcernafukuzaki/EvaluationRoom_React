@@ -218,7 +218,7 @@ export function obtenerDocumentosIdentidad() {
 export function obtenerTestPsicologicos() {
 	return (dispatch, getState) => {
 		axios.get((EVALUATIONROOM_HOST).concat('/v1/candidateform/testpsicologicos'))
-			.then((response) => { dispatch({ type: TESTPSICOLOGICOS_OBTENER, payload: response.data }) })
+			.then((response) => { dispatch({ type: TESTPSICOLOGICOS_OBTENER, payload: response.data.body.psychologicaltests }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
