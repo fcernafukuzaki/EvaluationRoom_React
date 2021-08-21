@@ -2,9 +2,7 @@ import axios from 'axios';
 import { 
 	CANDIDATES_GET,
 	CANDIDATO_GUARDAR,
-	CANDIDATO_OBTENER,
 	CANDIDATOS_OBTENER,
-	CANDIDATO_REGISTRADO_VALIDAR,
 	CANDIDATO_TESTPSICOLOGICO_RECLUTADOR_GUARDAR,
 	CANDIDATO_TESTPSICOLOGICO_GUARDAR,
 	CANDIDATO_TESTPSICOLOGICOS_PREGUNTAS_OBTENER,
@@ -40,24 +38,6 @@ import {EVALUATIONROOM_HOST} from './actionEnpoints';
 	}
 }*/
 
-export function obtenerCandidato(idCandidato, token) {
-	/*
-	Obtener información de un candidato a partir de su uid.
-	*/
-	return (dispatch, getState) => {
-		axios.get((EVALUATIONROOM_HOST).concat('/v1/candidate/uid=').concat(idCandidato),
-					{headers: { Authorization: token }})
-			.then((response) => { dispatch({ type: CANDIDATO_OBTENER, payload: response.data.body.candidato }) })
-			.catch((error) => {
-				if(error.toString().indexOf('Network Error') > -1){
-					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
-				} else {
-					dispatch({ type: ERROR, payload: error.response.data.error })
-				}
-			})
-	}
-}
-
 export function obtenerCandidatos() {
 	return (dispatch, getState) => {
 		axios.get('/candidato/')
@@ -82,21 +62,6 @@ export function getCandidates() {
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
 				} else {
 					dispatch({ type: ERROR, payload: error.response.data })
-				}
-			})
-	}
-}
-
-export function validarCandidatoRegistrado(correoElectronico) {
-	return (dispatch, getState) => {
-		axios.get((EVALUATIONROOM_HOST).concat('/v1/candidate/email=').concat(correoElectronico),
-					{headers: { Authorization: 'token' }})
-			.then((response) => { dispatch({ type: CANDIDATO_REGISTRADO_VALIDAR, payload: response.data.body.candidato }) })
-			.catch((error) => {
-				if(error.toString().indexOf('Network Error') > -1){
-					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
-				} else {
-					dispatch({ type: ERROR, payload: error.response.data.error })
 				}
 			})
 	}

@@ -13,15 +13,11 @@ import SoporteTecnicoNotificacionModal from '../../soportetecnico_notificacion/c
 import {validateInput, validateInputCandidatoRegistrado} from '../components/candidate_selfregistration_form_validate';
 import {validateModalFormInput} from '../../soportetecnico_notificacion/components/soportetecnico_notificacion_form_validate'
 
-import {obtenerTipoDirecciones } from '../../../../actions/actionTipoDireccion';
-import {obtenerPaises, obtenerPaisesNacimiento } from '../../../../actions/actionPais';
-import {obtenerDepartamentos, obtenerDepartamentosNacimiento } from '../../../../actions/actionDepartamento';
-import {obtenerProvincias, obtenerProvinciasNacimiento } from '../../../../actions/actionProvincia';
-import {obtenerDistritos, obtenerDistritosNacimiento } from '../../../../actions/actionDistrito';
-import {obtenerSexos } from '../../../../actions/actionSexo';
-import {obtenerEstadosCiviles } from '../../../../actions/actionEstadoCivil';
-import {obtenerDocumentosIdentidad } from '../../../../actions/actionDocumentoIdentidad';
-import {guardarCandidatoTestPsicologico, validarCandidatoRegistrado} from '../../../../actions/actionCandidato';
+import {guardarCandidatoTestPsicologico} from '../../../../actions/actionCandidato';
+import {obtenerPaises, obtenerPaisesNacimiento, obtenerDepartamentos, obtenerDepartamentosNacimiento, 
+	obtenerProvincias, obtenerProvinciasNacimiento, obtenerDistritos, obtenerDistritosNacimiento,
+	obtenerSexos, obtenerTipoDirecciones, obtenerEstadosCiviles, obtenerDocumentosIdentidad, 
+	validarCandidatoRegistrado} from '../../../../actions/common_view/actionCandidateForm'
 import {getSoporteTecnicoNotificacionMensajesError, addSoporteTecnicoNotificacion} from '../../../../actions/actionSoporteTecnicoNotificacion'
 
 class CandidatoSCLForm extends Component {

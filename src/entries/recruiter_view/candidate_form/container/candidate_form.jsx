@@ -12,16 +12,11 @@ import AlertBoxMessageForm from '../../../components/common/AlertBoxMessageForm'
 
 import {validateInputRecruiterRegistration} from '../components/candidate_form_validate';
 
-import { obtenerTipoDirecciones } from '../../../../actions/actionTipoDireccion';
-import { obtenerPaises, obtenerPaisesNacimiento } from '../../../../actions/actionPais';
-import { obtenerDepartamentos, obtenerDepartamentosNacimiento } from '../../../../actions/actionDepartamento';
-import { obtenerProvincias, obtenerProvinciasNacimiento } from '../../../../actions/actionProvincia';
-import { obtenerDistritos, obtenerDistritosNacimiento } from '../../../../actions/actionDistrito';
-import { obtenerSexos } from '../../../../actions/actionSexo';
-import { obtenerEstadosCiviles } from '../../../../actions/actionEstadoCivil';
-import { obtenerDocumentosIdentidad } from '../../../../actions/actionDocumentoIdentidad';
-import { obtenerTestPsicologicos} from '../../../../actions/actionTestPsicologico';
-import { guardarCandidatoTestPsicologicoRecruiter, obtenerCandidato} from '../../../../actions/actionCandidato';
+import { guardarCandidatoTestPsicologicoRecruiter } from '../../../../actions/actionCandidato';
+import {obtenerPaises, obtenerPaisesNacimiento, obtenerDepartamentos, obtenerDepartamentosNacimiento, 
+	obtenerProvincias, obtenerProvinciasNacimiento, obtenerDistritos, obtenerDistritosNacimiento,
+	obtenerSexos, obtenerTipoDirecciones, obtenerEstadosCiviles, obtenerDocumentosIdentidad, 
+	obtenerTestPsicologicos, obtenerCandidato} from '../../../../actions/common_view/actionCandidateForm'
 
 class CandidatoDatosForm extends Component {
 	constructor(props){
@@ -168,24 +163,24 @@ class CandidatoDatosForm extends Component {
 			});
 			let rowsTestPsicologicos = [];
 			let rowsTestPsicologicosChecked = [];
-			this.props.testPsicologico.map( test =>{
+			this.props.testPsicologicosResponse.map( test =>{
 				var checked = false;//Valor Default, ningún test seleccionado.
 				// Si candidato tiene asignado test psicológicos
 				if(typeof candidatoResponse.psychologicaltests != "undefined"){
 					checked = candidatoResponse.psychologicaltests.filter(
-							t => t.idtestpsicologico == test.idTestPsicologico).length > 0 ? true : false;
+							t => t.idtestpsicologico == test.idtestpsicologico).length > 0 ? true : false;
 				}
 				if(checked){
 					rowsTestPsicologicosChecked.push(
 						{
-							idTestPsicologico: test.idTestPsicologico
+							idTestPsicologico: test.idtestpsicologico
 						}
 					)
 				}
 				rowsTestPsicologicos.push(
 					{
 						nombre: test.nombre,
-						identificador: test.idTestPsicologico,
+						identificador: test.idtestpsicologico,
 						checked: checked
 					}
 				)
@@ -195,28 +190,28 @@ class CandidatoDatosForm extends Component {
 				testPsicologicosListCheck : rowsTestPsicologicos
 			});
 		}
-		if (prevProps.testPsicologico !== this.props.testPsicologico) {
+		if (prevProps.testPsicologicosResponse !== this.props.testPsicologicosResponse) {
 			let rowsTestPsicologicos = [];
 			let rowsTestPsicologicosChecked = [];
-			this.props.testPsicologico.map( test =>{
+			this.props.testPsicologicosResponse.map( test =>{
 				var checked = true;//Valor Default al cargar formulario.
 				// Si candidato tiene asignado test psicológicos
 				if(this.state.idCandidato != '' && typeof this.props.candidatoResponse.psychologicaltests != "undefined"){
-					checked = this.props.candidatoResponse.psychologicaltests.filter(t => t.idtestpsicologico == test.idTestPsicologico).length > 0 ? true : false;
+					checked = this.props.candidatoResponse.psychologicaltests.filter(t => t.idtestpsicologico == test.idtestpsicologico).length > 0 ? true : false;
 				} else {
 					checked = true;
 				}
 				if(checked){
 					rowsTestPsicologicosChecked.push(
 						{
-							idTestPsicologico: test.idTestPsicologico
+							idTestPsicologico: test.idtestpsicologico
 						}
 					)
 				}
 				rowsTestPsicologicos.push(
 					{
 						nombre: test.nombre,
-						identificador: test.idTestPsicologico,
+						identificador: test.idtestpsicologico,
 						checked: checked
 					}
 				)
@@ -960,7 +955,7 @@ function mapStateToProps(state){
 		sexosResponse : state.reducerSexo.obtenerSexosResponse,
 		estadosCivilesResponse : state.reducerEstadoCivil.obtenerEstadosCivilesResponse,
 		documentosIdentidadResponse : state.reducerDocumentoIdentidad.obtenerDocumentosIdentidadResponse,
-		testPsicologico : state.reducerTestPsicologico.obtenerTestPsicologicosResponse,
+		testPsicologicosResponse : state.reducerTestPsicologico.obtenerTestPsicologicosResponse,
 		candidatoResponse : state.reducerCandidato.obtenerCandidatoResponse,
 		guardarCandidatoTestPsicologicoRecruiterResponse : state.reducerCandidato.guardarCandidatoTestPsicologicoRecruiterResponse,
 		errorResponse : state.reducerCandidato.errorResponse
