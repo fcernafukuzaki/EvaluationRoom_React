@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react';
-
+import { connect } from 'react-redux';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 
 import NavBar from '../components/common/NavBar';
 import Footer from '../common/components/Footer';
+import Login from './login_user/container/login';
 import Home from './Home';
 import NotFound from '../common/components/NotFound';
 import ClientsList from './cliente/container/ClientsList';
@@ -19,8 +20,9 @@ import PerfilDatosForm from '../administrator_view/container/PerfilDatosForm';
 import UsuariosForm from '../administrator_view/container/UsuariosForm';
 import PerfilesForm from '../administrator_view/container/PerfilesForm';
 import SelectionProcessFormContainer from './selectionprocess_form/container/selectionprocess_form_container'
+import {obtenerUsuarioOAuth} from '../../actions/recruiter_view/actionLogin';
 
-export default class EvaluationRoomApp extends Component {
+class EvaluationRoomApp extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
@@ -33,13 +35,32 @@ export default class EvaluationRoomApp extends Component {
 		this.datosUsuario = this.datosUsuario.bind(this);
 		this.errorUsuario = this.errorUsuario.bind(this);
 	}
-	
-	datosUsuario(datos){
-		this.setState({
-			usuario: datos,
-			flagUsuario: (!datos.activo || datos.perfiles.length < 1) ? 'No autorizado' : null,
-			isLoading: datos != null ? false : true
-		});
+
+	componentDidUpdate(prevProps, prevState) {
+		if (prevProps.obtenerUsuarioOAuthResponse !== this.props.obtenerUsuarioOAuthResponse) {
+			console.log(this.props.obtenerUsuarioOAuthResponse)
+			if(typeof this.props.obtenerUsuarioOAuthResponse.code != "undefined"){
+				if(this.props.obtenerUsuarioOAuthResponse.code == 200){
+					const usuario = this.props.obtenerUsuarioOAuthResponse.body.usuario
+					const datos = usuario
+					//correoelectronico: "fcernaf@gmail.com"
+					//idusuario
+					this.setState({
+						usuario: datos,
+						flagUsuario: (!datos.activo || datos.perfiles.length < 1) ? 'No autorizado' : null,
+						isLoading: datos != null ? false : true
+					});
+				}
+			}
+		}
+	}
+
+	datosUsuario(response){
+		console.log(response);
+		console.log(response.accessToken);
+        console.log(response.profileObj.name);
+        console.log(response.profileObj.email);
+		this.props.obtenerUsuarioOAuth(response.accessToken, response.profileObj.email);
 	}
 	
 	errorUsuario(datos){
@@ -165,18 +186,21 @@ export default class EvaluationRoomApp extends Component {
 					perfil: [1]
 				}]
 			}]
-		
+		//<NavBar usuario={this.state.usuario} datosUsuario={this.datosUsuario.bind(this)} errorUsuario={this.errorUsuario.bind(this)} items={items} />
+		console.log(usuario)
 		return (
 			<Fragment>
-				<NavBar usuario={this.state.usuario} datosUsuario={this.datosUsuario.bind(this)} errorUsuario={this.errorUsuario.bind(this)} items={items} />
 				<Switch>
+					{typeof usuario != "undefined" ?
 					<Route exact path="/" render={()=>(
 							<Fragment>
-								<Home usuario={this.state.usuario} isLoading={this.state.isLoading} />
+								<Login responseGoogle={this.datosUsuario.bind(this)}/>
 							</Fragment>
 						)} />
+					: (<Fragment>
 					<Route exact path="/home" render={()=>(<Home usuario={this.state.usuario} isLoading={this.state.isLoading} />)} />
-					{flagUsuario !== 'No autorizado' &&
+					{
+					flagUsuario !== 'No autorizado' &&
 					<Fragment>
 						<Route exact path="/listarClientes" render={()=>(<ClientsList errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/registrarCliente" render={()=>(<ClientForm errorResponse={this.state.errorMensaje} />)} />
@@ -192,11 +216,20 @@ export default class EvaluationRoomApp extends Component {
 						<Route exact path="/listaPerfiles" render={()=>(<PerfilesForm errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/selectionprocess" render={()=>(<SelectionProcessFormContainer usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />
 					</Fragment>
+					}</Fragment>)
 					}
 					<Route component={NotFound} />
 				</Switch>
-				<Footer />
 			</Fragment>
 		);
 	}
 }
+
+function mapStateToProps(state){
+	return{
+		obtenerUsuarioOAuthResponse : state.reducerLogin.obtenerUsuarioOAuthResponse,
+		//errorResponse : state.reducerUsuario.errorResponse
+	}
+}
+
+export default connect(mapStateToProps, {obtenerUsuarioOAuth})(EvaluationRoomApp);

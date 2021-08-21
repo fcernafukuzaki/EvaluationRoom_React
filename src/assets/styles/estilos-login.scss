@@ -1,0 +1,72 @@
+.contenidoCentrado {
+    width: 390px;
+    display: inline-block;
+    position: absolute;
+    top: 43%;
+    left: 50%;
+    margin:-195px 0 0 -195px;
+}
+
+.contenidoLogin {
+    background-color: whitesmoke;
+    color: #555;
+    padding: 20px;
+    border: 1px solid cornsilk;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.lineaSubrayado {
+    padding-bottom: 5px !important;
+    border-bottom: 1px solid #aaaaaa;
+}
+
+.textoBienvenida {
+    padding-bottom: 3rem!important;
+    margin-bottom: 3rem!important;
+}
+
+.textoContacto {
+    padding-top: 3rem!important;
+    margin-top: 3rem!important;
+}
+
+.ancho12em {
+    width:12em;
+}
+
+@media screen and (max-width: 375px) {
+    .contenidoCentrado {
+        width: 365px;
+        display: inline-block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -250px 0 0 -182px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .contenidoCentrado {
+        width: 310px;
+        display: inline-block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -180px 0 0 -155px;
+    }
+    
+    .textoBienvenida {
+        padding-bottom: 0!important;
+        margin-bottom: 2rem!important;
+    }
+    
+    .textoContacto {
+        padding-top: 0!important;
+        margin-top: 2rem!important;
+    }
+    
+    .ancho12em {
+        width:10em;
+    }
+}

@@ -11,6 +11,7 @@ import reducers from './reducers';
 import EvaluationRoomApp from './entries/recruiter_view/EvaluationRoomApp_Recruiter';
 
 import './assets/styles/estilos.scss'
+import './assets/styles/estilos-login.scss'
 import './assets/styles/candidate-card.scss'
 import './assets/styles/selectionprocess-list.scss'
 import './assets/styles/formulario.scss'
