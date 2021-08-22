@@ -6,7 +6,8 @@ import CargandoImagen from '../../components/common/CargandoImagen';
 import TablePaginado from '../../components/common/TablePaginado';
 import BarraBusqueda from '../../components/common/BarraBusqueda';
 
-import {obtenerTestPsicologicos, obtenerTestPsicologicosPartes, obtenerTestPsicologicoPreguntas} from '../../../actions/actionTestPsicologico';
+import {obtenerTestPsicologicosPartes, obtenerTestPsicologicoPreguntas} from '../../../actions/actionTestPsicologico';
+import {obtenerTestPsicologicos} from '../../../actions/common_view/actionCandidateForm'
 
 class TestPsicologicos extends Component {
 	constructor(props){
@@ -72,13 +73,13 @@ class TestPsicologicos extends Component {
 	
 	varPartesTestPsicologico(test){
 		this.setState({
-			idTestPsicologico : test.idTestPsicologico,
+			idTestPsicologico : test.idtestpsicologico,
 			idParte: 0, 
 			nombre : test.nombre,
-			testPsicologicosPartesFiltro: this.props.obtenerTestPsicologicosPartesResponse.filter(p => p.idTestPsicologico == test.idTestPsicologico),
+			testPsicologicosPartesFiltro: this.props.obtenerTestPsicologicosPartesResponse.filter(p => p.idTestPsicologico == test.idtestpsicologico),
 			isLoading: true
 		});
-		this.props.obtenerTestPsicologicoPreguntas(test.idTestPsicologico);
+		this.props.obtenerTestPsicologicoPreguntas(test.idtestpsicologico);
 	}
 	
 	varPreguntasTestPsicologico(test){
@@ -93,10 +94,10 @@ class TestPsicologicos extends Component {
 	
 	generarTablaBodyTestPsicologico(row){
 		if(row != null){
-			return (<tr key={row.idTestPsicologico} onClick={() => this.varPartesTestPsicologico(row)} >
-						<td>{row.idTestPsicologico}</td>
+			return (<tr key={row.idtestpsicologico} onClick={() => this.varPartesTestPsicologico(row)} >
+						<td>{row.idtestpsicologico}</td>
 						<td>{row.nombre}</td>
-						<td>{row.cantidadPreguntas}</td>
+						<td>{row.cantidadpreguntas}</td>
 					</tr>);
 		} else {
 			return (<tr><td>Cargando</td></tr>)

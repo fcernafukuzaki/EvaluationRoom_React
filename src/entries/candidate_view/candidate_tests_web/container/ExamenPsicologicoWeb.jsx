@@ -45,7 +45,7 @@ class ExamenPsicologicoWeb extends Component {
 			testPsicologicoParteActual: 0,
 			cantidadAlterPregActual: 0,
 			mensajeAlerta: {mensaje: '', estilo: ''},
-			mensajeContador: {mensaje: '' , flag: '', visible: false, estilo: ''},
+			mensajeContador: {mensaje: '' , tipoMensaje: null, flag: '', visible: false, estilo: ''},
 			flagInstrucciones: true,
 			valorContador: 0,/* Cantidad de segundos a mostrar */
 			flagContinuarTest: false,
@@ -179,6 +179,10 @@ class ExamenPsicologicoWeb extends Component {
 				this.mostrarBotonInicioInstrucciones();
 			}
 		}
+		/**
+		 * Registrar cuando el candidato ingresa al portal
+		 */
+		this.registrarCandidatoTestPsicologicoLog('IngresoPortal')
 	}
 	
 	iniciarExamen(){
@@ -301,6 +305,7 @@ class ExamenPsicologicoWeb extends Component {
 				mensajeAlerta: mensajeAlerta,
 				mensajeContador: {
 					mensaje: this.state.mensajeContador.mensaje,
+					tipoMensaje: this.state.mensajeContador.tipoMensaje,
 					flag: this.obtenerIdTestPsicologico() + "-" + this.obtenerIdParte(),
 					visible: (this.esTestPsicologicoConTiempo(objetoTestPsicologicoInstrucciones) && !this.state.flagInstrucciones) ? true : false, //GATB
 					estilo: 'mensajeContador'
@@ -352,6 +357,7 @@ class ExamenPsicologicoWeb extends Component {
 		var respuestasSeleccionadas = this.state.respuestas;
 		var stateMensajeContador = {
 				mensaje: '',
+				tipoMensaje: null,
 				flag: this.state.mensajeContador.flag,
 				visible: false,
 				estilo: 'mensajeContador'
@@ -362,6 +368,15 @@ class ExamenPsicologicoWeb extends Component {
 		
 		if(this.seAcaboElTiempo(this.state.mensajeContador)){
 			console.log('Se acabó el tiempo del test.')
+
+			/** 
+			 * Guardar la última pregunta del candidato si se acabó el tiempo
+			 * Sólo si la cantidad de alternativas es mayor o igual a la cantidad de alternativas máxima.
+			 */
+			if(respuestasSeleccionadas.length >= cantMaxAlt){
+				this.guardarCandidatoRespuesta()
+			}
+			
 			var listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.filtrarListaPorIdTestIdParte(this.state.listaInstruccionesDePreguntasPendientes, this.obtenerIdTestPsicologico(), this.obtenerIdParte())
 			//console.log('obtenerSiguientePregunta: listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte', listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte)
 			var nuevaListaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte = this.eliminarInstrucciones(this.state.listaInstruccionesDePreguntasPendientes, listaInstruccionesDePreguntasPendientesPorTestPsicologicoYParte[0])
@@ -640,6 +655,7 @@ class ExamenPsicologicoWeb extends Component {
 							mensaje: (duracion - this.state.valorContador > 0) ? 
 									this.obtenerMinutos(duracion - this.state.valorContador) + ":" + this.obtenerSegundos(duracion - this.state.valorContador) : 
 									"Se acabó el tiempo. Debe pasar al siguiente test presionando el botón SIGUIENTE",
+							tipoMensaje: (duracion - this.state.valorContador > 0) ? null : 'Finalizado',
 							flag: this.obtenerIdTestPsicologico() +"-"+ this.obtenerIdParte(),
 							visible: this.state.flagInstrucciones ? false : true,
 							estilo: 'mensajeContador'
@@ -1261,9 +1277,16 @@ class ExamenPsicologicoWeb extends Component {
 	}
 
 	registrarCandidatoTestPsicologicoLog(flag){
-		var objetoGuardarCandidatoTestPsicologicoLog = {idcandidato: this.state.idCandidato,
-			idtestpsicologico: this.obtenerIdTestPsicologico(),
-			idparte: this.obtenerIdParte(),
+		var idtestpsicologico = -1
+		var idparte = -1
+		if(flag != 'IngresoPortal'){
+			idtestpsicologico = this.obtenerIdTestPsicologico()
+			idparte = this.obtenerIdParte()
+		}
+		var objetoGuardarCandidatoTestPsicologicoLog = {
+			idcandidato: this.state.idCandidato,
+			idtestpsicologico: idtestpsicologico,
+			idparte: idparte,
 			flag: flag
 		}
 		this.props.guardarCandidatoTestPsicologicoLog(this.state.candidatoDatos.correoelectronico, objetoGuardarCandidatoTestPsicologicoLog)

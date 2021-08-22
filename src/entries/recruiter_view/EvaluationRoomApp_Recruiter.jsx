@@ -181,7 +181,7 @@ export default class EvaluationRoomApp extends Component {
 						<Route exact path="/listarClientes" render={()=>(<ClientsList errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/registrarCliente" render={()=>(<ClientForm errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/registrarPuestoLaboral" render={()=>(<PuestoLaboralForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/registrarCandidato" render={()=>(<CandidatoDatosForm errorResponse={this.state.errorMensaje} />)} />
+						<Route exact path="/registrarCandidato" render={()=>(<CandidatoDatosForm usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/listaCandidatos" render={()=>(<CandidatesListInfo errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/listaCandidatos/resultados" render={()=>(<CandidatoResultadoForm errorResponse={this.state.errorMensaje} />)} />
 						<Route exact path="/asignarCandidatos" render={()=>(<CandidatesListJobPosition usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />

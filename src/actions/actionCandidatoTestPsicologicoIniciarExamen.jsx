@@ -7,10 +7,11 @@ import {
 	ERROR_CANDIDATO_TESTPSICOLOGICO_INICIAREXAMEN_OBTENER,
 	OBJ_ERROR_TIME_OUT
 } from './actionTypes';
+import {EVALUATIONROOM_INICIAREXAMEN_HOST} from './actionEnpoints';
 
 export function obtenerCandidatoTestPsicologicoIniciarExamen(token, obtenerCandidatoTestPsicologicoIniciarExamen) {
 	return (dispatch, getState) => {
-		axios.post('https://evaluationroom-iniciarexamen.herokuapp.com/v1/iniciar_examen'
+		axios.post((EVALUATIONROOM_INICIAREXAMEN_HOST).concat('/v1/iniciar_examen')
 					, obtenerCandidatoTestPsicologicoIniciarExamen
 					,{headers: { Authorization: token }}
 					)
@@ -27,7 +28,7 @@ export function obtenerCandidatoTestPsicologicoIniciarExamen(token, obtenerCandi
 
 export function guardarCandidatoTestPsicologicoRespuesta(token, guardarCandidatoTestPsicologicoRespuesta) {
 	return (dispatch, getState) => {
-		axios.post('https://evaluationroom-iniciarexamen.herokuapp.com/v1/registrar_respuesta'
+		axios.post((EVALUATIONROOM_INICIAREXAMEN_HOST).concat('/v1/registrar_respuesta')
 					, guardarCandidatoTestPsicologicoRespuesta
 					,{headers: { Authorization: token }}
 					)
@@ -44,7 +45,7 @@ export function guardarCandidatoTestPsicologicoRespuesta(token, guardarCandidato
 
 export function guardarCandidatoTestPsicologicoLog(token, guardarCandidatoTestPsicologicoLog) {
 	return (dispatch, getState) => {
-		axios.post('https://evaluationroom-iniciarexamen.herokuapp.com/v1/guardar_accion'
+		axios.post((EVALUATIONROOM_INICIAREXAMEN_HOST).concat('/v1/guardar_accion')
 					, guardarCandidatoTestPsicologicoLog
 					,{headers: { Authorization: token }}
 					)

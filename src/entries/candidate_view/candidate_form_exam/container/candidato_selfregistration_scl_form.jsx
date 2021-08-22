@@ -20,7 +20,7 @@ import {obtenerPaises, obtenerPaisesNacimiento, obtenerDepartamentos, obtenerDep
 	validarCandidatoRegistrado} from '../../../../actions/common_view/actionCandidateForm'
 import {getSoporteTecnicoNotificacionMensajesError, addSoporteTecnicoNotificacion} from '../../../../actions/actionSoporteTecnicoNotificacion'
 
-class CandidatoDatosForm extends Component {
+class CandidatoSCLForm extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
@@ -52,7 +52,7 @@ class CandidatoDatosForm extends Component {
 			errors: {},
 			isLoading: true,
 			candidato:{},
-			testPsicologicos: [{idTestPsicologico : 1},{idTestPsicologico : 2},{idTestPsicologico : 3}],
+			testPsicologicos: [{idTestPsicologico : 6}],
 			prompt: false,
 			errorMensaje: '',
 			guardado: false,
@@ -1097,4 +1097,4 @@ export default connect(mapStateToProps, { guardarCandidatoTestPsicologico, valid
 	getSoporteTecnicoNotificacionMensajesError, addSoporteTecnicoNotificacion,
 	obtenerEstadosCiviles, obtenerDocumentosIdentidad, obtenerSexos, obtenerTipoDirecciones, 
 	obtenerPaises, obtenerPaisesNacimiento, obtenerDepartamentos, obtenerDepartamentosNacimiento, 
-	obtenerProvincias, obtenerProvinciasNacimiento, obtenerDistritos, obtenerDistritosNacimiento })(CandidatoDatosForm);
+	obtenerProvincias, obtenerProvinciasNacimiento, obtenerDistritos, obtenerDistritosNacimiento })(CandidatoSCLForm);

@@ -258,11 +258,14 @@ html, body {
 }
 
 .imagenrotar {
-	display: inline-block;
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	margin:-60px 0 0 -60px;
+}
+
+.imagenrotar-centro {
+	display: inline-block;
 	-webkit-animation:spin 2s linear infinite;
 	-moz-animation:spin 2s linear infinite;
 	animation:spin 2s linear infinite;

@@ -2,9 +2,7 @@ import axios from 'axios';
 import { 
 	CANDIDATES_GET,
 	CANDIDATO_GUARDAR,
-	CANDIDATO_OBTENER,
 	CANDIDATOS_OBTENER,
-	CANDIDATO_REGISTRADO_VALIDAR,
 	CANDIDATO_TESTPSICOLOGICO_RECLUTADOR_GUARDAR,
 	CANDIDATO_TESTPSICOLOGICO_GUARDAR,
 	CANDIDATO_TESTPSICOLOGICOS_PREGUNTAS_OBTENER,
@@ -22,8 +20,9 @@ import {
 	ERROR,
 	OBJ_ERROR_TIME_OUT
 } from './actionTypes';
+import {EVALUATIONROOM_HOST} from './actionEnpoints';
 
-export function guardarCandidato(candidato) {
+/*export function guardarCandidato(candidato) {
 	return (dispatch, getState) => {
 		axios.post('/candidato/', candidato)
 			.then((response) => { dispatch({ type: CANDIDATO_GUARDAR, payload: response.data }) })
@@ -37,19 +36,7 @@ export function guardarCandidato(candidato) {
 				}
 			})
 	}
-}
-
-export function obtenerCandidato(idCandidato) {
-	return (dispatch, getState) => {
-		axios.get(('/candidato/id/').concat(idCandidato))
-			.then((response) => { dispatch({ type: CANDIDATO_OBTENER, payload: response.data }) })
-			.catch((error) => {
-				if(error.toString().indexOf('Network Error') > -1){
-					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
-				}
-			})
-	}
-}
+}*/
 
 export function obtenerCandidatos() {
 	return (dispatch, getState) => {
@@ -68,22 +55,8 @@ export function obtenerCandidatos() {
 
 export function getCandidates() {
 	return (dispatch, getState) => {
-		axios.get('https://evaluationroom.herokuapp.com/v1/candidate_info')
+		axios.get((EVALUATIONROOM_HOST).concat('/v1/candidate_info'))
 			.then((response) => { dispatch({ type: CANDIDATES_GET, payload: response.data }) })
-			.catch((error) => {
-				if(error.toString().indexOf('Network Error') > -1){
-					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
-				} else {
-					dispatch({ type: ERROR, payload: error.response.data })
-				}
-			})
-	}
-}
-
-export function validarCandidatoRegistrado(candidato) {
-	return (dispatch, getState) => {
-		axios.post('/candidato/validar/', candidato)
-			.then((response) => { dispatch({ type: CANDIDATO_REGISTRADO_VALIDAR, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
@@ -112,8 +85,8 @@ export function guardarCandidatoTestPsicologicoRecruiter(candidatoTest) {
 
 export function guardarCandidatoTestPsicologico(candidatoTest) {
 	return (dispatch, getState) => {
-		axios.post('/candidato/test/',candidatoTest)
-			.then((response) => { dispatch({ type: CANDIDATO_TESTPSICOLOGICO_GUARDAR, payload: response.data }) })
+		axios.post((EVALUATIONROOM_HOST).concat('/v1/candidate'),candidatoTest)
+			.then((response) => { dispatch({ type: CANDIDATO_TESTPSICOLOGICO_GUARDAR, payload: response.data.body.candidato }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
@@ -226,7 +199,7 @@ export function guardarCandidatoRespuesta(candidatoTestDetalle) {
 
 export function obtenerInterpretacion(idCandidato) {
 	return (dispatch, getState) => {
-		axios.get(('/testpsicologico/interpretacion/candidato/').concat(idCandidato))
+		axios.get((EVALUATIONROOM_HOST).concat('/testpsicologico/interpretacion/candidato/').concat(idCandidato))
 			.then((response) => { dispatch({ type: INTERPRETACION_OBTENER, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
@@ -270,7 +243,7 @@ export function obtenerCandidatosSinAsignacion(token, email) {
 	}
 
 	return (dispatch, getState) => {
-		axios.post('https://evaluationroom.herokuapp.com/v1/candidatewithoutselectionprocess', body)
+		axios.post((EVALUATIONROOM_HOST).concat('/v1/candidatewithoutselectionprocess'), body)
 			.then((response) => { dispatch({ type: CANDIDATOS_SIN_PUESTO_LABORAL_OBTENER, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){

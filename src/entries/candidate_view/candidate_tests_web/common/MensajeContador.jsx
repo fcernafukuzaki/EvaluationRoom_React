@@ -9,7 +9,7 @@ const MensajeContador = (props) => {
 				mensaje.visible && mensaje.mensaje.length > 0 && (
 				<Fragment>
 					<div className={classnames(mensaje.estilo)} >
-						{mensaje.mensaje}
+						{mensaje.tipoMensaje == null && (<i className="far fa-clock mr-1"></i>)}{mensaje.mensaje}
 					</div>
 				</Fragment>
 				)

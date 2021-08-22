@@ -5,6 +5,7 @@ import {
 	ERROR,
 	OBJ_ERROR_TIME_OUT
 } from './actionTypes';
+import {EVALUATIONROOM_SUPPORTNOTIFICATION_HOST} from './actionEnpoints';
 
 export function getSoporteTecnicoNotificacionMensajesError(token) {
 	var body = {
@@ -13,7 +14,7 @@ export function getSoporteTecnicoNotificacionMensajesError(token) {
 			}
 		}
 	return (dispatch, getState) => {
-		axios.get(('https://evaluationroom-support-notific.herokuapp.com/v1/candidato_soportetecnico_notificar'), body)
+		axios.get((EVALUATIONROOM_SUPPORTNOTIFICATION_HOST).concat('/v1/candidato_soportetecnico_notificar'), body)
 			.then((response) => { dispatch({ type: SOPORTE_TECNICO_NOTIFICACION_MENSAJES_ERROR_GET, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
@@ -33,7 +34,7 @@ export function addSoporteTecnicoNotificacion(token, correoelectronico, observac
 	}
 	var header ={headers: { Authorization: token }}
 	return (dispatch, getState) => {
-		axios.post(('https://evaluationroom-support-notific.herokuapp.com/v1/candidato_soportetecnico_notificar'), body, header)
+		axios.post((EVALUATIONROOM_SUPPORTNOTIFICATION_HOST).concat('/v1/candidato_soportetecnico_notificar'), body, header)
 			.then((response) => { dispatch({ type: SOPORTE_TECNICO_NOTIFICACION_ADD, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
