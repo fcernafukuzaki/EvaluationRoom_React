@@ -2,14 +2,17 @@ import React, {Fragment} from 'react';
 
 import CargandoImagen from '../components/common/CargandoImagen';
 
+import NavBar from '../components/common/NavBar';
+import Footer from '../common/components/Footer';
 import DashBoard from './dashboard/container/DashBoard';
 
 export default function Home (props){
+	console.log(props)
 	return (
-		<div className="mt-3 mx-auto ancho1200">
+		<Fragment>
 			{props.isLoading && <CargandoImagen />}
 			{props.usuario != null &&
-			props.usuario.idUsuario == 0 &&
+			props.usuario.idusuario == 0 &&
 			<Fragment>
 				<div>
 				Usuario no está autorizado al sistema EvaluationRoom.
@@ -18,7 +21,7 @@ export default function Home (props){
 			</Fragment>
 			}
 			{props.usuario != null &&
-			props.usuario.idUsuario > 0 &&
+			props.usuario.idusuario > 0 &&
 			Object.entries(props.usuario.perfiles).length == 0 &&
 			<Fragment>
 				<div>
@@ -28,14 +31,18 @@ export default function Home (props){
 			</Fragment>
 			}
 			{props.usuario != null &&
-			props.usuario.idUsuario > 0 &&
+			props.usuario.idusuario > 0 &&
 			Object.entries(props.usuario.perfiles).length > 0 &&
 			<Fragment>
-				<h4>Bienvenido {props.usuario.nombre} al sistema de evaluación psicológica.</h4>
-				
-				<DashBoard token={props.usuario.token} correoelectronico={props.usuario.correoElectronico} idusuario={props.usuario.idUsuario} />
+				<NavBar usuario={props.usuario} errorUsuario={props.errorUsuario} items={props.items} />
+				<div className="mt-3 mx-auto ancho1200">
+					<h4>Bienvenido {props.usuario.nombre} al sistema de evaluación psicológica.</h4>
+					
+					<DashBoard token={props.usuario.token} correoelectronico={props.usuario.correoelectronico} idusuario={props.usuario.idusuario} />
+				</div>
+				<Footer  />
 			</Fragment>
 			}
-		</div>
+		</Fragment>
 	);
 }

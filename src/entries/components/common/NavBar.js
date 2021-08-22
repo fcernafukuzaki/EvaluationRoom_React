@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 
 import NavBarItem from './NavBarItem';
-import { obtenerUsuarioOAuth } from '../../../actions/actionUsuario';
+//import { obtenerUsuarioOAuth } from '../../../actions/actionUsuario';
 
 class NavBar extends Component {
 	constructor(props){
@@ -10,13 +10,13 @@ class NavBar extends Component {
 	}
 	
 	componentWillMount() {
-		this.props.obtenerUsuarioOAuth();
+		//this.props.obtenerUsuarioOAuth();
 	}
 	
 	componentDidUpdate(prevProps, prevState) {
-		if (prevProps.obtenerUsuarioOAuthResponse !== this.props.obtenerUsuarioOAuthResponse) {
+		/*if (prevProps.obtenerUsuarioOAuthResponse !== this.props.obtenerUsuarioOAuthResponse) {
 			this.props.datosUsuario(this.props.obtenerUsuarioOAuthResponse);
-		}
+		}*/
 		if (prevProps.errorResponse !== this.props.errorResponse) {
 			this.props.errorUsuario(this.props.errorResponse);
 		}
@@ -24,11 +24,11 @@ class NavBar extends Component {
 	
 	render() {
 		let itemUsuario = [];
-		if(this.props.obtenerUsuarioOAuthResponse.idUsuario > 0 &&
-			Object.entries(this.props.obtenerUsuarioOAuthResponse.perfiles).length > 0 ){
-			let perfiles = this.props.obtenerUsuarioOAuthResponse.perfiles.map( p => {
-				return p.idPerfil;
-			});
+		if(this.props.usuario.idusuario > 0 &&
+			Object.entries(this.props.usuario.perfiles).length > 0 ){
+			let perfiles = this.props.usuario.perfiles.map( p => {
+				return p.idperfil;
+			});console.log(perfiles)
 			
 			this.props.items.map( item =>{
 				if(item.tipo === 'nav-item' ) {
@@ -75,20 +75,20 @@ class NavBar extends Component {
 				<div className="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul className="navbar-nav mr-auto">
 						{
-						this.props.obtenerUsuarioOAuthResponse.idUsuario > 0 &&
-						Object.entries(this.props.obtenerUsuarioOAuthResponse.perfiles).length > 0 &&
+						this.props.usuario.idusuario > 0 &&
+						Object.entries(this.props.usuario.perfiles).length > 0 &&
 						navItem}
 					</ul>
 					<ul className="navbar-nav">
-						{Object.entries(this.props.obtenerUsuarioOAuthResponse).length == 0 && this.props.errorResponse != '' &&
+						{Object.entries(this.props.usuario).length == 0 && this.props.errorResponse != '' &&
 						<li className="nav-item active">
 							<a className="nav-link" href="/login" id="btnLogin">
 							<i className="fas fa-sign-in-alt"></i> Iniciar sesión
 							</a>
 						</li>
 						}
-						{Object.entries(this.props.obtenerUsuarioOAuthResponse).length > 0 &&
-						this.props.obtenerUsuarioOAuthResponse.idUsuario > 0 &&
+						{Object.entries(this.props.usuario).length > 0 &&
+						this.props.usuario.idusuario > 0 &&
 						<li className="nav-item active">
 							<a className="nav-link" href="/logout" id="btnLogOut" >
 							<i className="fas fa-sign-out-alt"></i> Cerrar sesión
@@ -104,9 +104,9 @@ class NavBar extends Component {
 
 function mapStateToProps(state){
 	return{
-		obtenerUsuarioOAuthResponse : state.reducerUsuario.obtenerUsuarioOAuthResponse,
+		//obtenerUsuarioOAuthResponse : state.reducerUsuario.obtenerUsuarioOAuthResponse,
 		errorResponse : state.reducerUsuario.errorResponse
 	}
 }
 
-export default connect(mapStateToProps, { obtenerUsuarioOAuth })(NavBar);
+export default connect(mapStateToProps, { /*obtenerUsuarioOAuth*/ })(NavBar);

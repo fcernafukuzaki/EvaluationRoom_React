@@ -75,7 +75,7 @@ class CandidatoDatosForm extends Component {
 		this.props.obtenerSexos();
 		this.props.obtenerEstadosCiviles();
 		this.props.obtenerDocumentosIdentidad();
-		this.props.obtenerTestPsicologicos();
+		this.props.obtenerTestPsicologicos(this.props.token);
 		this.props.obtenerPaises();
 		this.props.obtenerPaisesNacimiento();
 		this.props.obtenerDepartamentos(1);

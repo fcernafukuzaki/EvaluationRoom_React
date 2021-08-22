@@ -28,7 +28,7 @@ class TestPsicologicos extends Component {
 	}
 	
 	componentWillMount() {
-		this.props.obtenerTestPsicologicos();
+		this.props.obtenerTestPsicologicos(this.props.token);
 		this.props.obtenerTestPsicologicosPartes();
 	}
 	

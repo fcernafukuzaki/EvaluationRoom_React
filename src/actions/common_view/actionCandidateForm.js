@@ -215,9 +215,10 @@ export function obtenerDocumentosIdentidad() {
 }
 
 // RECRUITER VIEW
-export function obtenerTestPsicologicos() {
+export function obtenerTestPsicologicos(token) {
 	return (dispatch, getState) => {
-		axios.get((EVALUATIONROOM_HOST).concat('/v1/candidateform/testpsicologicos'))
+		axios.get((EVALUATIONROOM_HOST).concat('/v1/candidateform/testpsicologicos'),
+					{headers: { Authorization: token }})
 			.then((response) => { dispatch({ type: TESTPSICOLOGICOS_OBTENER, payload: response.data.body.psychologicaltests }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){

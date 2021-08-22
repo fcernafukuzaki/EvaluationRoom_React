@@ -1,9 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
-
-import NavBar from '../components/common/NavBar';
-import Footer from '../common/components/Footer';
 import Login from './login_user/container/login';
 import Home from './Home';
 import NotFound from '../common/components/NotFound';
@@ -27,6 +24,8 @@ class EvaluationRoomApp extends Component {
 		super(props);
 		this.state = {
 			usuario: null,
+			usuario_nombre: null,
+			token: null,
 			flagUsuario: null,
 			isLoading: true,
 			errorMensaje: ''
@@ -42,12 +41,14 @@ class EvaluationRoomApp extends Component {
 			if(typeof this.props.obtenerUsuarioOAuthResponse.code != "undefined"){
 				if(this.props.obtenerUsuarioOAuthResponse.code == 200){
 					const usuario = this.props.obtenerUsuarioOAuthResponse.body.usuario
-					const datos = usuario
-					//correoelectronico: "fcernaf@gmail.com"
-					//idusuario
+					const datos = { correoelectronico: usuario.correoelectronico,
+									nombre: this.state.usuario_nombre,
+									idusuario: usuario.idusuario,
+									perfiles: usuario.perfiles,
+									token: this.state.token }
 					this.setState({
 						usuario: datos,
-						flagUsuario: (!datos.activo || datos.perfiles.length < 1) ? 'No autorizado' : null,
+						flagUsuario: (datos.perfiles.length < 1) ? 'No autorizado' : null,
 						isLoading: datos != null ? false : true
 					});
 				}
@@ -56,10 +57,7 @@ class EvaluationRoomApp extends Component {
 	}
 
 	datosUsuario(response){
-		console.log(response);
-		console.log(response.accessToken);
-        console.log(response.profileObj.name);
-        console.log(response.profileObj.email);
+		this.setState({usuario_nombre: response.profileObj.name, token:response.accessToken});
 		this.props.obtenerUsuarioOAuth(response.accessToken, response.profileObj.email);
 	}
 	
@@ -81,7 +79,7 @@ class EvaluationRoomApp extends Component {
 				botonClass: 'btn-primary btn-sm',
 				tipo: 'nav-item',
 				exact: true,
-				link: '/home',
+				link: '/',
 				perfil: [1,2,3]
 			} , {
 				key: 'itemClientes',
@@ -186,39 +184,43 @@ class EvaluationRoomApp extends Component {
 					perfil: [1]
 				}]
 			}]
-		//<NavBar usuario={this.state.usuario} datosUsuario={this.datosUsuario.bind(this)} errorUsuario={this.errorUsuario.bind(this)} items={items} />
-		console.log(usuario)
+		
 		return (
 			<Fragment>
 				<Switch>
-					{typeof usuario != "undefined" ?
-					<Route exact path="/" render={()=>(
-							<Fragment>
-								<Login responseGoogle={this.datosUsuario.bind(this)}/>
-							</Fragment>
-						)} />
-					: (<Fragment>
-					<Route exact path="/home" render={()=>(<Home usuario={this.state.usuario} isLoading={this.state.isLoading} />)} />
-					{
-					flagUsuario !== 'No autorizado' &&
+					{usuario == null ? (
+						<Fragment>
+							<Route exact path="/" render={()=>(<Login responseGoogle={this.datosUsuario.bind(this)}/>)} />
+						</Fragment>
+					) : (
 					<Fragment>
-						<Route exact path="/listarClientes" render={()=>(<ClientsList errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/registrarCliente" render={()=>(<ClientForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/registrarPuestoLaboral" render={()=>(<PuestoLaboralForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/registrarCandidato" render={()=>(<CandidatoDatosForm usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/listaCandidatos" render={()=>(<CandidatesListInfo errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/listaCandidatos/resultados" render={()=>(<CandidatoResultadoForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/asignarCandidatos" render={()=>(<CandidatesListJobPosition usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/listaTestPsicologicos" render={()=>(<TestPsicologicos errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/registrarUsuario" render={()=>(<UsuarioDatosForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/registrarPerfil" render={()=>(<PerfilDatosForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/listaUsuarios" render={()=>(<UsuariosForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/listaPerfiles" render={()=>(<PerfilesForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/selectionprocess" render={()=>(<SelectionProcessFormContainer usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />
-					</Fragment>
-					}</Fragment>)
+						<Route exact path="/" render={()=>(<Home 
+							usuario={this.state.usuario} 
+							isLoading={this.state.isLoading} 
+							datosUsuario={this.datosUsuario.bind(this)}
+							errorUsuario={this.errorUsuario.bind(this)}
+							items={items}
+							/>)} />
+						{
+						flagUsuario !== 'No autorizado' &&
+							<Fragment>
+								<Route exact path="/listarClientes" render={()=>(<ClientsList errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/registrarCliente" render={()=>(<ClientForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/registrarPuestoLaboral" render={()=>(<PuestoLaboralForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/registrarCandidato" render={()=>(<CandidatoDatosForm usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/listaCandidatos" render={()=>(<CandidatesListInfo token={this.state.usuario.token} errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/listaCandidatos/resultados" render={()=>(<CandidatoResultadoForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/asignarCandidatos" render={()=>(<CandidatesListJobPosition usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/listaTestPsicologicos" render={()=>(<TestPsicologicos token={this.state.usuario.token} errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/registrarUsuario" render={()=>(<UsuarioDatosForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/registrarPerfil" render={()=>(<PerfilDatosForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/listaUsuarios" render={()=>(<UsuariosForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/listaPerfiles" render={()=>(<PerfilesForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/selectionprocess" render={()=>(<SelectionProcessFormContainer usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />
+							</Fragment>
+						}
+					</Fragment>)
 					}
-					<Route component={NotFound} />
 				</Switch>
 			</Fragment>
 		);

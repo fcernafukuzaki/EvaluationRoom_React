@@ -9,8 +9,7 @@ import {EVALUATIONROOM_HOST} from '../actionEnpoints';
 export function obtenerUsuarioOAuth(token, correoElectronico) {
 	return (dispatch, getState) => {
 		const body = {correoelectronico: correoElectronico}
-		//axios.post((EVALUATIONROOM_HOST).concat('/login/authenticate')
-		axios.post(('http://localhost:5000').concat('/login/authenticate'), body
+		axios.post((EVALUATIONROOM_HOST).concat('/login/authenticate'), body
 				,{headers: { Authorization: token }}
 				)
 			.then((response) => { dispatch({ type: USUARIO_OBTENER_OAUTH, payload: response.data }) })
