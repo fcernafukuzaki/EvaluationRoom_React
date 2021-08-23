@@ -221,6 +221,8 @@ class DashBoard extends Component {
                         alertMessageFooter={this.state.mensajeInformativo.footer} 
                     />
                     <CandidatosSinAsignacionList 
+                        token={this.props.token}
+                        correoelectronico={this.props.correoelectronico}
                         candidatosSinPuestoLaboral={this.state.candidatosSinPuestoLaboral} 
                         candidatosTestPsicologicosSinPuestoLaboral={this.state.candidatesPsychologicalTestSinPuestoLaboral}
                         getCandidatoApreciacionPorIdCandidato={this.getCandidatoApreciacionPorIdCandidato.bind(this)}
@@ -237,6 +239,8 @@ class DashBoard extends Component {
                         />
                     </div>
                     <ClientsSelectionProcessList 
+                        token={this.props.token}
+                        correoelectronico={this.props.correoelectronico}
                         datos={this.state.selectionProcesses}
                         datosCandidatos={this.state.candidatesPsychologicalTest}
                         camposBusqueda={this.state.camposBusqueda}

@@ -16,14 +16,13 @@ class CandidateCard extends Component {
     }
 
     descargarInforme(idcandidato, nombreCompleto) {
-        //console.log(idcandidato);
         this.setState({
             informe: {
                 idCandidato: idcandidato,
                 nombreCompleto: nombreCompleto
             }
         }, () => {
-            this.props.generarInforme(this.state.informe);
+            this.props.generarInforme(this.props.token, this.state.informe, this.props.correoelectronico);
         });
     }
     

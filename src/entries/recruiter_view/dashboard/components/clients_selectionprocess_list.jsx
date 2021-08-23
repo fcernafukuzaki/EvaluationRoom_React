@@ -191,6 +191,8 @@ class ClientsSelectionProcessList extends Component {
                     //console.log('candidatos con asignación', candidatesPsychologicalTestList)
                     return (<Fragment key={candidate.idcandidato}>
                                 <CandidateCard 
+                                        token={this.props.token}
+                                        correoelectronico={this.props.correoelectronico}
                                         id={candidate.idcandidato}
                                         name={candidate.nombre}
                                         paternal_surname={candidate.apellidopaterno}
