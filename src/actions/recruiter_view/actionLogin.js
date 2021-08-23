@@ -17,7 +17,7 @@ export function obtenerUsuarioOAuth(token, correoElectronico) {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
 				} else {
-					dispatch({ type: ERROR, payload: error.response.data })
+					dispatch({ type: USUARIO_OBTENER_OAUTH, payload: error.response.data })
 				}
 			})
 	}

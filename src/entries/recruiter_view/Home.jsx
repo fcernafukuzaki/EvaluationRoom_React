@@ -1,48 +1,28 @@
 import React, {Fragment} from 'react';
-
 import CargandoImagen from '../components/common/CargandoImagen';
-
 import NavBar from '../components/common/NavBar';
 import Footer from '../common/components/Footer';
-import DashBoard from './dashboard/container/DashBoard';
 
 export default function Home (props){
-	console.log(props)
+	const {children, clientId, responseGoogle, isLoading, usuario, errorUsuario, items} = props;
+	const mensaje_usuario_no_autorizado = (
+		<div>
+		Usuario no está autorizado al sistema EvaluationRoom.
+		Contactar con Francisco Cerna Fukuzaki al correo fcernaf@gmail.com para gestionar el acceso.
+		</div>
+		)
+	const contenido_html = (errorUsuario == null ? children : mensaje_usuario_no_autorizado)
+
 	return (
 		<Fragment>
-			{props.isLoading && <CargandoImagen />}
-			{props.usuario != null &&
-			props.usuario.idusuario == 0 &&
+			{isLoading && <CargandoImagen />}
 			<Fragment>
-				<div>
-				Usuario no está autorizado al sistema EvaluationRoom.
-				Contactar con Francisco Cerna Fukuzaki al correo fcernaf@gmail.com para gestionar el acceso.
-				</div>
-			</Fragment>
-			}
-			{props.usuario != null &&
-			props.usuario.idusuario > 0 &&
-			Object.entries(props.usuario.perfiles).length == 0 &&
-			<Fragment>
-				<div>
-				Usuario no posee perfiles asignados al sistema EvaluationRoom.
-				Contactar con Francisco Cerna Fukuzaki al correo fcernaf@gmail.com para gestionar el acceso.
-				</div>
-			</Fragment>
-			}
-			{props.usuario != null &&
-			props.usuario.idusuario > 0 &&
-			Object.entries(props.usuario.perfiles).length > 0 &&
-			<Fragment>
-				<NavBar usuario={props.usuario} errorUsuario={props.errorUsuario} items={props.items} />
+				<NavBar clientId={clientId} responseGoogle={responseGoogle} usuario={usuario} items={items} />
 				<div className="mt-3 mx-auto ancho1200">
-					<h4>Bienvenido {props.usuario.nombre} al sistema de evaluación psicológica.</h4>
-					
-					<DashBoard token={props.usuario.token} correoelectronico={props.usuario.correoelectronico} idusuario={props.usuario.idusuario} />
+					{contenido_html}
 				</div>
-				<Footer  />
+				<Footer />
 			</Fragment>
-			}
 		</Fragment>
 	);
 }

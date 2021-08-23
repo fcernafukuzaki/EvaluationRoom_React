@@ -1,40 +1,21 @@
 import React, {Component} from 'react';
-import { connect } from 'react-redux';
-
+import {GoogleLogout} from 'react-google-login';
 import NavBarItem from './NavBarItem';
-//import { obtenerUsuarioOAuth } from '../../../actions/actionUsuario';
 
-class NavBar extends Component {
+export default class NavBar extends Component {
 	constructor(props){
 		super(props);
 	}
 	
-	componentWillMount() {
-		//this.props.obtenerUsuarioOAuth();
-	}
-	
-	componentDidUpdate(prevProps, prevState) {
-		/*if (prevProps.obtenerUsuarioOAuthResponse !== this.props.obtenerUsuarioOAuthResponse) {
-			this.props.datosUsuario(this.props.obtenerUsuarioOAuthResponse);
-		}*/
-		if (prevProps.errorResponse !== this.props.errorResponse) {
-			this.props.errorUsuario(this.props.errorResponse);
-		}
-	}
-	
 	render() {
+		const {clientId, usuario, items, responseGoogle} = this.props;
 		let itemUsuario = [];
-		if(this.props.usuario.idusuario > 0 &&
-			Object.entries(this.props.usuario.perfiles).length > 0 ){
-			let perfiles = this.props.usuario.perfiles.map( p => {
-				return p.idperfil;
-			});console.log(perfiles)
+		if(usuario.idusuario > 0 && Object.entries(usuario.perfiles).length > 0){
+			let perfiles = usuario.perfiles.map(p => p.idperfil);
 			
-			this.props.items.map( item =>{
+			items.map( item =>{
 				if(item.tipo === 'nav-item' ) {
-					var flagPerfil = item.perfil.filter( p => 
-						(perfiles.indexOf(p) > -1)
-					);
+					var flagPerfil = item.perfil.filter(p => (perfiles.indexOf(p) > -1));
 					if(flagPerfil.length > 0){
 						itemUsuario.push(item);
 					}
@@ -42,11 +23,9 @@ class NavBar extends Component {
 					let itemAux = item;
 					var i = -1;
 					var indiceSubItem = [];
-					item.item.map( eSubItem => {
+					item.item.map(eSubItem => {
 						i = i + 1;
-						var flagPerfil = eSubItem.perfil.filter( p => 
-							(perfiles.indexOf(p) > -1)
-						);
+						var flagPerfil = eSubItem.perfil.filter(p => (perfiles.indexOf(p) > -1));
 						if(flagPerfil.length == 0){
 							itemAux.item.splice(i,1);
 						} else if(flagPerfil.length > 0){
@@ -60,9 +39,7 @@ class NavBar extends Component {
 			});
 		}
 		
-		var navItem = itemUsuario.map( elemento =>{
-			return <NavBarItem {...elemento} key={elemento.key} />;
-		});
+		var navItem = itemUsuario.map( elemento => <NavBarItem {...elemento} key={elemento.key} /> );
 		
 		return (
 			<nav className="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between" role="navigation">
@@ -74,39 +51,33 @@ class NavBar extends Component {
 				</button>
 				<div className="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul className="navbar-nav mr-auto">
-						{
-						this.props.usuario.idusuario > 0 &&
-						Object.entries(this.props.usuario.perfiles).length > 0 &&
-						navItem}
+						{usuario.idusuario > 0 && Object.entries(usuario.perfiles).length > 0 && navItem}
 					</ul>
 					<ul className="navbar-nav">
-						{Object.entries(this.props.usuario).length == 0 && this.props.errorResponse != '' &&
+						{Object.entries(usuario).length == 0 &&
 						<li className="nav-item active">
-							<a className="nav-link" href="/login" id="btnLogin">
+							<a className="nav-link" href="/" id="btnLogin">
 							<i className="fas fa-sign-in-alt"></i> Iniciar sesión
 							</a>
 						</li>
 						}
-						{Object.entries(this.props.usuario).length > 0 &&
-						this.props.usuario.idusuario > 0 &&
 						<li className="nav-item active">
-							<a className="nav-link" href="/logout" id="btnLogOut" >
-							<i className="fas fa-sign-out-alt"></i> Cerrar sesión
-							</a>
+							<GoogleLogout
+								clientId={clientId}
+								render={renderProps => (
+									<div className="btn-group btn-group-lg">
+										<a className="nav-link" href="/" id="btnLogOut">
+											<i className="fas fa-sign-out-alt" onClick={renderProps.onClick} disabled={renderProps.disabled}></i> Cerrar sesión
+										</a>
+									</div>
+								)}
+								onLogoutSuccess={responseGoogle}
+							>
+							</GoogleLogout>
 						</li>
-						}
 					</ul>
 				</div>
 			</nav>
 		);
 	}
 }
-
-function mapStateToProps(state){
-	return{
-		//obtenerUsuarioOAuthResponse : state.reducerUsuario.obtenerUsuarioOAuthResponse,
-		errorResponse : state.reducerUsuario.errorResponse
-	}
-}
-
-export default connect(mapStateToProps, { /*obtenerUsuarioOAuth*/ })(NavBar);
