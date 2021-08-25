@@ -77,6 +77,21 @@ class EvaluationRoomApp extends Component {
 		this.setState({isLoading:true, usuario_nombre: response.profileObj.name, token:response.accessToken});
 		this.props.obtenerUsuarioOAuth(response.accessToken, response.profileObj.email);
 	}
+
+	set_body(path, content){
+		const {isLoading, usuario, flagUsuario, errorUsuario, errorMensaje} = this.state;
+		const {clientId} = this.props;
+		return <Route exact path={path} render={()=>(<Home 
+				clientId={clientId}
+				usuario={usuario} 
+				isLoading={isLoading} 
+				errorUsuario={errorUsuario}
+				responseGoogle={this.datosUsuario.bind(this)}
+				items={barmenu_items}
+				>
+					{content}
+				</Home>)} />
+	}
 	
 	render() {
 		const {isLoading, usuario, flagUsuario, errorUsuario, errorMensaje} = this.state;
@@ -93,23 +108,14 @@ class EvaluationRoomApp extends Component {
 					) : (
 					<Fragment>
 						{errorMensaje != null && <MensajeError error={errorMensaje} />}
-						<Route exact path="/" render={()=>(<Home 
-							clientId={clientId}
-							usuario={usuario} 
-							isLoading={isLoading} 
-							errorUsuario={errorUsuario}
-							responseGoogle={this.datosUsuario.bind(this)}
-							items={barmenu_items}
-							>
-								<h4>Bienvenido {usuario.nombre} al sistema de evaluación psicológica.</h4>
-								<DashBoard token={usuario.token} correoelectronico={usuario.correoelectronico} idusuario={usuario.idusuario} />
-							</Home>)} />
+						{this.set_body("/", <Fragment><h4>Bienvenido {usuario.nombre} al sistema de evaluación psicológica.</h4>
+							<DashBoard token={usuario.token} correoelectronico={usuario.correoelectronico} idusuario={usuario.idusuario} /></Fragment>)}
 						{flagUsuario &&
 							<Fragment>
 								<Route exact path="/listarClientes" render={()=>(<ClientsList errorResponse={this.state.errorMensaje} />)} />
 								<Route exact path="/registrarCliente" render={()=>(<ClientForm errorResponse={this.state.errorMensaje} />)} />
 								<Route exact path="/registrarPuestoLaboral" render={()=>(<PuestoLaboralForm errorResponse={this.state.errorMensaje} />)} />
-								<Route exact path="/registrarCandidato" render={()=>(<CandidatoDatosForm usuario={usuario} errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/registrarCandidato" render={()=>(this.set_body("/registrarCandidato", <CandidatoDatosForm usuario={usuario} errorResponse={this.state.errorMensaje} />))} />
 								<Route exact path="/listaCandidatos" render={()=>(<CandidatesListInfo token={usuario.token} errorResponse={this.state.errorMensaje} />)} />
 								<Route exact path="/listaCandidatos/resultados" render={()=>(<CandidatoResultadoForm errorResponse={this.state.errorMensaje} />)} />
 								<Route exact path="/asignarCandidatos" render={()=>(<CandidatesListJobPosition usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />

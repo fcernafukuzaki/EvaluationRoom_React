@@ -79,6 +79,7 @@ export function isDatetimeFinishedExam(datetime_finished_exam){
         if(date_ob.getFullYear() <= 1901){
             return true
         }
+        return false
     }
-    return false
+    return true
 }

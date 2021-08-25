@@ -69,7 +69,7 @@ export function getCandidates() {
 
 export function guardarCandidatoTestPsicologicoRecruiter(candidatoTest) {
 	return (dispatch, getState) => {
-		axios.post('/candidato/test/recruiter/',candidatoTest)
+		axios.post((EVALUATIONROOM_HOST).concat('/v1/candidate/self_registered=false'),candidatoTest)
 			.then((response) => { dispatch({ type: CANDIDATO_TESTPSICOLOGICO_RECLUTADOR_GUARDAR, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
