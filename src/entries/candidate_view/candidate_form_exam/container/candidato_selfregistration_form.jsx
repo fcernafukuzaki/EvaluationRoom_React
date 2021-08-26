@@ -139,6 +139,14 @@ class CandidatoDatosForm extends Component {
 					this.props.obtenerProvinciasNacimiento(idPaisNacimiento, idDepartamentoNacimiento);
 					this.props.obtenerDistritosNacimiento(idPaisNacimiento, idDepartamentoNacimiento, idProvinciaNacimiento);
 				}
+				var tests = candidatoResponse.psychologicaltests;
+				var testCandidato = [];
+				tests.map( t => {
+					testCandidato.push({
+						idCandidato: candidatoResponse.idcandidato,
+						idTestPsicologico: t.idtestpsicologico
+					})
+				});
 				// Objeto candidatoValidarInput
 				var candidatoValidarInput = {
 					idCandidato: candidatoResponse.idcandidato,
@@ -163,7 +171,7 @@ class CandidatoDatosForm extends Component {
 					idDepartamentoNacimiento: idDepartamentoNacimiento,
 					idProvinciaNacimiento: idProvinciaNacimiento,
 					idDistritoNacimiento: idDistritoNacimiento,
-					testPsicologicos: candidatoResponse.psychologicaltests
+					testPsicologicos: testCandidato
 				}
 				
 				this.setState({ 
