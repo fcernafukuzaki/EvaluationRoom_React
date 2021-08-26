@@ -1,11 +1,13 @@
 import React, { Component, Fragment } from 'react';
-
-import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
-
-import NavBar from '../components/common/NavBar';
-import Footer from '../common/components/Footer';
+import { connect } from 'react-redux';
+import { Route, Switch } from 'react-router-dom';
+import Login from './login_user/container/login';
 import Home from './Home';
+import {barmenu_items} from './barmenu/items'
 import NotFound from '../common/components/NotFound';
+import MensajeError from '../components/common/MensajeError';
+import CargandoImagen from '../components/common/CargandoImagen';
+import DashBoard from './dashboard/container/DashBoard';
 import ClientsList from './cliente/container/ClientsList';
 import ClientForm from './cliente/container/ClientForm';
 import PuestoLaboralForm from './cliente/container/PuestoLaboralForm';
@@ -19,184 +21,125 @@ import PerfilDatosForm from '../administrator_view/container/PerfilDatosForm';
 import UsuariosForm from '../administrator_view/container/UsuariosForm';
 import PerfilesForm from '../administrator_view/container/PerfilesForm';
 import SelectionProcessFormContainer from './selectionprocess_form/container/selectionprocess_form_container'
+import {obtenerUsuarioOAuth} from '../../actions/recruiter_view/actionLogin';
 
-export default class EvaluationRoomApp extends Component {
+class EvaluationRoomApp extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
 			usuario: null,
-			flagUsuario: null,
-			isLoading: true,
-			errorMensaje: ''
+			usuario_nombre: null,
+			token: null,
+			flagUsuario: false,
+			isLoading: false,
+			errorUsuario: null,
+			errorMensaje: null
 		}
 		
 		this.datosUsuario = this.datosUsuario.bind(this);
-		this.errorUsuario = this.errorUsuario.bind(this);
 	}
-	
-	datosUsuario(datos){
-		this.setState({
-			usuario: datos,
-			flagUsuario: (!datos.activo || datos.perfiles.length < 1) ? 'No autorizado' : null,
-			isLoading: datos != null ? false : true
-		});
+
+	componentDidUpdate(prevProps, prevState) {
+		if (prevProps.obtenerUsuarioOAuthResponse !== this.props.obtenerUsuarioOAuthResponse) {
+			const obtenerUsuarioOAuthResponse = this.props.obtenerUsuarioOAuthResponse
+			if(typeof obtenerUsuarioOAuthResponse.code != "undefined"){
+				if(obtenerUsuarioOAuthResponse.code == 200){
+					const usuario = obtenerUsuarioOAuthResponse.body.usuario
+					const datos = { correoelectronico: usuario.correoelectronico,
+									nombre: this.state.usuario_nombre,
+									idusuario: usuario.idusuario,
+									perfiles: usuario.perfiles,
+									token: this.state.token }
+					this.setState({
+						usuario: datos,
+						flagUsuario: (datos.perfiles.length < 1) ? false : true,
+						isLoading: datos != null ? false : true
+					});
+				}
+			} else {
+				const datos = {nombre: this.state.usuario_nombre}
+				this.setState({
+					usuario: datos,
+					flagUsuario: false,
+					errorUsuario: {mensaje: obtenerUsuarioOAuthResponse.error.message},
+					isLoading: false
+				});
+			}
+		}
+		if (prevProps.errorResponse !== this.props.errorResponse) {
+			this.setState({
+				errorMensaje: this.props.errorResponse
+			})
+		}
 	}
-	
-	errorUsuario(datos){
-		console.log('errorUsuario', datos);
-		this.setState({
-			flagUsuario: (datos.status == 401 || datos.status == 403 || datos.status == 404) ? 'No autorizado' : null,
-			errorMensaje: datos,
-			isLoading: false
-		});
+
+	datosUsuario(response){
+		this.setState({isLoading:true, usuario_nombre: response.profileObj.name, token:response.accessToken});
+		this.props.obtenerUsuarioOAuth(response.accessToken, response.profileObj.email);
+	}
+
+	set_body(path, content){
+		const {isLoading, usuario, flagUsuario, errorUsuario, errorMensaje} = this.state;
+		const {clientId} = this.props;
+		return <Route exact path={path} render={()=>(<Home 
+				clientId={clientId}
+				usuario={usuario} 
+				isLoading={isLoading} 
+				errorUsuario={errorUsuario}
+				responseGoogle={this.datosUsuario.bind(this)}
+				items={barmenu_items}
+				>
+					{content}
+				</Home>)} />
 	}
 	
 	render() {
-		const { usuario, flagUsuario, errorMensaje } = this.state;
-		const items = [{
-				key: 'item1',
-				label: 'Inicio',
-				divClass: 'nav-link',
-				botonClass: 'btn-primary btn-sm',
-				tipo: 'nav-item',
-				exact: true,
-				link: '/home',
-				perfil: [1,2,3]
-			} , {
-				key: 'itemClientes',
-				label: 'Clientes',
-				divClass: 'nav-link',
-				botonClass: 'btn-primary btn-sm',
-				tipo: 'nav-item dropdown',
-				item: [{
-					key: 'itemClientessubitem1',
-					label: 'Lista de clientes',
-					divClass: 'nav-link',
-					botonClass: 'btn-primary btn-sm',
-					tipo: 'dropdown-item',
-					exact: false,
-					link: '/listarClientes',
-					perfil: [1,2,3]
-				} , {
-					key: 'itemClientessubitem2',
-					label: 'Registrar cliente',
-					divClass: 'nav-link',
-					botonClass: 'btn-primary btn-sm',
-					tipo: 'dropdown-item',
-					exact: false,
-					link: '/listarClientes',//'/registrarCliente',
-					perfil: [1,2,3]
-				}]
-			} , {
-				key: 'item2',
-				label: 'Candidato',
-				divClass: 'nav-link',
-				botonClass: 'btn-primary btn-sm',
-				tipo: 'nav-item dropdown',
-				item: [{
-					key: 'item2subitem2',
-					label: 'Lista de candidatos',
-					divClass: 'col-sm-2',
-					botonClass: 'btn-primary btn-sm',
-					tipo: 'nav-item',
-					exact: false,
-					link: '/listaCandidatos',
-					perfil: [1,2,3]
-				} , {
-					key: 'item2subitem1',
-					label: 'Registrar candidato',
-					divClass: 'nav-link',
-					botonClass: 'btn-primary btn-sm',
-					tipo: 'dropdown-item',
-					exact: false,
-					link: '/registrarCandidato',
-					perfil: [1,2,3]
-				}]
-			} , {
-				key: 'item3',
-				label: 'Lista de test',
-				divClass: 'nav-link',
-				botonClass: 'btn-primary btn-sm',
-				tipo: 'nav-item',
-				exact: false,
-				link: '/listaTestPsicologicos',
-				perfil: [1,2,3]
-			} , {
-				key: 'item0',
-				label: 'Accesos de aplicación',
-				divClass: 'nav-link',
-				botonClass: 'btn-primary btn-sm',
-				tipo: 'nav-item dropdown',
-				item: [{
-					key: 'item0subitem3',
-					label: 'Lista de usuarios',
-					divClass: 'nav-link',
-					botonClass: 'btn-primary btn-sm',
-					tipo: 'dropdown-item',
-					exact: false,
-					link: '/listaUsuarios',
-					perfil: [1,2]
-				} , {
-					key: 'item0subitem4',
-					label: 'Lista de perfiles',
-					divClass: 'nav-link',
-					botonClass: 'btn-primary btn-sm',
-					tipo: 'dropdown-item',
-					exact: false,
-					link: '/listaPerfiles',
-					perfil: [1]
-				} , {
-					key: 'item0subitem1',
-					label: 'Registrar usuario',
-					divClass: 'nav-link',
-					botonClass: 'btn-primary btn-sm',
-					tipo: 'dropdown-item',
-					exact: false,
-					link: '/registrarUsuario',
-					perfil: [1,2]
-				} , {
-					key: 'item0subitem2',
-					label: 'Registrar perfil',
-					divClass: 'nav-link',
-					botonClass: 'btn-primary btn-sm',
-					tipo: 'dropdown-item',
-					exact: false,
-					link: '/registrarPerfil',
-					perfil: [1]
-				}]
-			}]
+		const {isLoading, usuario, flagUsuario, errorUsuario, errorMensaje} = this.state;
+		const {clientId} = this.props;
 		
 		return (
 			<Fragment>
-				<NavBar usuario={this.state.usuario} datosUsuario={this.datosUsuario.bind(this)} errorUsuario={this.errorUsuario.bind(this)} items={items} />
 				<Switch>
-					<Route exact path="/" render={()=>(
-							<Fragment>
-								<Home usuario={this.state.usuario} isLoading={this.state.isLoading} />
-							</Fragment>
-						)} />
-					<Route exact path="/home" render={()=>(<Home usuario={this.state.usuario} isLoading={this.state.isLoading} />)} />
-					{flagUsuario !== 'No autorizado' &&
+					{usuario == null ? (
+						<Fragment>
+							<Route exact path="/" render={()=>(<Login clientId={clientId} responseGoogle={this.datosUsuario.bind(this)}/>)} />
+							{isLoading && <CargandoImagen />}
+						</Fragment>
+					) : (
 					<Fragment>
-						<Route exact path="/listarClientes" render={()=>(<ClientsList errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/registrarCliente" render={()=>(<ClientForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/registrarPuestoLaboral" render={()=>(<PuestoLaboralForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/registrarCandidato" render={()=>(<CandidatoDatosForm usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/listaCandidatos" render={()=>(<CandidatesListInfo errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/listaCandidatos/resultados" render={()=>(<CandidatoResultadoForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/asignarCandidatos" render={()=>(<CandidatesListJobPosition usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/listaTestPsicologicos" render={()=>(<TestPsicologicos errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/registrarUsuario" render={()=>(<UsuarioDatosForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/registrarPerfil" render={()=>(<PerfilDatosForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/listaUsuarios" render={()=>(<UsuariosForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/listaPerfiles" render={()=>(<PerfilesForm errorResponse={this.state.errorMensaje} />)} />
-						<Route exact path="/selectionprocess" render={()=>(<SelectionProcessFormContainer usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />
-					</Fragment>
+						{errorMensaje != null && <MensajeError error={errorMensaje} />}
+						{this.set_body("/", <Fragment><h4>Bienvenido {usuario.nombre} al sistema de evaluación psicológica.</h4>
+							<DashBoard token={usuario.token} correoelectronico={usuario.correoelectronico} idusuario={usuario.idusuario} /></Fragment>)}
+						{flagUsuario &&
+							<Fragment>
+								<Route exact path="/listarClientes" render={()=>(<ClientsList errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/registrarCliente" render={()=>(<ClientForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/registrarPuestoLaboral" render={()=>(<PuestoLaboralForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/registrarCandidato" render={()=>(this.set_body("/registrarCandidato", <CandidatoDatosForm usuario={usuario} errorResponse={this.state.errorMensaje} />))} />
+								<Route exact path="/listaCandidatos" render={()=>(<CandidatesListInfo token={usuario.token} errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/listaCandidatos/resultados" render={()=>(<CandidatoResultadoForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/asignarCandidatos" render={()=>(<CandidatesListJobPosition usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/listaTestPsicologicos" render={()=>(<TestPsicologicos token={this.state.usuario.token} errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/registrarUsuario" render={()=>(<UsuarioDatosForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/registrarPerfil" render={()=>(<PerfilDatosForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/listaUsuarios" render={()=>(<UsuariosForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/listaPerfiles" render={()=>(<PerfilesForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/selectionprocess" render={()=>(<SelectionProcessFormContainer usuario={usuario} errorResponse={this.state.errorMensaje} />)} />
+							</Fragment>
+						}
+					</Fragment>)
 					}
-					<Route component={NotFound} />
 				</Switch>
-				<Footer />
 			</Fragment>
 		);
 	}
 }
+
+function mapStateToProps(state){
+	return{
+		obtenerUsuarioOAuthResponse : state.reducerLogin.obtenerUsuarioOAuthResponse,
+		errorResponse : state.reducerLogin.errorResponse
+	}
+}
+
+export default connect(mapStateToProps, {obtenerUsuarioOAuth})(EvaluationRoomApp);

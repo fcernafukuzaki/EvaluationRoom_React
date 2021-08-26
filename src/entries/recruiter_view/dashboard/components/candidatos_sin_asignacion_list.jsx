@@ -70,6 +70,8 @@ class CandidatosSinAsignacionList extends Component {
                 //console.log('candidatos sin asignación', candidatosTestPsicologicosSinPuestoLaboralList)
                 return (<Fragment key={candidate.idcandidato}>
                             <CandidateCard 
+                                token={this.props.token}
+                                correoelectronico={this.props.correoelectronico}
                                 id={candidate.idcandidato}
                                 name={candidate.nombre}
                                 paternal_surname={candidate.apellidopaterno}

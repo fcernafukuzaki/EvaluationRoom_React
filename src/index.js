@@ -11,6 +11,7 @@ import reducers from './reducers';
 import EvaluationRoomApp from './entries/recruiter_view/EvaluationRoomApp_Recruiter';
 
 import './assets/styles/estilos.scss'
+import './assets/styles/estilos-login.scss'
 import './assets/styles/candidate-card.scss'
 import './assets/styles/selectionprocess-list.scss'
 import './assets/styles/formulario.scss'
@@ -26,11 +27,13 @@ const store = createStore(
 	)
 );
 
+const clientId = "56017019162-bb4cfpv4dtpdl6ssmg0dbs4ik8hr6g9k.apps.googleusercontent.com"
+
 const homeContainer = document.getElementById('home-container');
 ReactDOM.render(
 	<BrowserRouter>
 		<Provider store={store}>
-			<EvaluationRoomApp />
+			<EvaluationRoomApp clientId={clientId} />
 		</Provider>
 	</BrowserRouter>
 	, homeContainer);

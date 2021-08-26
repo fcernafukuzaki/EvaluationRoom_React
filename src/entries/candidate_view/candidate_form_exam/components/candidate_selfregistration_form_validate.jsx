@@ -48,33 +48,17 @@ export function validateInput(data) {
 			}
 		}
 	}
-	if (Validator.isEmpty(data.idSexo.toString())) {
+	if(data.idSexo == 0){
 		errors.idSexo = mensajeRequerido;
-	} else {
-		if(data.idSexo === ''){
-			errors.idSexo = mensajeRequerido;
-		} else if(data.idSexo === '0'){
-			errors.idSexo = mensajeRequerido;
-		}
 	}
-	if (Validator.isEmpty(data.idDocumentoIdentidad.toString())) {
+	if(data.idDocumentoIdentidad == 0){
 		errors.idDocumentoIdentidad = mensajeRequerido;
-	} else {
-		if(data.idDocumentoIdentidad === ''){
-			errors.idDocumentoIdentidad = mensajeRequerido;
-		} else if(data.idDocumentoIdentidad === '0'){
-			errors.idDocumentoIdentidad = mensajeRequerido;
-		}
 	}
 	if (Validator.isEmpty(data.numeroDocumentoIdentidad)) {
 		errors.numeroDocumentoIdentidad = mensajeRequerido;
 	}
-	if (Validator.isEmpty(data.idEstadoCivil.toString())) {
+	if(data.idEstadoCivil == 0){
 		errors.idEstadoCivil = mensajeRequerido;
-	} else {
-		if(data.idEstadoCivil.toString() === '0'){
-			errors.idEstadoCivil = mensajeRequerido;
-		}
 	}
 	if (Validator.isEmpty(data.cantidadHijos.toString())) {
 		errors.cantidadHijos = mensajeRequerido;
@@ -122,31 +106,31 @@ export function validateInput(data) {
 		}
 	}
 	
-	if (Validator.isEmpty(data.lugarDomicilio)) {
+	if(Validator.isEmpty(data.lugarDomicilio)) {
 		errors.lugarDomicilio = mensajeRequerido;
 	}
-	if (Validator.isEmpty(data.idPaisDomicilio.toString()) || data.idPaisDomicilio === '0') {
+	if(data.idPaisDomicilio == 0) {
 		errors.idPaisDomicilio = mensajeRequerido;
 	}
-	if (Validator.isEmpty(data.idDepartamentoDomicilio.toString()) || data.idDepartamentoDomicilio === '0') {
+	if(data.idDepartamentoDomicilio == 0) {
 		errors.idDepartamentoDomicilio = mensajeRequerido;
 	}
-	if (Validator.isEmpty(data.idProvinciaDomicilio.toString()) || data.idProvinciaDomicilio === '0') {
+	if(data.idProvinciaDomicilio == 0) {
 		errors.idProvinciaDomicilio = mensajeRequerido;
 	}
-	if (Validator.isEmpty(data.idDistritoDomicilio.toString()) || data.idDistritoDomicilio === '0') {
+	if(data.idDistritoDomicilio == 0) {
 		errors.idDistritoDomicilio = mensajeRequerido;
 	}
-	if (Validator.isEmpty(data.idPaisNacimiento.toString()) || data.idPaisNacimiento === '0') {
+	if(data.idPaisNacimiento == 0) {
 		errors.idPaisNacimiento = mensajeRequerido;
 	}
-	if (Validator.isEmpty(data.idDepartamentoNacimiento.toString()) || data.idDepartamentoNacimiento === '0') {
+	if(data.idDepartamentoNacimiento == 0) {
 		errors.idDepartamentoNacimiento = mensajeRequerido;
 	}
-	if (Validator.isEmpty(data.idProvinciaNacimiento.toString()) || data.idProvinciaNacimiento === '0') {
+	if(data.idProvinciaNacimiento == 0) {
 		errors.idProvinciaNacimiento = mensajeRequerido;
 	}
-	if (Validator.isEmpty(data.idDistritoNacimiento.toString()) || data.idDistritoNacimiento === '0') {
+	if(data.idDistritoNacimiento == 0) {
 		errors.idDistritoNacimiento = mensajeRequerido;
 	}
 	

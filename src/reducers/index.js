@@ -18,8 +18,10 @@ import { actionCandidatoApreciacion } from './reducerCandidatoApreciacion';
 import { actionCandidatoTestPsicologicoIniciarExamen } from './reducerCandidatoTestPsicologicoIniciarExamen'
 import { actionSoporteTecnicoNotificacion } from './reducerSoporteTecnicoNotificacion'
 import { actionCandidateResetTest } from './reducerCandidateResetTest'
+import { actionLogin } from './recruiter_view/reducerLogin'
 
 const rootReducer = combineReducers({
+	reducerLogin: actionLogin,
 	reducerUsuario: actionUsuario,
 	reducerSexo: actionSexo,
 	reducerEstadoCivil: actionEstadoCivil,

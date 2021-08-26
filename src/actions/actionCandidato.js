@@ -69,7 +69,7 @@ export function getCandidates() {
 
 export function guardarCandidatoTestPsicologicoRecruiter(candidatoTest) {
 	return (dispatch, getState) => {
-		axios.post('/candidato/test/recruiter/',candidatoTest)
+		axios.post((EVALUATIONROOM_HOST).concat('/v1/candidate/self_registered=false'),candidatoTest)
 			.then((response) => { dispatch({ type: CANDIDATO_TESTPSICOLOGICO_RECLUTADOR_GUARDAR, payload: response.data }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
@@ -99,7 +99,7 @@ export function guardarCandidatoTestPsicologico(candidatoTest) {
 	}
 }
 
-export function obtenerCandidatoTestPsicologicosPreguntas(idCandidato) {
+/*export function obtenerCandidatoTestPsicologicosPreguntas(idCandidato) {
 	return (dispatch, getState) => {
 		axios.get(('/candidato/tests/id/').concat(idCandidato))
 			.then((response) => { dispatch({ type: CANDIDATO_TESTPSICOLOGICOS_PREGUNTAS_OBTENER, payload: response.data }) })
@@ -109,9 +109,9 @@ export function obtenerCandidatoTestPsicologicosPreguntas(idCandidato) {
 				}
 			})
 	}
-}
+}*/
 
-export function validarTestPsicologicosFinalizado(idCandidato) {
+/*export function validarTestPsicologicosFinalizado(idCandidato) {
 	return (dispatch, getState) => {
 		axios.get(('/candidato/tests/finalizado/id/').concat(idCandidato))
 			.then((response) => { dispatch({ type: CANDIDATO_TESTPSICOLOGICOS_FINALIZADO_VALIDAR, payload: response.data }) })
@@ -121,7 +121,7 @@ export function validarTestPsicologicosFinalizado(idCandidato) {
 				}
 			})
 	}
-}
+}*/
 
 export function obtenerCandidatoTestPsicologicosRespuestas(idCandidato) {
 	return (dispatch, getState) => {
@@ -159,7 +159,7 @@ export function obtenerCandidatoTestPsicologicos(idCandidato) {
 	}
 }
 
-export function obtenerCandidatoRespuestas(idCandidato) {
+/*export function obtenerCandidatoRespuestas(idCandidato) {
 	return (dispatch, getState) => {
 		axios.get(('/candidato/test/respuestas/id/').concat(idCandidato))
 			.then((response) => { dispatch({ type: CANDIDATO_RESPUESTAS_OBTENER, payload: response.data }) })
@@ -169,7 +169,7 @@ export function obtenerCandidatoRespuestas(idCandidato) {
 				}
 			})
 	}
-}
+}*/
 
 export function obtenerCandidatoTestPsicologicosDetalle(idCandidato, idTestPsicologico) {
 	return (dispatch, getState) => {
@@ -183,7 +183,7 @@ export function obtenerCandidatoTestPsicologicosDetalle(idCandidato, idTestPsico
 	}
 }
 
-export function guardarCandidatoRespuesta(candidatoTestDetalle) {
+/*export function guardarCandidatoRespuesta(candidatoTestDetalle) {
 	return (dispatch, getState) => {
 		axios.post('/candidato/test/respuesta/',candidatoTestDetalle)
 			.then((response) => { dispatch({ type: CANDIDATO_GUARDAR_RESPUESTA, payload: response.data }) })
@@ -195,7 +195,7 @@ export function guardarCandidatoRespuesta(candidatoTestDetalle) {
 				}
 			})
 	}
-}
+}*/
 
 export function obtenerInterpretacion(idCandidato) {
 	return (dispatch, getState) => {
@@ -209,10 +209,10 @@ export function obtenerInterpretacion(idCandidato) {
 	}
 }
 
-export function generarInforme(datosInforme) {
+export function generarInforme(token, datosInforme, correoelectronico) {
 	return (dispatch, getState) => {
-		let url = ('/testpsicologico/download/informe/').concat(datosInforme.idCandidato);
-		axios.get(url) 
+		let url = (EVALUATIONROOM_HOST).concat('/testpsicologico/download/informe/uid=',datosInforme.idCandidato,'&email=',correoelectronico);
+		axios.get(url, {headers: { Authorization: token }}) 
 			.then((response) => { console.log('response', response); return dispatch({ type: INFORME_GENERAR, payload: {url: url, nombreCompleto: datosInforme.nombreCompleto} }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
