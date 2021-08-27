@@ -8,6 +8,7 @@ import BarraBusqueda from '../../components/common/BarraBusqueda';
 
 import {obtenerTestPsicologicosPartes, obtenerTestPsicologicoPreguntas} from '../../../actions/actionTestPsicologico';
 import {obtenerTestPsicologicos} from '../../../actions/common_view/actionCandidateForm'
+import {obtenerTestPsicologicosInfo} from '../../../actions/recruiter_view/actionMenu'
 
 class TestPsicologicos extends Component {
 	constructor(props){
@@ -28,8 +29,9 @@ class TestPsicologicos extends Component {
 	}
 	
 	componentWillMount() {
-		this.props.obtenerTestPsicologicos(this.props.token);
-		this.props.obtenerTestPsicologicosPartes();
+		this.props.obtenerTestPsicologicosInfo(this.props.token, this.props.correoelectronico)
+		//this.props.obtenerTestPsicologicos(this.props.token);
+		//this.props.obtenerTestPsicologicosPartes();
 	}
 	
 	componentDidUpdate(prevProps, prevState) {
@@ -240,10 +242,11 @@ class TestPsicologicos extends Component {
 
 function mapStateToProps(state){
 	return{
+		obtenerTestPsicologicosInfoResponse: state.reducerMenu.obtenerTestPsicologicosInfoResponse,
 		obtenerTestPsicologicosResponse : state.reducerTestPsicologico.obtenerTestPsicologicosResponse,
 		obtenerTestPsicologicoPreguntasResponse : state.reducerTestPsicologico.obtenerTestPsicologicoPreguntasResponse,
 		obtenerTestPsicologicosPartesResponse : state.reducerTestPsicologico.obtenerTestPsicologicosPartesResponse
 	}
 }
 
-export default connect(mapStateToProps, { obtenerTestPsicologicos, obtenerTestPsicologicosPartes, obtenerTestPsicologicoPreguntas })(TestPsicologicos);
+export default connect(mapStateToProps, {obtenerTestPsicologicosInfo, obtenerTestPsicologicos, obtenerTestPsicologicosPartes, obtenerTestPsicologicoPreguntas })(TestPsicologicos);
