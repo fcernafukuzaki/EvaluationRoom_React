@@ -19,9 +19,11 @@ import { actionCandidatoTestPsicologicoIniciarExamen } from './reducerCandidatoT
 import { actionSoporteTecnicoNotificacion } from './reducerSoporteTecnicoNotificacion'
 import { actionCandidateResetTest } from './reducerCandidateResetTest'
 import { actionLogin } from './recruiter_view/reducerLogin'
+import { actionMenu } from './recruiter_view/reducerMenu'
 
 const rootReducer = combineReducers({
 	reducerLogin: actionLogin,
+	reducerMenu: actionMenu,
 	reducerUsuario: actionUsuario,
 	reducerSexo: actionSexo,
 	reducerEstadoCivil: actionEstadoCivil,

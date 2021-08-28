@@ -189,6 +189,12 @@ a.nounderline:link
 	}
 }
 
+@media screen and (max-width: 670px) {
+	.ancho1200{
+		width: 640px;
+	}
+}
+
 .table {
 	font-size: 14px;
 }

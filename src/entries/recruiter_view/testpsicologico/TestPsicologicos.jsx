@@ -1,20 +1,18 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
 import TablePaginado from '../../components/common/TablePaginado';
 import BarraBusqueda from '../../components/common/BarraBusqueda';
-
-import {obtenerTestPsicologicosPartes, obtenerTestPsicologicoPreguntas} from '../../../actions/actionTestPsicologico';
-import {obtenerTestPsicologicos} from '../../../actions/common_view/actionCandidateForm'
+import {obtenerTestPsicologicosInfo} from '../../../actions/recruiter_view/actionMenu'
 
 class TestPsicologicos extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
 			filtroTestPsicologicoEnunciado: '',
-			testPsicologicosPreguntasFiltro:[],
+			testPsicologicosPreguntasAux: [], // Lista de preguntas. El valor no cambia
+			testPsicologicosPreguntasFiltro:[], // Lista de preguntas que cambia a partir del texto ingresado
 			testPsicologicosPartesFiltro:[],
 			idTestPsicologico: 0,
 			idParte: 0,
@@ -28,19 +26,13 @@ class TestPsicologicos extends Component {
 	}
 	
 	componentWillMount() {
-		this.props.obtenerTestPsicologicos(this.props.token);
-		this.props.obtenerTestPsicologicosPartes();
+		this.props.obtenerTestPsicologicosInfo(this.props.token, this.props.correoelectronico)
 	}
 	
 	componentDidUpdate(prevProps, prevState) {
-		if (prevProps.obtenerTestPsicologicosResponse !== this.props.obtenerTestPsicologicosResponse) {
+		if (prevProps.obtenerTestPsicologicosInfoResponse !== this.props.obtenerTestPsicologicosInfoResponse) {
 			this.setState({
-				isLoading: Object.entries(this.props.obtenerTestPsicologicosResponse).length > 0 ? false : true
-			});
-		}
-		if (prevProps.obtenerTestPsicologicoPreguntasResponse !== this.props.obtenerTestPsicologicoPreguntasResponse) {
-			this.setState({
-				isLoading: this.state.isLoading ? false : true
+				isLoading: Object.entries(this.props.obtenerTestPsicologicosInfoResponse).length > 0 ? false : true
 			});
 		}
 		if (prevProps.errorResponse !== this.props.errorResponse) {
@@ -52,14 +44,14 @@ class TestPsicologicos extends Component {
 	}
 	
 	onChange(e) {
-		this.setState({ [e.target.name]: e.target.value });
+		this.setState({[e.target.name]: e.target.value});
 	}
 	
 	filtrarListaPreguntas(e){
 		let filtroTestPsicologicoEnunciado = e.target.value;
 		this.setState({
 			filtroTestPsicologicoEnunciado: filtroTestPsicologicoEnunciado,
-			testPsicologicosPreguntasFiltro: this.props.obtenerTestPsicologicoPreguntasResponse.filter( p => p.enunciado.indexOf(filtroTestPsicologicoEnunciado) > -1 )
+			testPsicologicosPreguntasFiltro: this.state.testPsicologicosPreguntasAux.filter(p => p.enunciado.indexOf(filtroTestPsicologicoEnunciado) > -1)
 		})
 	}
 	
@@ -68,27 +60,26 @@ class TestPsicologicos extends Component {
 	}
 	
 	obtenerTablaTituloPreguntas(titulo){
-		return ("Preguntas del test psicológico: ").concat(titulo, " (Parte ",this.state.idParte, ")");
+		return ("Preguntas del test psicológico: ").concat(titulo," (Parte ",this.state.idParte,")");
 	}
 	
 	varPartesTestPsicologico(test){
 		this.setState({
-			idTestPsicologico : test.idtestpsicologico,
+			idTestPsicologico: test.idtestpsicologico,
 			idParte: 0, 
-			nombre : test.nombre,
-			testPsicologicosPartesFiltro: this.props.obtenerTestPsicologicosPartesResponse.filter(p => p.idTestPsicologico == test.idtestpsicologico),
-			isLoading: true
+			nombre: test.nombre,
+			testPsicologicosPartesFiltro: this.props.obtenerTestPsicologicosInfoResponse.filter(p => p.idtestpsicologico == test.idtestpsicologico)
 		});
-		this.props.obtenerTestPsicologicoPreguntas(test.idtestpsicologico);
 	}
 	
-	varPreguntasTestPsicologico(test){
+	varPreguntasTestPsicologico(idtestpsicologico, idparte, preguntas){
 		this.setState({
-			idTestPsicologico : test.idTestPsicologico,
-			idParte: test.idParte,
-			nombre : this.state.nombre,
+			idTestPsicologico: idtestpsicologico,
+			idParte: idparte,
+			nombre: this.state.nombre,
 			filtroTestPsicologicoEnunciado: '',
-			testPsicologicosPreguntasFiltro: this.props.obtenerTestPsicologicoPreguntasResponse.filter(p => p.idParte == test.idParte)
+			testPsicologicosPreguntasFiltro: preguntas,
+			testPsicologicosPreguntasAux: preguntas
 		});
 	}
 	
@@ -106,12 +97,16 @@ class TestPsicologicos extends Component {
 	
 	generarTablaBodyPartes(row){
 		if(row != null){
-			return (<tr key={('').concat(row.idTestPsicologico,'-',row.idParte,'-',row.instrucciones)} onClick={() => this.varPreguntasTestPsicologico(row)} >
-						<td>{row.idParte}</td>
-						<td>{row.instrucciones}</td>
-						<td>Se puede seleccionar hasta un máximo de {row.alternativaMaxSeleccion} alternativas</td>
-						<td>{row.duracion == 0 ? 'No hay tiempo límite' : (row.duracion + " segundos")}</td>
-					</tr>);
+			const html_body = row.instrucciones.map(parte => {
+				return (<tr key={('').concat(parte.idtestpsicologico,'-',parte.idparte,'-',parte.instrucciones)} 
+							onClick={() => this.varPreguntasTestPsicologico(parte.idtestpsicologico,parte.idparte,parte.preguntas)} >
+							<td>{parte.idparte}</td>
+							<td>{parte.instrucciones}</td>
+							<td>Se puede seleccionar hasta un máximo de {parte.alternativamaxseleccion} alternativas</td>
+							<td>{parte.duracion == 0 ? 'No hay tiempo límite' : (parte.duracion + " segundos")}</td>
+						</tr>);
+			})
+			return html_body
 		} else {
 			return (<tr><td>Cargando</td></tr>)
 		}
@@ -122,7 +117,7 @@ class TestPsicologicos extends Component {
 			let alternativas = '';
 			let enunciadoGATBParte3 = '';
 			let alternativasGATBParte3 = '';
-			if(2 == row.idTestPsicologico && 3 == row.idParte){
+			if(2 == row.idtestpsicologico && 3 == row.idparte){
 				var enunciadoSplit = row.enunciado.split(",");
 				enunciadoGATBParte3 = (<img src={('/').concat(enunciadoSplit[0])} height="40" width="auto" />);
 				alternativasGATBParte3 = (<img src={('/').concat(enunciadoSplit[1])} height="40" width="auto" />);
@@ -131,11 +126,11 @@ class TestPsicologicos extends Component {
 			for(i = 0; i < row.alternativa.length; i++) {
 				alternativas += ('').concat(row.alternativa[i].alternativa,' (',row.alternativa[i].glosa,') ');
 			}
-			return (<tr key={('').concat(row.idTestPsicologico,'-',row.idParte,'-',row.idPregunta)}>
-						<td>{row.idParte}</td>
-						<td>{row.idPregunta}. {2 == row.idTestPsicologico && 3 == row.idParte ? enunciadoGATBParte3 : row.enunciado }
+			return (<tr key={('').concat(row.idtestpsicologico,'-',row.idparte,'-',row.idpregunta)}>
+						<td>{row.idparte}</td>
+						<td>{row.idpregunta}. {2 == row.idtestpsicologico && 3 == row.idparte ? enunciadoGATBParte3 : row.enunciado }
 						</td>
-						<td>{2 == row.idTestPsicologico && 3 == row.idParte ? alternativasGATBParte3 : alternativas}</td>
+						<td>{2 == row.idtestpsicologico && 3 == row.idparte ? alternativasGATBParte3 : alternativas}</td>
 					</tr>);
 		} else {
 			return (<tr><td>Cargando</td></tr>)
@@ -191,7 +186,7 @@ class TestPsicologicos extends Component {
 		return (
 			<div className="mt-3 mx-auto ancho1200">
 				{isLoading && <CargandoImagen />}
-				{this.props.obtenerTestPsicologicosResponse.length > 0 &&
+				{this.props.obtenerTestPsicologicosInfoResponse.length > 0 &&
 				<Fragment>
 					<TablePaginado tituloTabla={"Lista de tests psicológicos"}
 						mensajeSinRegistros={"No se encontró tests psicológicos."}
@@ -199,9 +194,8 @@ class TestPsicologicos extends Component {
 						tablaEstilo={"width200"}
 						tableBody={this.generarTablaBodyTestPsicologico.bind(this)}
 						registrosPorPagina={10} 
-						registros={this.props.obtenerTestPsicologicosResponse} 
+						registros={this.props.obtenerTestPsicologicosInfoResponse} 
 						camposBusqueda={[]} />
-					
 					{idTestPsicologico > 0 &&
 					<div key={("Partes").concat(idTestPsicologico)}>
 						<TablePaginado tituloTabla={this.obtenerTablaTituloPartes(nombre)}
@@ -214,7 +208,6 @@ class TestPsicologicos extends Component {
 							camposBusqueda={[]} />
 					</div>
 					}
-					
 					{idTestPsicologico > 0 && idParte > 0 &&
 					<div key={("Preguntas").concat(idTestPsicologico,"Parte",idParte)}>
 						<BarraBusqueda camposBusqueda={camposBusquedaPreguntas} />
@@ -225,9 +218,8 @@ class TestPsicologicos extends Component {
 							tableBody={this.generarTablaBodyPreguntas.bind(this)}
 							nombreTitulo={nombre}
 							registrosPorPagina={10}
-							registros={filtroTestPsicologicoEnunciado.length > 0 ? testPsicologicosPreguntasFiltro : idTestPsicologico > 0 ? testPsicologicosPreguntasFiltro : []} 
+							registros={filtroTestPsicologicoEnunciado.length > 0 ? testPsicologicosPreguntasFiltro: idTestPsicologico > 0 ? testPsicologicosPreguntasFiltro: []} 
 							camposBusqueda={[]} />
-							
 					</div>
 					}
 				</Fragment>
@@ -240,10 +232,8 @@ class TestPsicologicos extends Component {
 
 function mapStateToProps(state){
 	return{
-		obtenerTestPsicologicosResponse : state.reducerTestPsicologico.obtenerTestPsicologicosResponse,
-		obtenerTestPsicologicoPreguntasResponse : state.reducerTestPsicologico.obtenerTestPsicologicoPreguntasResponse,
-		obtenerTestPsicologicosPartesResponse : state.reducerTestPsicologico.obtenerTestPsicologicosPartesResponse
+		obtenerTestPsicologicosInfoResponse: state.reducerMenu.obtenerTestPsicologicosInfoResponse
 	}
 }
 
-export default connect(mapStateToProps, { obtenerTestPsicologicos, obtenerTestPsicologicosPartes, obtenerTestPsicologicoPreguntas })(TestPsicologicos);
+export default connect(mapStateToProps, {obtenerTestPsicologicosInfo})(TestPsicologicos);
