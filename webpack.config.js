@@ -9,7 +9,7 @@ module.exports = {
         'index_exam': './src/index_exam.js',
     }, 
     output: {
-        path: path.resolve(__dirname, '../EvaluationRoom/src/main/resources/public/'),
+        path: path.resolve(__dirname, 'build'),
         filename: 'js/[name].js'
     },
     resolve: {
@@ -60,6 +60,16 @@ module.exports = {
             template: './public/index_public.html',
             chunks: ['index_public'],
             filename: './evaluacion/index.html'
+        }),
+        new HtmlWebPackPlugin({
+            template: './public/index_public.html',
+            chunks: ['index_public'],
+            filename: './evaluacion_nueva/index.html'
+        }),
+        new HtmlWebPackPlugin({
+            template: './public/index_public.html',
+            chunks: ['index_public'],
+            filename: './ux_candidato/index.html'
         }),
         new HtmlWebPackPlugin({
             template: './public/index_exam.html',
