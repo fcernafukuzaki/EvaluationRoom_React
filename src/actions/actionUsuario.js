@@ -25,7 +25,7 @@ export function guardarUsuario(usuario) {
 	}
 }
 
-export function obtenerUsuarioOAuth() {
+/*export function obtenerUsuarioOAuth() {
 	return (dispatch, getState) => {
 		axios.get('/usuario/')
 			.then((response) => { dispatch({ type: USUARIO_OBTENER_OAUTH, payload: response.data }) })
@@ -37,7 +37,7 @@ export function obtenerUsuarioOAuth() {
 				}
 			})
 	}
-}
+}*/
 
 export function obtenerUsuarios() {
 	return (dispatch, getState) => {
