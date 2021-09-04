@@ -1,8 +1,8 @@
 import axios from 'axios';
 import {
 	USUARIO_GUARDAR,
+	USUARIO_ACTUALIZAR,
 	USUARIOS_OBTENER,
-	USUARIO_OBTENER_OAUTH, 
 	USUARIO_OBTENER,
 	PERFILES_OBTENER,
 	PERFIL_OBTENER,
@@ -21,7 +21,7 @@ export function obtenerUsuarios(token, correoElectronico) {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
 				} else {
-					dispatch({ type: ERROR, payload: error.response.data })
+					dispatch({ type: ERROR, payload: error.response.data.error })
 				}
 			})
 	}
@@ -40,7 +40,7 @@ export function guardarUsuario(usuario, token, correoElectronico) {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
 				} else {
-					dispatch({ type: ERROR, payload: error.response.data })
+					dispatch({ type: ERROR, payload: error.response.data.error })
 				}
 			})
 	}
@@ -55,7 +55,7 @@ export function obtenerUsuario(idUsuario, token, correoElectronico) {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
 				} else {
-					dispatch({ type: ERROR, payload: error.response.data })
+					dispatch({ type: ERROR, payload: error.response.data.error })
 				}
 			})
 	}
@@ -69,30 +69,16 @@ export function actualizarUsuario(usuario, token, correoElectronico) {
 	return (dispatch, getState) => {
 		axios.put((EVALUATIONROOM_ADMINACCESSGEST_HOST).concat('/usuarios/',usuario.idUsuario), usuario,
 					{headers: {Authorization:token, correoElectronico:correoElectronico}})
-			.then((response) => { dispatch({ type: USUARIO_GUARDAR, payload: response.data.body.usuario }) })
+			.then((response) => { dispatch({ type: USUARIO_ACTUALIZAR, payload: response.data.body.usuario }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
 				} else {
-					dispatch({ type: ERROR, payload: error.response.data })
+					dispatch({ type: ERROR, payload: error.response.data.error })
 				}
 			})
 	}
 }
-
-/*export function obtenerUsuarioOAuth() {
-	return (dispatch, getState) => {
-		axios.get('/usuario/')
-			.then((response) => { dispatch({ type: USUARIO_OBTENER_OAUTH, payload: response.data }) })
-			.catch((error) => {
-				if(error.toString().indexOf('Network Error') > -1){
-					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
-				} else {
-					dispatch({ type: ERROR, payload: error.response.data })
-				}
-			})
-	}
-}*/
 
 export function obtenerPerfiles(token, correoElectronico) {
 	return (dispatch, getState) => {
@@ -103,7 +89,7 @@ export function obtenerPerfiles(token, correoElectronico) {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
 				} else {
-					dispatch({ type: ERROR, payload: error.response.data })
+					dispatch({ type: ERROR, payload: error.response.data.error })
 				}
 			})
 	}
@@ -118,7 +104,7 @@ export function obtenerPerfil(idPerfil, token, correoElectronico) {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
 				} else {
-					dispatch({ type: ERROR, payload: error.response.data })
+					dispatch({ type: ERROR, payload: error.response.data.error })
 				}
 			})
 	}
@@ -133,7 +119,7 @@ export function guardarPerfil(perfil, token, correoElectronico) {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
 				} else {
-					dispatch({ type: ERROR, payload: error.response.data })
+					dispatch({ type: ERROR, payload: error.response.data.error })
 				}
 			})
 	}

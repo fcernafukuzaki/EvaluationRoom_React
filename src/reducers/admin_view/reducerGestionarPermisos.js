@@ -1,5 +1,6 @@
 import {
 	USUARIO_GUARDAR,
+	USUARIO_ACTUALIZAR,
 	USUARIOS_OBTENER,
 	USUARIO_OBTENER_OAUTH, 
 	USUARIO_OBTENER,
@@ -11,6 +12,7 @@ import {
 
 const initialState = {
 	guardarUsuarioResponse: [],
+	actualizarUsuarioResponse: [],
 	obtenerUsuariosResponse: [],
 	obtenerUsuarioOAuthResponse: [],
 	obtenerUsuarioResponse: [],
@@ -24,6 +26,8 @@ export function actionGestionarPermisos(state = initialState, action){
 	switch (action.type) {
 		case USUARIO_GUARDAR:
 			return Object.assign({}, state, {guardarUsuarioResponse: action.payload})
+		case USUARIO_ACTUALIZAR:
+			return Object.assign({}, state, {actualizarUsuarioResponse: action.payload})
 		case USUARIOS_OBTENER:
 			return Object.assign({}, state, {obtenerUsuariosResponse: action.payload})
 		case USUARIO_OBTENER_OAUTH:

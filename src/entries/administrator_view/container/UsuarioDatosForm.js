@@ -1,17 +1,13 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-
-import { Prompt } from 'react-router';
-
+import React, {Component, Fragment} from 'react';
+import {connect} from 'react-redux';
+import {Prompt} from 'react-router';
 import Formulario from '../../components/common/Formulario';
 import {obtenerValorParametro} from '../../common/components/encriptar_aes';
 import MensajeGuardarExitoso from '../../components/common/MensajeGuardarExitoso';
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
-
 import validateInput from '../../components/validate/Usuario';
-
-import { guardarUsuario, obtenerUsuario, obtenerPerfiles } from '../../../actions/admin_view/actionGestionarPermisos';
+import {guardarUsuario, actualizarUsuario, obtenerUsuario, obtenerPerfiles} from '../../../actions/admin_view/actionGestionarPermisos';
 
 class UsuarioDatosForm extends Component {
 	constructor(props){
@@ -24,7 +20,7 @@ class UsuarioDatosForm extends Component {
 			errors: {},
 			isLoading: true,
 			usuario:{},
-			perfilesUsuario: [],
+			perfilesChecked: [], // Checkbox de los perfiles
 			prompt: false,
 			errorMensaje: '',
 			guardado: false
@@ -38,9 +34,9 @@ class UsuarioDatosForm extends Component {
 	}
 	
 	componentWillMount() {
-		this.props.obtenerPerfiles();
+		this.props.obtenerPerfiles(this.props.token, this.props.correoelectronico);
 		if(obtenerValorParametro('id') != null){
-			this.props.obtenerUsuario(obtenerValorParametro('id'));
+			this.props.obtenerUsuario(obtenerValorParametro('id'), this.props.token, this.props.correoelectronico);
 		} else {
 			this.setState({
 				isLoading: false
@@ -50,16 +46,37 @@ class UsuarioDatosForm extends Component {
 	
 	componentDidUpdate(prevProps, prevState) {
 		if (prevProps.usuario !== this.props.usuario) {
+			let perfilesChecked = []
+			// Check a cada uno de los perfiles que tiene asignado el usuario.
+			this.props.perfiles.map(p=>
+				perfilesChecked.push({
+					idPerfil:p.idperfil, 
+					checked:this.props.usuario.perfiles.filter(up => up.idperfil == p.idperfil).length > 0 ? true : false
+				}))
 			this.setState({
-				idUsuario: this.props.usuario.idUsuario,
+				idUsuario: this.props.usuario.idusuario,
 				nombreUsuario: this.props.usuario.nombre,
-				correoElectronicoUsuario: this.props.usuario.correoElectronico,
+				correoElectronicoUsuario: this.props.usuario.correoelectronico,
 				activoUsuario: this.props.usuario.activo,
-				perfilesUsuario: this.props.usuario.perfiles,
+				perfilesChecked: perfilesChecked,
 				isLoading: false
 			});
 		}
+		if (prevProps.perfiles !== this.props.perfiles) {
+			let perfilesChecked = []
+			this.props.perfiles.map(p=>perfilesChecked.push({idPerfil:p.idperfil, checked:false}))
+			this.setState({
+				perfilesChecked: perfilesChecked
+			})
+		}
 		if (prevProps.guardarUsuarioResponse !== this.props.guardarUsuarioResponse) {
+			this.limpiar();
+			this.setState({ 
+				isLoading: false,
+				guardado: true
+			})
+		}
+		if (prevProps.actualizarUsuarioResponse !== this.props.actualizarUsuarioResponse){
 			this.limpiar();
 			this.setState({ 
 				isLoading: false,
@@ -74,7 +91,7 @@ class UsuarioDatosForm extends Component {
 				})
 			} else {
 				this.setState({
-					errorMensaje: this.props.errorResponse
+					errorMensaje: {mensaje: this.props.errorResponse.user_message}
 				})
 			}
 		}
@@ -94,33 +111,23 @@ class UsuarioDatosForm extends Component {
 	}
 	
 	onChange(e) {
-		this.setState({ [e.target.name]: e.target.value, prompt: !!(e.target.value.length) });
+		this.setState({[e.target.name]: e.target.value, prompt: !!(e.target.value.length)});
 	}
 	
 	onChangeCheck(event) {
-		if(this.state.activoUsuario){
-			this.setState({ activoUsuario: false });
-		} else {
-			this.setState({ activoUsuario: true });
-		}
+		this.setState({activoUsuario: (this.state.activoUsuario ? false : true)});
 	}
 	
 	onChangeCheckPerfil(event) {
 		const opcionSeleccionada = event.target;
-		const perfilesUsuario = this.state.perfilesUsuario;
-		var found = false;
-		for(let i = 0; i < perfilesUsuario.length; i += 1) {
-			if(perfilesUsuario[i].idPerfil == opcionSeleccionada.value){
-				perfilesUsuario.splice(i,1);
-				found = true;
+		let perfilesChecked = this.state.perfilesChecked
+		for(let i = 0; i < perfilesChecked.length; i += 1) {
+			if(perfilesChecked[i].idPerfil == parseInt(opcionSeleccionada.value)){
+				perfilesChecked[i].checked = !perfilesChecked[i].checked
+				break
 			}
 		}
-		
-		if(!found){
-			perfilesUsuario.push({idPerfil : parseInt(opcionSeleccionada.value)});
-		}
-				
-		this.setState({ perfilesUsuario : perfilesUsuario });
+		this.setState({perfilesChecked: perfilesChecked})
 	}
 	
 	onClickCancelar(e) {
@@ -134,17 +141,18 @@ class UsuarioDatosForm extends Component {
 	}
 	
 	guardar(){
-		let perfil = this.state.perfilesUsuario;
-		console.log(this.state.perfilesUsuario);
+		let perfilesChecked = this.state.perfilesChecked;
 		let perfilesUsuario = [];
 		if(this.state.idUsuario !== ''){
-			this.state.perfilesUsuario.map( p =>{
-				perfilesUsuario.push({
-					idUsuario: this.state.idUsuario,
-					idPerfil: p.idPerfil
-				})
+			perfilesChecked.map(p =>{
+				if(p.checked){
+					perfilesUsuario.push({
+						idUsuario: this.state.idUsuario,
+						idPerfil: p.idPerfil
+					})
+				}
 			});
-			perfil = perfilesUsuario;
+			perfilesChecked = perfilesUsuario;
 		}
 		this.setState({
 			errors: {}, 
@@ -154,13 +162,13 @@ class UsuarioDatosForm extends Component {
 				nombre: this.state.nombreUsuario,
 				correoElectronico: this.state.correoElectronicoUsuario,
 				activo: this.state.activoUsuario,
-				perfiles: perfil
+				perfiles: perfilesChecked
 			}
 		}, () => {
 			if(this.state.idUsuario === ''){
-				this.props.guardarUsuario(this.state.usuario);
+				this.props.guardarUsuario(this.state.usuario, this.props.token, this.props.correoelectronico);
 			} else {
-				this.props.guardarUsuario(this.state.usuario);
+				this.props.actualizarUsuario(this.state.usuario, this.props.token, this.props.correoelectronico);
 			}
 		});
 	}
@@ -172,30 +180,25 @@ class UsuarioDatosForm extends Component {
 			correoElectronicoUsuario: '',
 			activoUsuario: true,
 			usuario: {},
-			perfilesUsuario: [],
+			perfilesChecked: [],
 			prompt: false
 		})
 	}
 	
 	render() {
-		const { idUsuario, nombreUsuario, correoElectronicoUsuario, activoUsuario, perfilesUsuario, errors, isLoading , errorMensaje, guardado} = this.state;
-		//console.log('UsuarioDatosForm:state', this.state);
-		//console.log('UsuarioDatosForm:props', this.props);
+		const { idUsuario, nombreUsuario, correoElectronicoUsuario, activoUsuario, perfilesChecked, errors, isLoading , errorMensaje, guardado} = this.state;
+		
 		let rowsActivoUsuario = [{
 			nombre: '',
 			identificador: 'true',
 			checked: activoUsuario
 		}];
 		let rowsPerfiles = [];
-		this.props.perfiles.map( perfil =>{
-			var checked = false;
-			if(perfilesUsuario.length > 0){
-				checked = perfilesUsuario.filter(p => p.idPerfil == perfil.idPerfil).length > 0 ? true : false;
-			}
+		this.props.perfiles.map((perfil, index) =>{
 			rowsPerfiles.push({
 				nombre: perfil.nombre,
-				identificador: perfil.idPerfil,
-				checked: checked
+				identificador: perfil.idperfil,
+				checked: typeof perfilesChecked[index] != "undefined" ? perfilesChecked[index].checked : true
 			})
 		});
 		
@@ -297,11 +300,12 @@ class UsuarioDatosForm extends Component {
 
 function mapStateToProps(state){
 	return{
-		guardarUsuarioResponse : state.reducerGestionarPermisos.guardarUsuarioResponse,
-		perfiles : state.reducerGestionarPermisos.obtenerPerfilesResponse,
-		usuario : state.reducerGestionarPermisos.obtenerUsuarioResponse,
-		errorResponse : state.reducerGestionarPermisos.errorResponse
+		guardarUsuarioResponse: state.reducerGestionarPermisos.guardarUsuarioResponse,
+		actualizarUsuarioResponse: state.reducerGestionarPermisos.actualizarUsuarioResponse,
+		perfiles: state.reducerGestionarPermisos.obtenerPerfilesResponse,
+		usuario: state.reducerGestionarPermisos.obtenerUsuarioResponse,
+		errorResponse: state.reducerGestionarPermisos.errorResponse
 	}
 }
 
-export default connect(mapStateToProps, { guardarUsuario, obtenerUsuario, obtenerPerfiles })(UsuarioDatosForm);
+export default connect(mapStateToProps, {guardarUsuario, actualizarUsuario, obtenerUsuario, obtenerPerfiles})(UsuarioDatosForm);

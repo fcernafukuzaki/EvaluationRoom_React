@@ -115,15 +115,27 @@ class EvaluationRoomApp extends Component {
 								<Route exact path="/listarClientes" render={()=>(<ClientsList errorResponse={this.state.errorMensaje} />)} />
 								<Route exact path="/registrarCliente" render={()=>(<ClientForm errorResponse={this.state.errorMensaje} />)} />
 								<Route exact path="/registrarPuestoLaboral" render={()=>(<PuestoLaboralForm errorResponse={this.state.errorMensaje} />)} />
-								<Route exact path="/registrarCandidato" render={()=>(this.set_body("/registrarCandidato", <CandidatoDatosForm usuario={usuario} errorResponse={this.state.errorMensaje} />))} />
+								<Route exact path="/registrarCandidato" 
+									   render={(path)=>(this.set_body(path.location.pathname, 
+									   				<CandidatoDatosForm usuario={usuario} errorResponse={this.state.errorMensaje} />))} />
 								<Route exact path="/listaCandidatos" render={()=>(<CandidatesListInfo token={usuario.token} errorResponse={this.state.errorMensaje} />)} />
 								<Route exact path="/listaCandidatos/resultados" render={()=>(<CandidatoResultadoForm errorResponse={this.state.errorMensaje} />)} />
 								<Route exact path="/asignarCandidatos" render={()=>(<CandidatesListJobPosition usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />
-								<Route exact path="/listaTestPsicologicos" render={()=>(this.set_body("/listaTestPsicologicos", <TestPsicologicos token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
-								<Route exact path="/registrarUsuario" render={()=>(<UsuarioDatosForm errorResponse={this.state.errorMensaje} />)} />
-								<Route exact path="/registrarPerfil" render={()=>(<PerfilDatosForm errorResponse={this.state.errorMensaje} />)} />
-								<Route exact path="/listaUsuarios" render={(path)=>(this.set_body(path.location.pathname, <UsuariosForm path={path} token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
-								<Route exact path="/listaPerfiles" render={()=>(<PerfilesForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/listaTestPsicologicos" 
+									   render={(path)=>(this.set_body(path.location.pathname, 
+									   				<TestPsicologicos token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
+								<Route exact path="/registrarUsuario" 
+									   render={(path)=>(this.set_body(path.location.pathname, 
+									   					<UsuarioDatosForm token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
+								<Route exact path="/registrarPerfil" 
+									   render={(path)=>(this.set_body(path.location.pathname, 
+									   					<PerfilDatosForm token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
+								<Route exact path="/listaUsuarios" 
+									   render={(path)=>(this.set_body(path.location.pathname, 
+									   					<UsuariosForm token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
+								<Route exact path="/listaPerfiles" 
+									   render={(path)=>(this.set_body(path.location.pathname, 
+									   					<PerfilesForm token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
 								<Route exact path="/selectionprocess" render={()=>(<SelectionProcessFormContainer usuario={usuario} errorResponse={this.state.errorMensaje} />)} />
 							</Fragment>
 						}

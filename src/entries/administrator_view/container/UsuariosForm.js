@@ -1,7 +1,6 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-
-import { Link } from 'react-router-dom';
+import React, {Component, Fragment} from 'react';
+import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
 import TablePaginado from '../../components/common/TablePaginado';
@@ -38,7 +37,6 @@ class UsuariosForm extends Component {
 			});
 		}
 		if (prevProps.obtenerUsuarioResponse !== this.props.obtenerUsuarioResponse) {
-			console.log(this.props.obtenerUsuarioResponse)
 			this.setState({
 				isLoading: Object.entries(this.props.obtenerUsuarioResponse).length > 0 ? false : true,
 				listaPerfilesUsuario: this.props.obtenerUsuarioResponse.perfiles
@@ -47,7 +45,7 @@ class UsuariosForm extends Component {
 		if (prevProps.errorResponse !== this.props.errorResponse) {
 			this.setState({
 				isLoading: false,
-				errorMensaje: this.props.errorResponse
+				errorMensaje: {mensaje: this.props.errorResponse.user_message}
 			})
 		}
 	}
@@ -135,10 +133,10 @@ class UsuariosForm extends Component {
 		}]
 		
 		var camposBusqueda = [{
-				key: 'idFiltroUsuariosNombre',
-				label: "Filtrar por nombre de usuario",
-				onChange: this.filtrarListaUsuarios.bind(this),
-				valor: filtroUsuariosNombre
+			key: 'idFiltroUsuariosNombre',
+			label: "Filtrar por nombre de usuario",
+			onChange: this.filtrarListaUsuarios.bind(this),
+			valor: filtroUsuariosNombre
 		}];
 		
 		return (
