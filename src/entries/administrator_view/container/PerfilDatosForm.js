@@ -12,7 +12,7 @@ import CargandoImagen from '../../components/common/CargandoImagen';
 
 import validateInput from '../../components/validate/Perfil';
 
-import { guardarPerfil, obtenerPerfil } from '../../../actions/actionUsuario';
+import { guardarPerfil, obtenerPerfil } from '../../../actions/admin_view/actionGestionarPermisos';
 
 class PerfilDatosForm extends Component {
 	constructor(props){
@@ -190,9 +190,9 @@ class PerfilDatosForm extends Component {
 
 function mapStateToProps(state){
 	return{
-		guardarPerfilResponse : state.reducerUsuario.guardarPerfilResponse,
-		obtenerPerfilResponse : state.reducerUsuario.obtenerPerfilResponse,
-		errorResponse : state.reducerUsuario.errorResponse
+		guardarPerfilResponse : state.reducerGestionarPermisos.guardarPerfilResponse,
+		obtenerPerfilResponse : state.reducerGestionarPermisos.obtenerPerfilResponse,
+		errorResponse : state.reducerGestionarPermisos.errorResponse
 	}
 }
 

@@ -122,7 +122,7 @@ class EvaluationRoomApp extends Component {
 								<Route exact path="/listaTestPsicologicos" render={()=>(this.set_body("/listaTestPsicologicos", <TestPsicologicos token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
 								<Route exact path="/registrarUsuario" render={()=>(<UsuarioDatosForm errorResponse={this.state.errorMensaje} />)} />
 								<Route exact path="/registrarPerfil" render={()=>(<PerfilDatosForm errorResponse={this.state.errorMensaje} />)} />
-								<Route exact path="/listaUsuarios" render={()=>(<UsuariosForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/listaUsuarios" render={(path)=>(this.set_body(path.location.pathname, <UsuariosForm path={path} token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
 								<Route exact path="/listaPerfiles" render={()=>(<PerfilesForm errorResponse={this.state.errorMensaje} />)} />
 								<Route exact path="/selectionprocess" render={()=>(<SelectionProcessFormContainer usuario={usuario} errorResponse={this.state.errorMensaje} />)} />
 							</Fragment>

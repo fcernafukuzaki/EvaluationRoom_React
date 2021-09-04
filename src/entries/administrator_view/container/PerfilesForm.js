@@ -8,7 +8,7 @@ import TablePaginado from '../../components/common/TablePaginado';
 
 import {encriptarAES} from '../../common/components/encriptar_aes'
 
-import { obtenerPerfiles } from '../../../actions/actionUsuario';
+import { obtenerPerfiles } from '../../../actions/admin_view/actionGestionarPermisos';
 
 class PerfilesForm extends Component {
 	constructor(props){
@@ -127,7 +127,7 @@ class PerfilesForm extends Component {
 
 function mapStateToProps(state){
 	return{
-		obtenerPerfilesResponse : state.reducerUsuario.obtenerPerfilesResponse
+		obtenerPerfilesResponse : state.reducerGestionarPermisos.obtenerPerfilesResponse
 	}
 }
 

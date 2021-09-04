@@ -7,7 +7,7 @@ import {
 	PERFIL_OBTENER,
 	PERFIL_GUARDAR,
 	ERROR
-	} from '../actions/actionTypes';
+	} from '../../actions/actionTypes';
 
 const initialState = {
 	guardarUsuarioResponse: [],
@@ -20,7 +20,7 @@ const initialState = {
 	errorResponse: []
 }
 
-export function actionUsuario(state = initialState, action){
+export function actionGestionarPermisos(state = initialState, action){
 	switch (action.type) {
 		case USUARIO_GUARDAR:
 			return Object.assign({}, state, {guardarUsuarioResponse: action.payload})

@@ -11,7 +11,7 @@ import CargandoImagen from '../../components/common/CargandoImagen';
 
 import validateInput from '../../components/validate/Usuario';
 
-import { guardarUsuario, obtenerUsuario, obtenerPerfiles } from '../../../actions/actionUsuario';
+import { guardarUsuario, obtenerUsuario, obtenerPerfiles } from '../../../actions/admin_view/actionGestionarPermisos';
 
 class UsuarioDatosForm extends Component {
 	constructor(props){
@@ -297,10 +297,10 @@ class UsuarioDatosForm extends Component {
 
 function mapStateToProps(state){
 	return{
-		guardarUsuarioResponse : state.reducerUsuario.guardarUsuarioResponse,
-		perfiles : state.reducerUsuario.obtenerPerfilesResponse,
-		usuario : state.reducerUsuario.obtenerUsuarioResponse,
-		errorResponse : state.reducerUsuario.errorResponse
+		guardarUsuarioResponse : state.reducerGestionarPermisos.guardarUsuarioResponse,
+		perfiles : state.reducerGestionarPermisos.obtenerPerfilesResponse,
+		usuario : state.reducerGestionarPermisos.obtenerUsuarioResponse,
+		errorResponse : state.reducerGestionarPermisos.errorResponse
 	}
 }
 
