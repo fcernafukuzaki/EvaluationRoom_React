@@ -3,7 +3,6 @@ export const ERROR = 'ERROR'
 export const OBJ_ERROR_TIME_OUT = {status: 'ERROR_TIME_OUT', mensaje: 'Error de conexión a internet.'}
 //USUARIO
 export const USUARIO_GUARDAR = 'USUARIO_GUARDAR'
-export const USUARIO_ACTUALIZAR = 'USUARIO_ACTUALIZAR'
 export const USUARIOS_OBTENER = 'USUARIOS_OBTENER'
 export const USUARIO_OBTENER_OAUTH = 'USUARIO_OBTENER_OAUTH'
 export const USUARIO_OBTENER = 'USUARIO_OBTENER'

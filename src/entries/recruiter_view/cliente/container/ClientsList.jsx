@@ -1,11 +1,14 @@
-import React, {Component, Fragment} from 'react';
-import {connect} from 'react-redux';
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+
 import MensajeError from '../../../components/common/MensajeError';
 import CargandoImagen from '../../../components/common/CargandoImagen';
 import TablePaginado from '../../../components/common/TablePaginado';
+
 import {ClientButtonAdd, ClientButtonUpdate, ClientButtonAssignJobPosition, ClientButtonAssignMoreJobPosition}  from '../components/client_button'
 import {JobPositionButtonUpdate, JobPositionButtonAssignCandidates} from '../components/jobposition_button'
 import {encriptarAES} from '../../../common/components/encriptar_aes';
+
 import {obtenerClientes, getJobPosition} from '../../../../actions/actionCliente';
 
 class ClientsList extends Component {
@@ -21,6 +24,7 @@ class ClientsList extends Component {
 			errors: {},
 			isLoading: true,
 			errorMensaje: '',
+			clientes:{},
 			rutaRegistrarCliente: '/registrarCliente',
 			rutaRegistrarPuestoLaboral: '/registrarPuestoLaboral',
 			rutaAsignarCandidatos: '/asignarCandidatos'
@@ -34,15 +38,13 @@ class ClientsList extends Component {
 	}
 	
 	componentDidUpdate(prevProps, prevState) {
-		if (prevProps.obtenerClientesResponse !== this.props.obtenerClientesResponse) {
+		if (prevProps.clientes !== this.props.clientes) {
 			this.setState({
-				isLoading: Object.entries(this.props.obtenerClientesResponse).length > 0 ? false : true
+				isLoading: Object.entries(this.props.clientes).length > 0 ? false : true
 			});
         }
-        if(prevProps.getJobPositionResponse !== this.props.getJobPositionResponse){
-            this.setState({
-				isLoading: false
-			})
+        if(prevProps.getJobPositionResponse !== this.props.getJobPosition){
+            console.log(this.props.getJobPositionResponse)
         }
 		if (prevProps.errorResponse !== this.props.errorResponse) {
 			this.setState({
@@ -60,7 +62,7 @@ class ClientsList extends Component {
 		let filtroClientesNombre = e.target.value.toLowerCase();
 		this.setState({
 			filtroClientesNombre: filtroClientesNombre.toLowerCase(),
-			clientesFiltro: this.props.obtenerClientesResponse.filter(c => c.nombre.toLowerCase().indexOf(filtroClientesNombre) > -1),
+			clientesFiltro: this.props.clientes.filter( c => c.nombre.toLowerCase().indexOf(filtroClientesNombre) > -1 ),
 			filtroPuestosLaboralesNombre: '',
 			puestosLaboralesFiltro: [],
 			idclient: 0
@@ -71,7 +73,7 @@ class ClientsList extends Component {
 		let filtroPuestosLaboralesNombre = e.target.value.toLowerCase();
 		this.setState({
 			filtroPuestosLaboralesNombre: filtroPuestosLaboralesNombre.toLowerCase(),
-			puestosLaboralesFiltro: this.props.getJobPositionResponse.filter(p => p.nombre.toLowerCase().indexOf(filtroPuestosLaboralesNombre) > -1)
+			puestosLaboralesFiltro: this.props.getJobPositionResponse.filter( p => p.nombre.toLowerCase().indexOf(filtroPuestosLaboralesNombre) > -1 )
 		})
 	}
 	
@@ -81,9 +83,8 @@ class ClientsList extends Component {
 	
 	verPuestosLaborales(cliente){
 		this.setState({
-			isLoading: true,
-			idclient: cliente.idcliente, 
-			nameClient: cliente.nombre,
+			idclient : cliente.idcliente, 
+			nameClient : cliente.nombre,
 			puestosLaboralesFiltro: this.props.getJobPositionResponse
 		});
         this.props.getJobPosition(cliente.idcliente)
@@ -182,22 +183,23 @@ class ClientsList extends Component {
 		}]
 		
 		var camposBusqueda = [{
-			key: 'idFiltroClientesNombre',
-			label: "Filtrar por nombre de cliente",
-			onChange: this.filtrarListaClientes.bind(this),
-			valor: filtroClientesNombre
+				key: 'idFiltroClientesNombre',
+				label: "Filtrar por nombre de cliente",
+				onChange: this.filtrarListaClientes.bind(this),
+				valor: filtroClientesNombre
 		}];
 		
 		var camposBusquedaPuestoLaboral = [{
-			key: 'idFiltroPuestosLaboralesNombre',
-			label: "Filtrar por nombre del puesto laboral",
-			onChange: this.filtrarListaPuestosLaborales.bind(this),
-			valor: filtroPuestosLaboralesNombre
+				key: 'idFiltroPuestosLaboralesNombre',
+				label: "Filtrar por nombre del puesto laboral",
+				onChange: this.filtrarListaPuestosLaborales.bind(this),
+				valor: filtroPuestosLaboralesNombre
 		}];
 		
 		return (
 			<div className="mt-3 mx-auto ancho1200">
 				{isLoading && <CargandoImagen />}
+				{!isLoading && 
 				<Fragment>
 					<div className="mb-3">
 						<ClientButtonAdd 
@@ -210,7 +212,7 @@ class ClientsList extends Component {
 						tablaEstilo={"width200"}
 						tableBody={this.generarTablaBodyClientes.bind(this)}
 						registrosPorPagina={10} 
-						registros={filtroClientesNombre.length > 0 ? (clientesFiltro.length > 0 ? clientesFiltro : []) : this.props.obtenerClientesResponse} 
+						registros={filtroClientesNombre.length > 0 ? (clientesFiltro.length > 0 ? clientesFiltro : []) : this.props.clientes} 
 						camposBusqueda={camposBusqueda} />
 					{idclient > 0 &&
 					<Fragment>
@@ -226,6 +228,7 @@ class ClientsList extends Component {
 					</Fragment>
 					}
 				</Fragment>
+				}
 				{errorMensaje != '' && <MensajeError error={errorMensaje} />}
 			</div>
 		);
@@ -234,7 +237,7 @@ class ClientsList extends Component {
 
 function mapStateToProps(state){
 	return{
-        obtenerClientesResponse: state.reducerCliente.obtenerClientesResponse,
+        clientes : state.reducerCliente.obtenerClientesResponse,
         getJobPositionResponse: state.reducerCliente.getJobPositionResponse,
 	}
 }

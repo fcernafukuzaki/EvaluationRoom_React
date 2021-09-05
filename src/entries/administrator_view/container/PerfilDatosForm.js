@@ -1,14 +1,18 @@
-import React, {Component, Fragment} from 'react';
-import {connect} from 'react-redux';
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {Prompt} from 'react-router';
+
+import { Prompt } from 'react-router';
+
 import Formulario from '../../components/common/Formulario';
 import {obtenerValorParametro} from '../../common/components/encriptar_aes';
 import MensajeGuardarExitoso from '../../components/common/MensajeGuardarExitoso';
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
+
 import validateInput from '../../components/validate/Perfil';
-import {guardarPerfil, obtenerPerfil} from '../../../actions/admin_view/actionGestionarPermisos';
+
+import { guardarPerfil, obtenerPerfil } from '../../../actions/actionUsuario';
 
 class PerfilDatosForm extends Component {
 	constructor(props){
@@ -32,7 +36,7 @@ class PerfilDatosForm extends Component {
 	
 	componentWillMount() {
 		if(obtenerValorParametro('id') != null){
-			this.props.obtenerPerfil(obtenerValorParametro('id'), this.props.token, this.props.correoelectronico);
+			this.props.obtenerPerfil(obtenerValorParametro('id'));
 		} else {
 			this.setState({
 				isLoading: false
@@ -57,9 +61,16 @@ class PerfilDatosForm extends Component {
 			})
 		}
 		if (prevProps.errorResponse !== this.props.errorResponse) {
-			this.setState({
-				errorMensaje: {mensaje: this.props.errorResponse.user_message}
-			})
+			if(409 == this.props.errorResponse.status){
+				this.setState({
+					errors : {nombrePerfil: this.props.errorResponse.mensaje},
+					isLoading: false
+				})
+			} else {
+				this.setState({
+					errorMensaje: this.props.errorResponse
+				})
+			}
 		}
 	}
 	
@@ -81,16 +92,16 @@ class PerfilDatosForm extends Component {
 				}
 			}, () => {
 				if(this.state.idPerfil === ''){
-					this.props.guardarPerfil(this.state.perfil, this.props.token, this.props.correoelectronico);
+					this.props.guardarPerfil(this.state.perfil);
 				} else {
-					this.props.guardarPerfil(this.state.perfil, this.props.token, this.props.correoelectronico);
+					this.props.guardarPerfil(this.state.perfil);
 				}
 			});
 		}
 	}
 	
 	onChange(e) {
-		this.setState({[e.target.name]: e.target.value, prompt: !!(e.target.value.length)});
+		this.setState({ [e.target.name]: e.target.value, prompt: !!(e.target.value.length) });
 	}
 	
 	onClickCancelar(e) {
@@ -115,7 +126,7 @@ class PerfilDatosForm extends Component {
 	
 	render() {
 		const { idPerfil, nombrePerfil, nombrePerfilForm, errors, isLoading , errorMensaje, guardado} = this.state;
-		
+		//console.log('PerfilDatosForm', this.state);
 		var form = {
 			titulo: (idPerfil == '' ? 'Registrar perfil' : ('Datos de perfil ').concat(nombrePerfilForm)),
 			campos: [
@@ -179,9 +190,9 @@ class PerfilDatosForm extends Component {
 
 function mapStateToProps(state){
 	return{
-		guardarPerfilResponse: state.reducerGestionarPermisos.guardarPerfilResponse,
-		obtenerPerfilResponse: state.reducerGestionarPermisos.obtenerPerfilResponse,
-		errorResponse: state.reducerGestionarPermisos.errorResponse
+		guardarPerfilResponse : state.reducerUsuario.guardarPerfilResponse,
+		obtenerPerfilResponse : state.reducerUsuario.obtenerPerfilResponse,
+		errorResponse : state.reducerUsuario.errorResponse
 	}
 }
 
