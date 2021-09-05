@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-import { actionUsuario } from './reducerUsuario';
+import { actionGestionarPermisos } from './admin_view/reducerGestionarPermisos';
 import { actionCliente } from './reducerCliente';
 import { actionCandidato } from './reducerCandidato';
 import { actionReclutador } from './reducerReclutador';
@@ -17,7 +17,7 @@ const rootReducer = combineReducers({
 	reducerLogin: actionLogin,
 	reducerMenu: actionMenu,
 	reducerCandidateForm: actionCandidateForm,
-	reducerUsuario: actionUsuario,
+	reducerGestionarPermisos: actionGestionarPermisos,
 	reducerCliente: actionCliente,
 	reducerCandidato: actionCandidato,
 	reducerReclutador: actionReclutador,
