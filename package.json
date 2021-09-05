@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@nivo/pie": "^0.62.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.3",
     "classnames": "^2.2.6",
     "crypto-js": "^4.0.0",
     "file-saver": "^2.0.2",
