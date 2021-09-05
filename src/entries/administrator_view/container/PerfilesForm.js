@@ -1,14 +1,11 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-
-import { Link } from 'react-router-dom';
+import React, {Component, Fragment} from 'react';
+import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 import MensajeError from '../../components/common/MensajeError';
 import CargandoImagen from '../../components/common/CargandoImagen';
 import TablePaginado from '../../components/common/TablePaginado';
-
 import {encriptarAES} from '../../common/components/encriptar_aes'
-
-import { obtenerPerfiles } from '../../../actions/actionUsuario';
+import {obtenerPerfiles} from '../../../actions/admin_view/actionGestionarPermisos';
 
 class PerfilesForm extends Component {
 	constructor(props){
@@ -26,7 +23,7 @@ class PerfilesForm extends Component {
 	}
 	
 	componentWillMount() {
-		this.props.obtenerPerfiles();
+		this.props.obtenerPerfiles(this.props.token, this.props.correoelectronico);
 	}
 	
 	componentDidUpdate(prevProps, prevState) {
@@ -44,20 +41,20 @@ class PerfilesForm extends Component {
 	}
 	
 	onChange(e) {
-		this.setState({ [e.target.name]: e.target.value });
+		this.setState({[e.target.name]: e.target.value});
 	}
 	
 	filtrarListaPerfiles(e){
 		let filtroPerfilesNombre = e.target.value.toLowerCase();
 		this.setState({
 			filtroPerfilesNombre: filtroPerfilesNombre.toLowerCase(),
-			perfilesFiltro: this.props.obtenerPerfilesResponse.filter( c => c.nombre.toLowerCase().indexOf(filtroPerfilesNombre) > -1 )
+			perfilesFiltro: this.props.obtenerPerfilesResponse.filter(c => c.nombre.toLowerCase().indexOf(filtroPerfilesNombre) > -1)
 		})
 	}
 	
 	generarTablaBodyPerfiles(row){
 		if(row != null){
-			var hashidPerfil = encriptarAES(row.idPerfil.toString());
+			var hashidPerfil = encriptarAES(row.idperfil.toString());
 			var actualizarPerfil = (
 				<Link to={{ pathname: this.state.rutaRegistrarPerfil, search: `?id=${hashidPerfil}`, state: { } }}>
 					<button type="button" className="btn btn-outline-secondary btn-sm" title="Actualizar datos">
@@ -65,8 +62,8 @@ class PerfilesForm extends Component {
 					</button>
 				</Link>
 			);
-			return (<tr key={row.idPerfil} >
-						<td>{row.idPerfil}</td>
+			return (<tr key={row.idperfil} >
+						<td>{row.idperfil}</td>
 						<td>{row.nombre}</td>
 						<td>{actualizarPerfil}</td>
 					</tr>);
@@ -77,8 +74,7 @@ class PerfilesForm extends Component {
 	
 	render() {
 		const { perfilesFiltro, filtroPerfilesNombre, errors, isLoading, errorMensaje } = this.state;
-		//console.log('PerfilesForm:state', this.state);
-		//console.log('PerfilesForm:props', this.props);
+		
 		var tableHeadPerfiles = [{
 				key: 'idPerfil',
 				nombre: 'N°'
@@ -91,16 +87,15 @@ class PerfilesForm extends Component {
 		}]
 		
 		var camposBusqueda = [{
-				key: 'idFiltroPerfilesNombre',
-				label: "Filtrar por nombre de perfil",
-				onChange: this.filtrarListaPerfiles.bind(this),
-				valor: filtroPerfilesNombre
+			key: 'idFiltroPerfilesNombre',
+			label: "Filtrar por nombre de perfil",
+			onChange: this.filtrarListaPerfiles.bind(this),
+			valor: filtroPerfilesNombre
 		}];
 		
 		return (
 			<div className="mt-3 mx-auto ancho1200">
 				{isLoading && <CargandoImagen />}
-				{!isLoading && 
 				<Fragment>
 					<div className="mb-3">
 						<Link to={{ pathname: this.state.rutaRegistrarPerfil, state: { } }}>
@@ -118,7 +113,6 @@ class PerfilesForm extends Component {
 						registros={filtroPerfilesNombre.length > 0 ? (perfilesFiltro.length > 0 ? perfilesFiltro : []) : this.props.obtenerPerfilesResponse} 
 						camposBusqueda={camposBusqueda} />
 				</Fragment>
-				}
 				{errorMensaje != '' && <MensajeError error={errorMensaje} />}
 			</div>
 		);
@@ -127,8 +121,8 @@ class PerfilesForm extends Component {
 
 function mapStateToProps(state){
 	return{
-		obtenerPerfilesResponse : state.reducerUsuario.obtenerPerfilesResponse
+		obtenerPerfilesResponse: state.reducerGestionarPermisos.obtenerPerfilesResponse
 	}
 }
 
-export default connect(mapStateToProps, { obtenerPerfiles })(PerfilesForm);
+export default connect(mapStateToProps, {obtenerPerfiles})(PerfilesForm);
