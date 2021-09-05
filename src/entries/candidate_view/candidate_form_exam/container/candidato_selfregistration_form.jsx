@@ -739,7 +739,7 @@ class CandidatoDatosForm extends Component {
 					id: 'correoElectronico',
 					label: 'Correo electrónico : ',
 					type: 'text',
-					value: correoElectronico.toLowerCase(),
+					value: correoElectronico.toLowerCase().trim(),
 					error: errors.correoElectronico,
 					onChange: this.onChange,
 					labelClass: 'col-md-3',
