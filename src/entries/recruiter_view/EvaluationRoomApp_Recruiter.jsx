@@ -74,8 +74,9 @@ class EvaluationRoomApp extends Component {
 	}
 
 	datosUsuario(response){
-		this.setState({isLoading:true, usuario_nombre: response.profileObj.name, token:response.accessToken});
-		this.props.obtenerUsuarioOAuth(response.accessToken, response.profileObj.email);
+		const profile = response.profileObj
+		this.setState({isLoading:true, usuario_nombre: typeof profile != "undefined" ? profile.name : "", token:response.accessToken});
+		this.props.obtenerUsuarioOAuth(response.accessToken, typeof profile != "undefined" ? profile.email : "");
 	}
 
 	set_body(path, content){
