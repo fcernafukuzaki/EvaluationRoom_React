@@ -112,9 +112,15 @@ class EvaluationRoomApp extends Component {
 							<DashBoard token={usuario.token} correoelectronico={usuario.correoelectronico} idusuario={usuario.idusuario} /></Fragment>)}
 						{flagUsuario &&
 							<Fragment>
-								<Route exact path="/listarClientes" render={()=>(<ClientsList errorResponse={this.state.errorMensaje} />)} />
-								<Route exact path="/registrarCliente" render={()=>(<ClientForm errorResponse={this.state.errorMensaje} />)} />
-								<Route exact path="/registrarPuestoLaboral" render={()=>(<PuestoLaboralForm errorResponse={this.state.errorMensaje} />)} />
+								<Route exact path="/listarClientes" 
+									   render={(path)=>(this.set_body(path.location.pathname, 
+														<ClientsList token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
+								<Route exact path="/registrarCliente" 
+									   render={(path)=>(this.set_body(path.location.pathname, 
+									   					<ClientForm errorResponse={this.state.errorMensaje} />))} />
+								<Route exact path="/registrarPuestoLaboral" 
+									   render={(path)=>(this.set_body(path.location.pathname, 
+									   					<PuestoLaboralForm errorResponse={this.state.errorMensaje} />))} />
 								<Route exact path="/registrarCandidato" 
 									   render={(path)=>(this.set_body(path.location.pathname, 
 									   				<CandidatoDatosForm usuario={usuario} errorResponse={this.state.errorMensaje} />))} />
@@ -123,7 +129,7 @@ class EvaluationRoomApp extends Component {
 								<Route exact path="/asignarCandidatos" render={()=>(<CandidatesListJobPosition usuario={this.state.usuario} errorResponse={this.state.errorMensaje} />)} />
 								<Route exact path="/listaTestPsicologicos" 
 									   render={(path)=>(this.set_body(path.location.pathname, 
-									   				<TestPsicologicos token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
+									   					<TestPsicologicos token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
 								<Route exact path="/registrarUsuario" 
 									   render={(path)=>(this.set_body(path.location.pathname, 
 									   					<UsuarioDatosForm token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
@@ -149,8 +155,8 @@ class EvaluationRoomApp extends Component {
 
 function mapStateToProps(state){
 	return{
-		obtenerUsuarioOAuthResponse : state.reducerLogin.obtenerUsuarioOAuthResponse,
-		errorResponse : state.reducerLogin.errorResponse
+		obtenerUsuarioOAuthResponse: state.reducerLogin.obtenerUsuarioOAuthResponse,
+		errorResponse: state.reducerLogin.errorResponse
 	}
 }
 
