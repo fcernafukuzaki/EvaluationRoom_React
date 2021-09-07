@@ -15,11 +15,12 @@ import {
 } from './actionTypes';
 import {EVALUATIONROOM_HOST} from './actionEnpoints';
 
-export function addClient(client) {
-	console.log(client)
+export function obtenerClientes(token, correoElectronico) {
 	return (dispatch, getState) => {
-		axios.post((EVALUATIONROOM_HOST).concat('/v1/client'), client)
-			.then((response) => { dispatch({ type: CLIENTE_GUARDAR, payload: response.data }) })
+		const header = {headers: {Authorization:token, correoElectronico:correoElectronico}}
+		const url = (EVALUATIONROOM_HOST).concat('/v1/clients/')
+		axios.get(url, header)
+			.then((response) => { dispatch({ type: CLIENTES_OBTENER, payload: response.data.body.clients }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
@@ -30,11 +31,12 @@ export function addClient(client) {
 	}
 }
 
-export function updateClient(client) {
-	console.log(client)
+export function addClient(body, token, correoElectronico) {
 	return (dispatch, getState) => {
-		axios.put((EVALUATIONROOM_HOST).concat('/v1/client'), client)
-			.then((response) => { dispatch({ type: CLIENTE_ACTUALIZAR, payload: response.data }) })
+		const header = {headers: {Authorization:token, correoElectronico:correoElectronico}}
+		const url = (EVALUATIONROOM_HOST).concat('/v1/clients/')
+		axios.post(url, body, header)
+			.then((response) => { dispatch({ type: CLIENTE_GUARDAR, payload: response.data.body.client }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
@@ -45,10 +47,12 @@ export function updateClient(client) {
 	}
 }
 
-export function obtenerCliente(idclient) {
+export function updateClient(body, token, correoElectronico) {
 	return (dispatch, getState) => {
-		axios.get((EVALUATIONROOM_HOST).concat('/v1/client').concat(idclient ? ('/' + idclient) : ''))
-			.then((response) => { dispatch({ type: CLIENTE_OBTENER, payload: response.data }) })
+		const header = {headers: {Authorization:token, correoElectronico:correoElectronico}}
+		const url = (EVALUATIONROOM_HOST).concat('/v1/clients/')
+		axios.put(url, body, header)
+			.then((response) => { dispatch({ type: CLIENTE_ACTUALIZAR, payload: response.data.body.client }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
@@ -59,10 +63,12 @@ export function obtenerCliente(idclient) {
 	}
 }
 
-export function obtenerClientes() {
+export function obtenerCliente(idClient, token, correoElectronico) {
 	return (dispatch, getState) => {
-		axios.get((EVALUATIONROOM_HOST).concat('/v1/client_info'))
-			.then((response) => { dispatch({ type: CLIENTES_OBTENER, payload: response.data }) })
+		const header = {headers: {Authorization:token, correoElectronico:correoElectronico}}
+		const url = (EVALUATIONROOM_HOST).concat('/v1/clients/', idClient)
+		axios.get(url, header)
+			.then((response) => { dispatch({ type: CLIENTE_OBTENER, payload: response.data.body.client }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })

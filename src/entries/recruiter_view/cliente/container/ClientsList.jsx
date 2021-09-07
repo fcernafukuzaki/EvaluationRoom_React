@@ -30,7 +30,7 @@ class ClientsList extends Component {
 	}
 	
 	componentWillMount() {
-		this.props.obtenerClientes();
+		this.props.obtenerClientes(this.props.token, this.props.correoelectronico);
 	}
 	
 	componentDidUpdate(prevProps, prevState) {
@@ -53,7 +53,7 @@ class ClientsList extends Component {
 	}
 	
 	onChange(e) {
-		this.setState({ [e.target.name]: e.target.value });
+		this.setState({[e.target.name]: e.target.value});
 	}
 	
 	filtrarListaClientes(e){

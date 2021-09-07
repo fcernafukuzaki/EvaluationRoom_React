@@ -1,16 +1,13 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-import { Prompt } from 'react-router';
-
+import React, {Component, Fragment} from 'react';
+import {connect} from 'react-redux';
+import {Prompt} from 'react-router';
 import Formulario from '../../../components/common/Formulario';
 import {obtenerValorParametro} from '../../../common/components/encriptar_aes';
 import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExitoso';
 import MensajeError from '../../../components/common/MensajeError';
 import CargandoImagen from '../../../components/common/CargandoImagen';
-
 import validateInput from '../components/client_form_validate';
-
-import { addClient, updateClient, obtenerCliente } from '../../../../actions/actionCliente';
+import {addClient, updateClient, obtenerCliente} from '../../../../actions/actionCliente';
 
 class ClientForm extends Component {
 	constructor(props){
@@ -35,7 +32,7 @@ class ClientForm extends Component {
 	
 	componentWillMount() {
 		if(obtenerValorParametro('id') != null){
-			this.props.obtenerCliente(obtenerValorParametro('id'));
+			this.props.obtenerCliente(obtenerValorParametro('id'), this.props.token, this.props.correoelectronico);
 		} else {
 			this.setState({
 				isLoading: false
@@ -88,9 +85,9 @@ class ClientForm extends Component {
                     }
 			}, () => {
 				if(this.state.idclient === ''){
-					this.props.addClient(this.state.cliente);
+					this.props.addClient(this.state.cliente, this.props.token, this.props.correoelectronico);
 				} else {
-					this.props.updateClient(this.state.cliente);
+					this.props.updateClient(this.state.cliente, this.props.token, this.props.correoelectronico);
 				}
 			});
 		}

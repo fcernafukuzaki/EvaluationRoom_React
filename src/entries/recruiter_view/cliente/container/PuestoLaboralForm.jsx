@@ -1,7 +1,6 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-import { Prompt } from 'react-router';
-
+import React, {Component, Fragment} from 'react';
+import {connect} from 'react-redux';
+import {Prompt} from 'react-router';
 import Formulario from '../../../components/common/Formulario';
 import {obtenerValorParametro} from '../../../common/components/encriptar_aes';
 import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExitoso';
@@ -9,7 +8,6 @@ import MensajeError from '../../../components/common/MensajeError';
 import CargandoImagen from '../../../components/common/CargandoImagen';
 import {getDateFormat} from '../../../common/components/date_util'
 import validateInput from '../components/jobposition_form_validate';
-
 import {guardarPuestosLaborales, actualizarPuestosLaborales, getJobPosition} from '../../../../actions/actionCliente';
 
 class PuestoLaboralForm extends Component {

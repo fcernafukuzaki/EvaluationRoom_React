@@ -118,7 +118,7 @@ class EvaluationRoomApp extends Component {
 														<ClientsList token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
 								<Route exact path="/registrarCliente" 
 									   render={(path)=>(this.set_body(path.location.pathname, 
-									   					<ClientForm errorResponse={this.state.errorMensaje} />))} />
+									   					<ClientForm token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
 								<Route exact path="/registrarPuestoLaboral" 
 									   render={(path)=>(this.set_body(path.location.pathname, 
 									   					<PuestoLaboralForm errorResponse={this.state.errorMensaje} />))} />
