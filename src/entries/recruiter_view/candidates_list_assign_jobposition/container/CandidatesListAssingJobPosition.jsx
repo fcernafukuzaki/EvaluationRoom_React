@@ -1,12 +1,10 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-
-import { Link } from 'react-router-dom';
-
+import React, {Component, Fragment} from 'react';
+import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 import {encriptarAES, obtenerValorParametro} from '../../../common/components/encriptar_aes';
 import {getNewDateTimeFormat, getDateFormat} from '../../../common/components/date_util'
 import {getSelectionProcess} from '../../../../actions/actionSelectionProcess';
-import {obtenerCliente, addCandidateToJobPosition, deleteCandidateToJobPosition} from '../../../../actions/actionCliente';
+import {obtenerCliente, addCandidateToJobPosition, deleteCandidateToJobPosition} from '../../../../actions/selection_process/actionCliente';
 import {getCandidates, obtenerPuestoLaboralCandidato, generarInforme } from '../../../../actions/actionCandidato';
 import MensajeError from '../../../components/common/MensajeError';
 import CargandoImagen from '../../../components/common/CargandoImagen';
@@ -53,7 +51,7 @@ class CandidatesListJobPosition extends Component {
 		if(obtenerValorParametro('id') != null){
 			var ids = obtenerValorParametro('id');
 			var id = ids.split('_');//idclient, idjobposition
-			this.props.obtenerCliente(id[0]);
+			this.props.obtenerCliente(id[0], this.props.token, this.props.correoelectronico);
 			this.props.getSelectionProcess(id[0], id[1], null, this.props.usuario.token);
 		}
 	}

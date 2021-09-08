@@ -1,7 +1,6 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-import { Prompt } from 'react-router';
-
+import React, {Component, Fragment} from 'react';
+import {connect} from 'react-redux';
+import {Prompt} from 'react-router';
 import Formulario from '../../../components/common/Formulario';
 import {obtenerValorParametro} from '../../../common/components/encriptar_aes';
 import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExitoso';
@@ -9,8 +8,7 @@ import MensajeError from '../../../components/common/MensajeError';
 import CargandoImagen from '../../../components/common/CargandoImagen';
 import {getDateFormat} from '../../../common/components/date_util'
 import validateInput from '../components/jobposition_form_validate';
-
-import {guardarPuestosLaborales, actualizarPuestosLaborales, getJobPosition} from '../../../../actions/actionCliente';
+import {guardarPuestosLaborales, actualizarPuestosLaborales, getJobPosition} from '../../../../actions/selection_process/actionCliente';
 
 class PuestoLaboralForm extends Component {
 	constructor(props){
@@ -42,7 +40,13 @@ class PuestoLaboralForm extends Component {
 		if(obtenerValorParametro('id') != null){
 			var ids = obtenerValorParametro('id');
 			var id = ids.split('_');//idclient, idjobposition
-			this.props.getJobPosition(id[0], id[1]);
+			if(typeof id[1] != "undefined"){
+				this.props.getJobPosition(id[0], id[1], this.props.token, this.props.correoelectronico);
+			} else {
+				this.setState({
+					isLoading: false
+				});
+			}
 		} else {
 			this.setState({
 				isLoading: false
@@ -105,9 +109,9 @@ class PuestoLaboralForm extends Component {
 					}
 			}, () => {
 				if(this.state.idjobposition === ''){
-					this.props.guardarPuestosLaborales(this.state.jobposition);
+					this.props.guardarPuestosLaborales(this.state.jobposition, this.props.token, this.props.correoelectronico);
 				} else {
-					this.props.actualizarPuestosLaborales(this.state.jobposition);
+					this.props.actualizarPuestosLaborales(this.state.jobposition, this.props.token, this.props.correoelectronico);
 				}
 			});
 		}
@@ -205,11 +209,11 @@ class PuestoLaboralForm extends Component {
 
 function mapStateToProps(state){
 	return{
-		guardarPuestosLaboralesResponse : state.reducerCliente.guardarPuestosLaboralesResponse,
+		guardarPuestosLaboralesResponse: state.reducerCliente.guardarPuestosLaboralesResponse,
 		actualizarPuestosLaboralesResponse: state.reducerCliente.actualizarPuestosLaboralesResponse,
-		puestoLaboral : state.reducerCliente.getJobPositionResponse,
-		errorResponse : state.reducerCliente.errorResponse
+		puestoLaboral: state.reducerCliente.getJobPositionResponse,
+		errorResponse: state.reducerCliente.errorResponse
 	}
 }
 
-export default connect(mapStateToProps, { guardarPuestosLaborales, actualizarPuestosLaborales, getJobPosition })(PuestoLaboralForm);
+export default connect(mapStateToProps, {guardarPuestosLaborales, actualizarPuestosLaborales, getJobPosition})(PuestoLaboralForm);
