@@ -6,7 +6,7 @@ import TablePaginado from '../../../components/common/TablePaginado';
 import {ClientButtonAdd, ClientButtonUpdate, ClientButtonAssignJobPosition, ClientButtonAssignMoreJobPosition}  from '../components/client_button'
 import {JobPositionButtonUpdate, JobPositionButtonAssignCandidates} from '../components/jobposition_button'
 import {encriptarAES} from '../../../common/components/encriptar_aes';
-import {obtenerClientes, getJobPosition} from '../../../../actions/actionCliente';
+import {obtenerClientes, getJobPositions} from '../../../../actions/selection_process/actionCliente';
 
 class ClientsList extends Component {
 	constructor(props){
@@ -30,7 +30,7 @@ class ClientsList extends Component {
 	}
 	
 	componentWillMount() {
-		this.props.obtenerClientes();
+		this.props.obtenerClientes(this.props.token, this.props.correoelectronico);
 	}
 	
 	componentDidUpdate(prevProps, prevState) {
@@ -39,7 +39,7 @@ class ClientsList extends Component {
 				isLoading: Object.entries(this.props.obtenerClientesResponse).length > 0 ? false : true
 			});
         }
-        if(prevProps.getJobPositionResponse !== this.props.getJobPositionResponse){
+        if(prevProps.getJobPositionsResponse !== this.props.getJobPositionsResponse){
             this.setState({
 				isLoading: false
 			})
@@ -53,7 +53,7 @@ class ClientsList extends Component {
 	}
 	
 	onChange(e) {
-		this.setState({ [e.target.name]: e.target.value });
+		this.setState({[e.target.name]: e.target.value});
 	}
 	
 	filtrarListaClientes(e){
@@ -71,7 +71,7 @@ class ClientsList extends Component {
 		let filtroPuestosLaboralesNombre = e.target.value.toLowerCase();
 		this.setState({
 			filtroPuestosLaboralesNombre: filtroPuestosLaboralesNombre.toLowerCase(),
-			puestosLaboralesFiltro: this.props.getJobPositionResponse.filter(p => p.nombre.toLowerCase().indexOf(filtroPuestosLaboralesNombre) > -1)
+			puestosLaboralesFiltro: this.props.getJobPositionsResponse.filter(p => p.nombre.toLowerCase().indexOf(filtroPuestosLaboralesNombre) > -1)
 		})
 	}
 	
@@ -84,9 +84,9 @@ class ClientsList extends Component {
 			isLoading: true,
 			idclient: cliente.idcliente, 
 			nameClient: cliente.nombre,
-			puestosLaboralesFiltro: this.props.getJobPositionResponse
+			puestosLaboralesFiltro: this.props.getJobPositionsResponse
 		});
-        this.props.getJobPosition(cliente.idcliente)
+        this.props.getJobPositions(cliente.idcliente, this.props.token, this.props.correoelectronico)
 	}
 	
 	generarTablaBodyClientes(row, index){
@@ -221,7 +221,7 @@ class ClientsList extends Component {
 							tableBody={this.generarTablaBodyPuestosLaborales.bind(this)}
 							nombreTitulo={nameClient}
 							registrosPorPagina={10}
-							registros={filtroPuestosLaboralesNombre.length > 0 ? puestosLaboralesFiltro : idclient > 0 ? this.props.getJobPositionResponse : filtroClientesNombre.length > 0 ? [] : []} 
+							registros={filtroPuestosLaboralesNombre.length > 0 ? puestosLaboralesFiltro : idclient > 0 ? this.props.getJobPositionsResponse : filtroClientesNombre.length > 0 ? [] : []} 
 							camposBusqueda={camposBusquedaPuestoLaboral} />
 					</Fragment>
 					}
@@ -235,8 +235,8 @@ class ClientsList extends Component {
 function mapStateToProps(state){
 	return{
         obtenerClientesResponse: state.reducerCliente.obtenerClientesResponse,
-        getJobPositionResponse: state.reducerCliente.getJobPositionResponse,
+        getJobPositionsResponse: state.reducerCliente.getJobPositionsResponse,
 	}
 }
 
-export default connect(mapStateToProps, {obtenerClientes, getJobPosition})(ClientsList);
+export default connect(mapStateToProps, {obtenerClientes, getJobPositions})(ClientsList);

@@ -1,8 +1,7 @@
 import React, {Component, Fragment} from 'react'
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Formulario from '../../../common/components/formulario/formulario'
-import { Prompt, Redirect } from 'react-router';
-
+import {Prompt, Redirect} from 'react-router';
 import {getNewDateTimeFormat, getDateFormat, getDateFormat_SeparadoPorGuion} from '../../../common/components/date_util'
 import validateInput from './selectionprocess_form_validate'
 import MensajeError from '../../../components/common/MensajeError';
@@ -10,8 +9,8 @@ import CargandoImagen from '../../../components/common/CargandoImagen';
 import {encriptarAES, obtenerValorParametro} from '../../../common/components/encriptar_aes';
 import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExitoso';
 import {getSelectionProcess} from '../../../../actions/actionSelectionProcess';
-import { obtenerCliente, addClient, updateClient, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition } from '../../../../actions/actionCliente';
-import { getCandidates, generarInforme } from '../../../../actions/actionCandidato';
+import {obtenerCliente, addClient, updateClient, guardarPuestosLaborales, actualizarPuestosLaborales, addCandidateToJobPosition, deleteCandidateToJobPosition} from '../../../../actions/selection_process/actionCliente';
+import {getCandidates, generarInforme} from '../../../../actions/actionCandidato';
 import {CandidateButtonUpdate, CandidateButtonResults, CandidateButtonDatos, CandidateButtonExam} from '../../candidate_card/components/candidate_button';
 
 class SelectionProcessForm extends Component {
@@ -159,9 +158,9 @@ class SelectionProcessForm extends Component {
                  * Si se escoge un cliente ya existente, entonces se registrará un nuevo puesto laboral
                 */
                 if(this.state.idjobposition === ''){
-					this.props.guardarPuestosLaborales(this.state.puestolaboral);
+					this.props.guardarPuestosLaborales(this.state.puestolaboral, this.props.token, this.props.correoelectronico);
 				} else {
-                    this.props.actualizarPuestosLaborales(this.state.puestolaboral);
+                    this.props.actualizarPuestosLaborales(this.state.puestolaboral, this.props.token, this.props.correoelectronico);
                 }
 			});
         }
@@ -386,9 +385,9 @@ class SelectionProcessForm extends Component {
                     }
             }, () => {
                 if(this.state.idclient === ''){
-                    this.props.addClient(this.state.cliente);
+                    this.props.addClient(this.state.cliente, this.props.token, this.props.correoelectronico);
                 } else {
-                    this.props.updateClient(this.state.cliente);
+                    this.props.updateClient(this.state.cliente, this.props.token, this.props.correoelectronico);
                 }
             });
         }

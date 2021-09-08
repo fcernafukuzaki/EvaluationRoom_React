@@ -8,9 +8,9 @@ import NotFound from '../common/components/NotFound';
 import MensajeError from '../components/common/MensajeError';
 import CargandoImagen from '../components/common/CargandoImagen';
 import DashBoard from './dashboard/container/DashBoard';
-import ClientsList from './cliente/container/ClientsList';
-import ClientForm from './cliente/container/ClientForm';
-import PuestoLaboralForm from './cliente/container/PuestoLaboralForm';
+import ClientsList from './selection_process/container/ClientsList';
+import ClientForm from './selection_process/container/ClientForm';
+import PuestoLaboralForm from './selection_process/container/PuestoLaboralForm';
 import CandidatoDatosForm from './candidate_form/container/candidate_form';
 import CandidatesListInfo from '../recruiter_view/candidates_list/container/candidates_list_info';
 import CandidatoResultadoForm from './candidate_info_result/container/candidate_info_result_tests';
@@ -74,8 +74,9 @@ class EvaluationRoomApp extends Component {
 	}
 
 	datosUsuario(response){
-		this.setState({isLoading:true, usuario_nombre: response.profileObj.name, token:response.accessToken});
-		this.props.obtenerUsuarioOAuth(response.accessToken, response.profileObj.email);
+		const profile = response.profileObj
+		this.setState({isLoading:true, usuario_nombre: typeof profile != "undefined" ? profile.name : "", token:response.accessToken});
+		this.props.obtenerUsuarioOAuth(response.accessToken, typeof profile != "undefined" ? profile.email : "");
 	}
 
 	set_body(path, content){
@@ -117,10 +118,10 @@ class EvaluationRoomApp extends Component {
 														<ClientsList token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
 								<Route exact path="/registrarCliente" 
 									   render={(path)=>(this.set_body(path.location.pathname, 
-									   					<ClientForm errorResponse={this.state.errorMensaje} />))} />
+									   					<ClientForm token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
 								<Route exact path="/registrarPuestoLaboral" 
 									   render={(path)=>(this.set_body(path.location.pathname, 
-									   					<PuestoLaboralForm errorResponse={this.state.errorMensaje} />))} />
+									   					<PuestoLaboralForm token={usuario.token} correoelectronico={usuario.correoelectronico} errorResponse={this.state.errorMensaje} />))} />
 								<Route exact path="/registrarCandidato" 
 									   render={(path)=>(this.set_body(path.location.pathname, 
 									   					<CandidatoDatosForm usuario={usuario} errorResponse={this.state.errorMensaje} />))} />
