@@ -29,7 +29,7 @@ export const barmenu_items = [{
         botonClass: 'btn-primary btn-sm',
         tipo: 'dropdown-item',
         exact: false,
-        link: '/listarClientes',//'/registrarCliente',
+        link: '/registrarCliente',
         perfil: [1,2,3]
     }]
 } , {

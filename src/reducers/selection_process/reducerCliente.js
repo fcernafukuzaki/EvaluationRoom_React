@@ -5,12 +5,13 @@ import {
 	CLIENTES_OBTENER,
 	PUESTOS_LABORALES_GUARDAR,
 	PUESTOS_LABORALES_ACTUALIZAR,
+	JOBPOSITION_GET,
 	JOBPOSITIONS_GET,
 	JOBPOSITION_CANDIDATES_GET,
 	JOBPOSITION_CANDIDATE_ADD,
 	JOBPOSITION_CANDIDATE_DELETE,
 	ERROR
-	} from '../actions/actionTypes';
+	} from '../../actions/actionTypes';
 
 const initialState = { 
 	guardarClienteResponse: [],
@@ -20,6 +21,7 @@ const initialState = {
 	guardarPuestosLaboralesResponse: [],
 	actualizarPuestosLaboralesResponse: [],
 	getJobPositionResponse: [],
+	getJobPositionsResponse: [],
 	getCandidatesFromJobPositionResponse: [],
 	addCandidateToJobPositionResponse: [],
 	deleteCandidateToJobPositionResponse: [],
@@ -40,8 +42,10 @@ export function actionCliente(state = initialState, action){
 			return Object.assign({}, state, {guardarPuestosLaboralesResponse: action.payload})
 		case PUESTOS_LABORALES_ACTUALIZAR:
 			return Object.assign({}, state, {actualizarPuestosLaboralesResponse: action.payload})
-		case JOBPOSITIONS_GET:
+		case JOBPOSITION_GET:
 			return Object.assign({}, state, {getJobPositionResponse: action.payload})
+		case JOBPOSITIONS_GET:
+			return Object.assign({}, state, {getJobPositionsResponse: action.payload})
 		case JOBPOSITION_CANDIDATES_GET:
 			return Object.assign({}, state, {getCandidatesFromJobPositionResponse: action.payload})
 		case JOBPOSITION_CANDIDATE_ADD:

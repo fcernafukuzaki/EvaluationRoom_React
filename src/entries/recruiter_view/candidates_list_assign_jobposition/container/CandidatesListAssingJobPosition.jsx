@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 import {encriptarAES, obtenerValorParametro} from '../../../common/components/encriptar_aes';
 import {getNewDateTimeFormat, getDateFormat} from '../../../common/components/date_util'
 import {getSelectionProcess} from '../../../../actions/actionSelectionProcess';
-import {obtenerCliente, addCandidateToJobPosition, deleteCandidateToJobPosition} from '../../../../actions/actionCliente';
+import {obtenerCliente, addCandidateToJobPosition, deleteCandidateToJobPosition} from '../../../../actions/selection_process/actionCliente';
 import {getCandidates, obtenerPuestoLaboralCandidato, generarInforme } from '../../../../actions/actionCandidato';
 import MensajeError from '../../../components/common/MensajeError';
 import CargandoImagen from '../../../components/common/CargandoImagen';

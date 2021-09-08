@@ -6,14 +6,15 @@ import {
 	CLIENTES_OBTENER,
 	PUESTOS_LABORALES_GUARDAR,
 	PUESTOS_LABORALES_ACTUALIZAR,
+	JOBPOSITION_GET,
 	JOBPOSITIONS_GET,
 	JOBPOSITION_CANDIDATES_GET,
 	JOBPOSITION_CANDIDATE_ADD,
 	JOBPOSITION_CANDIDATE_DELETE,
 	ERROR,
 	OBJ_ERROR_TIME_OUT
-} from './actionTypes';
-import {EVALUATIONROOM_HOST} from './actionEnpoints';
+} from '../actionTypes';
+import {EVALUATIONROOM_HOST} from '../actionEnpoints';
 
 export function obtenerClientes(token, correoElectronico) {
 	return (dispatch, getState) => {
@@ -79,11 +80,12 @@ export function obtenerCliente(idClient, token, correoElectronico) {
 	}
 }
 
-export function guardarPuestosLaborales(datos) {
-	console.log(datos)
+export function getJobPositions(idclient, token, correoElectronico){
 	return (dispatch, getState) => {
-		axios.post((EVALUATIONROOM_HOST).concat('/v1/jobposition'), datos)
-			.then((response) => { dispatch({ type: PUESTOS_LABORALES_GUARDAR, payload: response.data }) })
+		const header = {headers: {Authorization:token, correoElectronico:correoElectronico}}
+		const url = (EVALUATIONROOM_HOST).concat('/v1/jobposition/', idclient)
+		axios.get(url, header)
+			.then((response) => { dispatch({ type: JOBPOSITIONS_GET, payload: response.data.body.jobpositions }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
@@ -94,11 +96,12 @@ export function guardarPuestosLaborales(datos) {
 	}
 }
 
-export function actualizarPuestosLaborales(datos) {
-	console.log(datos)
+export function getJobPosition(idclient, idjobposition, token, correoElectronico){
 	return (dispatch, getState) => {
-		axios.put((EVALUATIONROOM_HOST).concat('/v1/jobposition'), datos)
-			.then((response) => { dispatch({ type: PUESTOS_LABORALES_ACTUALIZAR, payload: response.data }) })
+		const header = {headers: {Authorization:token, correoElectronico:correoElectronico}}
+		const url = (EVALUATIONROOM_HOST).concat('/v1/jobposition/', idclient, '/', idjobposition)
+		axios.get(url, header)
+			.then((response) => { dispatch({ type: JOBPOSITION_GET, payload: response.data.body.jobposition }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
@@ -109,12 +112,28 @@ export function actualizarPuestosLaborales(datos) {
 	}
 }
 
-export function getJobPosition(idclient, idjobposition){
+export function guardarPuestosLaborales(datos, token, correoElectronico) {
 	return (dispatch, getState) => {
-		axios.get((EVALUATIONROOM_HOST).concat('/v1/jobposition')
-					.concat(idclient ? ('/' + idclient) : '')
-					.concat(idjobposition ? ('/' + idjobposition) : ''))
-			.then((response) => { dispatch({ type: JOBPOSITIONS_GET, payload: response.data }) })
+		const header = {headers: {Authorization:token, correoElectronico:correoElectronico}}
+		const url = (EVALUATIONROOM_HOST).concat('/v1/jobposition/')
+		axios.post(url, datos, header)
+			.then((response) => {dispatch({type: PUESTOS_LABORALES_GUARDAR, payload: response.data.body.jobposition})})
+			.catch((error) => {
+				if(error.toString().indexOf('Network Error') > -1){
+					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })
+				} else {
+					dispatch({ type: ERROR, payload: error.response.data })
+				}
+			})
+	}
+}
+
+export function actualizarPuestosLaborales(datos, token, correoElectronico) {
+	return (dispatch, getState) => {
+		const header = {headers: {Authorization:token, correoElectronico:correoElectronico}}
+		const url = (EVALUATIONROOM_HOST).concat('/v1/jobposition/')
+		axios.put(url, datos, header)
+			.then((response) => { dispatch({ type: PUESTOS_LABORALES_ACTUALIZAR, payload: response.data.body.jobposition }) })
 			.catch((error) => {
 				if(error.toString().indexOf('Network Error') > -1){
 					dispatch({ type: ERROR, payload: OBJ_ERROR_TIME_OUT })

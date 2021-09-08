@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
-
 import { actionGestionarPermisos } from './admin_view/reducerGestionarPermisos';
-import { actionCliente } from './reducerCliente';
+import { actionCliente } from './selection_process/reducerCliente';
 import { actionCandidato } from './reducerCandidato';
 import { actionReclutador } from './reducerReclutador';
 import { actionSelectionProcess } from './reducerSelectionProcess';

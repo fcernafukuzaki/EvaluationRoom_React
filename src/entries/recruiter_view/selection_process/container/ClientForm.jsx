@@ -7,7 +7,7 @@ import MensajeGuardarExitoso from '../../../components/common/MensajeGuardarExit
 import MensajeError from '../../../components/common/MensajeError';
 import CargandoImagen from '../../../components/common/CargandoImagen';
 import validateInput from '../components/client_form_validate';
-import {addClient, updateClient, obtenerCliente} from '../../../../actions/actionCliente';
+import {addClient, updateClient, obtenerCliente} from '../../../../actions/selection_process/actionCliente';
 
 class ClientForm extends Component {
 	constructor(props){
